@@ -6,16 +6,17 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 class Timer {
-    public:
-        Timer();
+ public:
+  Timer();
 
-        void Update(float dt);
+  void Update(float dt);
 
-        void Restart();
+  void Restart();
 
-        float Get();
-    private:
-        float time;
+  float Get();
+
+ private:
+  float time;
 };
 
 #endif

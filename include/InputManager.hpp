@@ -6,60 +6,60 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 #define INCLUDE_SDL
-#include "SDL_include.h"
 #include <string>
 #include <unordered_map>
+#include "SDL_include.h"
 
-#define LEFT_ARROW_KEY      SDLK_LEFT
-#define RIGHT_ARROW_KEY     SDLK_RIGHT
-#define UP_ARROW_KEY        SDLK_UP
-#define DOWN_ARROW_KEY      SDLK_DOWN
-#define SPACE_BAR_KEY       SDLK_SPACE
-#define ESCAPE_KEY          SDLK_ESCAPE
-#define LEFT_MOUSE_BUTTON   SDL_BUTTON_LEFT
-#define RIGHT_MOUSE_BUTTON  SDL_BUTTON_RIGHT
-#define W_KEY               SDLK_w
-#define A_KEY               SDLK_a
-#define S_KEY               SDLK_s
-#define D_KEY               SDLK_d
+#define LEFT_ARROW_KEY SDLK_LEFT
+#define RIGHT_ARROW_KEY SDLK_RIGHT
+#define UP_ARROW_KEY SDLK_UP
+#define DOWN_ARROW_KEY SDLK_DOWN
+#define SPACE_BAR_KEY SDLK_SPACE
+#define ESCAPE_KEY SDLK_ESCAPE
+#define LEFT_MOUSE_BUTTON SDL_BUTTON_LEFT
+#define RIGHT_MOUSE_BUTTON SDL_BUTTON_RIGHT
+#define W_KEY SDLK_w
+#define A_KEY SDLK_a
+#define S_KEY SDLK_s
+#define D_KEY SDLK_d
 
 class InputManager {
-    public:
-        void Update();
+ public:
+  void Update();
 
-        bool KeyPress(int key);
-        bool KeyRelease(int key);
-        bool IsKeyDown(int key);
+  bool KeyPress(int key);
+  bool KeyRelease(int key);
+  bool IsKeyDown(int key);
 
-        bool MousePress(int button) const;
-        bool MouseRelease(int button) const;
-        bool IsMouseDown(int button) const;
+  bool MousePress(int button) const;
+  bool MouseRelease(int button) const;
+  bool IsMouseDown(int button) const;
 
-        int GetMouseX() const;
-        int GetMouseY() const;
+  int GetMouseX() const;
+  int GetMouseY() const;
 
-        bool QuitRequested() const;
+  bool QuitRequested() const;
 
-        static InputManager& GetInstance();
-    private:
+  static InputManager& GetInstance();
 
-        static InputManager instance;
+ private:
+  static InputManager instance;
 
-        InputManager();
+  InputManager();
 
-        ~InputManager();
+  ~InputManager();
 
-        bool mouseState[6];
-        int mouseUpdate[6];
+  bool mouseState[6];
+  int mouseUpdate[6];
 
-        std::unordered_map<int, bool> keyState;
-        std::unordered_map<int, int> keyUpdate;
+  std::unordered_map<int, bool> keyState;
+  std::unordered_map<int, int> keyUpdate;
 
-        bool quitRequested;
-        int updateCounter;
+  bool quitRequested;
+  int updateCounter;
 
-        int mouseX;
-        int mouseY;
+  int mouseX;
+  int mouseY;
 };
 
 #endif

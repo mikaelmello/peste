@@ -6,15 +6,15 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 class GameData {
-    public:
-        enum Types {
-            CameraFollower,
-            Collider,
-            Sound,
-            Sprite,
-            Text,
-            TileMap,
-        };
+ public:
+  enum Types {
+    CameraFollower,
+    Collider,
+    Sound,
+    Sprite,
+    Text,
+    TileMap,
+  };
 };
 
 #endif

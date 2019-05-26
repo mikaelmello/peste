@@ -5,28 +5,29 @@
  *                  INCLUDES E DEFINES
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-#include "GameData.hpp"
 #include <string>
+#include "GameData.hpp"
 
 class GameObject;
 
 class Component {
-    public:
-        Component(GameObject& associated);
+ public:
+  Component(GameObject &associated);
 
-        virtual ~Component();
+  virtual ~Component();
 
-        virtual void NotifyCollision(GameObject& other);
+  virtual void NotifyCollision(GameObject &other);
 
-        virtual void Start();
+  virtual void Start();
 
-        virtual void Update(float dt) = 0;
+  virtual void Update(float dt) = 0;
 
-        virtual void Render() = 0;
+  virtual void Render() = 0;
 
-        virtual bool Is(GameData::Types type) const = 0;
-    protected:
-        GameObject& associated;
+  virtual bool Is(GameData::Types type) const = 0;
+
+ protected:
+  GameObject &associated;
 };
 
 #endif

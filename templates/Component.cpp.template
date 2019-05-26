@@ -1,26 +1,27 @@
-#include "<CAMELCASENAME>.hpp"
-#include "GameObject.hpp"
-#include "Collider.hpp"
-#include "Sprite.hpp"
 #include <string>
+#include "<CAMELCASENAME>.hpp"
+#include "Collider.hpp"
+#include "GameObject.hpp"
+#include "Sprite.hpp"
 
-<CAMELCASENAME>::<CAMELCASENAME>(GameObject& associated) : Component(associated) {
-    Collider* collider = new Collider(associated);
-    Sprite* sprite = new Sprite(associated, <SPRITEPATH>);
-    associated.AddComponent(collider);
-    associated.AddComponent(sprite);
+<CAMELCASENAME>::<CAMELCASENAME>(GameObject& associated)
+    : Component(associated) {
+  Collider* collider = new Collider(associated);
+  Sprite* sprite = new Sprite(associated, <SPRITEPATH>);
+  associated.AddComponent(collider);
+  associated.AddComponent(sprite);
 }
 
 <CAMELCASENAME>::~<CAMELCASENAME>() {}
 
-void <CAMELCASENAME>::NotifyCollision(GameObject& other) {}
+void<CAMELCASENAME>::NotifyCollision(GameObject& other) {}
 
-void <CAMELCASENAME>::Start() {}
+void<CAMELCASENAME>::Start() {}
 
-void <CAMELCASENAME>::Update(float dt) {}
+void<CAMELCASENAME>::Update(float dt) {}
 
-void <CAMELCASENAME>::Render() {}
+void<CAMELCASENAME>::Render() {}
 
-bool <CAMELCASENAME>::Is(GameData::Types type) const {
-    return type == this->Type;
+bool<CAMELCASENAME>::Is(GameData::Types type) const {
+  return type == this->Type;
 }
