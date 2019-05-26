@@ -13,11 +13,17 @@
 #include "json.hpp"
 
 using json = nlohmann::json;
+using namespace Helpers;
 
-TileMap::TileMap(GameObject& associated, const std::string& file,
-                 TileSet* tileSet)
-    : Component(associated), tileSet(tileSet) {
+TileMap::TileMap(GameObject& associated, const std::string& file)
+    : Component(associated), tileSet(nullptr) {
   Load(file);
+}
+
+TileMap::~TileMap() {
+  if (tileSet != nullptr) {
+    free(tileSet);
+  }
 }
 
 void TileMap::Load(const std::string& file) {
@@ -30,6 +36,16 @@ void TileMap::Load(const std::string& file) {
   tileHeight = j["tileheight"].get<int>();
   tileWidth = j["tilewidth"].get<int>();
   layers = j["layers"].get<std::vector<Layer>>();
+
+  auto tilesets = j["tilesets"].get<std::vector<json>>();
+  if (tilesets.size() == 0) {
+    throw std::invalid_argument("Invalid map, no tilesets");
+  }
+
+  auto configuredTileset = tilesets.front();
+  auto path = split(configuredTileset["image"].get<std::string>(), '/');
+
+  tileSet = new TileSet(tileWidth, tileHeight, "assets/img/" + path.back());
 
   // default parallax factor
   for (int i = 0; i < layers.size(); i++) {

@@ -16,7 +16,9 @@
 
 class TileMap : public Component {
  public:
-  TileMap(GameObject& associated, const std::string& file, TileSet* tileSet);
+  TileMap(GameObject& associated, const std::string& file);
+
+  ~TileMap();
 
   void Load(const std::string& file);
 
