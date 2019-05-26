@@ -6,54 +6,55 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 #define INCLUDE_SDL
-#include "SDL_include.h"
-#include "Vec2.hpp"
-#include "State.hpp"
-#include <string>
-#include <stack>
 #include <memory>
+#include <stack>
+#include <string>
+#include "SDL_include.h"
+#include "State.hpp"
+#include "Vec2.hpp"
 
 class Game {
-    public:
-        ~Game();
+ public:
+  ~Game();
 
-        void Run();
+  void Run();
 
-        SDL_Renderer* GetRenderer();
+  SDL_Renderer* GetRenderer();
 
-        State& GetCurrentState();
+  State& GetCurrentState();
 
-        void Push(State* state);
+  void Push(State* state);
 
-        static Game& GetInstance();        
+  static Game& GetInstance();
 
-        float GetDeltaTime() const;
+  float GetDeltaTime() const;
 
-        int GetWidth() const;
+  int GetWidth() const;
 
-        int GetHeight() const;
-    private:
-        Game(const std::string& title, int width, int height);
+  int GetHeight() const;
 
-        void CalculateDeltaTime();
+ private:
+  Game(const std::string& title, int width, int height);
 
-        static Game* instance;
+  void CalculateDeltaTime();
 
-        SDL_Window* window;
+  static Game* instance;
 
-        SDL_Renderer* renderer;
+  SDL_Window* window;
 
-        std::stack<std::unique_ptr<State>> stateStack;
+  SDL_Renderer* renderer;
 
-        State* storedState;
+  std::stack<std::unique_ptr<State>> stateStack;
 
-        int frameStart;
+  State* storedState;
 
-        float dt;
+  int frameStart;
 
-        int width;
+  float dt;
 
-        int height;
+  int width;
+
+  int height;
 };
 
 #endif

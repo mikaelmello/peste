@@ -5,34 +5,35 @@
  *                  INCLUDES E DEFINES
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-#include "Component.hpp"
-#include "GameObject.hpp"
-#include "GameData.hpp"
-#include "Vec2.hpp"
-#include "Rect.hpp"
-#include <string>
 #include <memory>
+#include <string>
+#include "Component.hpp"
+#include "GameData.hpp"
+#include "GameObject.hpp"
+#include "Rect.hpp"
+#include "Vec2.hpp"
 
 class Collider : public Component {
-    public:
-        Collider(GameObject& associated, Vec2 scale = {1, 1}, Vec2 offset = {0, 0});
+ public:
+  Collider(GameObject& associated, Vec2 scale = {1, 1}, Vec2 offset = {0, 0});
 
-        void Update(float dt) override;
+  void Update(float dt) override;
 
-        bool Is(GameData::Types type) const override;
+  bool Is(GameData::Types type) const override;
 
-        void Render() override;
+  void Render() override;
 
-        void SetScale(Vec2 scale);
+  void SetScale(Vec2 scale);
 
-        void SetOffset(Vec2 offset);
+  void SetOffset(Vec2 offset);
 
-        Rect box;
+  Rect box;
 
-        const GameData::Types Type = GameData::Types::Collider;
-    private:
-        Vec2 scale;
-        Vec2 offset;
+  const GameData::Types Type = GameData::Types::Collider;
+
+ private:
+  Vec2 scale;
+  Vec2 offset;
 };
 
 #endif

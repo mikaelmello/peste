@@ -6,38 +6,39 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 #define INCLUDE_SDL_MIXER
-#include "SDL_include.h"
+#include <string>
 #include "Component.hpp"
 #include "GameData.hpp"
 #include "GameObject.hpp"
-#include <string>
+#include "SDL_include.h"
 
 class Sound : public Component {
-    public:
-        Sound(GameObject& associated);
+ public:
+  Sound(GameObject& associated);
 
-        Sound(GameObject& associated, const std::string& file);
+  Sound(GameObject& associated, const std::string& file);
 
-        ~Sound();
+  ~Sound();
 
-        void Open(const std::string& file);
+  void Open(const std::string& file);
 
-        void Play(int times = 1);
+  void Play(int times = 1);
 
-        void Stop();
+  void Stop();
 
-        void Update(float dt) override;
+  void Update(float dt) override;
 
-        bool Is(GameData::Types type) const override;
+  bool Is(GameData::Types type) const override;
 
-        void Render() override;
+  void Render() override;
 
-        bool IsOpen() const;
+  bool IsOpen() const;
 
-        const GameData::Types Type = GameData::Types::Sound;
-    private:
-        std::shared_ptr<Mix_Chunk> chunk;
-        int channel;
+  const GameData::Types Type = GameData::Types::Sound;
+
+ private:
+  std::shared_ptr<Mix_Chunk> chunk;
+  int channel;
 };
 
 #endif
