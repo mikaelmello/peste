@@ -32,12 +32,6 @@ Game::Game(const std::string& title, int width, int height)
     throw std::runtime_error("Failed to init the SDL_Image library");
   }
 
-  int mix_flags = MIX_INIT_FLAC | MIX_INIT_MP3 | MIX_INIT_OGG;
-  return_code = Mix_Init(mix_flags);
-  if (return_code != mix_flags) {
-    throw std::runtime_error("Failed to init the SDL_Mixer library");
-  }
-
   return_code = TTF_Init();
   if (return_code != 0) {
     throw std::runtime_error("Failed to init the SDL_TTF library");
@@ -48,6 +42,12 @@ Game::Game(const std::string& title, int width, int height)
   if (return_code != 0) {
     throw std::runtime_error(
         "Failed to open the mixer with default parameters");
+  }
+
+  int mix_flags = MIX_INIT_FLAC | MIX_INIT_MP3 | MIX_INIT_OGG;
+  return_code = Mix_Init(mix_flags);
+  if (return_code != mix_flags) {
+    throw std::runtime_error("Failed to init the SDL_Mixer library");
   }
 
   window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED,
