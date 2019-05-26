@@ -5,22 +5,22 @@
  *                  INCLUDES E DEFINES
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-#include "Component.hpp"
-#include "GameObject.hpp"
-#include "GameData.hpp"
 #include <string>
+#include "Component.hpp"
+#include "GameData.hpp"
+#include "GameObject.hpp"
 
 class CameraFollower : public Component {
-    public:
-        CameraFollower(GameObject& associated);
+ public:
+  CameraFollower(GameObject& associated);
 
-        void Update(float dt) override;
+  void Update(float dt) override;
 
-        bool Is(GameData::Types type) const override;
+  bool Is(GameData::Types type) const override;
 
-        void Render() override;
+  void Render() override;
 
-        const GameData::Types Type = GameData::Types::CameraFollower;
+  const GameData::Types Type = GameData::Types::CameraFollower;
 };
 
 #endif

@@ -1,33 +1,34 @@
-#ifndef <UPPERCASENAME>_H
-#define <UPPERCASENAME>_H
+#ifndef < UPPERCASENAME > _H
+#define < UPPERCASENAME > _H
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *                  INCLUDES E DEFINES
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-#include "Component.hpp"
-#include "GameObject.hpp"
-#include "GameData.hpp"
 #include <string>
+#include "Component.hpp"
+#include "GameData.hpp"
+#include "GameObject.hpp"
 
-class <CAMELCASENAME> : public Component {
-    public:
-        <CAMELCASENAME>(GameObject& associated);
+class<CAMELCASENAME> : public Component {
+ public:
+  <CAMELCASENAME>(GameObject& associated);
 
-        ~<CAMELCASENAME>();
+  ~<CAMELCASENAME>();
 
-        void Start() override;
+  void Start() override;
 
-        void NotifyCollision(GameObject& other) override;
+  void NotifyCollision(GameObject& other) override;
 
-        void Update(float dt) override;
+  void Update(float dt) override;
 
-        bool Is(GameData::Types type) const override;
+  bool Is(GameData::Types type) const override;
 
-        void Render() override;
+  void Render() override;
 
-        const GameData::Types Type = GameData::Types::<CAMELCASENAME>;
-    private:
+  const GameData::Types Type = GameData::Types::<CAMELCASENAME>;
+
+ private:
 };
 
 #endif

@@ -7,57 +7,58 @@
 
 #define INCLUDE_SDL_TTF
 #define INCLUDE_SDL_IMAGE
-#include "SDL_include.h"
-#include "GameObject.hpp"
-#include "Timer.hpp"
+#include <memory>
+#include <string>
 #include "Component.hpp"
 #include "GameData.hpp"
-#include <string>
-#include <memory>
+#include "GameObject.hpp"
+#include "SDL_include.h"
+#include "Timer.hpp"
 
 class Text : public Component {
-    public:
-        enum TextStyle { SOLID, SHADED, BLENDED };
+ public:
+  enum TextStyle { SOLID, SHADED, BLENDED };
 
-        Text(GameObject& associated, const std::string& fontFile, int fontSize, TextStyle style, const std::string& text, SDL_Color color);
+  Text(GameObject& associated, const std::string& fontFile, int fontSize,
+       TextStyle style, const std::string& text, SDL_Color color);
 
-        ~Text();
+  ~Text();
 
-        void Update(float dt) override;
+  void Update(float dt) override;
 
-        void Render() override;
+  void Render() override;
 
-        bool Is(GameData::Types type) const override;
+  bool Is(GameData::Types type) const override;
 
-        void SetText(const std::string& text);
+  void SetText(const std::string& text);
 
-        void SetColor(SDL_Color color);
+  void SetColor(SDL_Color color);
 
-        void SetStyle(TextStyle style);
+  void SetStyle(TextStyle style);
 
-        void SetFontFile(const std::string& fontFile);
+  void SetFontFile(const std::string& fontFile);
 
-        void SetFontSize(int fontSize);
+  void SetFontSize(int fontSize);
 
-        void SetBlink(bool blink, float blinkPeriod);
+  void SetBlink(bool blink, float blinkPeriod);
 
-        const GameData::Types Type = GameData::Types::Text;
-    private:
-        void RemakeTexture();
+  const GameData::Types Type = GameData::Types::Text;
 
-        std::shared_ptr<TTF_Font> font;
-        std::shared_ptr<SDL_Texture> texture;
+ private:
+  void RemakeTexture();
 
-        std::string text;
-        TextStyle style;
-        std::string fontFile;
-        int fontSize;
-        SDL_Color color;
-        bool blink;
-        bool display;
-        float blinkPeriod;
-        Timer blinkTimer;
+  std::shared_ptr<TTF_Font> font;
+  std::shared_ptr<SDL_Texture> texture;
 
+  std::string text;
+  TextStyle style;
+  std::string fontFile;
+  int fontSize;
+  SDL_Color color;
+  bool blink;
+  bool display;
+  float blinkPeriod;
+  Timer blinkTimer;
 };
 
 #endif

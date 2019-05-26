@@ -5,48 +5,49 @@
  *                  INCLUDES E DEFINES
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-#include "Component.hpp"
-#include "GameObject.hpp"
-#include "GameData.hpp"
-#include "TileSet.hpp"
-#include "Vec2.hpp"
 #include <string>
 #include <vector>
+#include "Component.hpp"
+#include "GameData.hpp"
+#include "GameObject.hpp"
+#include "TileSet.hpp"
+#include "Vec2.hpp"
 
 class TileMap : public Component {
-    public:
-        TileMap(GameObject& associated, const std::string& file, TileSet* tileSet);
+ public:
+  TileMap(GameObject& associated, const std::string& file, TileSet* tileSet);
 
-        void Load(const std::string& file);
+  void Load(const std::string& file);
 
-        void SetTileSet(TileSet* tileSet);
+  void SetTileSet(TileSet* tileSet);
 
-        int& At(int x, int y, int z = 0);
+  int& At(int x, int y, int z = 0);
 
-        void Render();
-        
-        void RenderLayer(int layer, int cameraX = 0, int cameraY = 0);
+  void Render();
 
-        bool Is(GameData::Types type) const override;
+  void RenderLayer(int layer, int cameraX = 0, int cameraY = 0);
 
-        void Update(float dt) override;
+  bool Is(GameData::Types type) const override;
 
-        int GetWidth();
+  void Update(float dt) override;
 
-        int GetHeight();
+  int GetWidth();
 
-        int GetDepth();
-    
-        void SetParallax(int layer, float xFactor, float yFactor);
+  int GetHeight();
 
-        const GameData::Types Type = GameData::Types::TileMap;
-    private:
-        std::vector<int> tileMatrix;
-        std::vector<Vec2> layerParallax;
-        TileSet* tileSet;
-        int mapWidth;
-        int mapHeight;
-        int mapDepth;
+  int GetDepth();
+
+  void SetParallax(int layer, float xFactor, float yFactor);
+
+  const GameData::Types Type = GameData::Types::TileMap;
+
+ private:
+  std::vector<int> tileMatrix;
+  std::vector<Vec2> layerParallax;
+  TileSet* tileSet;
+  int mapWidth;
+  int mapHeight;
+  int mapDepth;
 };
 
 #endif

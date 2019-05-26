@@ -5,45 +5,46 @@
  *                  INCLUDES E DEFINES
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-#include "Component.hpp"
-#include "Rect.hpp"
+#include <memory>
 #include <string>
 #include <vector>
-#include <memory>
+#include "Component.hpp"
+#include "Rect.hpp"
 
 class GameObject {
-    public:
-        GameObject(double priority = 1000);
+ public:
+  GameObject(double priority = 1000);
 
-        ~GameObject();
+  ~GameObject();
 
-        void Update(float dt);
+  void Update(float dt);
 
-        void Render();
+  void Render();
 
-        void Start();
+  void Start();
 
-        bool IsDead() const;
+  bool IsDead() const;
 
-        void RequestDelete();
+  void RequestDelete();
 
-        void NotifyCollision(GameObject& other);
+  void NotifyCollision(GameObject& other);
 
-        void AddComponent(Component* cpt);
+  void AddComponent(Component* cpt);
 
-        void RemoveComponent(Component* cpt);
+  void RemoveComponent(Component* cpt);
 
-        std::weak_ptr<Component> GetComponent(GameData::Types type);
+  std::weak_ptr<Component> GetComponent(GameData::Types type);
 
-        Rect box;
+  Rect box;
 
-        double angleDeg;
+  double angleDeg;
 
-        double priority;
-    private:
-        std::vector<std::shared_ptr<Component>> components;
-        bool isDead;
-        bool started;
+  double priority;
+
+ private:
+  std::vector<std::shared_ptr<Component>> components;
+  bool isDead;
+  bool started;
 };
 
 #endif
