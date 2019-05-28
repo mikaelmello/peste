@@ -14,13 +14,16 @@ RoomState::RoomState() {
   objects.emplace(bckgGo);
 
   GameObject* mapGo = new GameObject(5);
-  TileMap* map = new TileMap(*mapGo, "assets/map/map.json");
-  map->SetParallax(1, 0, 0);
-  mapGo->AddComponent(map);
+  currentTileMap = new TileMap(*mapGo, "assets/map/map.json");
+  currentTileMap->SetParallax(1, 0, 0);
+  mapGo->AddComponent(currentTileMap);
   objects.emplace(mapGo);
 
+  printf("%lf %lf\n", currentTileMap->GetInitialPosition().x,
+         currentTileMap->GetInitialPosition().y);
+
   GameObject* playerGo = new GameObject(5);
-  Player* player = new Player(*playerGo);
+  Player* player = new Player(*playerGo, currentTileMap->GetInitialPosition());
   playerGo->AddComponent(player);
   objects.emplace(playerGo);
 
