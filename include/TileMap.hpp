@@ -10,12 +10,15 @@
 #include "Component.hpp"
 #include "GameData.hpp"
 #include "GameObject.hpp"
+#include "Layer.hpp"
 #include "TileSet.hpp"
 #include "Vec2.hpp"
 
 class TileMap : public Component {
  public:
-  TileMap(GameObject& associated, const std::string& file, TileSet* tileSet);
+  TileMap(GameObject& associated, const std::string& file);
+
+  ~TileMap();
 
   void Load(const std::string& file);
 
@@ -31,6 +34,12 @@ class TileMap : public Component {
 
   void Update(float dt) override;
 
+  bool CanWalk(int x, int y);
+
+  int GetLogicalWidth();
+
+  int GetLogicalHeight();
+
   int GetWidth();
 
   int GetHeight();
@@ -42,12 +51,18 @@ class TileMap : public Component {
   const GameData::Types Type = GameData::Types::TileMap;
 
  private:
-  std::vector<int> tileMatrix;
-  std::vector<Vec2> layerParallax;
   TileSet* tileSet;
-  int mapWidth;
-  int mapHeight;
-  int mapDepth;
+
+  int height;
+  int width;
+  int depth;
+  int logicalHeight;
+  int logicalWidth;
+  int tileHeight;
+  int tileWidth;
+  std::vector<Vec2> layerParallax;
+  std::vector<Layer> layers;
+  std::vector<std::vector<int>> walkable;
 };
 
 #endif

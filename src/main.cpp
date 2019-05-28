@@ -1,11 +1,14 @@
 #define INCLUDE_SDL
 #include <iostream>
 #include "Game.hpp"
+#include "RoomState.hpp"
 #include "SDL_include.h"
 
 int main(int argc, char** argv) {
   try {
+    auto roomState = new RoomState();
     Game& game = Game::GetInstance();
+    game.Push(roomState);
     game.Run();
   } catch (const std::exception& ex) {
     std::cout << "Game crashed\n\n" << std::endl;
