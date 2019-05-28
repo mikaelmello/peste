@@ -46,6 +46,8 @@ class TileMap : public Component {
 
   int GetDepth();
 
+  Vec2 GetInitialPosition();
+
   void SetParallax(int layer, float xFactor, float yFactor);
 
   const GameData::Types Type = GameData::Types::TileMap;
@@ -60,6 +62,8 @@ class TileMap : public Component {
   int logicalWidth;
   int tileHeight;
   int tileWidth;
+  Vec2 initialPosition;
+
   std::vector<Vec2> layerParallax;
   std::vector<Layer> layers;
   std::vector<std::vector<int>> walkable;

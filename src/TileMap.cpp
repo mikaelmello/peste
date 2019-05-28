@@ -37,6 +37,17 @@ void TileMap::Load(const std::string& file) {
   tileWidth = j["tilewidth"].get<int>();
   layers = j["layers"].get<std::vector<Layer>>();
 
+  auto properties = j["properties"];
+
+  for (auto p : properties) {
+    std::string key = p["name"].get<std::string>();
+    if (key == "initialPositionX") {
+      initialPosition.x = p["value"].get<int>();
+    } else if (key == "initialPositionY") {
+      initialPosition.y = p["value"].get<int>();
+    }
+  }
+
   // the last layer is a logical layer
   depth = layers.size() - 1;
 
@@ -122,6 +133,8 @@ void TileMap::Render() {
     RenderLayer(i, Camera::pos.x, Camera::pos.y);
   }
 }
+
+Vec2 TileMap::GetInitialPosition() { return initialPosition; }
 
 int TileMap::GetWidth() { return width; }
 
