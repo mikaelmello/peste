@@ -14,6 +14,7 @@ class GameData {
     Sprite,
     Text,
     TileMap,
+    Player,
   };
 };
 
