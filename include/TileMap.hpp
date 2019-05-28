@@ -55,6 +55,7 @@ class TileMap : public Component {
 
   int height;
   int width;
+  int depth;
   int logicalHeight;
   int logicalWidth;
   int tileHeight;

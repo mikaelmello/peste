@@ -37,6 +37,9 @@ void TileMap::Load(const std::string& file) {
   tileWidth = j["tilewidth"].get<int>();
   layers = j["layers"].get<std::vector<Layer>>();
 
+  // the last layer is a logical layer
+  depth = layers.size() - 1;
+
   auto tilesets = j["tilesets"].get<std::vector<json>>();
   if (tilesets.size() == 0) {
     throw std::invalid_argument("Invalid map, no tilesets");
@@ -138,6 +141,6 @@ bool TileMap::CanWalk(int x, int y) {
 
 bool TileMap::Is(GameData::Types type) const { return type == this->Type; }
 
-int TileMap::GetDepth() { return layers.size(); }
+int TileMap::GetDepth() { return depth; }
 
 void TileMap::Update(float dt) {}
