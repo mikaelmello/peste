@@ -12,7 +12,7 @@
 
 class Player : public Component {
  public:
-  Player(GameObject& associated);
+  Player(GameObject& associated, Vec2 position);
 
   ~Player();
 
@@ -29,6 +29,7 @@ class Player : public Component {
   const GameData::Types Type = GameData::Types::Player;
 
  private:
+  Vec2 position;
 };
 
 #endif
