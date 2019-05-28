@@ -34,6 +34,12 @@ class TileMap : public Component {
 
   void Update(float dt) override;
 
+  bool CanWalk(int x, int y);
+
+  int GetLogicalWidth();
+
+  int GetLogicalHeight();
+
   int GetWidth();
 
   int GetHeight();
@@ -49,10 +55,13 @@ class TileMap : public Component {
 
   int height;
   int width;
+  int logicalHeight;
+  int logicalWidth;
   int tileHeight;
   int tileWidth;
   std::vector<Vec2> layerParallax;
   std::vector<Layer> layers;
+  std::vector<std::vector<int>> walkable;
 };
 
 #endif

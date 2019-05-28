@@ -47,6 +47,28 @@ void TileMap::Load(const std::string& file) {
 
   tileSet = new TileSet(tileWidth, tileHeight, "assets/img/" + path.back());
 
+  if (tileHeight != tileWidth || tileHeight % 16 != 0) {
+    throw std::invalid_argument("Tiles must be squared and a multiple of 16");
+  }
+
+  auto factor = tileHeight / 16;
+  logicalHeight = height * factor;
+  logicalWidth = width * factor;
+
+  // a layer logica deve sempre ser a ultima, mais acima
+  auto& logical_layer = layers.back().data;
+
+  walkable = std::vector<std::vector<int>>(logicalHeight);
+  for (int i = 0; i < logicalHeight; i++) {
+    walkable[i] = std::vector<int>(logicalWidth);
+
+    for (int j = 0; j < logicalWidth; j++) {
+      int idx = (i / 8 * width) + j / 8;
+      int equivalent = logical_layer[idx];
+      walkable[i][j] = (equivalent != 0);
+    }
+  }
+
   // default parallax factor
   for (int i = 0; i < layers.size(); i++) {
     layerParallax.push_back({0, 0});
@@ -101,6 +123,18 @@ void TileMap::Render() {
 int TileMap::GetWidth() { return width; }
 
 int TileMap::GetHeight() { return height; }
+
+int TileMap::GetLogicalWidth() { return logicalWidth; }
+
+int TileMap::GetLogicalHeight() { return logicalHeight; }
+
+bool TileMap::CanWalk(int x, int y) {
+  if (x < 0 || x >= logicalWidth || y < 0 || y >= logicalHeight) {
+    return false;
+  }
+
+  return walkable[x][y];
+}
 
 bool TileMap::Is(GameData::Types type) const { return type == this->Type; }
 
