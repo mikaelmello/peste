@@ -1,22 +1,23 @@
 #include "MenuState.hpp"
 #include <stdexcept>
 #include "Camera.hpp"
+#include "CreditsState.hpp"
 #include "Game.hpp"
 #include "Helpers.hpp"
-#include "InputManager.hpp"
+#include "Resources.hpp"
 #include "RoomState.hpp"
+#include "TutorialState.hpp"
 
-MenuState::MenuState() : position({100, 100}), button_offset(40) {}
+MenuState::MenuState()
+    : position({100, 100}), im(InputManager::GetInstance()) {}
 
 MenuState::~MenuState() {}
-#include <iostream>
 
 void MenuState::Update(float dt) {
   if (quitRequested || popRequested) {
     return;
   }
 
-  InputManager& im = InputManager::GetInstance();
   quitRequested |= im.QuitRequested();
 
   if (im.KeyPress(ESCAPE_KEY)) {
@@ -37,6 +38,10 @@ void MenuState::Update(float dt) {
         Game::GetInstance().Push(new RoomState());
         break;
       case Cursor::CursorState::tutorial:
+        Game::GetInstance().Push(new TutorialState());
+        break;
+      case Cursor::CursorState::credits:
+        Game::GetInstance().Push(new CreditsState());
         break;
       case Cursor::CursorState::quit:
         popRequested |= true;
@@ -88,6 +93,13 @@ void MenuState::LoadAssets() {
   tutorial_button_go->AddComponent(tutorial_button_sprite);
   buttons.push_back(tutorial_button_go);
   objects.emplace(tutorial_button_go);
+
+  GameObject* credits_button_go = new GameObject();
+  Sprite* credits_button_sprite =
+      new Sprite(*credits_button_go, MENU_CREDITS_BUTTON_SPRITE);
+  credits_button_go->AddComponent(credits_button_sprite);
+  buttons.push_back(credits_button_go);
+  objects.emplace(credits_button_go);
 
   GameObject* quit_button_go = new GameObject();
   Sprite* quit_button_sprite =

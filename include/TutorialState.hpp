@@ -5,6 +5,9 @@
  *                  INCLUDES E DEFINES
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+#define TUTORIAL_BACKGROUND_SPRITE "assets/img/temp_tutorial_bg.jpg"
+
+#include "InputManager.hpp"
 #include "Music.hpp"
 #include "State.hpp"
 
@@ -27,6 +30,9 @@ class TutorialState : public State {
   void Update(float dt);
 
   void Render();
+
+ private:
+  InputManager& im;
 };
 
 #endif

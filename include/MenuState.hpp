@@ -8,11 +8,12 @@
 #define MENU_BACKGROUND_SPRITE "assets/img/temp_menu_bg.jpg"
 #define MENU_PLAY_BUTTON_SPRITE "assets/img/temp_button.png"
 #define MENU_TUTORIAL_BUTTON_SPRITE "assets/img/temp_button.png"
+#define MENU_CREDITS_BUTTON_SPRITE "assets/img/temp_button.png"
 #define MENU_QUIT_BUTTON_SPRITE "assets/img/temp_button.png"
 #define MENU_CURSOR_SPRITE "assets/img/temp_cursor.png"
 
-#include <limits>
 #include "Helpers.hpp"
+#include "InputManager.hpp"
 #include "Music.hpp"
 #include "State.hpp"
 
@@ -38,7 +39,7 @@ class MenuState : public State {
 
  private:
   struct Cursor {
-    enum CursorState { play, tutorial, quit, Count };
+    enum CursorState { play, tutorial, credits, quit, Count };
 
     Cursor() : cursor_state(CursorState::play), cursor_go(nullptr) {}
 
@@ -87,7 +88,7 @@ class MenuState : public State {
 
   const Vec2 position;
 
-  const int button_offset;
+  InputManager& im;
 };
 
 #endif
