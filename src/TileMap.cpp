@@ -153,8 +153,9 @@ bool TileMap::CanWalk(int x, int y) {
   if (x < 0 || x >= logicalWidth || y < 0 || y >= logicalHeight) {
     return false;
   }
-  printf("%d kk %d kk %d factor %d, logicalWidth %d, logicalHeight %d \n", x, y,
-         walkable[y][x] ? 1 : 0, logicalFactor, logicalWidth, logicalHeight);
+  // printf("%d kk %d kk %d factor %d, logicalWidth %d, logicalHeight %d \n", x,
+  // y,
+  //  walkable[y][x] ? 1 : 0, logicalFactor, logicalWidth, logicalHeight);
 
   return walkable[y][x];
 }
