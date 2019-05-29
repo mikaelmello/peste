@@ -1,5 +1,5 @@
-#ifndef <UPPERCASENAME>_H
-#define <UPPERCASENAME>_H
+#ifndef ENDINGONESTATE_H
+#define ENDINGONESTATE_H
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *                  INCLUDES E DEFINES
@@ -8,11 +8,11 @@
 #include "Music.hpp"
 #include "State.hpp"
 
-class <CAMELCASENAME> : public State {
+class EndingoneState : public State {
  public:
-  <CAMELCASENAME>();
+  EndingoneState();
 
-  ~<CAMELCASENAME>();
+  ~EndingoneState();
 
   void Start();
 
