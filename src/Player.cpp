@@ -40,12 +40,12 @@ void Player::Update(float dt) {
 
   int w = associated.box.w / tileDim;
   int h = associated.box.h / tileDim;
-  int x = position.x;
+  int x = position.x + w / 4;
   int y = position.y + h - tileDim / 4;
 
   if (input.IsKeyDown(UP_ARROW_KEY)) {
     canwalk = true;
-    for (int i = 0; i < w && canwalk; i++) {
+    for (int i = 0; i < w / 2 && canwalk; i++) {
       canwalk = canwalk = tilemap->CanWalk(x + i, y - 1);
     }
     if (canwalk) {
@@ -54,7 +54,7 @@ void Player::Update(float dt) {
   }
   if (input.IsKeyDown(DOWN_ARROW_KEY)) {
     canwalk = true;
-    for (int i = 0; i < w && canwalk; i++) {
+    for (int i = 0; i < w / 2 && canwalk; i++) {
       canwalk = canwalk = tilemap->CanWalk(x + i, y + tileDim / 4 + 1);
     }
     if (canwalk) {
@@ -73,7 +73,7 @@ void Player::Update(float dt) {
   if (input.IsKeyDown(RIGHT_ARROW_KEY)) {
     canwalk = true;
     for (int i = 0; i < tileDim / 4 && canwalk; i++) {
-      canwalk = canwalk = tilemap->CanWalk(x + w + 1, y + i);
+      canwalk = canwalk = tilemap->CanWalk(x + w / 2 + 1, y + i);
     }
     if (canwalk) {
       position.x += 1;
