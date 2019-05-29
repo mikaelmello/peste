@@ -19,6 +19,9 @@ class Rect {
   Rect GetCentered(Vec2 pos) const;
   Rect GetCentered(float x, float y) const;
 
+  void SetCenter(Vec2 pos);
+  void SetCenter(float x, float y);
+
   float Distance(const Rect& rect) const;
 
   bool Contains(const Vec2& point) const;
