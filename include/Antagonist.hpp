@@ -10,6 +10,7 @@
 #include "Component.hpp"
 #include "GameData.hpp"
 #include "GameObject.hpp"
+#include "Timer.hpp"
 
 class Antagonist : public Component {
  public:
@@ -31,6 +32,14 @@ class Antagonist : public Component {
 
  private:
   Vec2 position;
+
+  std::vector<Vec2> path;
+
+  Timer timer1;
+
+  Timer timer2;
+
+  int i;
 };
 
 #endif
