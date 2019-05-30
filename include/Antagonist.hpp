@@ -1,20 +1,21 @@
-#ifndef <UPPERCASENAME>_H
-#define <UPPERCASENAME>_H
+#ifndef ANTAGONIST_H
+#define ANTAGONIST_H
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *                  INCLUDES E DEFINES
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+#define ANTAGONIST_SPRITE "assets/img/static_terry.png"
 
 #include <string>
 #include "Component.hpp"
 #include "GameData.hpp"
 #include "GameObject.hpp"
 
-class <CAMELCASENAME> : public Component {
+class Antagonist : public Component {
  public:
-  <CAMELCASENAME>(GameObject& associated);
+  Antagonist(GameObject& associated, Vec2 position);
 
-  ~<CAMELCASENAME>();
+  ~Antagonist();
 
   void Start() override;
 
@@ -26,9 +27,10 @@ class <CAMELCASENAME> : public Component {
 
   void Render() override;
 
-  const GameData::Types Type = GameData::Types::<CAMELCASENAME>;
+  const GameData::Types Type = GameData::Types::Antagonist;
 
  private:
+  Vec2 position;
 };
 
 #endif
