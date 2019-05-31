@@ -10,7 +10,7 @@
 Antagonist::Antagonist(GameObject& associated, Vec2 position)
     : Component(associated), position(position), i(0) {
   Collider* collider = new Collider(associated);
-  Sprite* sprite = new Sprite(associated, ANTAGONIST_SPRITE);
+  Sprite* sprite = new Sprite(associated, ANTAGONIST_SPRITE, 4, 0.1);
   associated.AddComponent(collider);
   associated.AddComponent(sprite);
 
