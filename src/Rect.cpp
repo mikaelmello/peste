@@ -19,6 +19,10 @@ Rect Rect::GetCentered(float centerX, float centerY) const {
   return Rect(centerX - w / 2, centerY - h / 2, w, h);
 }
 
+void Rect::SetCenter(Vec2 pos) { *this = GetCentered(pos); }
+
+void Rect::SetCenter(float x, float y) { *this = GetCentered(x, y); }
+
 bool Rect::Contains(const Vec2& point) const {
   if (x > point.x || (x + w) < point.x) {
     return false;

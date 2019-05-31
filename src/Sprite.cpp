@@ -98,7 +98,7 @@ void Sprite::SetScaleX(float scaleX, float scaleY) {
     associated.box.h = GetHeight();
   }
 
-  associated.box = associated.box.GetCentered(oldCenter);
+  associated.box.SetCenter(oldCenter);
 }
 
 void Sprite::SetFrame(int frame) {
