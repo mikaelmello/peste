@@ -4,7 +4,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *                  INCLUDES E DEFINES
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-#define ANTAGONIST_SPRITE "assets/img/idle_terry.png"
+#define ANTAGONIST_SPRITE "assets/img/terry/idle_terry.png"
 
 #include <string>
 #include "Component.hpp"
