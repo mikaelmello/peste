@@ -30,6 +30,18 @@ class Player : public Component {
 
  private:
   Vec2 position;
+  enum Direction {
+    UP,
+    RIGHT,
+    LEFT,
+    DOWN,
+    UPRIGHT,
+    UPLEFT,
+    DOWNRIGHT,
+    DOWNLEFT,
+    IDLE
+  };
+  Direction lastMove;
 };
 
 #endif
