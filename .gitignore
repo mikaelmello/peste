@@ -1,7 +1,7 @@
 *.o
 engine
 *.zip
-valgrind
+valgrind.txt
 
 .vscode/*
 !.vscode/settings.json
