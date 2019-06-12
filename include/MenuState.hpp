@@ -5,12 +5,12 @@
  *                  INCLUDES E DEFINES
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-#define MENU_BACKGROUND_SPRITE "assets/img/temp_menu_bg.jpg"
-#define MENU_PLAY_BUTTON_SPRITE "assets/img/temp_button.png"
-#define MENU_TUTORIAL_BUTTON_SPRITE "assets/img/temp_button.png"
-#define MENU_CREDITS_BUTTON_SPRITE "assets/img/temp_button.png"
-#define MENU_QUIT_BUTTON_SPRITE "assets/img/temp_button.png"
-#define MENU_CURSOR_SPRITE "assets/img/temp_cursor.png"
+#define MENU_BACKGROUND_SPRITE "assets/img/menu/menu_background.png"
+#define MENU_PLAY_BUTTON_SPRITE "assets/img/menu/play_button.png"
+#define MENU_TUTORIAL_BUTTON_SPRITE "assets/img/menu/tutorial_button.png"
+#define MENU_CREDITS_BUTTON_SPRITE "assets/img/menu/credits_button.png"
+#define MENU_QUIT_BUTTON_SPRITE "assets/img/menu/quit_button.png"
+#define MENU_CURSOR_SPRITE "assets/img/menu/cursor.png"
 
 #include "Helpers.hpp"
 #include "InputManager.hpp"
