@@ -10,6 +10,13 @@
 
 #define PLAYER_FRONT_ANIM "assets/img/hope/front_anim.png"
 #define PLAYER_BACK_ANIM "assets/img/hope/back_anim.png"
+#define PLAYER_LEFT_ANIM "assets/img/hope/back_anim.png"
+#define PLAYER_RIGHT_ANIM "assets/img/hope/back_anim.png"
+#define PLAYER_UPLEFT_ANIM "assets/img/hope/back_anim.png"
+#define PLAYER_DOWNLEFT_ANIM "assets/img/hope/back_anim.png"
+#define PLAYER_UPRIGHT_ANIM "assets/img/hope/back_anim.png"
+#define PLAYER_DOWNRIGHT_ANIM "assets/img/hope/back_anim.png"
+
 #define PLAYER_FRONT "assets/img/hope/front.png"
 #define PLAYER_BACK "assets/img/hope/back.png"
 #define PLAYER_LEFT "assets/img/hope/left.png"
@@ -121,53 +128,48 @@ void Player::Update(float dt) {
     }
   } else {
     if (up) {
+      changed = true;
       if (right && lastMove != UPRIGHT) {
-        sprite->Open(PLAYER_UPRIGHT);
+        sprite->Open(PLAYER_UPRIGHT_ANIM);
         lastMove = UPRIGHT;
       } else if (left && lastMove != UPLEFT) {
-        sprite->Open(PLAYER_UPLEFT);
+        sprite->Open(PLAYER_UPLEFT_ANIM);
         lastMove = UPLEFT;
       } else if (lastMove != UP) {
         sprite->Open(PLAYER_BACK_ANIM);
-        changed = true;
         lastMove = UP;
+      } else {
+        changed = false;
       }
-    }
-    if (down) {
+    } else if (down) {
+      changed = true;
       if (right && lastMove != DOWNRIGHT) {
-        sprite->Open(PLAYER_DOWNRIGHT);
+        sprite->Open(PLAYER_DOWNRIGHT_ANIM);
         lastMove = DOWNRIGHT;
       } else if (left && lastMove != DOWNLEFT) {
-        sprite->Open(PLAYER_DOWNLEFT);
+        sprite->Open(PLAYER_DOWNLEFT_ANIM);
         lastMove = DOWNLEFT;
       } else if (lastMove != DOWN) {
         sprite->Open(PLAYER_FRONT_ANIM);
-        changed = true;
         lastMove = DOWN;
+      } else {
+        changed = false;
       }
-    }
-    if (left) {
-      if (up && lastMove != UPLEFT) {
-        sprite->Open(PLAYER_UPLEFT);
-        lastMove = UPLEFT;
-      } else if (down && lastMove != DOWN) {
-        sprite->Open(PLAYER_DOWNLEFT);
-        lastMove = DOWNLEFT;
-      } else if (lastMove != LEFT) {
-        sprite->Open(PLAYER_LEFT);
+    } else if (left) {
+      changed = true;
+      if (lastMove != LEFT) {
+        sprite->Open(PLAYER_LEFT_ANIM);
         lastMove = LEFT;
+      } else {
+        changed = false;
       }
-    }
-    if (right) {
-      if (up && lastMove != UPRIGHT) {
-        sprite->Open(PLAYER_UPRIGHT);
-        lastMove = UPRIGHT;
-      } else if (down && lastMove != DOWNRIGHT) {
-        sprite->Open(PLAYER_DOWNRIGHT);
-        lastMove = DOWNRIGHT;
-      } else if (lastMove != RIGHT) {
-        sprite->Open(PLAYER_RIGHT);
+    } else if (right) {
+      changed = true;
+      if (lastMove != RIGHT) {
+        sprite->Open(PLAYER_RIGHT_ANIM);
         lastMove = RIGHT;
+      } else {
+        changed = false;
       }
     }
   }
