@@ -1,69 +1,118 @@
 #include "Pathfinder.hpp"
 #include "Game.hpp"
 
-Vec2 Pathfinder::next_point(Vec2& p1, Vec2& p2, Vec2& start, Vec2& goal) {
-  float m = (goal.y - start.y) / (goal.x - start.x);
-  float b = (-m) * goal.x + goal.y;
+void tracePath(Pathfinder::Cell cellDetails[][496], std::pair<int, int> dest,
+               std::vector<Vec2>& path) {
+  printf("\nThe Path is ");
+  int row = dest.first;
+  int col = dest.second;
 
-  float point_1 = std::abs((m * p1.x + b) - p1.y);
-  float point_2 = std::abs((m * p2.x + b) - p2.y);
+  std::stack<std::pair<int, int>> Path;
 
-  return point_1 < point_2 ? p1 : p2;
+  while (!(cellDetails[row][col].parent_i == row &&
+           cellDetails[row][col].parent_j == col)) {
+    Path.push(std::make_pair(row, col));
+    int temp_row = cellDetails[row][col].parent_i;
+    int temp_col = cellDetails[row][col].parent_j;
+    row = temp_row;
+    col = temp_col;
+    path.push_back({row, col});
+  }
+
+  Path.push(std::make_pair(row, col));
+  while (!Path.empty()) {
+    std::pair<int, int> p = Path.top();
+    Path.pop();
+    printf("-> (%d,%d) ", p.first, p.second);
+  }
+
+  return;
 }
 
-int Pathfinder::Manhattan::Distance(int ax, int ay, int bx, int by) {
-  return abs(ax - bx) + abs(ay - by);
-}
+Pathfinder::Astar::Astar(Heuristic& h, TileMap* tm) : h(h), tm(tm) {}
 
-Pathfinder::Astar::Astar(Manhattan* heuristic, TileMap* tilemap)
-    : heuristic(heuristic), tilemap(tilemap) {}
+Pathfinder::Astar::~Astar() {}
 
-std::vector<Vec2> Pathfinder::Astar::Run(Vec2& a, Vec2& b) {
+std::vector<Vec2> Pathfinder::Astar::Run(Vec2& start, Vec2& dest) {
+  printf("%d\n", tm->GetLogicalWidth());
   std::vector<Vec2> path;
-  Search(path, a, a, b);
+  if (isDestination(start.x, start.y, {dest.x, dest.y})) {
+    printf("Já está no destino.\n");
+  }
+
+  if (!isValid(start.x, start.y) || !isValid(dest.x, dest.y)) {
+    printf("parâmetros inválidos.\n");
+  }
+
+  Search(path, {dest.x, dest.y}, {start.x, start.y});
   return path;
 }
 
-// Retorna os vizinhos do ponto p com execeção do ponto x
-// x = path[path.size() - 2] que descreve o ponto pai do ponto p.
-std::vector<Vec2> Pathfinder::neighbours(std::vector<Vec2>& path, Vec2& p,
-                                         Vec2 father_p) {
-  std::vector<Vec2> neighbours;
-  std::vector<Vec2> deltas = {{-1, -1}, {0, -1}, {1, -1}, {-1, 0},
-                              {1, 0},   {-1, 1}, {0, 1},  {1, 1}};
+void Pathfinder::Astar::Search(std::vector<Vec2>& path,
+                               std::pair<int, int> start,
+                               std::pair<int, int> dest) {
+  int row = tm->GetLogicalHeight();
+  int col = tm->GetLogicalWidth();
+  Pathfinder::Cell details[row][496];
 
-  for (auto delta : deltas) {
-    if ((father_p.x != p.x + delta.x) || (father_p.y != p.y + delta.y)) {
-      neighbours.push_back(p + delta);
-    }
-  }
-  return neighbours;
-}
+  int i = start.first;
+  int j = start.second;
+  printf("kkk %d %d\n", i, row);
 
-void Pathfinder::Astar::Search(std::vector<Vec2>& path, Vec2& start, Vec2& p,
-                               Vec2& goal) {
-  if ((p.x == goal.x && p.y == goal.y) || !tilemap->CanWalk(goal.x, goal.y))
-    return;
+  details[i][j] = Pathfinder::Cell(0, 0, 0, i, j, false);
+  printf("kkk\n");
 
-  std::vector<Vec2> neighbours =
-      path.size() < 2 ? Pathfinder::neighbours(path, p)
-                      : Pathfinder::neighbours(path, p, path[path.size() - 2]);
+  std::set<dii> open;
+  open.insert(std::make_pair(0.0f, std::make_pair(i, j)));
 
-  Vec2 s;
-  int smaller_distance = std::numeric_limits<int>::max();
+  while (!open.empty()) {
+    dii p = *open.begin();
+    open.erase(open.begin());
 
-  for (auto neighbour : neighbours) {
-    if (tilemap->CanWalk(neighbour.x, neighbour.y)) {
-      float distance =
-          heuristic->Distance(neighbour.x, neighbour.y, goal.x, goal.y);
+    i = p.second.first;
+    j = p.second.second;
 
-      if (distance < smaller_distance) {
-        smaller_distance = distance;
-        s = Pathfinder::next_point(s, neighbour, start, goal);
+    details[i][j].closed = true;
+
+    std::vector<std::pair<int, int>> neighbours = {
+        {i - 1, j},     {i + 1, j},     {i, j + 1},     {i, j - 1},
+        {i - 1, j + 1}, {i - 1, j - 1}, {i + 1, j + 1}, {i + 1, j - 1}};
+
+    float cost = 1.0f;
+    int count = 0;
+
+    for (std::pair<int, int> v : neighbours) {
+      if (count == 4) {
+        cost = std::sqrt(2);
+      }
+      count++;
+
+      if (isValid(v.first, v.second)) {
+        if (isDestination(v.first, v.second, dest)) {
+          details[v.first][v.second].parent_i = i;
+          details[v.first][v.second].parent_j = j;
+          tracePath(details, dest, path);
+          return;
+        } else if (!details[v.first][v.second].closed &&
+                   tm->CanWalk(v.first, v.second)) {
+          double g = details[i][j].g + cost;
+          double h = this->h.Distance(v, dest);
+          double f = g + h;
+
+          if (details[v.first][v.first].f > f) {
+            open.insert(std::make_pair(f, std::make_pair(v.first, v.second)));
+
+            details[v.first][v.second].f = f;
+            details[v.first][v.second].g = g;
+            details[v.first][v.second].h = h;
+
+            details[v.first][v.second].parent_i = i;
+            details[v.first][v.second].parent_j = j;
+          }
+        }
       }
     }
   }
 
-  path.push_back(s);
-  return Search(path, start, s, goal);
+  printf("Caminho não encontrado.\n");
 }

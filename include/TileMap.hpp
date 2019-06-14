@@ -50,6 +50,8 @@ class TileMap : public Component {
 
   Vec2 GetInitialPosition();
 
+  std::vector<std::vector<bool>> GetLogical();
+
   void SetParallax(int layer, float xFactor, float yFactor);
 
   const GameData::Types Type = GameData::Types::TileMap;

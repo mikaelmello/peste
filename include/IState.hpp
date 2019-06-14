@@ -6,23 +6,24 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 #include "Antagonist.hpp"
+#include "GameObject.hpp"
 
 class IState {
  public:
-  IState(Antagonist& antagonist);
+  IState(GameObject& antagonist);
 
   ~IState();
 
-  void virtual OnStateEnter() = 0;
+  void OnStateEnter();
 
-  void virtual OnStateExecution() = 0;
+  void OnStateExecution();
 
-  void virtual OnStateExit() = 0;
+  void OnStateExit();
 
-  void virtual Update(float dt);
+  void Update(float dt);
 
  protected:
-  Antagonist& antagonist;
+  GameObject& antagonist;
 };
 
 #endif

@@ -28,7 +28,7 @@ EnemyState::EnemyState() {
   antagonist_go->AddComponent(antagonist);
   objects.emplace(antagonist_go);
 
-  Camera::Follow(antagonist_go);
+  Camera::Unfollow();
 }
 
 EnemyState::~EnemyState() {}

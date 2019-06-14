@@ -14,8 +14,10 @@ Antagonist::Antagonist(GameObject& associated, Vec2 position)
   associated.AddComponent(collider);
   associated.AddComponent(sprite);
 
-  timer1.Restart();
-  timer2.Restart();
+  state = std::unique_ptr<IState>(new PatrolState(associated));
+  state->OnStateEnter();
+  // timer1.Restart();
+  // timer2.Restart();
 }
 
 Antagonist::~Antagonist() {}
@@ -25,7 +27,9 @@ void Antagonist::NotifyCollision(GameObject& other) {}
 void Antagonist::Start() {}
 
 void Antagonist::Update(float dt) {
-  auto tilemap = Game::GetInstance().GetCurrentState().GetCurrentTileMap();
+  if (true) {
+  }
+  /*auto tilemap = Game::GetInstance().GetCurrentState().GetCurrentTileMap();
   int tileDim = tilemap->GetLogicalTileDimension();
 
   associated.box.x = position.x * tileDim;
@@ -33,9 +37,10 @@ void Antagonist::Update(float dt) {
 
   if (timer1.Get() < 0.1) {
     auto tilemap = Game::GetInstance().GetCurrentState().GetCurrentTileMap();
-    auto a_star = new Pathfinder::Astar(new Pathfinder::Manhattan(), tilemap);
+    Pathfinder::Heuristic& h = *new Pathfinder::Diagonal();
+    auto a_star = new Pathfinder::Astar(h, tilemap);
 
-    Vec2 b = {140, 177};
+    Vec2 b = {255, 200};
     auto c = a_star->Run(position, b);
     path.assign(c.begin(), c.end());
   }
@@ -49,7 +54,7 @@ void Antagonist::Update(float dt) {
     }
   }
 
-  timer2.Update(dt);
+  timer2.Update(dt);*/
 }
 
 void Antagonist::Render() {}

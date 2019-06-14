@@ -6,11 +6,16 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 #define ANTAGONIST_SPRITE "assets/img/terry/idle_terry.png"
 
+#include <memory>
 #include <string>
 #include "Component.hpp"
 #include "GameData.hpp"
 #include "GameObject.hpp"
+#include "PatrolState.hpp"
 #include "Timer.hpp"
+
+class IState;
+#include "IState.hpp"
 
 class Antagonist : public Component {
  public:
@@ -30,9 +35,9 @@ class Antagonist : public Component {
 
   const GameData::Types Type = GameData::Types::Antagonist;
 
- private:
   Vec2 position;
 
+ private:
   std::vector<Vec2> path;
 
   Timer timer1;
@@ -40,6 +45,8 @@ class Antagonist : public Component {
   Timer timer2;
 
   int i;
+
+  std::unique_ptr<IState> state;
 };
 
 #endif

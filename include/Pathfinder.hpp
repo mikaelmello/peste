@@ -11,28 +11,77 @@
 
 namespace Pathfinder {
 
-std::vector<Vec2> neighbours(std::vector<Vec2>& path, Vec2& p,
-                             Vec2 father_p = Vec2(0, 0));
+typedef std::pair<int, int> ii;
 
-Vec2 next_point(Vec2& p1, Vec2& p2, Vec2& start, Vec2& goal);
+typedef std::pair<double, ii> dii;
 
-class Manhattan {
+struct Cell {
+  Cell()
+      : f(FLT_MAX),
+        g(FLT_MAX),
+        h(FLT_MAX),
+        parent_i(-1),
+        parent_j(-1),
+        closed(false) {}
+
+  Cell(double f, double g, double h, int p_i, int p_j, bool c)
+      : f(f), g(g), h(h), parent_i(p_i), parent_j(p_j), closed(c) {}
+
+  int parent_i, parent_j;
+
+  double f, g, h;
+
+  bool closed;
+};
+
+class Heuristic {
  public:
-  int Distance(int ax, int ay, int bx, int by);
+  double virtual Distance(std::pair<int, int> a, std::pair<int, int> b) = 0;
+};
+
+class Euclidian : public Heuristic {
+ public:
+  inline double Distance(std::pair<int, int> a, std::pair<int, int> b) {
+    return std::sqrt((a.first - b.first) * (a.first - b.first) +
+                     (a.second - b.second) * (a.second - b.second));
+  }
+};
+
+class Manhattan : public Heuristic {
+ public:
+  inline double Distance(std::pair<int, int> a, std::pair<int, int> b) {
+    return std::abs(a.first - b.first) + std::abs(a.second - b.second);
+  }
+};
+
+class Diagonal : public Heuristic {
+ public:
+  inline double Distance(std::pair<int, int> a, std::pair<int, int> b) {
+    return std::max(std::abs(a.first - b.first), std::abs(a.second - b.second));
+  }
 };
 
 class Astar {
  public:
-  Astar(Manhattan* heuristic, TileMap* tilemap);
+  Astar(Heuristic& h, TileMap* tm);
 
-  std::vector<Vec2> Run(Vec2& start, Vec2& goal);
+  ~Astar();
+
+  std::vector<Vec2> Run(Vec2& start, Vec2& dest);
 
  private:
-  void Search(std::vector<Vec2>& path, Vec2& start, Vec2& p, Vec2& goal);
+  Heuristic& h;
 
-  Manhattan* heuristic;
+  TileMap* tm;
 
-  TileMap* tilemap;
+  void Search(std::vector<Vec2>& path, std::pair<int, int> start,
+              std::pair<int, int> dest);
+
+  inline bool isDestination(int row, int col, std::pair<int, int> dest) {
+    return row == dest.first && col == dest.second;
+  }
+
+  inline bool isValid(int row, int col) { return tm->CanWalk(row, col); }
 };
 
 }  // namespace Pathfinder
