@@ -5,7 +5,6 @@
  *                  INCLUDES E DEFINES
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-#include "Antagonist.hpp"
 #include "GameObject.hpp"
 
 class IState {
@@ -14,13 +13,13 @@ class IState {
 
   ~IState();
 
-  void OnStateEnter();
+  void virtual OnStateEnter() = 0;
 
-  void OnStateExecution();
+  void virtual OnStateExecution() = 0;
 
-  void OnStateExit();
+  void virtual OnStateExit() = 0;
 
-  void Update(float dt);
+  void virtual Update(float dt) = 0;
 
  protected:
   GameObject& antagonist;

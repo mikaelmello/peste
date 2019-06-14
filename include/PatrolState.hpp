@@ -14,6 +14,8 @@ class PatrolState : public IState {
  public:
   PatrolState(GameObject& antagonist);
 
+  ~PatrolState();
+
   void OnStateEnter();
 
   void OnStateExecution();
@@ -21,6 +23,8 @@ class PatrolState : public IState {
   void OnStateExit();
 
   void Update(float dt);
+
+  friend class IState;
 
  private:
   int counter;

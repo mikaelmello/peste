@@ -11,11 +11,8 @@
 #include "Component.hpp"
 #include "GameData.hpp"
 #include "GameObject.hpp"
-#include "PatrolState.hpp"
-#include "Timer.hpp"
-
-class IState;
 #include "IState.hpp"
+#include "Timer.hpp"
 
 class Antagonist : public Component {
  public:
@@ -46,7 +43,7 @@ class Antagonist : public Component {
 
   int i;
 
-  std::unique_ptr<IState> state;
+  IState* state;
 };
 
 #endif

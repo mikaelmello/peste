@@ -5,17 +5,22 @@
 #include "Game.hpp"
 #include "GameObject.hpp"
 #include "Pathfinder.hpp"
+#include "PatrolState.hpp"
 #include "Sprite.hpp"
 
 Antagonist::Antagonist(GameObject& associated, Vec2 position)
     : Component(associated), position(position), i(0) {
   Collider* collider = new Collider(associated);
+
   Sprite* sprite = new Sprite(associated, ANTAGONIST_SPRITE, 4, 0.1);
+
   associated.AddComponent(collider);
   associated.AddComponent(sprite);
 
-  state = std::unique_ptr<IState>(new PatrolState(associated));
-  state->OnStateEnter();
+  // state = std::unique_ptr<IState>(new PatrolState(associated));
+  // state = std::unique_ptr<IState>(new PatrolState(associated));
+
+  // state->OnStateEnter();
   // timer1.Restart();
   // timer2.Restart();
 }
@@ -24,11 +29,21 @@ Antagonist::~Antagonist() {}
 
 void Antagonist::NotifyCollision(GameObject& other) {}
 
-void Antagonist::Start() {}
+void Antagonist::Start() {
+  printf("I'm here\n");
+  position = Vec2(240, 192);
+  state = new PatrolState(associated);
+}
 
 void Antagonist::Update(float dt) {
-  if (true) {
-  }
+  auto p = (PatrolState*)state;
+  p->Update(dt);
+
+  auto tilemap = Game::GetInstance().GetCurrentState().GetCurrentTileMap();
+  int tileDim = tilemap->GetLogicalTileDimension();
+
+  associated.box.x = position.x * tileDim;
+  associated.box.y = position.y * tileDim;
   /*auto tilemap = Game::GetInstance().GetCurrentState().GetCurrentTileMap();
   int tileDim = tilemap->GetLogicalTileDimension();
 

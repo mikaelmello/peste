@@ -6,27 +6,9 @@
 #include "InputManager.hpp"
 #include "TileMap.hpp"
 
-EnemyState::EnemyState() {
-  GameObject* bckgGo = new GameObject(5);
-  Sprite* bckgSprite = new Sprite(*bckgGo, "assets/img/black.jpg");
-  bckgGo->AddComponent(new CameraFollower(*bckgGo));
-  bckgGo->AddComponent(bckgSprite);
-  objects.emplace(bckgGo);
-
-  GameObject* mapGo = new GameObject(5);
-  currentTileMap = new TileMap(*mapGo, "assets/map/map.json");
-  currentTileMap->SetParallax(1, 0, 0);
-  mapGo->AddComponent(currentTileMap);
-  objects.emplace(mapGo);
-
-  printf("%lf %lf\n", currentTileMap->GetInitialPosition().x,
-         currentTileMap->GetInitialPosition().y);
-
-  GameObject* antagonist_go = new GameObject(5);
-  Antagonist* antagonist =
-      new Antagonist(*antagonist_go, currentTileMap->GetInitialPosition());
-  antagonist_go->AddComponent(antagonist);
-  objects.emplace(antagonist_go);
+EnemyState::EnemyState() : State() {
+  // printf("%lf %lf\n", currentTileMap->GetInitialPosition().x,
+  //    currentTileMap->GetInitialPosition().y);
 
   Camera::Unfollow();
 }
@@ -57,6 +39,24 @@ void EnemyState::Pause() {}
 
 void EnemyState::Resume() {}
 
-void EnemyState::LoadAssets() {}
+void EnemyState::LoadAssets() {
+  GameObject* bckgGo = new GameObject(5);
+  Sprite* bckgSprite = new Sprite(*bckgGo, "assets/img/black.jpg");
+  bckgGo->AddComponent(new CameraFollower(*bckgGo));
+  bckgGo->AddComponent(bckgSprite);
+  objects.emplace(bckgGo);
+
+  GameObject* mapGo = new GameObject(5);
+  currentTileMap = new TileMap(*mapGo, "assets/map/map.json");
+  currentTileMap->SetParallax(1, 0, 0);
+  mapGo->AddComponent(currentTileMap);
+  objects.emplace(mapGo);
+
+  GameObject* antagonist_go = new GameObject(5);
+  Antagonist* antagonist =
+      new Antagonist(*antagonist_go, currentTileMap->GetInitialPosition());
+  antagonist_go->AddComponent(antagonist);
+  objects.emplace(antagonist_go);
+}
 
 void EnemyState::Render() { RenderArray(); }

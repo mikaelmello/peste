@@ -1,47 +1,41 @@
 #include "Pathfinder.hpp"
 #include "Game.hpp"
 
-void tracePath(Pathfinder::Cell cellDetails[][496], std::pair<int, int> dest,
+void tracePath(Pathfinder::Cell details[][496], std::pair<int, int> dest,
                std::vector<Vec2>& path) {
-  printf("\nThe Path is ");
   int row = dest.first;
   int col = dest.second;
 
-  std::stack<std::pair<int, int>> Path;
-
-  while (!(cellDetails[row][col].parent_i == row &&
-           cellDetails[row][col].parent_j == col)) {
-    Path.push(std::make_pair(row, col));
-    int temp_row = cellDetails[row][col].parent_i;
-    int temp_col = cellDetails[row][col].parent_j;
+  while (!(details[row][col].parent_i == row &&
+           details[row][col].parent_j == col)) {
+    int temp_row = details[row][col].parent_i;
+    int temp_col = details[row][col].parent_j;
     row = temp_row;
     col = temp_col;
-    path.push_back({row, col});
+    path.push_back({(float)row, (float)col});
   }
-
-  Path.push(std::make_pair(row, col));
-  while (!Path.empty()) {
-    std::pair<int, int> p = Path.top();
-    Path.pop();
-    printf("-> (%d,%d) ", p.first, p.second);
-  }
-
-  return;
 }
 
 Pathfinder::Astar::Astar(Heuristic& h, TileMap* tm) : h(h), tm(tm) {}
 
 Pathfinder::Astar::~Astar() {}
 
+#include <iostream>
 std::vector<Vec2> Pathfinder::Astar::Run(Vec2& start, Vec2& dest) {
-  printf("%d\n", tm->GetLogicalWidth());
   std::vector<Vec2> path;
+
   if (isDestination(start.x, start.y, {dest.x, dest.y})) {
     printf("Já está no destino.\n");
+    return {};
   }
 
+  if (!isValid(dest.x, dest.y)) {
+    printf("Destino inválido!\n");
+    printf("  %d %d\n", tm->GetLogicalHeight(), tm->GetLogicalWidth());
+  }
   if (!isValid(start.x, start.y) || !isValid(dest.x, dest.y)) {
     printf("parâmetros inválidos.\n");
+    return {};
   }
 
   Search(path, {dest.x, dest.y}, {start.x, start.y});
@@ -57,10 +51,8 @@ void Pathfinder::Astar::Search(std::vector<Vec2>& path,
 
   int i = start.first;
   int j = start.second;
-  printf("kkk %d %d\n", i, row);
 
   details[i][j] = Pathfinder::Cell(0, 0, 0, i, j, false);
-  printf("kkk\n");
 
   std::set<dii> open;
   open.insert(std::make_pair(0.0f, std::make_pair(i, j)));
