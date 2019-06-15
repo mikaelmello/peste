@@ -14,6 +14,12 @@ PatrolState::PatrolState(GameObject& antagonist)
 PatrolState::~PatrolState() {}
 
 void PatrolState::OnStateEnter() {
+  if (!patrol_paths.empty()) {
+    // Garantir que sempre inicia este método com a pilha vazia.
+    // Checar se essa linha de código não dá problema.
+    patrol_paths = std::stack<std::vector<Vec2>>();
+  }
+
   Pathfinder::Heuristic* heuristic = new Pathfinder::Diagonal();
   Pathfinder::Astar* pf = new Pathfinder::Astar(
       *heuristic, Game::GetInstance().GetCurrentState().GetCurrentTileMap());
@@ -47,7 +53,7 @@ void PatrolState::OnStateExecution() {
     auto ant = std::dynamic_pointer_cast<Antagonist>(
         antagonist.GetComponent(GameData::Antagonist).lock());
 
-    auto top = patrol_paths.top();
+    std::vector<Vec2> top = patrol_paths.top();
 
     ant->position = top[counter];
     counter++;

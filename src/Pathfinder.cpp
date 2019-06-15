@@ -1,8 +1,9 @@
 #include "Pathfinder.hpp"
 #include "Game.hpp"
 
-void tracePath(Pathfinder::Cell details[][496], std::pair<int, int> dest,
-               std::vector<Vec2>& path) {
+void Pathfinder::Astar::TracePath(Pathfinder::Cell** details,
+                                  std::pair<int, int> dest,
+                                  std::vector<Vec2>& path) {
   int row = dest.first;
   int col = dest.second;
 
@@ -20,24 +21,18 @@ Pathfinder::Astar::Astar(Heuristic& h, TileMap* tm) : h(h), tm(tm) {}
 
 Pathfinder::Astar::~Astar() {}
 
-#include <iostream>
 std::vector<Vec2> Pathfinder::Astar::Run(Vec2& start, Vec2& dest) {
-  std::vector<Vec2> path;
-
   if (isDestination(start.x, start.y, {dest.x, dest.y})) {
     printf("Já está no destino.\n");
     return {};
   }
 
-  if (!isValid(dest.x, dest.y)) {
-    printf("Destino inválido!\n");
-    printf("  %d %d\n", tm->GetLogicalHeight(), tm->GetLogicalWidth());
-  }
   if (!isValid(start.x, start.y) || !isValid(dest.x, dest.y)) {
     printf("parâmetros inválidos.\n");
     return {};
   }
 
+  std::vector<Vec2> path;
   Search(path, {dest.x, dest.y}, {start.x, start.y});
   return path;
 }
@@ -47,12 +42,17 @@ void Pathfinder::Astar::Search(std::vector<Vec2>& path,
                                std::pair<int, int> dest) {
   int row = tm->GetLogicalHeight();
   int col = tm->GetLogicalWidth();
-  Pathfinder::Cell details[row][496];
+
+  Pathfinder::Cell** details;
+  details = new Pathfinder::Cell*[row];
+  for (int i = 0; i < row; i++) {
+    details[i] = new Pathfinder::Cell[col];
+  }
 
   int i = start.first;
   int j = start.second;
 
-  details[i][j] = Pathfinder::Cell(0, 0, 0, i, j, false);
+  details[i][j] = Pathfinder::Cell(0, 0, i, j, false);
 
   std::set<dii> open;
   open.insert(std::make_pair(0.0f, std::make_pair(i, j)));
@@ -83,7 +83,7 @@ void Pathfinder::Astar::Search(std::vector<Vec2>& path,
         if (isDestination(v.first, v.second, dest)) {
           details[v.first][v.second].parent_i = i;
           details[v.first][v.second].parent_j = j;
-          tracePath(details, dest, path);
+          TracePath(details, dest, path);
           return;
         } else if (!details[v.first][v.second].closed &&
                    tm->CanWalk(v.first, v.second)) {
@@ -96,7 +96,6 @@ void Pathfinder::Astar::Search(std::vector<Vec2>& path,
 
             details[v.first][v.second].f = f;
             details[v.first][v.second].g = g;
-            details[v.first][v.second].h = h;
 
             details[v.first][v.second].parent_i = i;
             details[v.first][v.second].parent_j = j;

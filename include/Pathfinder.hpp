@@ -16,20 +16,14 @@ typedef std::pair<int, int> ii;
 typedef std::pair<double, ii> dii;
 
 struct Cell {
-  Cell()
-      : f(FLT_MAX),
-        g(FLT_MAX),
-        h(FLT_MAX),
-        parent_i(-1),
-        parent_j(-1),
-        closed(false) {}
+  Cell() : f(FLT_MAX), g(FLT_MAX), parent_i(-1), parent_j(-1), closed(false) {}
 
-  Cell(double f, double g, double h, int p_i, int p_j, bool c)
-      : f(f), g(g), h(h), parent_i(p_i), parent_j(p_j), closed(c) {}
+  Cell(double f, double g, int p_i, int p_j, bool c)
+      : f(f), g(g), parent_i(p_i), parent_j(p_j), closed(c) {}
 
   int parent_i, parent_j;
 
-  double f, g, h;
+  double f, g;
 
   bool closed;
 };
@@ -76,6 +70,9 @@ class Astar {
 
   void Search(std::vector<Vec2>& path, std::pair<int, int> start,
               std::pair<int, int> dest);
+
+  inline void TracePath(Pathfinder::Cell** details, std::pair<int, int> dest,
+                        std::vector<Vec2>& path);
 
   inline bool isDestination(int row, int col, std::pair<int, int> dest) {
     return row == dest.first && col == dest.second;

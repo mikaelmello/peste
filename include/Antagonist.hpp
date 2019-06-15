@@ -7,6 +7,7 @@
 #define ANTAGONIST_SPRITE "assets/img/terry/idle_terry.png"
 
 #include <memory>
+#include <stack>
 #include <string>
 #include "Component.hpp"
 #include "GameData.hpp"
@@ -35,15 +36,7 @@ class Antagonist : public Component {
   Vec2 position;
 
  private:
-  std::vector<Vec2> path;
-
-  Timer timer1;
-
-  Timer timer2;
-
-  int i;
-
-  IState* state;
+  std::stack<IState*> state;
 };
 
 #endif

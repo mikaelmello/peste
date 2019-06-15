@@ -13,6 +13,8 @@ class IState {
 
   ~IState();
 
+  inline bool PopRequested() { return pop_requested; }
+
   void virtual OnStateEnter() = 0;
 
   void virtual OnStateExecution() = 0;
@@ -23,6 +25,8 @@ class IState {
 
  protected:
   GameObject& antagonist;
+
+  bool pop_requested;
 };
 
 #endif
