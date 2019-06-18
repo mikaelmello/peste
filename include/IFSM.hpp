@@ -1,5 +1,5 @@
-#ifndef ISTATE_H
-#define ISTATE_H
+#ifndef IFSM_H
+#define IFSM_H
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *                  INCLUDES E DEFINES
@@ -7,11 +7,11 @@
 
 #include "GameObject.hpp"
 
-class IState {
+class IFSM {
  public:
-  IState(GameObject& antagonist);
+  IFSM(GameObject& antagonist);
 
-  ~IState();
+  ~IFSM();
 
   inline bool PopRequested() { return pop_requested; }
 

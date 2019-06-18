@@ -1,20 +1,22 @@
-#ifndef PATROLSTATE_H
-#define PATROLSTATE_H
+#ifndef IDLEFSM_H
+#define IDLEFSM_H
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *                  INCLUDES E DEFINES
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+#define IDLE_TIME 2
+#define IDLE_SPRITE_ANTAGONIST "assets/img/terry/idle_terry.png"
 
 #include <stack>
 #include "GameObject.hpp"
-#include "IState.hpp"
+#include "IFSM.hpp"
 #include "Timer.hpp"
 
-class PatrolState : public IState {
+class IdleFSM : public IFSM {
  public:
-  PatrolState(GameObject& antagonist);
+  IdleFSM(GameObject& antagonist);
 
-  ~PatrolState();
+  ~IdleFSM();
 
   void OnStateEnter();
 
@@ -30,8 +32,6 @@ class PatrolState : public IState {
   int counter;
 
   Timer timer;
-
-  std::stack<std::vector<Vec2>> patrol_paths;
 };
 
 #endif

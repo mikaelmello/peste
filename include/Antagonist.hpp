@@ -12,7 +12,7 @@
 #include "Component.hpp"
 #include "GameData.hpp"
 #include "GameObject.hpp"
-#include "IState.hpp"
+#include "IFSM.hpp"
 #include "Timer.hpp"
 
 class Antagonist : public Component {
@@ -31,12 +31,16 @@ class Antagonist : public Component {
 
   void Render() override;
 
+  void Push(IFSM* s);
+
   const GameData::Types Type = GameData::Types::Antagonist;
 
   Vec2 position;
 
  private:
-  std::stack<IState*> state;
+  IFSM* stored_state;
+
+  std::stack<std::unique_ptr<IFSM>> state_stack;
 };
 
 #endif

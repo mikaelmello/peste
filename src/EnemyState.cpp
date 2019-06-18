@@ -57,6 +57,8 @@ void EnemyState::LoadAssets() {
       new Antagonist(*antagonist_go, currentTileMap->GetInitialPosition());
   antagonist_go->AddComponent(antagonist);
   objects.emplace(antagonist_go);
+
+  Camera::Follow(antagonist_go);
 }
 
 void EnemyState::Render() { RenderArray(); }

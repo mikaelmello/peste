@@ -43,19 +43,21 @@ void Pathfinder::Astar::Search(std::vector<Vec2>& path,
   int row = tm->GetLogicalHeight();
   int col = tm->GetLogicalWidth();
 
+  // Conversar com Levi e Mikael sobre essas linhas
   Pathfinder::Cell** details;
   details = new Pathfinder::Cell*[row];
   for (int i = 0; i < row; i++) {
     details[i] = new Pathfinder::Cell[col];
   }
+  // Conversar com Levi e Mikael sobre essas linhas
 
   int i = start.first;
   int j = start.second;
 
-  details[i][j] = Pathfinder::Cell(0, 0, i, j, false);
+  details[i][j] = Pathfinder::Cell(h.Distance(start, dest), 0, i, j, false);
 
   std::set<dii> open;
-  open.insert(std::make_pair(0.0f, std::make_pair(i, j)));
+  open.insert(std::make_pair(details[i][j].f, std::make_pair(i, j)));
 
   while (!open.empty()) {
     dii p = *open.begin();
