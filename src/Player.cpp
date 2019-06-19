@@ -107,76 +107,13 @@ void Player::Update(float dt) {
   }
 
   if (!up && !right && !left && !down) {
-    sprite->SetFrameCount(1);
-    sprite->SetFrameTime(1);
-    if (lastMove == UPRIGHT) {
-      sprite->Open(PLAYER_UPRIGHT);
-    } else if (lastMove == UPLEFT) {
-      sprite->Open(PLAYER_UPLEFT);
-    } else if (lastMove == UP) {
-      sprite->Open(PLAYER_BACK);
-    } else if (lastMove == LEFT) {
-      sprite->Open(PLAYER_LEFT);
-    } else if (lastMove == RIGHT) {
-      sprite->Open(PLAYER_RIGHT);
-    } else if (lastMove == DOWNLEFT) {
-      sprite->Open(PLAYER_DOWNLEFT);
-    } else if (lastMove == DOWNRIGHT) {
-      sprite->Open(PLAYER_DOWNRIGHT);
-    } else if (lastMove == DOWN) {
-      sprite->Open(PLAYER_FRONT);
-    }
+    IDLEAnimation(sprite);
   } else {
-    if (up) {
-      changed = true;
-      if (right && lastMove != UPRIGHT) {
-        sprite->Open(PLAYER_UPRIGHT_ANIM);
-        lastMove = UPRIGHT;
-      } else if (left && lastMove != UPLEFT) {
-        sprite->Open(PLAYER_UPLEFT_ANIM);
-        lastMove = UPLEFT;
-      } else if (lastMove != UP) {
-        sprite->Open(PLAYER_BACK_ANIM);
-        lastMove = UP;
-      } else {
-        changed = false;
-      }
-    } else if (down) {
-      changed = true;
-      if (right && lastMove != DOWNRIGHT) {
-        sprite->Open(PLAYER_DOWNRIGHT_ANIM);
-        lastMove = DOWNRIGHT;
-      } else if (left && lastMove != DOWNLEFT) {
-        sprite->Open(PLAYER_DOWNLEFT_ANIM);
-        lastMove = DOWNLEFT;
-      } else if (lastMove != DOWN) {
-        sprite->Open(PLAYER_FRONT_ANIM);
-        lastMove = DOWN;
-      } else {
-        changed = false;
-      }
-    } else if (left) {
-      changed = true;
-      if (lastMove != LEFT) {
-        sprite->Open(PLAYER_LEFT_ANIM);
-        lastMove = LEFT;
-      } else {
-        changed = false;
-      }
-    } else if (right) {
-      changed = true;
-      if (lastMove != RIGHT) {
-        sprite->Open(PLAYER_RIGHT_ANIM);
-        lastMove = RIGHT;
-      } else {
-        changed = false;
-      }
+    changed = WalkingAnimation(sprite, up, right, down, left);
+    if (changed) {
+      sprite->SetFrameCount(5);
+      sprite->SetFrameTime(0.1);
     }
-  }
-
-  if (changed) {
-    sprite->SetFrameCount(5);
-    sprite->SetFrameTime(0.1);
   }
 
   associated.box.w = sprite->GetWidth();
@@ -186,3 +123,72 @@ void Player::Update(float dt) {
 void Player::Render() {}
 
 bool Player::Is(GameData::Types type) const { return type == this->Type; }
+
+void Player::IDLEAnimation(const std::shared_ptr<Sprite>& sprite) {
+  sprite->SetFrameCount(1);
+  sprite->SetFrameTime(1);
+  if (lastMove == UPRIGHT) {
+    sprite->Open(PLAYER_UPRIGHT);
+  } else if (lastMove == UPLEFT) {
+    sprite->Open(PLAYER_UPLEFT);
+  } else if (lastMove == UP) {
+    sprite->Open(PLAYER_BACK);
+  } else if (lastMove == LEFT) {
+    sprite->Open(PLAYER_LEFT);
+  } else if (lastMove == RIGHT) {
+    sprite->Open(PLAYER_RIGHT);
+  } else if (lastMove == DOWNLEFT) {
+    sprite->Open(PLAYER_DOWNLEFT);
+  } else if (lastMove == DOWNRIGHT) {
+    sprite->Open(PLAYER_DOWNRIGHT);
+  } else if (lastMove == DOWN) {
+    sprite->Open(PLAYER_FRONT);
+  }
+  lastMove = IDLE;
+}
+
+bool Player::WalkingAnimation(const std::shared_ptr<Sprite>& sprite, bool up,
+                              bool right, bool down, bool left) {
+  if (up) {
+    if (right && lastMove != UPRIGHT) {
+      sprite->Open(PLAYER_UPRIGHT_ANIM);
+      lastMove = UPRIGHT;
+      return true;
+    } else if (left && lastMove != UPLEFT) {
+      sprite->Open(PLAYER_UPLEFT_ANIM);
+      lastMove = UPLEFT;
+      return true;
+    } else if (lastMove != UP) {
+      sprite->Open(PLAYER_BACK_ANIM);
+      lastMove = UP;
+      return true;
+    }
+  } else if (down) {
+    if (right && lastMove != DOWNRIGHT) {
+      sprite->Open(PLAYER_DOWNRIGHT_ANIM);
+      lastMove = DOWNRIGHT;
+      return true;
+    } else if (left && lastMove != DOWNLEFT) {
+      sprite->Open(PLAYER_DOWNLEFT_ANIM);
+      lastMove = DOWNLEFT;
+      return true;
+    } else if (lastMove != DOWN) {
+      sprite->Open(PLAYER_FRONT_ANIM);
+      lastMove = DOWN;
+      return true;
+    }
+  } else if (left) {
+    if (lastMove != LEFT) {
+      sprite->Open(PLAYER_LEFT_ANIM);
+      lastMove = LEFT;
+      return true;
+    }
+  } else if (right) {
+    if (lastMove != RIGHT) {
+      sprite->Open(PLAYER_RIGHT_ANIM);
+      lastMove = RIGHT;
+      return true;
+    }
+  }
+  return false;
+}
