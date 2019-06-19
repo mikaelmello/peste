@@ -3,6 +3,7 @@
 #define INCLUDE_SDL_MIXER
 #define INCLUDE_SDL_TTF
 #include "Game.hpp"
+#include <iostream>
 #include <stdexcept>
 #include <string>
 #include "InputManager.hpp"

@@ -19,9 +19,6 @@ RoomState::RoomState() {
   mapGo->AddComponent(currentTileMap);
   objects.emplace(mapGo);
 
-  printf("%lf %lf\n", currentTileMap->GetInitialPosition().x,
-         currentTileMap->GetInitialPosition().y);
-
   GameObject* playerGo = new GameObject(5);
   Player* player = new Player(*playerGo, currentTileMap->GetInitialPosition());
   playerGo->AddComponent(player);
@@ -30,7 +27,10 @@ RoomState::RoomState() {
   Camera::Follow(playerGo);
 }
 
-RoomState::~RoomState() {}
+RoomState::~RoomState() {
+  Camera::Unfollow();
+  Camera::pos = {0, 0};
+}
 
 void RoomState::Update(float dt) {
   if (quitRequested || popRequested) {
