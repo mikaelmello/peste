@@ -4,7 +4,7 @@
 
 <CAMELCASENAME>::~<CAMELCASENAME>() {}
 
-void<CAMELCASENAME>::Update(float dt) {
+void <CAMELCASENAME>::Update(float dt) {
   if (quitRequested || popRequested) {
     return;
   }
@@ -12,16 +12,16 @@ void<CAMELCASENAME>::Update(float dt) {
   UpdateArray(dt);
 }
 
-void<CAMELCASENAME>::Start() {
+void <CAMELCASENAME>::Start() {
   LoadAssets();
   StartArray();
   started = true;
 }
 
-void<CAMELCASENAME>::Pause() {}
+void <CAMELCASENAME>::Pause() {}
 
-void<CAMELCASENAME>::Resume() {}
+void <CAMELCASENAME>::Resume() {}
 
-void<CAMELCASENAME>::LoadAssets() {}
+void <CAMELCASENAME>::LoadAssets() {}
 
-void<CAMELCASENAME>::Render() { RenderArray(); }
+void <CAMELCASENAME>::Render() { RenderArray(); }

@@ -57,7 +57,9 @@
         "valarray": "cpp",
         "cstddef": "cpp",
         "memory": "cpp",
-        "string": "cpp"
+        "string": "cpp",
+        "optional": "cpp",
+        "string_view": "cpp"
     },
     "C_Cpp.clang_format_fallbackStyle": "Google",
     "editor.formatOnSave": true,

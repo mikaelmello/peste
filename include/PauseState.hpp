@@ -1,5 +1,5 @@
-#ifndef <UPPERCASENAME>_H
-#define <UPPERCASENAME>_H
+#ifndef PAUSESTATE_H
+#define PAUSESTATE_H
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *                  INCLUDES E DEFINES
@@ -8,11 +8,11 @@
 #include "Music.hpp"
 #include "State.hpp"
 
-class <CAMELCASENAME> : public State {
+class PauseState : public State {
  public:
-  <CAMELCASENAME>();
+  PauseState();
 
-  ~<CAMELCASENAME>();
+  ~PauseState();
 
   void Start();
 
