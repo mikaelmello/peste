@@ -12,6 +12,7 @@
 #include "GameObject.hpp"
 #include "Music.hpp"
 #include "Sprite.hpp"
+#include "TileMap.hpp"
 #include "TileSet.hpp"
 
 class State {
@@ -32,6 +33,8 @@ class State {
 
   virtual void Resume() = 0;
 
+  virtual TileMap* GetCurrentTileMap();
+
   virtual std::weak_ptr<GameObject> AddObject(GameObject* go);
 
   virtual std::weak_ptr<GameObject> GetObjectPtr(GameObject* go);
@@ -50,6 +53,8 @@ class State {
   bool popRequested;
   bool quitRequested;
   bool started;
+
+  TileMap* currentTileMap = nullptr;
 
   struct GameObjectComp {
     bool operator()(const std::shared_ptr<GameObject>& lhs,
