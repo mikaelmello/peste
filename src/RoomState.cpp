@@ -3,6 +3,7 @@
 #include "CameraFollower.hpp"
 #include "GameObject.hpp"
 #include "InputManager.hpp"
+#include "Item.hpp"
 #include "Player.hpp"
 #include "TileMap.hpp"
 
@@ -25,6 +26,12 @@ RoomState::RoomState() {
   objects.emplace(playerGo);
 
   Camera::Follow(playerGo);
+
+  GameObject* lampGo = new GameObject(5);
+  Item* lamp = new Item(*lampGo, "assets/img/item/lamp.png",
+                        currentTileMap->GetInitialPosition());
+  lampGo->AddComponent(lamp);
+  objects.emplace(lampGo);
 }
 
 RoomState::~RoomState() {

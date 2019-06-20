@@ -30,7 +30,8 @@ Player::Player(GameObject& associated, Vec2 position)
     : Component(associated), position(position) {
   Sprite* sprite = new Sprite(associated, PLAYER_FRONT);
   sprite->SetScaleX(0.7, 0.7);
-  Collider* collider = new Collider(associated);
+  Collider* collider =
+      new Collider(associated, {0.7, 0.3}, {0, sprite->GetHeight() / 2.5});
   associated.AddComponent(sprite);
   associated.box.w = sprite->GetWidth();
   associated.box.h = sprite->GetHeight();

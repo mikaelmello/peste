@@ -1,5 +1,5 @@
-#ifndef <UPPERCASENAME>_H
-#define <UPPERCASENAME>_H
+#ifndef ITEM_H
+#define ITEM_H
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *                  INCLUDES E DEFINES
@@ -9,12 +9,13 @@
 #include "Component.hpp"
 #include "GameData.hpp"
 #include "GameObject.hpp"
+#include "Vec2.hpp"
 
-class <CAMELCASENAME> : public Component {
+class Item : public Component {
  public:
-  <CAMELCASENAME>(GameObject& associated);
+  Item(GameObject& associated, const std::string& path, Vec2 pos);
 
-  ~<CAMELCASENAME>();
+  ~Item();
 
   void Start() override;
 
@@ -26,7 +27,7 @@ class <CAMELCASENAME> : public Component {
 
   void Render() override;
 
-  const GameData::Types Type = GameData::Types::<CAMELCASENAME>;
+  const GameData::Types Type = GameData::Types::Item;
 
  private:
 };
