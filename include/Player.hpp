@@ -34,7 +34,7 @@ class Player : public Component {
   void OpenIdleSprite(const std::shared_ptr<Sprite>& sprite,
                       Helpers::Direction lastDirection);
 
-  bool OpenWalkingSprite(const std::shared_ptr<Sprite>& sprite,
+  void OpenWalkingSprite(const std::shared_ptr<Sprite>& sprite,
                          Helpers::Direction lastDirection,
                          Helpers::Direction direction);
 
