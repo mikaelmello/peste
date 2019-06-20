@@ -9,53 +9,55 @@
 #include "Pathfinder.hpp"
 
 PatrolFSM::PatrolFSM(GameObject& antagonist)
-    : IFSM(antagonist), counter(0), sprite_status(IDLE_CODE) {
-  OnStateEnter();
-  timer.Restart();
-}
+    : IFSM(antagonist), counter(0), sprite_status(IDLE_CODE) {}
 
 PatrolFSM::~PatrolFSM() {}
 
 void PatrolFSM::OnStateEnter() {
   if (!patrol_paths.empty()) {
     // Garantir que sempre inicia este método com a pilha vazia.
-    // Checar se essa linha de código não dá problema.
     patrol_paths = std::stack<std::vector<Vec2>>();
   }
 
   Pathfinder::Heuristic* heuristic = new Pathfinder::Diagonal();
   Pathfinder::Astar* pf = new Pathfinder::Astar(
-      *heuristic, Game::GetInstance().GetCurrentState().GetCurrentTileMap());
+      antagonist, *heuristic,
+      Game::GetInstance().GetCurrentState().GetCurrentTileMap());
 
-  auto dest1 = Vec2(160, 177);
-  auto dest2 = Vec2(240, 200);
+  auto dest1 = Vec2(100, 192);
+  auto dest2 = Vec2(100, 142);
+  auto dest3 = Vec2(200, 142);
 
   auto initial = Game::GetInstance()
                      .GetCurrentState()
                      .GetCurrentTileMap()
                      ->GetInitialPosition();
 
-  auto path1 = pf->Run(dest1, dest2);
-  patrol_paths.push(path1);
-
-  auto path2 = pf->Run(initial, dest1);
-  patrol_paths.push(path2);
-
   auto current = std::dynamic_pointer_cast<Antagonist>(
                      antagonist.GetComponent(GameData::Antagonist).lock())
                      ->position;
-  auto ret_path = pf->Run(current, initial);
-  patrol_paths.push(ret_path);
+
+  try {
+    auto path3 = pf->Run(dest2, dest3);
+    patrol_paths.push(path3);
+
+    auto path2 = pf->Run(dest1, dest2);
+    patrol_paths.push(path2);
+
+    auto path1 = pf->Run(initial, dest1);
+    patrol_paths.push(path1);
+
+    auto ret_path = pf->Run(current, initial);
+    patrol_paths.push(ret_path);
+  } catch (...) {
+    pop_requested = true;
+  }
 
   timer.Restart();
-
   delete pf;
 }
 
 void PatrolFSM::OnStateExecution() {
-  bool change_sprite = false;
-  int last_sprite = 0;
-
   if (!patrol_paths.empty()) {
     auto ant = std::dynamic_pointer_cast<Antagonist>(
         antagonist.GetComponent(GameData::Antagonist).lock());
@@ -121,7 +123,12 @@ void PatrolFSM::OnStateExecution() {
   }
 }
 
-void PatrolFSM::OnStateExit() {}
+void PatrolFSM::OnStateExit() {
+  auto sprite = std::dynamic_pointer_cast<Sprite>(
+      antagonist.GetComponent(GameData::Sprite).lock());
+  sprite_status = IDLE_CODE;
+  sprite->Open(IDLE_SPRITE);
+}
 
 void PatrolFSM::Update(float dt) {
   if (patrol_paths.empty()) {
@@ -129,14 +136,17 @@ void PatrolFSM::Update(float dt) {
     counter = 0;
   }
 
-  auto path = patrol_paths.top();
+  while (!patrol_paths.empty() && counter == patrol_paths.top().size()) {
+    auto ant = std::dynamic_pointer_cast<Antagonist>(
+        antagonist.GetComponent(GameData::Antagonist).lock());
 
-  if (counter == path.size()) {
     patrol_paths.pop();
     counter = 0;
+
+    ant->Push(new IdleFSM(antagonist));
   }
 
-  if (timer.Get() > 0.03) {
+  if (timer.Get() > 0.9 * dt) {
     OnStateExecution();
     timer.Restart();
   }

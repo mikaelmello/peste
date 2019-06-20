@@ -149,8 +149,6 @@ int TileMap::GetLogicalHeight() { return logicalHeight; }
 
 int TileMap::GetLogicalTileDimension() { return logicalTileDimension; }
 
-std::vector<std::vector<bool>> TileMap::GetLogical() { return walkable; }
-
 bool TileMap::CanWalk(int x, int y) {
   if (x < 0 || x >= logicalWidth || y < 0 || y >= logicalHeight) {
     return false;

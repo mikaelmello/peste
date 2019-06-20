@@ -12,13 +12,13 @@
 Antagonist::Antagonist(GameObject& associated, Vec2 position)
     : Component(associated), position(position), stored_state(nullptr) {
   Collider* collider = new Collider(associated);
-  Sprite* sprite = new Sprite(associated, ANTAGONIST_SPRITE, 4, 0.1);
+  Sprite* sprite = new Sprite(associated, ANTAGONIST_SPRITE, 4, 0.125);
 
   associated.AddComponent(collider);
   associated.AddComponent(sprite);
 }
 
-Antagonist::~Antagonist() {}
+Antagonist::~Antagonist() { delete stored_state; }
 
 void Antagonist::NotifyCollision(GameObject& other) {}
 
@@ -32,10 +32,12 @@ void Antagonist::Update(float dt) {
     auto& top_state = state_stack.top();
     if (top_state->PopRequested()) {
       state_stack.pop();
-      if (!state_stack.empty()) {
+      // Pensar mais sobre esse if-then. Aparentemente não é necessário.
+      /*if (!state_stack.empty()) {
         auto& enter_state = state_stack.top();
         enter_state->OnStateEnter();
-      }
+      }*/
+      // Pensar mais sobre esse if-then. Aparentemente não é necessário.
     }
 
     if (stored_state != nullptr) {
@@ -70,30 +72,5 @@ void Antagonist::Update(float dt) {
 void Antagonist::Render() {}
 
 void Antagonist::Push(IFSM* s) { stored_state = s; }
-
-/*void Antagonist::SpriteManager(Vec2 ant) const {
-  std::pair<int, int> delta = {(position - ant).x, (position - ant).y};
-  std::vector<std::pair<int, int>> deltas = {
-      {-1, 0}, {1, 0}, {0, 1}, {0, -1}, {-1, 1}, {-1, -1}, {1, 1}, {1, -1}};
-
-  auto it = std::find(deltas.begin(), deltas.end(), delta);
-  int change = 0;
-  if (it != deltas.end()) {
-    change = std::distance(deltas.begin(), it) + 1;
-  }
-
-  auto sprite = std::dynamic_pointer_cast<Sprite>(
-      associated.GetComponent(GameData::Sprite).lock());
-  switch (change) {
-    case 0:
-      sprite->Open(IDLE_TERRY);
-      break;
-    case 1:
-      sprite->Open(LEFT_WALK_TERRY);
-      break;
-    case 2:
-      sprite->Open(RIGHT_)
-  }
-}*/
 
 bool Antagonist::Is(GameData::Types type) const { return type == this->Type; }
