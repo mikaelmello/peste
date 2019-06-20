@@ -7,7 +7,7 @@
 
 Inventory::Inventory(GameObject& associated) : Component(associated) {
   Sprite* sprite = new Sprite(associated, "assets/img/inventory-temp.png");
-  CameraFollower* cf = new CameraFollower(associated);
+  CameraFollower* cf = new CameraFollower(associated, {512, 334});
   associated.AddComponent(sprite);
   associated.AddComponent(cf);
 

@@ -11,7 +11,7 @@
 RoomState::RoomState() {
   GameObject* bckgGo = new GameObject(5);
   Sprite* bckgSprite = new Sprite(*bckgGo, "assets/img/black.jpg");
-  bckgGo->AddComponent(new CameraFollower(*bckgGo));
+  bckgGo->AddComponent(new CameraFollower(*bckgGo, {512, 334}));
   bckgGo->AddComponent(bckgSprite);
   objects.emplace(bckgGo);
 
