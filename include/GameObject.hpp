@@ -33,6 +33,10 @@ class GameObject {
 
   void RemoveComponent(Component* cpt);
 
+  inline void DisableRender() { render = false; }
+  inline void EnableRender() { render = true; }
+  inline void ToggleRender() { render = !render; }
+
   std::weak_ptr<Component> GetComponent(GameData::Types type);
 
   Rect box;
@@ -45,6 +49,7 @@ class GameObject {
   std::vector<std::shared_ptr<Component>> components;
   bool isDead;
   bool started;
+  bool render;
 };
 
 #endif

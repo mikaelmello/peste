@@ -5,7 +5,11 @@
 #include "Component.hpp"
 
 GameObject::GameObject(double priority)
-    : isDead(false), started(false), angleDeg(0), priority(priority) {}
+    : isDead(false),
+      started(false),
+      angleDeg(0),
+      priority(priority),
+      render(true) {}
 
 GameObject::~GameObject() { components.clear(); }
 
@@ -27,6 +31,8 @@ void GameObject::NotifyCollision(GameObject& other) {
 }
 
 void GameObject::Render() {
+  if (!render) return;
+
   std::for_each(components.begin(), components.end(),
                 [](std::shared_ptr<Component>& cpt) { cpt->Render(); });
 }
