@@ -44,6 +44,8 @@ enum Direction {
   DOWNRIGHT,
 };
 
+Direction combine_moves(bool up, bool down, bool left, bool right);
+
 }  // end namespace Helpers
 
 #endif

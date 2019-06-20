@@ -33,8 +33,8 @@ class Player : public Component {
  private:
   void IDLEAnimation(const std::shared_ptr<Sprite>& sprite);
 
-  bool WalkingAnimation(const std::shared_ptr<Sprite>& sprite, bool up,
-                        bool right, bool down, bool left);
+  bool WalkingAnimation(const std::shared_ptr<Sprite>& sprite,
+                        Helpers::Direction direction);
 
   Vec2 position;
 

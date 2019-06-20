@@ -111,7 +111,7 @@ void Player::Update(float dt) {
   if (!up && !right && !left && !down) {
     IDLEAnimation(sprite);
   } else {
-    changed = WalkingAnimation(sprite, up, right, down, left);
+    changed = WalkingAnimation(sprite, combine_moves(up, down, left, right));
     if (changed) {
       sprite->SetFrameCount(5);
       sprite->SetFrameTime(0.1);
@@ -129,68 +129,70 @@ bool Player::Is(GameData::Types type) const { return type == this->Type; }
 void Player::IDLEAnimation(const std::shared_ptr<Sprite>& sprite) {
   sprite->SetFrameCount(1);
   sprite->SetFrameTime(1);
-  if (lastMove == Direction::UPRIGHT) {
-    sprite->Open(PLAYER_UPRIGHT);
-  } else if (lastMove == Direction::UPLEFT) {
-    sprite->Open(PLAYER_UPLEFT);
-  } else if (lastMove == Direction::UP) {
-    sprite->Open(PLAYER_BACK);
-  } else if (lastMove == Direction::LEFT) {
-    sprite->Open(PLAYER_LEFT);
-  } else if (lastMove == Direction::RIGHT) {
-    sprite->Open(PLAYER_RIGHT);
-  } else if (lastMove == Direction::DOWNLEFT) {
-    sprite->Open(PLAYER_DOWNLEFT);
-  } else if (lastMove == Direction::DOWNRIGHT) {
-    sprite->Open(PLAYER_DOWNRIGHT);
-  } else if (lastMove == Direction::DOWN) {
-    sprite->Open(PLAYER_FRONT);
+
+  switch (lastMove) {
+    case Direction::UP:
+      sprite->Open(PLAYER_BACK);
+      break;
+    case Direction::DOWN:
+      sprite->Open(PLAYER_FRONT);
+      break;
+    case Direction::LEFT:
+      sprite->Open(PLAYER_LEFT);
+      break;
+    case Direction::RIGHT:
+      sprite->Open(PLAYER_RIGHT);
+      break;
+    case Direction::UPLEFT:
+      sprite->Open(PLAYER_UPLEFT);
+      break;
+    case Direction::UPRIGHT:
+      sprite->Open(PLAYER_UPRIGHT);
+      break;
+    case Direction::DOWNLEFT:
+      sprite->Open(PLAYER_DOWNLEFT);
+      break;
+    case Direction::DOWNRIGHT:
+      sprite->Open(PLAYER_DOWNRIGHT);
+      break;
   }
+
   lastMove = Direction::NONE;
 }
 
-bool Player::WalkingAnimation(const std::shared_ptr<Sprite>& sprite, bool up,
-                              bool right, bool down, bool left) {
-  if (up) {
-    if (right && lastMove != Direction::UPRIGHT) {
-      sprite->Open(PLAYER_UPRIGHT_ANIM);
-      lastMove = Direction::UPRIGHT;
-      return true;
-    } else if (left && lastMove != Direction::UPLEFT) {
-      sprite->Open(PLAYER_UPLEFT_ANIM);
-      lastMove = Direction::UPLEFT;
-      return true;
-    } else if (lastMove != Direction::UP) {
-      sprite->Open(PLAYER_BACK_ANIM);
-      lastMove = Direction::UP;
-      return true;
-    }
-  } else if (down) {
-    if (right && lastMove != Direction::DOWNRIGHT) {
-      sprite->Open(PLAYER_DOWNRIGHT_ANIM);
-      lastMove = Direction::DOWNRIGHT;
-      return true;
-    } else if (left && lastMove != Direction::DOWNLEFT) {
-      sprite->Open(PLAYER_DOWNLEFT_ANIM);
-      lastMove = Direction::DOWNLEFT;
-      return true;
-    } else if (lastMove != Direction::DOWN) {
-      sprite->Open(PLAYER_FRONT_ANIM);
-      lastMove = Direction::DOWN;
-      return true;
-    }
-  } else if (left) {
-    if (lastMove != Direction::LEFT) {
-      sprite->Open(PLAYER_LEFT_ANIM);
-      lastMove = Direction::LEFT;
-      return true;
-    }
-  } else if (right) {
-    if (lastMove != Direction::RIGHT) {
-      sprite->Open(PLAYER_RIGHT_ANIM);
-      lastMove = Direction::RIGHT;
-      return true;
-    }
+bool Player::WalkingAnimation(const std::shared_ptr<Sprite>& sprite,
+                              Direction direction) {
+  if (lastMove == direction) {
+    return false;
   }
-  return false;
+
+  switch (direction) {
+    case Direction::UP:
+      sprite->Open(PLAYER_BACK_ANIM);
+      break;
+    case Direction::DOWN:
+      sprite->Open(PLAYER_FRONT_ANIM);
+      break;
+    case Direction::LEFT:
+      sprite->Open(PLAYER_LEFT_ANIM);
+      break;
+    case Direction::RIGHT:
+      sprite->Open(PLAYER_RIGHT_ANIM);
+      break;
+    case Direction::UPLEFT:
+      sprite->Open(PLAYER_UPLEFT_ANIM);
+      break;
+    case Direction::UPRIGHT:
+      sprite->Open(PLAYER_UPRIGHT_ANIM);
+      break;
+    case Direction::DOWNLEFT:
+      sprite->Open(PLAYER_DOWNLEFT_ANIM);
+      break;
+    case Direction::DOWNRIGHT:
+      sprite->Open(PLAYER_DOWNRIGHT_ANIM);
+      break;
+  }
+
+  lastMove = direction;
+  return true;
 }

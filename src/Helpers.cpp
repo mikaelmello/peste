@@ -49,3 +49,48 @@ bool Helpers::is_whitespace(const std::string& s) {
 float Helpers::rad_to_deg(float rad) { return rad * 180 / M_PI; }
 
 float Helpers::deg_to_rad(float deg) { return deg * M_PI / 180; }
+
+Helpers::Direction Helpers::combine_moves(bool up, bool down, bool left,
+                                          bool right) {
+  if (up && down) {
+    up = false;
+    down = false;
+  }
+
+  if (left && right) {
+    left = false;
+    right = false;
+  }
+
+  if (up) {
+    if (left) {
+      return Helpers::Direction::UPLEFT;
+    }
+
+    if (right) {
+      return Helpers::Direction::UPRIGHT;
+    }
+
+    return Helpers::Direction::UP;
+  }
+
+  if (down) {
+    if (left) {
+      return Helpers::Direction::DOWNLEFT;
+    }
+
+    if (right) {
+      return Helpers::Direction::DOWNRIGHT;
+    }
+
+    return Helpers::Direction::DOWN;
+  }
+
+  if (left) {
+    return Helpers::Direction::LEFT;
+  }
+
+  if (right) {
+    return Helpers::Direction::RIGHT;
+  }
+}
