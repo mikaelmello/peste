@@ -5,16 +5,17 @@
  *                  INCLUDES E DEFINES
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-#define MENU_BACKGROUND_SPRITE "assets/img/temp_menu_bg.jpg"
-#define MENU_PLAY_BUTTON_SPRITE "assets/img/temp_button.png"
-#define MENU_TUTORIAL_BUTTON_SPRITE "assets/img/temp_button.png"
-#define MENU_CREDITS_BUTTON_SPRITE "assets/img/temp_button.png"
-#define MENU_QUIT_BUTTON_SPRITE "assets/img/temp_button.png"
-#define MENU_CURSOR_SPRITE "assets/img/temp_cursor.png"
+#define MENU_BACKGROUND_SPRITE "assets/img/menu/menu_background.png"
+#define MENU_PLAY_BUTTON_SPRITE "assets/img/menu/play_button.png"
+#define MENU_TUTORIAL_BUTTON_SPRITE "assets/img/menu/tutorial_button.png"
+#define MENU_CREDITS_BUTTON_SPRITE "assets/img/menu/credits_button.png"
+#define MENU_QUIT_BUTTON_SPRITE "assets/img/menu/quit_button.png"
+#define MENU_CURSOR_SPRITE "assets/img/menu/cursor.png"
 
 #include "Helpers.hpp"
 #include "InputManager.hpp"
 #include "Music.hpp"
+#include "Options.hpp"
 #include "State.hpp"
 
 class MenuState : public State {
@@ -38,55 +39,13 @@ class MenuState : public State {
   void Render();
 
  private:
-  struct Cursor {
-    enum CursorState { play, tutorial, credits, quit, Count };
-
-    Cursor() : cursor_state(CursorState::play), cursor_go(nullptr) {}
-
-    inline Cursor& operator++() {
-      int i = static_cast<int>(cursor_state);
-      i = (i + 1) % CursorState::Count;
-      cursor_state = static_cast<CursorState>(i);
-      cursor_go->box = cursor_go->box.GetCentered(positions[i]);
-      return *this;
-    }
-
-    inline Cursor operator++(int) {
-      Cursor result(*this);
-      ++(*this);
-      return result;
-    }
-
-    inline Cursor& operator--() {
-      int i = static_cast<int>(cursor_state);
-      i = i != 0 ? i - 1 : Count - 1;
-      cursor_state = static_cast<CursorState>(i);
-      cursor_go->box = cursor_go->box.GetCentered(positions[i]);
-      return *this;
-    }
-
-    inline Cursor operator--(int) {
-      Cursor result(*this);
-      --(*this);
-      return result;
-    }
-
-    void setQuit() {
-      cursor_state = Cursor::CursorState::quit;
-      cursor_go->box = cursor_go->box.GetCentered(
-          positions[static_cast<int>(CursorState::quit)]);
-    }
-
-    std::vector<Vec2> positions;
-
-    CursorState cursor_state;
-
-    GameObject* cursor_go;
-  };
-
-  Cursor cursor;
+  enum Cursor { play, tutorial, credits, quit };
 
   const Vec2 position;
+
+  std::shared_ptr<Options> options;
+
+  std::vector<std::shared_ptr<GameObject>> buttons;
 
   InputManager& im;
 };
