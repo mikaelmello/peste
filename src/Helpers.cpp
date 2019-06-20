@@ -93,4 +93,6 @@ Helpers::Direction Helpers::combine_moves(bool up, bool down, bool left,
   if (right) {
     return Helpers::Direction::RIGHT;
   }
+
+  return Helpers::Direction::NONE;
 }

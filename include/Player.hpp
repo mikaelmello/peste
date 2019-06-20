@@ -31,14 +31,16 @@ class Player : public Component {
   const GameData::Types Type = GameData::Types::Player;
 
  private:
-  void IDLEAnimation(const std::shared_ptr<Sprite>& sprite);
+  void OpenIdleSprite(const std::shared_ptr<Sprite>& sprite,
+                      Helpers::Direction lastDirection);
 
-  bool WalkingAnimation(const std::shared_ptr<Sprite>& sprite,
-                        Helpers::Direction direction);
+  bool OpenWalkingSprite(const std::shared_ptr<Sprite>& sprite,
+                         Helpers::Direction lastDirection,
+                         Helpers::Direction direction);
 
   Vec2 position;
 
-  Helpers::Direction lastMove;
+  Helpers::Direction lastDirection;
 };
 
 #endif

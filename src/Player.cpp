@@ -108,10 +108,12 @@ void Player::Update(float dt) {
     }
   }
 
-  if (!up && !right && !left && !down) {
-    IDLEAnimation(sprite);
+  auto direction = combine_moves(up, down, left, right);
+
+  if (direction == Direction::NONE) {
+    OpenIdleSprite(sprite, lastDirection);
   } else {
-    changed = WalkingAnimation(sprite, combine_moves(up, down, left, right));
+    changed = OpenWalkingSprite(sprite, lastDirection, direction);
     if (changed) {
       sprite->SetFrameCount(5);
       sprite->SetFrameTime(0.1);
@@ -126,11 +128,12 @@ void Player::Render() {}
 
 bool Player::Is(GameData::Types type) const { return type == this->Type; }
 
-void Player::IDLEAnimation(const std::shared_ptr<Sprite>& sprite) {
+void Player::OpenIdleSprite(const std::shared_ptr<Sprite>& sprite,
+                            Direction lastDirection) {
   sprite->SetFrameCount(1);
   sprite->SetFrameTime(1);
 
-  switch (lastMove) {
+  switch (lastDirection) {
     case Direction::UP:
       sprite->Open(PLAYER_BACK);
       break;
@@ -156,13 +159,11 @@ void Player::IDLEAnimation(const std::shared_ptr<Sprite>& sprite) {
       sprite->Open(PLAYER_DOWNRIGHT);
       break;
   }
-
-  lastMove = Direction::NONE;
 }
 
-bool Player::WalkingAnimation(const std::shared_ptr<Sprite>& sprite,
-                              Direction direction) {
-  if (lastMove == direction) {
+bool Player::OpenWalkingSprite(const std::shared_ptr<Sprite>& sprite,
+                               Direction lastDirection, Direction direction) {
+  if (lastDirection == direction) {
     return false;
   }
 
@@ -193,6 +194,6 @@ bool Player::WalkingAnimation(const std::shared_ptr<Sprite>& sprite,
       break;
   }
 
-  lastMove = direction;
+  lastDirection = direction;
   return true;
 }
