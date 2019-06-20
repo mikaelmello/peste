@@ -9,7 +9,7 @@
 
 class IFSM {
  public:
-  IFSM(GameObject& antagonist);
+  IFSM(GameObject& object);
 
   ~IFSM();
 

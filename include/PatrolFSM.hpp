@@ -30,7 +30,7 @@
 
 class PatrolFSM : public IFSM {
  public:
-  PatrolFSM(GameObject& antagonist);
+  PatrolFSM(GameObject& object);
 
   ~PatrolFSM();
 
@@ -41,8 +41,6 @@ class PatrolFSM : public IFSM {
   void OnStateExit();
 
   void Update(float dt);
-
-  friend class IState;
 
  private:
   int counter;
