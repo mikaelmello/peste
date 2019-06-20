@@ -28,7 +28,7 @@ RoomState::RoomState() {
   Camera::Follow(playerGo);
 
   GameObject* lampGo = new GameObject(5);
-  Item* lamp = new Item(*lampGo, "assets/img/item/lamp.png",
+  Item* lamp = new Item(*lampGo, "Lamp", "A lamp", "assets/img/item/lamp.png",
                         currentTileMap->GetInitialPosition());
   lampGo->AddComponent(lamp);
   objects.emplace(lampGo);
