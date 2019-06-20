@@ -16,6 +16,7 @@ class GameData {
     TileMap,
     Player,
     Item,
+    Inventory,
   };
 };
 

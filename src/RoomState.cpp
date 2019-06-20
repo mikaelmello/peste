@@ -3,6 +3,7 @@
 #include "CameraFollower.hpp"
 #include "GameObject.hpp"
 #include "InputManager.hpp"
+#include "Inventory.hpp"
 #include "Item.hpp"
 #include "Player.hpp"
 #include "TileMap.hpp"
@@ -32,6 +33,11 @@ RoomState::RoomState() {
                         currentTileMap->GetInitialPosition());
   lampGo->AddComponent(lamp);
   objects.emplace(lampGo);
+
+  GameObject* inventoryGo = new GameObject(1000);
+  Inventory* inv = new Inventory(*inventoryGo);
+  inventoryGo->AddComponent(inv);
+  objects.emplace(inventoryGo);
 }
 
 RoomState::~RoomState() {
