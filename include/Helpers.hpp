@@ -32,6 +32,18 @@ float rad_to_deg(float rad);
 
 float deg_to_rad(float deg);
 
+enum Direction {
+  NONE,
+  UP,
+  DOWN,
+  LEFT,
+  RIGHT,
+  UPLEFT,
+  UPRIGHT,
+  DOWNLEFT,
+  DOWNRIGHT,
+};
+
 }  // end namespace Helpers
 
 #endif

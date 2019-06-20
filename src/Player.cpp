@@ -8,6 +8,8 @@
 #include "Sprite.hpp"
 #include "TileMap.hpp"
 
+using namespace Helpers;
+
 #define PLAYER_FRONT_ANIM "assets/img/hope/front_anim.png"
 #define PLAYER_BACK_ANIM "assets/img/hope/back_anim.png"
 #define PLAYER_LEFT_ANIM "assets/img/hope/back_anim.png"
@@ -127,66 +129,66 @@ bool Player::Is(GameData::Types type) const { return type == this->Type; }
 void Player::IDLEAnimation(const std::shared_ptr<Sprite>& sprite) {
   sprite->SetFrameCount(1);
   sprite->SetFrameTime(1);
-  if (lastMove == UPRIGHT) {
+  if (lastMove == Direction::UPRIGHT) {
     sprite->Open(PLAYER_UPRIGHT);
-  } else if (lastMove == UPLEFT) {
+  } else if (lastMove == Direction::UPLEFT) {
     sprite->Open(PLAYER_UPLEFT);
-  } else if (lastMove == UP) {
+  } else if (lastMove == Direction::UP) {
     sprite->Open(PLAYER_BACK);
-  } else if (lastMove == LEFT) {
+  } else if (lastMove == Direction::LEFT) {
     sprite->Open(PLAYER_LEFT);
-  } else if (lastMove == RIGHT) {
+  } else if (lastMove == Direction::RIGHT) {
     sprite->Open(PLAYER_RIGHT);
-  } else if (lastMove == DOWNLEFT) {
+  } else if (lastMove == Direction::DOWNLEFT) {
     sprite->Open(PLAYER_DOWNLEFT);
-  } else if (lastMove == DOWNRIGHT) {
+  } else if (lastMove == Direction::DOWNRIGHT) {
     sprite->Open(PLAYER_DOWNRIGHT);
-  } else if (lastMove == DOWN) {
+  } else if (lastMove == Direction::DOWN) {
     sprite->Open(PLAYER_FRONT);
   }
-  lastMove = IDLE;
+  lastMove = Direction::NONE;
 }
 
 bool Player::WalkingAnimation(const std::shared_ptr<Sprite>& sprite, bool up,
                               bool right, bool down, bool left) {
   if (up) {
-    if (right && lastMove != UPRIGHT) {
+    if (right && lastMove != Direction::UPRIGHT) {
       sprite->Open(PLAYER_UPRIGHT_ANIM);
-      lastMove = UPRIGHT;
+      lastMove = Direction::UPRIGHT;
       return true;
-    } else if (left && lastMove != UPLEFT) {
+    } else if (left && lastMove != Direction::UPLEFT) {
       sprite->Open(PLAYER_UPLEFT_ANIM);
-      lastMove = UPLEFT;
+      lastMove = Direction::UPLEFT;
       return true;
-    } else if (lastMove != UP) {
+    } else if (lastMove != Direction::UP) {
       sprite->Open(PLAYER_BACK_ANIM);
-      lastMove = UP;
+      lastMove = Direction::UP;
       return true;
     }
   } else if (down) {
-    if (right && lastMove != DOWNRIGHT) {
+    if (right && lastMove != Direction::DOWNRIGHT) {
       sprite->Open(PLAYER_DOWNRIGHT_ANIM);
-      lastMove = DOWNRIGHT;
+      lastMove = Direction::DOWNRIGHT;
       return true;
-    } else if (left && lastMove != DOWNLEFT) {
+    } else if (left && lastMove != Direction::DOWNLEFT) {
       sprite->Open(PLAYER_DOWNLEFT_ANIM);
-      lastMove = DOWNLEFT;
+      lastMove = Direction::DOWNLEFT;
       return true;
-    } else if (lastMove != DOWN) {
+    } else if (lastMove != Direction::DOWN) {
       sprite->Open(PLAYER_FRONT_ANIM);
-      lastMove = DOWN;
+      lastMove = Direction::DOWN;
       return true;
     }
   } else if (left) {
-    if (lastMove != LEFT) {
+    if (lastMove != Direction::LEFT) {
       sprite->Open(PLAYER_LEFT_ANIM);
-      lastMove = LEFT;
+      lastMove = Direction::LEFT;
       return true;
     }
   } else if (right) {
-    if (lastMove != RIGHT) {
+    if (lastMove != Direction::RIGHT) {
       sprite->Open(PLAYER_RIGHT_ANIM);
-      lastMove = RIGHT;
+      lastMove = Direction::RIGHT;
       return true;
     }
   }

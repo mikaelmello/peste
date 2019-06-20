@@ -9,6 +9,7 @@
 #include "Component.hpp"
 #include "GameData.hpp"
 #include "GameObject.hpp"
+#include "Helpers.hpp"
 #include "Sprite.hpp"
 
 class Player : public Component {
@@ -31,22 +32,13 @@ class Player : public Component {
 
  private:
   void IDLEAnimation(const std::shared_ptr<Sprite>& sprite);
+
   bool WalkingAnimation(const std::shared_ptr<Sprite>& sprite, bool up,
                         bool right, bool down, bool left);
 
   Vec2 position;
-  enum Direction {
-    UP,
-    RIGHT,
-    LEFT,
-    DOWN,
-    UPRIGHT,
-    UPLEFT,
-    DOWNRIGHT,
-    DOWNLEFT,
-    IDLE
-  };
-  Direction lastMove;
+
+  Helpers::Direction lastMove;
 };
 
 #endif
