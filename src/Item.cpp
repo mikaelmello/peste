@@ -7,8 +7,8 @@
 #include "Sprite.hpp"
 #include "TileMap.hpp"
 
-Item::Item(GameObject& associated, const std::string name,
-           const std::string description, const std::string& spritePath,
+Item::Item(GameObject& associated, const std::string& name,
+           const std::string& description, const std::string& spritePath,
            Vec2 pos)
     : Component(associated),
       name(name),

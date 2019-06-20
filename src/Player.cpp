@@ -5,6 +5,7 @@
 #include "Game.hpp"
 #include "GameObject.hpp"
 #include "InputManager.hpp"
+#include "Item.hpp"
 #include "Sprite.hpp"
 #include "TileMap.hpp"
 
@@ -43,7 +44,9 @@ Player::Player(GameObject& associated, Vec2 position)
 
 Player::~Player() {}
 
-void Player::NotifyCollision(GameObject& other) {}
+void Player::NotifyCollision(GameObject& other) {
+  std::cout << "estou colidindo oh meu deus" << std::endl;
+}
 
 void Player::Start() {}
 
