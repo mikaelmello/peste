@@ -37,6 +37,7 @@ RoomState::RoomState() {
   GameObject* inventoryGo = new GameObject(1000);
   Inventory* inv = new Inventory(*inventoryGo);
   inventoryGo->AddComponent(inv);
+  inventoryGo->DisableRender();
   objects.emplace(inventoryGo);
 }
 

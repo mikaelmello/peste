@@ -3,6 +3,7 @@
 #include "CameraFollower.hpp"
 #include "Collider.hpp"
 #include "GameObject.hpp"
+#include "InputManager.hpp"
 #include "Sprite.hpp"
 
 Inventory::Inventory(GameObject& associated) : Component(associated) {
@@ -20,8 +21,14 @@ void Inventory::NotifyCollision(GameObject& other) {}
 
 void Inventory::Start() {}
 
-void Inventory::Update(float dt) { printf("Uai\n"); }
+void Inventory::Update(float dt) {
+  InputManager& input = InputManager::GetInstance();
 
-void Inventory::Render() { printf("ta?\n"); }
+  if (input.KeyPress(I_KEY)) {
+    associated.ToggleRender();
+  }
+}
+
+void Inventory::Render() {}
 
 bool Inventory::Is(GameData::Types type) const { return type == this->Type; }
