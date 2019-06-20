@@ -13,7 +13,8 @@
 
 class Item : public Component {
  public:
-  Item(GameObject& associated, const std::string& path, Vec2 pos);
+  Item(GameObject& associated, const std::string name,
+       const std::string description, const std::string& spritePath, Vec2 pos);
 
   ~Item();
 
@@ -27,9 +28,16 @@ class Item : public Component {
 
   void Render() override;
 
+  void SetCenter(Vec2 pos);
+
+  void SetScale(float scaleX, float scaleY);
+
   const GameData::Types Type = GameData::Types::Item;
 
  private:
+  std::string name;
+  std::string description;
+  Vec2 position;
 };
 
 #endif
