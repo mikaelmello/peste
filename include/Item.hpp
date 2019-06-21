@@ -38,6 +38,7 @@ class Item : public Component {
   std::string name;
   std::string description;
   Vec2 position;
+  bool colliding;
 };
 
 #endif

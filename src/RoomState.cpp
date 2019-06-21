@@ -22,7 +22,7 @@ RoomState::RoomState() {
   mapGo->AddComponent(currentTileMap);
   objects.emplace(mapGo);
 
-  GameObject* playerGo = new GameObject(5);
+  GameObject* playerGo = new GameObject(6);
   Player* player = new Player(*playerGo, currentTileMap->GetInitialPosition());
   playerGo->AddComponent(player);
   objects.emplace(playerGo);

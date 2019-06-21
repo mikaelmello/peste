@@ -44,9 +44,7 @@ Player::Player(GameObject& associated, Vec2 position)
 
 Player::~Player() {}
 
-void Player::NotifyCollision(GameObject& other) {
-  std::cout << "estou colidindo oh meu deus" << std::endl;
-}
+void Player::NotifyCollision(GameObject& other) {}
 
 void Player::Start() {}
 
