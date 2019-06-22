@@ -37,6 +37,17 @@ void TileMap::Load(const std::string& file) {
   tileWidth = j["tilewidth"].get<int>();
   layers = j["layers"].get<std::vector<Layer>>();
 
+  auto properties = j["properties"];
+
+  for (auto p : properties) {
+    std::string key = p["name"].get<std::string>();
+    if (key == "initialPositionX") {
+      initialPosition.x = p["value"].get<int>();
+    } else if (key == "initialPositionY") {
+      initialPosition.y = p["value"].get<int>();
+    }
+  }
+
   // the last layer is a logical layer
   depth = layers.size() - 1;
 
@@ -50,23 +61,26 @@ void TileMap::Load(const std::string& file) {
 
   tileSet = new TileSet(tileWidth, tileHeight, "assets/img/" + path.back());
 
-  if (tileHeight != tileWidth || tileHeight % 16 != 0) {
-    throw std::invalid_argument("Tiles must be squared and a multiple of 16");
+  if (tileHeight != tileWidth || tileHeight % logicalTileDimension != 0) {
+    throw std::invalid_argument(
+        "Tiles must be squared and a multiple of logicalTileDimension");
   }
 
-  auto factor = tileHeight / 16;
-  logicalHeight = height * factor;
-  logicalWidth = width * factor;
+  logicalFactor = tileHeight / logicalTileDimension;
+  logicalHeight = height * logicalFactor;
+  logicalWidth = width * logicalFactor;
+  initialPosition.x *= logicalFactor;
+  initialPosition.y *= logicalFactor;
 
   // a layer logica deve sempre ser a ultima, mais acima
   auto& logical_layer = layers.back().data;
 
-  walkable = std::vector<std::vector<int>>(logicalHeight);
+  walkable = std::vector<std::vector<bool>>(logicalHeight);
   for (int i = 0; i < logicalHeight; i++) {
-    walkable[i] = std::vector<int>(logicalWidth);
+    walkable[i] = std::vector<bool>(logicalWidth);
 
     for (int j = 0; j < logicalWidth; j++) {
-      int idx = (i / 8 * width) + j / 8;
+      int idx = (i / logicalFactor * width) + j / logicalFactor;
       int equivalent = logical_layer[idx];
       walkable[i][j] = (equivalent != 0);
     }
@@ -123,6 +137,8 @@ void TileMap::Render() {
   }
 }
 
+Vec2 TileMap::GetInitialPosition() { return initialPosition; }
+
 int TileMap::GetWidth() { return width; }
 
 int TileMap::GetHeight() { return height; }
@@ -131,12 +147,14 @@ int TileMap::GetLogicalWidth() { return logicalWidth; }
 
 int TileMap::GetLogicalHeight() { return logicalHeight; }
 
+int TileMap::GetLogicalTileDimension() { return logicalTileDimension; }
+
 bool TileMap::CanWalk(int x, int y) {
   if (x < 0 || x >= logicalWidth || y < 0 || y >= logicalHeight) {
     return false;
   }
 
-  return walkable[x][y];
+  return walkable[y][x];
 }
 
 bool TileMap::Is(GameData::Types type) const { return type == this->Type; }

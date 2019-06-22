@@ -60,3 +60,5 @@ void State::UpdateArray(float dt) {
 void State::RenderArray() {
   std::for_each(objects.begin(), objects.end(), [](auto& go) { go->Render(); });
 }
+
+TileMap* State::GetCurrentTileMap() { return currentTileMap; }
