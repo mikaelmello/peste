@@ -8,10 +8,10 @@
 #define INCLUDE_SDL
 #include <string>
 #include "Component.hpp"
-#include "GameData.hpp"
 #include "GameObject.hpp"
 #include "SDL_include.h"
 #include "Timer.hpp"
+#include "Types.hpp"
 
 class Sprite : public Component {
  public:
@@ -29,7 +29,7 @@ class Sprite : public Component {
 
   void Update(float dt) override;
 
-  bool Is(GameData::Types type) const override;
+  bool Is(Types type) const override;
 
   void Render(int x, int y);
 
@@ -51,7 +51,7 @@ class Sprite : public Component {
 
   Vec2 GetScale();
 
-  const GameData::Types Type = GameData::Types::Sprite;
+  const Types Type = SpriteType;
 
  private:
   std::shared_ptr<SDL_Texture> texture;

@@ -7,8 +7,8 @@
 
 #include <string>
 #include "Component.hpp"
-#include "GameData.hpp"
 #include "GameObject.hpp"
+#include "Types.hpp"
 #include "Vec2.hpp"
 
 class Item : public Component {
@@ -24,7 +24,7 @@ class Item : public Component {
 
   void Update(float dt) override;
 
-  bool Is(GameData::Types type) const override;
+  bool Is(Types type) const override;
 
   void Render() override;
 
@@ -32,7 +32,7 @@ class Item : public Component {
 
   void SetScale(float scaleX, float scaleY);
 
-  const GameData::Types Type = GameData::Types::Item;
+  const Types Type = ItemType;
 
  private:
   std::string name;

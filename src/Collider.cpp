@@ -8,9 +8,9 @@
 #endif  // DEBUG
 #include <string>
 #include "Collider.hpp"
-#include "GameData.hpp"
 #include "GameObject.hpp"
 #include "Helpers.hpp"
+#include "Types.hpp"
 #include "Vec2.hpp"
 
 Collider::Collider(GameObject& associated, Vec2 scale, Vec2 offset)
@@ -58,7 +58,7 @@ void Collider::Render() {
 #endif  // DEBUG
 }
 
-bool Collider::Is(GameData::Types type) const { return type == this->Type; }
+bool Collider::Is(Types type) const { return type == this->Type; }
 
 void Collider::SetOffset(Vec2 offset) { offset = offset; }
 

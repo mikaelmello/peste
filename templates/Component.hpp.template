@@ -7,7 +7,7 @@
 
 #include <string>
 #include "Component.hpp"
-#include "GameData.hpp"
+#include "Types.hpp"
 #include "GameObject.hpp"
 
 class <CAMELCASENAME> : public Component {
@@ -22,11 +22,11 @@ class <CAMELCASENAME> : public Component {
 
   void Update(float dt) override;
 
-  bool Is(GameData::Types type) const override;
+  bool Is(Types type) const override;
 
   void Render() override;
 
-  const GameData::Types Type = GameData::Types::<CAMELCASENAME>;
+  const Types Type = <CAMELCASENAME>Type;
 
  private:
 };

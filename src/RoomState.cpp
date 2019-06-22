@@ -5,10 +5,11 @@
 #include "Collision.hpp"
 #include "GameObject.hpp"
 #include "InputManager.hpp"
-#include "Inventory.hpp"
+#include "InventoryState.hpp"
 #include "Item.hpp"
 #include "Player.hpp"
 #include "TileMap.hpp"
+#include "Types.hpp"
 
 RoomState::RoomState() {
   GameObject* bckgGo = new GameObject(5);
@@ -76,8 +77,8 @@ void RoomState::Update(float dt) {
       std::shared_ptr<GameObject> go1 = *i;
       std::shared_ptr<GameObject> go2 = *j;
 
-      auto colliderSp1 = go1->GetComponent(GameData::Collider).lock();
-      auto colliderSp2 = go2->GetComponent(GameData::Collider).lock();
+      auto colliderSp1 = go1->GetComponent(ColliderType).lock();
+      auto colliderSp2 = go2->GetComponent(ColliderType).lock();
 
       if (!colliderSp1 || !colliderSp2) {
         continue;

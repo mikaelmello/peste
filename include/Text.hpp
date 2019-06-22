@@ -10,10 +10,10 @@
 #include <memory>
 #include <string>
 #include "Component.hpp"
-#include "GameData.hpp"
 #include "GameObject.hpp"
 #include "SDL_include.h"
 #include "Timer.hpp"
+#include "Types.hpp"
 
 class Text : public Component {
  public:
@@ -28,7 +28,7 @@ class Text : public Component {
 
   void Render() override;
 
-  bool Is(GameData::Types type) const override;
+  bool Is(Types type) const override;
 
   void SetText(const std::string& text);
 
@@ -42,7 +42,7 @@ class Text : public Component {
 
   void SetBlink(bool blink, float blinkPeriod);
 
-  const GameData::Types Type = GameData::Types::Text;
+  const Types Type = TextType;
 
  private:
   void RemakeTexture();

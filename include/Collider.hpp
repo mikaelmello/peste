@@ -8,9 +8,9 @@
 #include <memory>
 #include <string>
 #include "Component.hpp"
-#include "GameData.hpp"
 #include "GameObject.hpp"
 #include "Rect.hpp"
+#include "Types.hpp"
 #include "Vec2.hpp"
 
 class Collider : public Component {
@@ -19,7 +19,7 @@ class Collider : public Component {
 
   void Update(float dt) override;
 
-  bool Is(GameData::Types type) const override;
+  bool Is(Types type) const override;
 
   void Render() override;
 
@@ -29,7 +29,7 @@ class Collider : public Component {
 
   Rect box;
 
-  const GameData::Types Type = GameData::Types::Collider;
+  const Types Type = ColliderType;
 
  private:
   Vec2 scale;

@@ -10,6 +10,7 @@
 #include <vector>
 #include "Component.hpp"
 #include "Rect.hpp"
+#include "Types.hpp"
 
 class GameObject {
  public:
@@ -28,7 +29,7 @@ class GameObject {
   void RequestDelete();
 
   void ReverseDelete();
-  
+
   void NotifyCollision(GameObject& other);
 
   void AddComponent(Component* cpt);
@@ -39,7 +40,7 @@ class GameObject {
   inline void EnableRender() { render = true; }
   inline void ToggleRender() { render = !render; }
 
-  std::weak_ptr<Component> GetComponent(GameData::Types type);
+  std::weak_ptr<Component> GetComponent(Types type);
 
   Rect box;
 

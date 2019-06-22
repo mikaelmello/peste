@@ -7,10 +7,10 @@
 #include "Camera.hpp"
 #include "Component.hpp"
 #include "Game.hpp"
-#include "GameData.hpp"
 #include "GameObject.hpp"
 #include "Resources.hpp"
 #include "SDL_include.h"
+#include "Types.hpp"
 
 Text::Text(GameObject& associated, const std::string& fontFile, int fontSize,
            TextStyle style, const std::string& text, SDL_Color color)
@@ -56,7 +56,7 @@ void Text::Render() {
   }
 }
 
-bool Text::Is(GameData::Types type) const { return type == this->Type; }
+bool Text::Is(Types type) const { return type == this->Type; }
 
 void Text::SetText(const std::string& text) {
   this->text = text;

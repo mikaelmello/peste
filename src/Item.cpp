@@ -10,6 +10,7 @@
 #include "Sprite.hpp"
 #include "TileMap.hpp"
 #include "TutorialState.hpp"
+#include "Types.hpp"
 
 Item::Item(GameObject& associated, const std::string& name,
            const std::string& description, const std::string& spritePath,
@@ -34,7 +35,7 @@ Item::Item(GameObject& associated, const std::string& name,
 Item::~Item() {}
 
 void Item::NotifyCollision(GameObject& other) {
-  auto playerComponent = other.GetComponent(GameData::Player).lock();
+  auto playerComponent = other.GetComponent(PlayerType).lock();
   if (playerComponent) {
     colliding = true;
     InputManager& input = InputManager::GetInstance();
@@ -57,12 +58,12 @@ void Item::Render() {
   colliding = false;
 }
 
-bool Item::Is(GameData::Types type) const { return type == this->Type; }
+bool Item::Is(Types type) const { return type == this->Type; }
 
 void Item::SetCenter(Vec2 pos) { associated.box.SetCenter(pos); }
 
 void Item::SetScale(float scaleX, float scaleY) {
-  auto sprite = associated.GetComponent(GameData::Types::Sprite);
+  auto sprite = associated.GetComponent(SpriteType);
   auto spriteSharedPtr = std::dynamic_pointer_cast<Sprite>(sprite.lock());
 
   spriteSharedPtr->SetScaleX(scaleX, scaleY);

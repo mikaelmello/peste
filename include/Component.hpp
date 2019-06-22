@@ -6,7 +6,7 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 #include <string>
-#include "GameData.hpp"
+#include "Types.hpp"
 
 class GameObject;
 
@@ -24,7 +24,7 @@ class Component {
 
   virtual void Render() = 0;
 
-  virtual bool Is(GameData::Types type) const = 0;
+  virtual bool Is(Types type) const = 0;
 
  protected:
   GameObject &associated;

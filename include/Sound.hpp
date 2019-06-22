@@ -8,9 +8,9 @@
 #define INCLUDE_SDL_MIXER
 #include <string>
 #include "Component.hpp"
-#include "GameData.hpp"
 #include "GameObject.hpp"
 #include "SDL_include.h"
+#include "Types.hpp"
 
 class Sound : public Component {
  public:
@@ -28,13 +28,13 @@ class Sound : public Component {
 
   void Update(float dt) override;
 
-  bool Is(GameData::Types type) const override;
+  bool Is(Types type) const override;
 
   void Render() override;
 
   bool IsOpen() const;
 
-  const GameData::Types Type = GameData::Types::Sound;
+  const Types Type = SoundType;
 
  private:
   std::shared_ptr<Mix_Chunk> chunk;

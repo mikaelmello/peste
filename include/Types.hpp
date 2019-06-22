@@ -1,12 +1,20 @@
-#ifndef GAMEDATA_H
-#define GAMEDATA_H
+#ifndef TYPES_H
+#define TYPES_H
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *                  INCLUDES E DEFINES
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-class GameData {
- public:
+enum Types {
+  CameraFollowerType,
+  ColliderType,
+  SoundType,
+  SpriteType,
+  TextType,
+  TileMapType,
+  PlayerType,
+  ItemType,
+  InventoryType,
 };
 
 #endif

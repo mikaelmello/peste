@@ -22,6 +22,6 @@ void <CAMELCASENAME>::Update(float dt) {}
 
 void <CAMELCASENAME>::Render() {}
 
-bool <CAMELCASENAME>::Is(GameData::Types type) const {
+bool <CAMELCASENAME>::Is(Types type) const {
   return type == this->Type;
 }

@@ -6,11 +6,11 @@
 #include "Camera.hpp"
 #include "Component.hpp"
 #include "Game.hpp"
-#include "GameData.hpp"
 #include "GameObject.hpp"
 #include "Resources.hpp"
 #include "SDL_include.h"
 #include "Timer.hpp"
+#include "Types.hpp"
 
 Sprite::Sprite(GameObject& associated, int frameCount, float frameTime,
                float secondsToSelfDestruct)
@@ -78,7 +78,7 @@ void Sprite::Update(float dt) {
   }
 }
 
-bool Sprite::Is(GameData::Types type) const { return type == this->Type; }
+bool Sprite::Is(Types type) const { return type == this->Type; }
 
 int Sprite::GetWidth() const { return round(scale.x * (width / frameCount)); }
 

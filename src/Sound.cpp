@@ -7,10 +7,10 @@
 #include <string>
 #include "Component.hpp"
 #include "Game.hpp"
-#include "GameData.hpp"
 #include "GameObject.hpp"
 #include "Resources.hpp"
 #include "SDL_include.h"
+#include "Types.hpp"
 
 Sound::Sound(GameObject& associated) : Component(associated), channel(-1) {}
 
@@ -43,6 +43,6 @@ void Sound::Render() {}
 
 void Sound::Update(float dt) {}
 
-bool Sound::Is(GameData::Types type) const { return type == this->Type; }
+bool Sound::Is(Types type) const { return type == this->Type; }
 
 bool Sound::IsOpen() const { return (bool)chunk; }

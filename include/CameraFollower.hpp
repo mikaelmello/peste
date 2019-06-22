@@ -7,8 +7,8 @@
 
 #include <string>
 #include "Component.hpp"
-#include "GameData.hpp"
 #include "GameObject.hpp"
+#include "Types.hpp"
 #include "Vec2.hpp"
 
 class CameraFollower : public Component {
@@ -17,11 +17,11 @@ class CameraFollower : public Component {
 
   void Update(float dt) override;
 
-  bool Is(GameData::Types type) const override;
+  bool Is(Types type) const override;
 
   void Render() override;
 
-  const GameData::Types Type = GameData::Types::CameraFollower;
+  const Types Type = CameraFollowerType;
 
  private:
   Vec2 offset;

@@ -5,11 +5,11 @@
 #include <string>
 #include "Camera.hpp"
 #include "Component.hpp"
-#include "GameData.hpp"
 #include "GameObject.hpp"
 #include "Helpers.hpp"
 #include "Layer.hpp"
 #include "TileSet.hpp"
+#include "Types.hpp"
 #include "json.hpp"
 
 using json = nlohmann::json;
@@ -157,7 +157,7 @@ bool TileMap::CanWalk(int x, int y) {
   return walkable[y][x];
 }
 
-bool TileMap::Is(GameData::Types type) const { return type == this->Type; }
+bool TileMap::Is(Types type) const { return type == this->Type; }
 
 int TileMap::GetDepth() { return depth; }
 

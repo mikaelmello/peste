@@ -8,10 +8,10 @@
 #include <string>
 #include <vector>
 #include "Component.hpp"
-#include "GameData.hpp"
 #include "GameObject.hpp"
 #include "Layer.hpp"
 #include "TileSet.hpp"
+#include "Types.hpp"
 #include "Vec2.hpp"
 
 class TileMap : public Component {
@@ -30,7 +30,7 @@ class TileMap : public Component {
 
   void RenderLayer(int layer, int cameraX = 0, int cameraY = 0);
 
-  bool Is(GameData::Types type) const override;
+  bool Is(Types type) const override;
 
   void Update(float dt) override;
 
@@ -52,7 +52,7 @@ class TileMap : public Component {
 
   void SetParallax(int layer, float xFactor, float yFactor);
 
-  const GameData::Types Type = GameData::Types::TileMap;
+  const Types Type = TileMapType;
 
  private:
   TileSet* tileSet;

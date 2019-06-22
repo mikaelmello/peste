@@ -45,7 +45,7 @@ Player::Player(GameObject& associated, Vec2 position)
 Player::~Player() {}
 
 void Player::NotifyCollision(GameObject& other) {
-  auto item_cpt = other.GetComponent(GameData::Item).lock();
+  auto item_cpt = other.GetComponent(ItemType).lock();
   InputManager& input = InputManager::GetInstance();
   if (input.KeyPress(SPACE_BAR_KEY)) {
     auto go_copy = other;
@@ -63,7 +63,7 @@ void Player::Update(float dt) {
   auto tilemap = Game::GetInstance().GetCurrentState().GetCurrentTileMap();
   int tileDim = tilemap->GetLogicalTileDimension();
 
-  auto cpt = associated.GetComponent(GameData::Types::Sprite);
+  auto cpt = associated.GetComponent(SpriteType);
   auto sprite = std::dynamic_pointer_cast<Sprite>(cpt.lock());
 
   bool up = false;
@@ -135,7 +135,7 @@ void Player::Update(float dt) {
 
 void Player::Render() {}
 
-bool Player::Is(GameData::Types type) const { return type == this->Type; }
+bool Player::Is(Types type) const { return type == this->Type; }
 
 void Player::OpenIdleSprite(const std::shared_ptr<Sprite>& sprite,
                             Direction lastDirection) {

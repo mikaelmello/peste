@@ -7,8 +7,8 @@
 
 #include <string>
 #include "Component.hpp"
-#include "GameData.hpp"
 #include "GameObject.hpp"
+#include "Types.hpp"
 
 class Inventory : public Component {
  public:
@@ -22,11 +22,11 @@ class Inventory : public Component {
 
   void Update(float dt) override;
 
-  bool Is(GameData::Types type) const override;
+  bool Is(Types type) const override;
 
   void Render() override;
 
-  const GameData::Types Type = GameData::Types::Inventory;
+  const Types Type = InventoryType;
 
  private:
 };

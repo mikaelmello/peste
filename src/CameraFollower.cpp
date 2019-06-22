@@ -1,7 +1,7 @@
 #include "CameraFollower.hpp"
 #include <string>
 #include "Camera.hpp"
-#include "GameData.hpp"
+#include "Types.hpp"
 #include "Vec2.hpp"
 
 CameraFollower::CameraFollower(GameObject& associated, Vec2 offset)
@@ -13,6 +13,4 @@ void CameraFollower::Update(float dt) {
 
 void CameraFollower::Render() {}
 
-bool CameraFollower::Is(GameData::Types type) const {
-  return type == this->Type;
-}
+bool CameraFollower::Is(Types type) const { return type == this->Type; }
