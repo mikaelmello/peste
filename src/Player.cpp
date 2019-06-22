@@ -49,7 +49,7 @@ void Player::NotifyCollision(GameObject& other) {
   InputManager& input = InputManager::GetInstance();
   if (input.KeyPress(SPACE_BAR_KEY)) {
     auto go_copy = other;
-    go_copy.ReverseDelete();
+    other.RequestDelete();
     // pick to inventory
   }
 }
