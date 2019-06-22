@@ -27,8 +27,6 @@ class GameObject {
 
   void RequestDelete();
 
-  void ReverseDelete();
-  
   void NotifyCollision(GameObject& other);
 
   void AddComponent(Component* cpt);

@@ -37,10 +37,6 @@ void Item::NotifyCollision(GameObject& other) {
   auto playerComponent = other.GetComponent(GameData::Player).lock();
   if (playerComponent) {
     colliding = true;
-    InputManager& input = InputManager::GetInstance();
-    if (input.KeyPress(SPACE_BAR_KEY)) {
-      associated.RequestDelete();
-    }
   }
 }
 
