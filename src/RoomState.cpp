@@ -55,6 +55,14 @@ void RoomState::Update(float dt) {
   quitRequested |= im.QuitRequested();
   popRequested |= im.KeyPress(ESCAPE_KEY);
 
+  for (auto i = objects.begin(); i != objects.end();) {
+    if ((*i)->IsDead()) {
+      i = objects.erase(i);
+    } else {
+      i++;
+    }
+  }
+
   for (auto i = objects.begin(); i != objects.end(); i++) {
     auto aux = i;
     for (auto j = ++aux; j != objects.end(); j++) {

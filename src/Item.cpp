@@ -39,7 +39,7 @@ void Item::NotifyCollision(GameObject& other) {
     colliding = true;
     InputManager& input = InputManager::GetInstance();
     if (input.KeyPress(SPACE_BAR_KEY)) {
-      std::cout << "pick item" << std::endl;
+      associated.RequestDelete();
     }
   }
 }

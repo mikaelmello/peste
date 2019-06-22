@@ -44,7 +44,15 @@ Player::Player(GameObject& associated, Vec2 position)
 
 Player::~Player() {}
 
-void Player::NotifyCollision(GameObject& other) {}
+void Player::NotifyCollision(GameObject& other) {
+  auto item_cpt = other.GetComponent(GameData::Item).lock();
+  InputManager& input = InputManager::GetInstance();
+  if (input.KeyPress(SPACE_BAR_KEY)) {
+    auto go_copy = other;
+    go_copy.ReverseDelete();
+    // pick to inventory
+  }
+}
 
 void Player::Start() {}
 

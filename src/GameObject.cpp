@@ -35,6 +35,8 @@ bool GameObject::IsDead() const { return isDead; }
 
 void GameObject::RequestDelete() { isDead = true; }
 
+void GameObject::ReverseDelete() { isDead = false; }
+
 void GameObject::AddComponent(Component* cpt) {
   components.emplace_back(cpt);
 
