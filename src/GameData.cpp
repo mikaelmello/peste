@@ -1,1 +1,3 @@
-#include "Types.hpp"
+#include "GameData.hpp"
+
+GameObject* GameData::PlayerGameObject = nullptr;

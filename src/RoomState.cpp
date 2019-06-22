@@ -3,6 +3,8 @@
 #include "CameraFollower.hpp"
 #include "Collider.hpp"
 #include "Collision.hpp"
+#include "Game.hpp"
+#include "GameData.hpp"
 #include "GameObject.hpp"
 #include "InputManager.hpp"
 #include "InventoryState.hpp"
@@ -28,6 +30,7 @@ RoomState::RoomState() {
   Player* player = new Player(*playerGo, currentTileMap->GetInitialPosition());
   playerGo->AddComponent(player);
   objects.emplace(playerGo);
+  GameData::PlayerGameObject = playerGo;
 
   Camera::Follow(playerGo);
 
@@ -36,12 +39,6 @@ RoomState::RoomState() {
                         currentTileMap->GetInitialPosition());
   lampGo->AddComponent(lamp);
   objects.emplace(lampGo);
-
-  GameObject* inventoryGo = new GameObject(1000);
-  Inventory* inv = new Inventory(*inventoryGo);
-  inventoryGo->AddComponent(inv);
-  inventoryGo->DisableRender();
-  objects.emplace(inventoryGo);
 }
 
 RoomState::~RoomState() {
@@ -62,6 +59,10 @@ void RoomState::Update(float dt) {
   InputManager& im = InputManager::GetInstance();
   quitRequested |= im.QuitRequested();
   popRequested |= im.KeyPress(ESCAPE_KEY);
+
+  if (im.KeyPress(I_KEY)) {
+    Game::GetInstance().Push(new InventoryState());
+  }
 
   for (auto i = objects.begin(); i != objects.end();) {
     if ((*i)->IsDead()) {
@@ -107,9 +108,12 @@ void RoomState::Start() {
   started = true;
 }
 
-void RoomState::Pause() {}
+void RoomState::Pause() {
+  Camera::Unfollow();
+  Camera::pos = {0, 0};
+}
 
-void RoomState::Resume() {}
+void RoomState::Resume() { Camera::Follow(GameData::PlayerGameObject); }
 
 void RoomState::LoadAssets() {}
 
