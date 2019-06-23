@@ -24,7 +24,7 @@ void GameObject::Update(float dt) {
                 [&](std::shared_ptr<Component>& cpt) { cpt->Update(dt); });
 }
 
-void GameObject::NotifyCollision(GameObject& other) {
+void GameObject::NotifyCollision(std::shared_ptr<GameObject> other) {
   std::for_each(
       components.begin(), components.end(),
       [&](std::shared_ptr<Component>& cpt) { cpt->NotifyCollision(other); });

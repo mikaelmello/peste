@@ -28,7 +28,7 @@ class GameObject {
 
   void RequestDelete();
 
-  void NotifyCollision(GameObject& other);
+  void NotifyCollision(std::shared_ptr<GameObject> other);
 
   void AddComponent(Component* cpt);
 

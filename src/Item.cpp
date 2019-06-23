@@ -1,5 +1,6 @@
 #include "Item.hpp"
 #include <iostream>
+#include <memory>
 #include <string>
 #include "Camera.hpp"
 #include "Collider.hpp"
@@ -34,8 +35,8 @@ Item::Item(GameObject& associated, const std::string& name,
 
 Item::~Item() {}
 
-void Item::NotifyCollision(GameObject& other) {
-  auto playerComponent = other.GetComponent(PlayerType).lock();
+void Item::NotifyCollision(std::shared_ptr<GameObject> other) {
+  auto playerComponent = other->GetComponent(PlayerType).lock();
   if (playerComponent) {
     colliding = true;
   }

@@ -5,6 +5,7 @@
  *                  INCLUDES E DEFINES
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+#include <memory>
 #include <string>
 #include "Types.hpp"
 
@@ -16,7 +17,7 @@ class Component {
 
   virtual ~Component();
 
-  virtual void NotifyCollision(GameObject &other);
+  virtual void NotifyCollision(std::shared_ptr<GameObject> other);
 
   virtual void Start();
 

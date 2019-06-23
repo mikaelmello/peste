@@ -75,8 +75,8 @@ void RoomState::Update(float dt) {
   for (auto i = objects.begin(); i != objects.end(); i++) {
     auto aux = i;
     for (auto j = ++aux; j != objects.end(); j++) {
-      std::shared_ptr<GameObject> go1 = *i;
-      std::shared_ptr<GameObject> go2 = *j;
+      auto go1 = *i;
+      auto go2 = *j;
 
       auto colliderSp1 = go1->GetComponent(ColliderType).lock();
       auto colliderSp2 = go2->GetComponent(ColliderType).lock();
@@ -93,8 +93,8 @@ void RoomState::Update(float dt) {
       bool collides = Collision::IsColliding(collider1->box, collider2->box,
                                              radDeg1, radDeg2);
       if (collides) {
-        go1->NotifyCollision(*go2);
-        go2->NotifyCollision(*go1);
+        go1->NotifyCollision(go2);
+        go2->NotifyCollision(go1);
       }
     }
   }

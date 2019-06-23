@@ -5,6 +5,7 @@
  *                  INCLUDES E DEFINES
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+#include <memory>
 #include <string>
 #include "Component.hpp"
 #include "Types.hpp"
@@ -18,7 +19,7 @@ class <CAMELCASENAME> : public Component {
 
   void Start() override;
 
-  void NotifyCollision(GameObject& other) override;
+  void NotifyCollision(std::shared_ptr<GameObject> other) override;
 
   void Update(float dt) override;
 
