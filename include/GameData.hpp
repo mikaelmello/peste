@@ -5,11 +5,16 @@
  *                  INCLUDES E DEFINES
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+#include <memory>
+#include <vector>
 #include "GameObject.hpp"
 
 class GameData {
  public:
   static GameObject* PlayerGameObject;
+  static std::vector<std::shared_ptr<GameObject>> PlayerInventory;
+
+  static void AddToInventory(std::shared_ptr<GameObject> item);
 };
 
 #endif

@@ -4,6 +4,7 @@
 #include <string>
 #include "Collider.hpp"
 #include "Game.hpp"
+#include "GameData.hpp"
 #include "GameObject.hpp"
 #include "InputManager.hpp"
 #include "Item.hpp"
@@ -46,12 +47,14 @@ Player::Player(GameObject& associated, Vec2 position)
 Player::~Player() {}
 
 void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
-  auto item_cpt = other->GetComponent(ItemType).lock();
   InputManager& input = InputManager::GetInstance();
-  if (input.KeyPress(SPACE_BAR_KEY)) {
-    auto go_copy = other;
-    other->RequestDelete();
-    // pick to inventory
+  auto item_cpt = other->GetComponent(ItemType).lock();
+
+  if (item_cpt) {
+    if (input.KeyPress(X_KEY)) {
+      other->RequestDelete();
+      GameData::AddToInventory(other);
+    }
   }
 }
 
