@@ -1,5 +1,5 @@
 #include "IFSM.hpp"
 
-IFSM::IFSM(GameObject& object) : antagonist(object), pop_requested(false) {}
+IFSM::IFSM(GameObject& object) : object(object), pop_requested(false) {}
 
 IFSM::~IFSM() {}

@@ -31,13 +31,13 @@ void Antagonist::Update(float dt) {
   if (!state_stack.empty()) {
     auto& top_state = state_stack.top();
     if (top_state->PopRequested()) {
+      top_state->OnStateExit();
       state_stack.pop();
-      // Pensar mais sobre esse if-then. Aparentemente não é necessário.
-      /*if (!state_stack.empty()) {
+
+      if (!state_stack.empty()) {
         auto& enter_state = state_stack.top();
         enter_state->OnStateEnter();
-      }*/
-      // Pensar mais sobre esse if-then. Aparentemente não é necessário.
+      }
     }
 
     if (stored_state != nullptr) {
@@ -71,6 +71,23 @@ void Antagonist::Update(float dt) {
 
 void Antagonist::Render() {}
 
-void Antagonist::Push(IFSM* s) { stored_state = s; }
+void Antagonist::Push(IFSM* s) {
+  if (stored_state != nullptr) {
+    delete stored_state;
+  }
+  stored_state = s;
+}
+
+bool Antagonist::NearTarget() {
+  std::pair<int, int> suspicious_position(
+      200, 142);  // Esta função receberá como argumento este parâmetro.
+  std::pair<int, int> current_position(position.x, position.y);
+
+  auto heuristic = new Pathfinder::Euclidian();
+  double dist = heuristic->Distance(suspicious_position, current_position);
+
+  delete heuristic;
+  return dist <= 50;
+}
 
 bool Antagonist::Is(GameData::Types type) const { return type == this->Type; }

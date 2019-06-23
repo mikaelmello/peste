@@ -33,6 +33,8 @@ class Antagonist : public Component {
 
   void Push(IFSM* s);
 
+  bool NearTarget();
+
   const GameData::Types Type = GameData::Types::Antagonist;
 
   Vec2 position;

@@ -2,13 +2,13 @@
 
 #include "Sprite.hpp"
 
-IdleFSM::IdleFSM(GameObject& antagonist) : IFSM(antagonist) { OnStateEnter(); }
+IdleFSM::IdleFSM(GameObject& object) : IFSM(object) { OnStateEnter(); }
 
 IdleFSM::~IdleFSM() {}
 
 void IdleFSM::OnStateEnter() {
   auto sprite = std::dynamic_pointer_cast<Sprite>(
-      antagonist.GetComponent(GameData::Sprite).lock());
+      object.GetComponent(GameData::Sprite).lock());
   sprite->Open(IDLE_SPRITE_ANTAGONIST);
 
   timer.Restart();

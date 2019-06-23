@@ -58,7 +58,9 @@ class Diagonal : public Heuristic {
 
 class Astar {
  public:
-  Astar(GameObject& object, Heuristic& h, TileMap* tm);
+  Astar(GameObject& object, Heuristic* h, TileMap* tm);
+
+  Astar(GameObject& object, TileMap* tm);
 
   ~Astar();
 
@@ -67,7 +69,7 @@ class Astar {
  private:
   GameObject& object;
 
-  Heuristic& heuristic;
+  Heuristic* heuristic;
 
   TileMap* tm;
 
@@ -111,7 +113,7 @@ class Astar {
 
   inline bool Shorter(int cost, std::pair<int, int>& p,
                       std::pair<int, int>& d) {
-    return cost + heuristic.Distance(p, d) < details[p.first][p.second].f;
+    return cost + heuristic->Distance(p, d) < details[p.first][p.second].f;
   }
 
   inline std::vector<std::pair<int, int>> Neighbours(std::pair<int, int> p) {

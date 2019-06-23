@@ -26,6 +26,7 @@
 #include <stack>
 #include "GameObject.hpp"
 #include "IFSM.hpp"
+#include "SuspectFSM.hpp"
 #include "Timer.hpp"
 
 class PatrolFSM : public IFSM {
@@ -42,14 +43,18 @@ class PatrolFSM : public IFSM {
 
   void Update(float dt);
 
+  friend class SuspectFSM;  // Verificar como reduzir o escopo de friend.
+
  private:
+  bool temp_bool_test = true;
+
   int counter;
 
   int sprite_status;
 
   Timer timer;
 
-  std::stack<std::vector<Vec2>> patrol_paths;
+  static std::stack<std::pair<int, std::vector<Vec2>>> patrol_paths;
 };
 
 #endif

@@ -1,10 +1,13 @@
 #include "Pathfinder.hpp"
 #include "Game.hpp"
 
-Pathfinder::Astar::Astar(GameObject& o, Heuristic& h, TileMap* tm)
+Pathfinder::Astar::Astar(GameObject& o, Heuristic* h, TileMap* tm)
     : object(o), heuristic(h), tm(tm) {}
 
-Pathfinder::Astar::~Astar() {}
+Pathfinder::Astar::Astar(GameObject& o, TileMap* tm)
+    : Astar(o, new Euclidian(), tm) {}
+
+Pathfinder::Astar::~Astar() { delete heuristic; }
 
 bool Pathfinder::Astar::CanWalk(std::pair<int, int>& p) {
   int wi = 0.2 * object.box.w / tm->GetLogicalTileDimension();
@@ -98,7 +101,7 @@ void Pathfinder::Astar::Search(std::vector<Vec2>& path,
       }
 
       if (Shorter(cost, neighbour, dest) || !IsIn(open, neighbour)) {
-        double f_value = cost + heuristic.Distance(neighbour, dest);
+        double f_value = cost + heuristic->Distance(neighbour, dest);
         SetFValue(neighbour, f_value);
         SetParent(neighbour, current.second);
 

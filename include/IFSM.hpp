@@ -24,7 +24,7 @@ class IFSM {
   void virtual Update(float dt) = 0;
 
  protected:
-  GameObject& antagonist;
+  GameObject& object;
 
   bool pop_requested;
 };

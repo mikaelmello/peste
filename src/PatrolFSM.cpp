@@ -7,66 +7,68 @@
 #include "GameObject.hpp"
 #include "IdleFSM.hpp"
 #include "Pathfinder.hpp"
+#include "SuspectFSM.hpp"
 
-PatrolFSM::PatrolFSM(GameObject& antagonist)
-    : IFSM(antagonist), counter(0), sprite_status(IDLE_CODE) {}
+std::stack<std::pair<int, std::vector<Vec2>>> PatrolFSM::patrol_paths;
+
+PatrolFSM::PatrolFSM(GameObject& object)
+    : IFSM(object), counter(0), sprite_status(IDLE_CODE) {}
 
 PatrolFSM::~PatrolFSM() {}
 
 void PatrolFSM::OnStateEnter() {
-  if (!patrol_paths.empty()) {
-    // Garantir que sempre inicia este método com a pilha vazia.
-    patrol_paths = std::stack<std::vector<Vec2>>();
+  if (patrol_paths.empty()) {
+    Pathfinder::Heuristic* heuristic = new Pathfinder::Diagonal();
+    Pathfinder::Astar* pf = new Pathfinder::Astar(
+        object, heuristic,
+        Game::GetInstance().GetCurrentState().GetCurrentTileMap());
+
+    auto dest1 = Vec2(100, 192);
+    auto dest2 = Vec2(100, 142);
+    auto dest3 = Vec2(200, 142);
+
+    auto initial = Game::GetInstance()
+                       .GetCurrentState()
+                       .GetCurrentTileMap()
+                       ->GetInitialPosition();
+
+    auto current = std::dynamic_pointer_cast<Antagonist>(
+                       object.GetComponent(GameData::Antagonist).lock())
+                       ->position;
+
+    try {
+      auto path3 = pf->Run(dest2, dest3);
+      patrol_paths.emplace(0, path3);
+
+      auto path2 = pf->Run(dest1, dest2);
+      patrol_paths.emplace(0, path2);
+
+      auto path1 = pf->Run(initial, dest1);
+      patrol_paths.emplace(0, path1);
+
+      auto ret_path = pf->Run(current, initial);
+      patrol_paths.emplace(0, ret_path);
+    } catch (...) {
+      pop_requested = true;
+    }
+
+    timer.Restart();
+    delete pf;
   }
-
-  Pathfinder::Heuristic* heuristic = new Pathfinder::Diagonal();
-  Pathfinder::Astar* pf = new Pathfinder::Astar(
-      antagonist, *heuristic,
-      Game::GetInstance().GetCurrentState().GetCurrentTileMap());
-
-  auto dest1 = Vec2(100, 192);
-  auto dest2 = Vec2(100, 142);
-  auto dest3 = Vec2(200, 142);
-
-  auto initial = Game::GetInstance()
-                     .GetCurrentState()
-                     .GetCurrentTileMap()
-                     ->GetInitialPosition();
-
-  auto current = std::dynamic_pointer_cast<Antagonist>(
-                     antagonist.GetComponent(GameData::Antagonist).lock())
-                     ->position;
-
-  try {
-    auto path3 = pf->Run(dest2, dest3);
-    patrol_paths.push(path3);
-
-    auto path2 = pf->Run(dest1, dest2);
-    patrol_paths.push(path2);
-
-    auto path1 = pf->Run(initial, dest1);
-    patrol_paths.push(path1);
-
-    auto ret_path = pf->Run(current, initial);
-    patrol_paths.push(ret_path);
-  } catch (...) {
-    pop_requested = true;
-  }
-
-  timer.Restart();
-  delete pf;
 }
 
 void PatrolFSM::OnStateExecution() {
   if (!patrol_paths.empty()) {
     auto ant = std::dynamic_pointer_cast<Antagonist>(
-        antagonist.GetComponent(GameData::Antagonist).lock());
+        object.GetComponent(GameData::Antagonist).lock());
     std::pair<int, int> previous = {ant->position.x, ant->position.y};
 
-    std::vector<Vec2> top = patrol_paths.top();
-    ant->position = top[counter];
-    counter++;
+    int& k = patrol_paths.top().first;
+    std::vector<Vec2>& top = patrol_paths.top().second;
+    ant->position = top[k];
+    k++;
 
+    // Isso será usado em pelo menos 3 estados. Repensar.
     std::pair<int, int> delta = {ant->position.x - previous.first,
                                  ant->position.y - previous.second};
 
@@ -85,7 +87,7 @@ void PatrolFSM::OnStateExecution() {
 
     if (sprite_code != sprite_status) {
       auto sprite = std::dynamic_pointer_cast<Sprite>(
-          antagonist.GetComponent(GameData::Sprite).lock());
+          object.GetComponent(GameData::Sprite).lock());
       std::string sprite_path;
       switch (sprite_code) {
         case LEFT_WALK_CODE:
@@ -121,29 +123,32 @@ void PatrolFSM::OnStateExecution() {
       sprite_status = sprite_code;
     }
   }
+  // Isso será usado em pelo menos 3 estados. Repensar.
 }
 
 void PatrolFSM::OnStateExit() {
   auto sprite = std::dynamic_pointer_cast<Sprite>(
-      antagonist.GetComponent(GameData::Sprite).lock());
+      object.GetComponent(GameData::Sprite).lock());
   sprite_status = IDLE_CODE;
   sprite->Open(IDLE_SPRITE);
 }
 
 void PatrolFSM::Update(float dt) {
-  if (patrol_paths.empty()) {
-    OnStateEnter();
-    counter = 0;
+  auto ant = std::dynamic_pointer_cast<Antagonist>(
+      object.GetComponent(GameData::Antagonist).lock());
+
+  OnStateEnter();
+
+  while (!patrol_paths.empty() &&
+         patrol_paths.top().first == patrol_paths.top().second.size()) {
+    patrol_paths.pop();
+
+    ant->Push(new IdleFSM(object));
   }
 
-  while (!patrol_paths.empty() && counter == patrol_paths.top().size()) {
-    auto ant = std::dynamic_pointer_cast<Antagonist>(
-        antagonist.GetComponent(GameData::Antagonist).lock());
-
-    patrol_paths.pop();
-    counter = 0;
-
-    ant->Push(new IdleFSM(antagonist));
+  if (ant->NearTarget() && temp_bool_test) {
+    ant->Push(new SuspectFSM(object));
+    temp_bool_test = false;
   }
 
   if (timer.Get() > 0.9 * dt) {
