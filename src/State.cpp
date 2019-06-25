@@ -24,7 +24,7 @@ State::~State() {}
 
 std::shared_ptr<GameObject> State::AddObject(GameObject* go) {
   std::shared_ptr<GameObject> goSharedPtr(go);
-  objects.insert(goSharedPtr);
+  enqueuedObjects.push(goSharedPtr);
 
   if (started) {
     goSharedPtr->Start();
@@ -53,6 +53,11 @@ void State::StartArray() {
 }
 
 void State::UpdateArray(float dt) {
+  while (!enqueuedObjects.empty()) {
+    objects.insert(enqueuedObjects.front());
+    enqueuedObjects.pop();
+  }
+
   std::for_each(objects.begin(), objects.end(),
                 [&](auto& go) { go->Update(dt); });
 }

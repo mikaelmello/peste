@@ -6,6 +6,7 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 #include <memory>
+#include <queue>
 #include <set>
 #include <string>
 #include <vector>
@@ -64,6 +65,7 @@ class State {
   };
 
   std::multiset<std::shared_ptr<GameObject>, GameObjectComp> objects;
+  std::queue<std::shared_ptr<GameObject>> enqueuedObjects;
 };
 
 #endif
