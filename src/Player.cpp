@@ -53,7 +53,6 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
 
   if (item_cpt) {
     if (input.KeyPress(X_KEY)) {
-      other->RequestDelete();
       GameData::AddToInventory(other);
     }
   }
