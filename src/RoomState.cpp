@@ -26,26 +26,6 @@ RoomState::RoomState() {
   currentTileMap->SetParallax(1, 0, 0);
   mapGo->AddComponent(currentTileMap);
   objects.emplace(mapGo);
-
-  GameObject* playerGo = new GameObject(6);
-  Player* player = new Player(*playerGo, currentTileMap->GetInitialPosition());
-  playerGo->AddComponent(player);
-  objects.emplace(playerGo);
-  GameData::PlayerGameObject = playerGo;
-
-  GameObject* antagonist_go = new GameObject(5);
-  Antagonist* antagonist =
-      new Antagonist(*antagonist_go, currentTileMap->GetInitialPosition());
-  antagonist_go->AddComponent(antagonist);
-  objects.emplace(antagonist_go);
-
-  Camera::Follow(playerGo);
-
-  GameObject* lampGo = new GameObject(5);
-  Item* lamp = new Item(*lampGo, "Lamp", "A lamp", "assets/img/item/lamp.png",
-                        currentTileMap->GetInitialPosition());
-  lampGo->AddComponent(lamp);
-  objects.emplace(lampGo);
 }
 
 RoomState::~RoomState() {
@@ -122,6 +102,26 @@ void RoomState::Pause() {
 
 void RoomState::Resume() { Camera::Follow(GameData::PlayerGameObject); }
 
-void RoomState::LoadAssets() {}
+void RoomState::LoadAssets() {
+  GameObject* playerGo = new GameObject(6);
+  Player* player = new Player(*playerGo, currentTileMap->GetInitialPosition());
+  playerGo->AddComponent(player);
+  objects.emplace(playerGo);
+  GameData::PlayerGameObject = playerGo;
+
+  GameObject* antagonist_go = new GameObject(5);
+  Antagonist* antagonist =
+      new Antagonist(*antagonist_go, currentTileMap->GetInitialPosition());
+  antagonist_go->AddComponent(antagonist);
+  objects.emplace(antagonist_go);
+
+  Camera::Follow(playerGo);
+
+  GameObject* lampGo = new GameObject(5);
+  Item* lamp = new Item(*lampGo, "Lamp", "A lamp", "assets/img/item/lamp.png",
+                        currentTileMap->GetInitialPosition() - Vec2(3, 3));
+  lampGo->AddComponent(lamp);
+  objects.emplace(lampGo);
+}
 
 void RoomState::Render() { RenderArray(); }
