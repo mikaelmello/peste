@@ -82,35 +82,31 @@ void Pathfinder::Astar::Search(std::vector<Vec2>& path,
 }
 
 bool Pathfinder::Astar::CanWalk(std::pair<int, int>& p) {
-  auto collider = std::dynamic_pointer_cast<Collider>(
-      object.GetComponent(ColliderType));
+  auto colliderCpt = object.GetComponent(ColliderType);
+  auto spriteCpt = object.GetComponent(SpriteType);
 
-  float start_w = 1.0f;
-  float end_w = 1.0f;
-  float start_h = 0;
-
-  Vec2 offset = collider->GetOffSet();
-
-  if (collider) {
-    Vec2 scale = collider->GetScale();
-
-    start_w = (1.0f - scale.x) / 2.0f;
-    end_w = 1 - scale.x / 2.0f;
-    start_h = (1.0f - scale.y);
+  if (!colliderCpt || !spriteCpt) {
+    throw std::runtime_error("Nao tem collider nem sprite no path finder");
   }
 
-  int wi = start_w * object.box.w / tm->GetLogicalTileDimension() + offset.x;
-  int w = end_w * object.box.w / tm->GetLogicalTileDimension() + offset.x;
-  int hi = start_h * object.box.h / tm->GetLogicalTileDimension();
-  int h = object.box.h / tm->GetLogicalTileDimension();
+  auto sprite = std::dynamic_pointer_cast<Sprite>(spriteCpt);
+  auto collider = std::dynamic_pointer_cast<Collider>(colliderCpt);
 
-  bool can_walk = true;
-  for (int i = wi; i < w && can_walk; i++) {
-    for (int j = hi; j < h && can_walk; j++) {
-      can_walk = tm->CanWalk(p.first + i, p.second + j);
+  int cellsWidth = collider->box.w / tm->GetLogicalTileDimension();
+  int cellsHeight = collider->box.h / tm->GetLogicalTileDimension();
+
+  int x = p.first - cellsWidth / 2;
+  int y = p.second - cellsHeight / 2;
+
+  for (int i = x; i <= (x + cellsWidth); i++) {
+    for (int j = y; j <= (y + cellsHeight); j++) {
+      if (!tm->CanWalk(i, j)) {
+        return false;
+      }
     }
   }
-  return can_walk;
+
+  return true;
 }
 
 void Pathfinder::Astar::TracePath(std::pair<int, int>& dest,

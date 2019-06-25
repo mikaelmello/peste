@@ -18,18 +18,18 @@ PatrolFSM::PatrolFSM(GameObject& object)
 PatrolFSM::~PatrolFSM() {}
 
 void PatrolFSM::OnStateEnter() {
+  Game& game = Game::GetInstance();
+  State& state = game.GetCurrentState();
+  auto tilemap = state.GetCurrentTileMap();
+
   if (patrol_paths.empty()) {
-    Pathfinder::Astar* pf = new Pathfinder::Astar(
-        object, Game::GetInstance().GetCurrentState().GetCurrentTileMap());
+    Pathfinder::Astar* pf = new Pathfinder::Astar(object, tilemap);
 
     auto dest1 = Vec2(100, 192);
     auto dest2 = Vec2(100, 142);
     auto dest3 = Vec2(200, 142);
 
-    auto initial = Game::GetInstance()
-                       .GetCurrentState()
-                       .GetCurrentTileMap()
-                       ->GetInitialPosition();
+    auto initial = tilemap->GetInitialPosition();
 
     initial = Vec2(426, 160);
     auto current = std::dynamic_pointer_cast<Antagonist>(
@@ -48,7 +48,8 @@ void PatrolFSM::OnStateEnter() {
 
       auto ret_path = pf->Run(current, initial);
       patrol_paths.emplace(0, ret_path);
-    } catch (...) {
+    } catch (std::exception ex) {
+      printf("quee\n");
       pop_requested = true;
     }
 
@@ -85,8 +86,8 @@ void PatrolFSM::OnStateExecution() {
     }
 
     if (sprite_code != sprite_status) {
-      auto sprite = std::dynamic_pointer_cast<Sprite>(
-          object.GetComponent(SpriteType));
+      auto sprite =
+          std::dynamic_pointer_cast<Sprite>(object.GetComponent(SpriteType));
       std::string sprite_path;
       switch (sprite_code) {
         case LEFT_WALK_CODE:

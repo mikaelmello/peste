@@ -27,6 +27,10 @@ void Antagonist::NotifyCollision(std::shared_ptr<GameObject> other) {}
 void Antagonist::Start() { state_stack.emplace(new PatrolFSM(associated)); }
 
 void Antagonist::Update(float dt) {
+  Game& game = Game::GetInstance();
+  State& state = game.GetCurrentState();
+  auto tilemap = state.GetCurrentTileMap();
+
   if (!state_stack.empty()) {
     auto& top_state = state_stack.top();
     if (top_state->PopRequested()) {
@@ -57,7 +61,6 @@ void Antagonist::Update(float dt) {
     state->Update(dt);
   }
 
-  auto tilemap = Game::GetInstance().GetCurrentState().GetCurrentTileMap();
   int tileDim = tilemap->GetLogicalTileDimension();
 
   associated.box.x = position.x * tileDim;
