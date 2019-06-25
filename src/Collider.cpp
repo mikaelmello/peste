@@ -60,6 +60,10 @@ void Collider::Render() {
 
 bool Collider::Is(GameData::Types type) const { return type == this->Type; }
 
-void Collider::SetOffset(Vec2 offset) { offset = offset; }
+void Collider::SetOffset(Vec2 offset) { this->offset = offset; }
 
-void Collider::SetScale(Vec2 scale) { scale = scale; }
+void Collider::SetScale(Vec2 scale) { this->scale = scale; }
+
+Vec2 Collider::GetOffSet() const { return offset; }
+
+Vec2 Collider::GetScale() const { return scale; }

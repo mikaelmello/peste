@@ -7,7 +7,7 @@ import re
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 parser = argparse.ArgumentParser('create-class.py')
-parser.add_argument('type', choices=['state', 'component'])
+parser.add_argument('type', choices=['state', 'component', 'fsm'])
 parser.add_argument('name', help='Class name')
 args = parser.parse_args()
 
@@ -17,6 +17,9 @@ class_name = args.name.capitalize()
 if class_type == 'State':
     class_name = class_name + 'State'
 
+elif class_type == 'Fsm':
+    class_name = class_name + 'FSM'
+    
 hpp_template_path = os.path.join(BASE_DIR, '..', 'templates', f'{class_type}.hpp.template')
 cpp_template_path = os.path.join(BASE_DIR, '..', 'templates', f'{class_type}.cpp.template')
 

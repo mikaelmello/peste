@@ -15,6 +15,7 @@ class GameData {
     Text,
     TileMap,
     Player,
+    Antagonist,
   };
 };
 

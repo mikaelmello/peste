@@ -5,28 +5,26 @@
  *                  INCLUDES E DEFINES
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-#include "Music.hpp"
-#include "State.hpp"
+#include "GameObject.hpp"
+#include "IFSM.hpp"
+#include "Timer.hpp"
 
-class <CAMELCASENAME> : public State {
+class <CAMELCASENAME> : public IFSM {
  public:
-  <CAMELCASENAME>();
+  <CAMELCASENAME>(GameObject& object);
 
   ~<CAMELCASENAME>();
 
-  void Start();
+  void OnStateEnter();
 
-  void Pause();
+  void OnStateExecution();
 
-  void Resume();
-
-  bool QuitRequested() const;
-
-  void LoadAssets();
+  void OnStateExit();
 
   void Update(float dt);
 
-  void Render();
+ private:
+  Timer timer;
 };
 
 #endif

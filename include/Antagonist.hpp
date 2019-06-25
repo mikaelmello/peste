@@ -1,20 +1,25 @@
-#ifndef <UPPERCASENAME>_H
-#define <UPPERCASENAME>_H
+#ifndef ANTAGONIST_H
+#define ANTAGONIST_H
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *                  INCLUDES E DEFINES
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+#define ANTAGONIST_SPRITE "assets/img/terry/idle_terry.png"
 
+#include <memory>
+#include <stack>
 #include <string>
 #include "Component.hpp"
 #include "GameData.hpp"
 #include "GameObject.hpp"
+#include "IFSM.hpp"
+#include "Timer.hpp"
 
-class <CAMELCASENAME> : public Component {
+class Antagonist : public Component {
  public:
-  <CAMELCASENAME>(GameObject& associated);
+  Antagonist(GameObject& associated, Vec2 position);
 
-  ~<CAMELCASENAME>();
+  ~Antagonist();
 
   void Start() override;
 
@@ -26,9 +31,18 @@ class <CAMELCASENAME> : public Component {
 
   void Render() override;
 
-  const GameData::Types Type = GameData::Types::<CAMELCASENAME>;
+  void Push(IFSM* s);
+
+  bool NearTarget();
+
+  const GameData::Types Type = GameData::Types::Antagonist;
+
+  Vec2 position;
 
  private:
+  IFSM* stored_state;
+
+  std::stack<std::unique_ptr<IFSM>> state_stack;
 };
 
 #endif
