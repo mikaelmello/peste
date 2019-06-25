@@ -121,6 +121,8 @@ void Player::Update(float dt) {
 
   associated.box.w = sprite->GetWidth();
   associated.box.h = sprite->GetHeight();
+
+  GameData::hope_position = position;
 }
 
 void Player::Render() {}

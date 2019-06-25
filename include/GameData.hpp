@@ -5,6 +5,8 @@
  *                  INCLUDES E DEFINES
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+#include "Vec2.hpp"
+
 class GameData {
  public:
   enum Types {
@@ -17,6 +19,8 @@ class GameData {
     Player,
     Antagonist,
   };
+
+  static Vec2 hope_position;
 };
 
 #endif

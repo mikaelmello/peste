@@ -25,11 +25,11 @@ class PursuitFSM : public IFSM {
   void Update(float dt);
 
  private:
-  Timer timer;
-
   std::pair<int, std::vector<Vec2>> path;
 
   std::unique_ptr<Pathfinder::Astar> pf;
+
+  Timer timer;
 };
 
 #endif

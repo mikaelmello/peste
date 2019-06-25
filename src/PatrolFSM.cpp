@@ -12,16 +12,14 @@
 std::stack<std::pair<int, std::vector<Vec2>>> PatrolFSM::patrol_paths;
 
 PatrolFSM::PatrolFSM(GameObject& object)
-    : IFSM(object), counter(0), sprite_status(IDLE_CODE) {}
+    : IFSM(object), sprite_status(IDLE_CODE) {}
 
 PatrolFSM::~PatrolFSM() {}
 
 void PatrolFSM::OnStateEnter() {
   if (patrol_paths.empty()) {
-    Pathfinder::Heuristic* heuristic = new Pathfinder::Diagonal();
     Pathfinder::Astar* pf = new Pathfinder::Astar(
-        object, heuristic,
-        Game::GetInstance().GetCurrentState().GetCurrentTileMap());
+        object, Game::GetInstance().GetCurrentState().GetCurrentTileMap());
 
     auto dest1 = Vec2(100, 192);
     auto dest2 = Vec2(100, 142);
@@ -32,6 +30,7 @@ void PatrolFSM::OnStateEnter() {
                        .GetCurrentTileMap()
                        ->GetInitialPosition();
 
+    initial = Vec2(426, 160);
     auto current = std::dynamic_pointer_cast<Antagonist>(
                        object.GetComponent(GameData::Antagonist).lock())
                        ->position;
@@ -52,7 +51,6 @@ void PatrolFSM::OnStateEnter() {
       pop_requested = true;
     }
 
-    timer.Restart();
     delete pf;
   }
 }
@@ -146,15 +144,9 @@ void PatrolFSM::Update(float dt) {
     ant->Push(new IdleFSM(object));
   }
 
-  if (ant->NearTarget() && temp_bool_test) {
+  if (ant->NearTarget()) {
     ant->Push(new SuspectFSM(object));
-    temp_bool_test = false;
   }
 
-  if (timer.Get() > 0.9 * dt) {
-    OnStateExecution();
-    timer.Restart();
-  }
-
-  timer.Update(dt);
+  OnStateExecution();
 }

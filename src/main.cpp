@@ -2,11 +2,12 @@
 #include <iostream>
 #include "EnemyState.hpp"
 #include "Game.hpp"
+#include "RoomState.hpp"
 #include "SDL_include.h"
 
 int main(int argc, char** argv) {
   try {
-    auto roomState = new EnemyState();
+    auto roomState = new RoomState();
     Game& game = Game::GetInstance();
     game.Push(roomState);
     game.Run();

@@ -4,11 +4,9 @@
 #include "Game.hpp"
 
 PursuitFSM::PursuitFSM(GameObject& object) : IFSM(object) {
-  auto heuristic = new Pathfinder::Diagonal();
   auto tile_map = Game::GetInstance().GetCurrentState().GetCurrentTileMap();
   pf = std::unique_ptr<Pathfinder::Astar>(
-      new Pathfinder::Astar(object, heuristic, tile_map));
-  OnStateEnter();
+      new Pathfinder::Astar(object, tile_map));
 }
 
 PursuitFSM::~PursuitFSM() {}
@@ -17,19 +15,17 @@ void PursuitFSM::OnStateEnter() {
   auto ant = std::dynamic_pointer_cast<Antagonist>(
       object.GetComponent(GameData::Antagonist).lock());
 
-  Vec2 hope_position_test(100, 177);
-
-  auto pursuit_path = pf->Run(ant->position, hope_position_test);
+  auto pursuit_path = pf->Run(ant->position, GameData::hope_position);
   path = {0, pursuit_path};
 }
 
 void PursuitFSM::OnStateExecution() {
-  printf("hey\n");
-
   auto ant = std::dynamic_pointer_cast<Antagonist>(
       object.GetComponent(GameData::Antagonist).lock());
 
-  ant->position = path.second[path.first];
+  if (path.first < path.second.size()) {
+    ant->position = path.second[path.first];
+  }
 }
 
 void PursuitFSM::OnStateExit() {}

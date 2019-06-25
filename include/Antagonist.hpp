@@ -5,6 +5,7 @@
  *                  INCLUDES E DEFINES
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 #define ANTAGONIST_SPRITE "assets/img/terry/idle_terry.png"
+#define ANTAGONIST_DISTANCE 50
 
 #include <memory>
 #include <stack>

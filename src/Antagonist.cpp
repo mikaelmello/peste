@@ -23,10 +23,7 @@ Antagonist::~Antagonist() { delete stored_state; }
 
 void Antagonist::NotifyCollision(GameObject& other) {}
 
-void Antagonist::Start() {
-  position = Vec2(240, 192);
-  state_stack.emplace(new PatrolFSM(associated));
-}
+void Antagonist::Start() { state_stack.emplace(new PatrolFSM(associated)); }
 
 void Antagonist::Update(float dt) {
   if (!state_stack.empty()) {
@@ -51,11 +48,7 @@ void Antagonist::Update(float dt) {
       stored_state = nullptr;
     }
 
-    // Condicional para tratar eventuais erros lógicos.
     if (state_stack.empty()) {
-      printf(
-          "Tem algum erro na FSM aí parceiro. Botando o monstro pra "
-          "patrulhar.\n");
       state_stack.emplace(new PatrolFSM(associated));
     }
 
@@ -80,15 +73,8 @@ void Antagonist::Push(IFSM* s) {
 }
 
 bool Antagonist::NearTarget() {
-  std::pair<int, int> suspicious_position(
-      200, 142);  // Esta função receberá como argumento este parâmetro.
-  std::pair<int, int> current_position(position.x, position.y);
-
-  auto heuristic = new Pathfinder::Euclidian();
-  double dist = heuristic->Distance(suspicious_position, current_position);
-
-  delete heuristic;
-  return dist <= 50;
+  double dist = position.Distance(GameData::hope_position);
+  return dist <= ANTAGONIST_DISTANCE;
 }
 
 bool Antagonist::Is(GameData::Types type) const { return type == this->Type; }
