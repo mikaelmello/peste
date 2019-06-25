@@ -27,6 +27,25 @@ class InventoryState : public State {
   void Update(float dt);
 
   void Render();
+
+ private:
+  // Width of the inventory item
+  int itemWidth;
+
+  // Height of the inventory item
+  int itemHeight;
+
+  // Height of the inventory grid
+  int gridWidth;
+
+  // Height of the inventory grid
+  int gridHeight;
+
+  // position of the first item in the grid
+  Vec2 initialPosition;
+
+  // Gets the XY position to render an item
+  Vec2 getGridPosition(int index);
 };
 
 #endif
