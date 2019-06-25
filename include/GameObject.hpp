@@ -28,6 +28,8 @@ class GameObject {
 
   void RequestDelete();
 
+  void ReverseDelete();
+
   void NotifyCollision(std::shared_ptr<GameObject> other);
 
   void AddComponent(Component* cpt);
