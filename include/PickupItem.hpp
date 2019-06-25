@@ -1,5 +1,5 @@
-#ifndef ITEM_H
-#define ITEM_H
+#ifndef PickupItem_H
+#define PickupItem_H
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *                  INCLUDES E DEFINES
@@ -10,14 +10,12 @@
 #include "Component.hpp"
 #include "GameObject.hpp"
 #include "Types.hpp"
-#include "Vec2.hpp"
 
-class Item : public Component {
+class PickupItem : public Component {
  public:
-  Item(GameObject& associated, const std::string& name,
-       const std::string& description, const std::string& spritePath, Vec2 pos);
+  PickupItem(GameObject& associated, Vec2 position);
 
-  ~Item();
+  ~PickupItem();
 
   void Start() override;
 
@@ -29,25 +27,9 @@ class Item : public Component {
 
   void Render() override;
 
-  void SetCenter(Vec2 pos);
-
-  void SetScale(float scaleX, float scaleY);
-
-  void HidePickupDialog();
-
-  void ShowPickupDialog();
-
-  void Pickup();
-
-  const Types Type = ItemType;
+  const Types Type = PickupItemType;
 
  private:
-  std::string name;
-  std::string description;
-  Vec2 position;
-  bool colliding;
-
-  std::shared_ptr<GameObject> pickupItemGo;
 };
 
 #endif

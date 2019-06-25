@@ -7,6 +7,7 @@
 #include "Game.hpp"
 #include "GameObject.hpp"
 #include "InputManager.hpp"
+#include "PickupItem.hpp"
 #include "Player.hpp"
 #include "Sprite.hpp"
 #include "TileMap.hpp"
@@ -23,6 +24,7 @@ Item::Item(GameObject& associated, const std::string& name,
       colliding(false) {
   Sprite* sprite = new Sprite(associated, spritePath);
   sprite->SetScaleX(0.07, 0.07);
+
   Collider* collider =
       new Collider(associated, {1, 0.3}, {0, sprite->GetHeight() / 2.5});
   associated.AddComponent(collider);
@@ -31,6 +33,13 @@ Item::Item(GameObject& associated, const std::string& name,
   associated.box.y = position.y * 8;
   associated.box.w = sprite->GetWidth();
   associated.box.h = sprite->GetHeight();
+
+  GameObject* pickupGo = new GameObject(associated.priority);
+  PickupItem* pickup = new PickupItem(*pickupGo, position);
+  pickupGo->AddComponent(pickup);
+
+  State& state = Game::GetInstance().GetCurrentState();
+  pickupItemGo = state.AddObject(pickupGo);
 }
 
 Item::~Item() {}
@@ -48,12 +57,18 @@ void Item::Update(float dt) {}
 
 void Item::Render() {
   if (colliding) {
-    Sprite* sprite = new Sprite(associated, "assets/img/x.png");
-    sprite->Render(position.x * 8 - Camera::pos.x,
-                   position.y * 8 - Camera::pos.y - 30);
+    ShowPickupDialog();
+  } else {
+    HidePickupDialog();
   }
   colliding = false;
 }
+
+void Item::Pickup() { pickupItemGo->RequestDelete(); }
+
+void Item::HidePickupDialog() { pickupItemGo->DisableRender(); }
+
+void Item::ShowPickupDialog() { pickupItemGo->EnableRender(); }
 
 bool Item::Is(Types type) const { return type == this->Type; }
 
