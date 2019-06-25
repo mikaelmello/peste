@@ -49,7 +49,7 @@ Player::~Player() {}
 
 void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
   InputManager& input = InputManager::GetInstance();
-  auto item_cpt = other->GetComponent(ItemType).lock();
+  auto item_cpt = other->GetComponent(ItemType);
 
   if (item_cpt) {
     if (input.KeyPress(X_KEY)) {
@@ -69,7 +69,7 @@ void Player::Update(float dt) {
   int tileDim = tilemap->GetLogicalTileDimension();
 
   auto cpt = associated.GetComponent(SpriteType);
-  auto sprite = std::dynamic_pointer_cast<Sprite>(cpt.lock());
+  auto sprite = std::dynamic_pointer_cast<Sprite>(cpt);
 
   bool up = false;
   bool down = false;

@@ -35,9 +35,9 @@ class State {
 
   virtual TileMap* GetCurrentTileMap();
 
-  virtual std::weak_ptr<GameObject> AddObject(GameObject* go);
+  virtual std::shared_ptr<GameObject> AddObject(GameObject* go);
 
-  virtual std::weak_ptr<GameObject> GetObjectPtr(GameObject* go);
+  virtual std::shared_ptr<GameObject> GetObjectPtr(GameObject* go);
 
   bool QuitRequested() const;
 

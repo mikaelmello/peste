@@ -74,7 +74,7 @@ void Antagonist::Push(IFSM* s) {
 }
 
 bool Antagonist::NearTarget() {
-  auto player = GameData::PlayerGameObject->GetComponent(PlayerType).lock();
+  auto player = GameData::PlayerGameObject->GetComponent(PlayerType);
   if (!player) {
     throw std::runtime_error("Player game object without Player component");
   }

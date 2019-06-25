@@ -22,7 +22,7 @@ State::State() : quitRequested(false), started(false), popRequested(false) {}
 
 State::~State() {}
 
-std::weak_ptr<GameObject> State::AddObject(GameObject* go) {
+std::shared_ptr<GameObject> State::AddObject(GameObject* go) {
   std::shared_ptr<GameObject> goSharedPtr(go);
   objects.insert(goSharedPtr);
 
@@ -30,18 +30,18 @@ std::weak_ptr<GameObject> State::AddObject(GameObject* go) {
     goSharedPtr->Start();
   }
 
-  return std::weak_ptr<GameObject>(goSharedPtr);
+  return goSharedPtr;
 }
 
-std::weak_ptr<GameObject> State::GetObjectPtr(GameObject* go) {
+std::shared_ptr<GameObject> State::GetObjectPtr(GameObject* go) {
   auto it = std::find_if(objects.begin(), objects.end(),
                          [&](auto& go2) { return go == go2.get(); });
 
   if (it == objects.end()) {
-    return std::weak_ptr<GameObject>();
+    return std::shared_ptr<GameObject>();
   }
 
-  return std::weak_ptr<GameObject>(*it);
+  return *it;
 }
 
 bool State::QuitRequested() const { return quitRequested; }

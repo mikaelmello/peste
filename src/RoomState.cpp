@@ -85,8 +85,8 @@ void RoomState::Update(float dt) {
       auto go1 = *i;
       auto go2 = *j;
 
-      auto colliderSp1 = go1->GetComponent(ColliderType).lock();
-      auto colliderSp2 = go2->GetComponent(ColliderType).lock();
+      auto colliderSp1 = go1->GetComponent(ColliderType);
+      auto colliderSp2 = go2->GetComponent(ColliderType);
 
       if (!colliderSp1 || !colliderSp2) {
         continue;

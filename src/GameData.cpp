@@ -7,7 +7,7 @@ GameObject* GameData::PlayerGameObject = nullptr;
 std::vector<std::shared_ptr<GameObject>> GameData::PlayerInventory;
 
 void GameData::AddToInventory(std::shared_ptr<GameObject> item) {
-  auto item_cpt = item->GetComponent(ItemType).lock();
+  auto item_cpt = item->GetComponent(ItemType);
   if (!item_cpt) {
     throw new std::invalid_argument(
         "Trying to add game object without an item component in the inventory");

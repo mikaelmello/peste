@@ -33,7 +33,7 @@ void PatrolFSM::OnStateEnter() {
 
     initial = Vec2(426, 160);
     auto current = std::dynamic_pointer_cast<Antagonist>(
-                       object.GetComponent(AntagonistType).lock())
+                       object.GetComponent(AntagonistType))
                        ->position;
 
     try {
@@ -59,7 +59,7 @@ void PatrolFSM::OnStateEnter() {
 void PatrolFSM::OnStateExecution() {
   if (!patrol_paths.empty()) {
     auto ant = std::dynamic_pointer_cast<Antagonist>(
-        object.GetComponent(AntagonistType).lock());
+        object.GetComponent(AntagonistType));
     std::pair<int, int> previous = {ant->position.x, ant->position.y};
 
     int& k = patrol_paths.top().first;
@@ -86,7 +86,7 @@ void PatrolFSM::OnStateExecution() {
 
     if (sprite_code != sprite_status) {
       auto sprite = std::dynamic_pointer_cast<Sprite>(
-          object.GetComponent(SpriteType).lock());
+          object.GetComponent(SpriteType));
       std::string sprite_path;
       switch (sprite_code) {
         case LEFT_WALK_CODE:
@@ -127,14 +127,14 @@ void PatrolFSM::OnStateExecution() {
 
 void PatrolFSM::OnStateExit() {
   auto sprite =
-      std::dynamic_pointer_cast<Sprite>(object.GetComponent(SpriteType).lock());
+      std::dynamic_pointer_cast<Sprite>(object.GetComponent(SpriteType));
   sprite_status = IDLE_CODE;
   sprite->Open(IDLE_SPRITE);
 }
 
 void PatrolFSM::Update(float dt) {
   auto ant = std::dynamic_pointer_cast<Antagonist>(
-      object.GetComponent(AntagonistType).lock());
+      object.GetComponent(AntagonistType));
 
   OnStateEnter();
 

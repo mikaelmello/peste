@@ -38,7 +38,7 @@ class GameObject {
   inline void EnableRender() { render = true; }
   inline void ToggleRender() { render = !render; }
 
-  std::weak_ptr<Component> GetComponent(Types type);
+  std::shared_ptr<Component> GetComponent(Types type);
 
   Rect box;
 

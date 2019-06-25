@@ -14,7 +14,7 @@ SuspectFSM::~SuspectFSM() {}
 
 void SuspectFSM::OnStateEnter() {
   auto ant = std::dynamic_pointer_cast<Antagonist>(
-      object.GetComponent(AntagonistType).lock());
+      object.GetComponent(AntagonistType));
 
   if (ant->NearTarget()) {
     Pathfinder::Astar* pf = new Pathfinder::Astar(
@@ -22,7 +22,7 @@ void SuspectFSM::OnStateEnter() {
 
     initial = ant->position;
 
-    auto player = GameData::PlayerGameObject->GetComponent(PlayerType).lock();
+    auto player = GameData::PlayerGameObject->GetComponent(PlayerType);
     if (!player) {
       throw std::runtime_error("Player game object without Player component");
     }
@@ -36,7 +36,7 @@ void SuspectFSM::OnStateEnter() {
 
 void SuspectFSM::OnStateExecution() {
   auto ant = std::dynamic_pointer_cast<Antagonist>(
-      object.GetComponent(AntagonistType).lock());
+      object.GetComponent(AntagonistType));
 
   if (path.first < path.second.size()) {
     ant->position = path.second[path.first];
@@ -52,7 +52,7 @@ void SuspectFSM::OnStateExit() {
       object, Game::GetInstance().GetCurrentState().GetCurrentTileMap());
 
   Vec2 current = std::dynamic_pointer_cast<Antagonist>(
-                     object.GetComponent(AntagonistType).lock())
+                     object.GetComponent(AntagonistType))
                      ->position;
 
   auto return_path = pf->Run(current, initial);
@@ -63,7 +63,7 @@ void SuspectFSM::OnStateExit() {
 
 void SuspectFSM::Update(float dt) {
   auto ant = std::dynamic_pointer_cast<Antagonist>(
-      object.GetComponent(AntagonistType).lock());
+      object.GetComponent(AntagonistType));
   OnStateExecution();
 
   if (bias_update_timer.Get() > 3 * dt) {

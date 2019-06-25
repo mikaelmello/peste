@@ -83,7 +83,7 @@ void Pathfinder::Astar::Search(std::vector<Vec2>& path,
 
 bool Pathfinder::Astar::CanWalk(std::pair<int, int>& p) {
   auto collider = std::dynamic_pointer_cast<Collider>(
-      object.GetComponent(ColliderType).lock());
+      object.GetComponent(ColliderType));
 
   float start_w = 1.0f;
   float end_w = 1.0f;

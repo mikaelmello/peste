@@ -36,7 +36,7 @@ Item::Item(GameObject& associated, const std::string& name,
 Item::~Item() {}
 
 void Item::NotifyCollision(std::shared_ptr<GameObject> other) {
-  auto playerComponent = other->GetComponent(PlayerType).lock();
+  auto playerComponent = other->GetComponent(PlayerType);
   if (playerComponent) {
     colliding = true;
   }
@@ -61,7 +61,7 @@ void Item::SetCenter(Vec2 pos) { associated.box.SetCenter(pos); }
 
 void Item::SetScale(float scaleX, float scaleY) {
   auto sprite = associated.GetComponent(SpriteType);
-  auto spriteSharedPtr = std::dynamic_pointer_cast<Sprite>(sprite.lock());
+  auto spriteSharedPtr = std::dynamic_pointer_cast<Sprite>(sprite);
 
   spriteSharedPtr->SetScaleX(scaleX, scaleY);
 }

@@ -8,7 +8,7 @@ IdleFSM::~IdleFSM() {}
 
 void IdleFSM::OnStateEnter() {
   auto sprite =
-      std::dynamic_pointer_cast<Sprite>(object.GetComponent(SpriteType).lock());
+      std::dynamic_pointer_cast<Sprite>(object.GetComponent(SpriteType));
   sprite->Open(IDLE_SPRITE_ANTAGONIST);
 
   timer.Restart();
