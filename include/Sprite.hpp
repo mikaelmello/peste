@@ -43,6 +43,8 @@ class Sprite : public Component {
 
   void SetScaleX(float scaleX, float scaleY);
 
+  void SetMaxDimensions(int maxWidth, int maxHeight);
+
   void SetFrame(int frame);
 
   void SetFrameCount(int frameCount);

@@ -119,3 +119,20 @@ Vec2 Sprite::GetScale() {
 
   SDL_Surface* surface = nullptr;
 }
+
+void Sprite::SetMaxDimensions(int maxHeight, int maxWidth) {
+  if (maxHeight >= height && maxWidth >= width) return;
+
+  double xScale, yScale;
+
+  if (maxWidth < width) {
+    xScale = (double)maxWidth / (double)width;
+  }
+
+  if (maxHeight < height) {
+    yScale = (double)maxHeight / (double)height;
+  }
+
+  double minScale = std::min(xScale, yScale);
+  SetScaleX(minScale, minScale);
+}
