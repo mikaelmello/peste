@@ -20,7 +20,7 @@ void Collider::Update(float dt) {
   box = associated.box;
   box.w *= scale.x;
   box.h *= scale.y;
-  box = box.GetCentered(associated.box.Center());
+  box.SetCenter(associated.box.Center());
 
   box += offset.GetRotated(Helpers::deg_to_rad(associated.angleDeg));
 }
