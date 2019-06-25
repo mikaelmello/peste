@@ -15,6 +15,7 @@ enum Types {
   PlayerType,
   ItemType,
   InventoryType,
+  AntagonistType,
 };
 
 #endif

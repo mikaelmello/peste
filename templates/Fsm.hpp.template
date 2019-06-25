@@ -1,0 +1,30 @@
+#ifndef <UPPERCASENAME>_H
+#define <UPPERCASENAME>_H
+
+/* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
+ *                  INCLUDES E DEFINES
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
+#include "GameObject.hpp"
+#include "IFSM.hpp"
+#include "Timer.hpp"
+
+class <CAMELCASENAME> : public IFSM {
+ public:
+  <CAMELCASENAME>(GameObject& object);
+
+  ~<CAMELCASENAME>();
+
+  void OnStateEnter();
+
+  void OnStateExecution();
+
+  void OnStateExit();
+
+  void Update(float dt);
+
+ private:
+  Timer timer;
+};
+
+#endif

@@ -10,6 +10,7 @@
 #include "Item.hpp"
 #include "Sprite.hpp"
 #include "TileMap.hpp"
+#include "Types.hpp"
 
 using namespace Helpers;
 

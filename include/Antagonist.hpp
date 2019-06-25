@@ -1,23 +1,27 @@
-#ifndef PLAYER_H
-#define PLAYER_H
+#ifndef ANTAGONIST_H
+#define ANTAGONIST_H
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *                  INCLUDES E DEFINES
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+#define ANTAGONIST_SPRITE "assets/img/terry/idle_terry.png"
+#define ANTAGONIST_DISTANCE 50
 
 #include <memory>
+#include <stack>
 #include <string>
 #include "Component.hpp"
+#include "GameData.hpp"
 #include "GameObject.hpp"
-#include "Helpers.hpp"
-#include "Sprite.hpp"
+#include "IFSM.hpp"
+#include "Timer.hpp"
 #include "Types.hpp"
 
-class Player : public Component {
+class Antagonist : public Component {
  public:
-  Player(GameObject& associated, Vec2 position);
+  Antagonist(GameObject& associated, Vec2 position);
 
-  ~Player();
+  ~Antagonist();
 
   void Start() override;
 
@@ -29,19 +33,18 @@ class Player : public Component {
 
   void Render() override;
 
-  const Types Type = PlayerType;
+  void Push(IFSM* s);
+
+  bool NearTarget();
+
+  const Types Type = Types::AntagonistType;
 
   Vec2 position;
 
  private:
-  void OpenIdleSprite(const std::shared_ptr<Sprite>& sprite,
-                      Helpers::Direction lastDirection);
+  IFSM* stored_state;
 
-  void OpenWalkingSprite(const std::shared_ptr<Sprite>& sprite,
-                         Helpers::Direction lastDirection,
-                         Helpers::Direction direction);
-
-  Helpers::Direction lastDirection;
+  std::stack<std::unique_ptr<IFSM>> state_stack;
 };
 
 #endif

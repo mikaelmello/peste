@@ -1,0 +1,16 @@
+#include "<CAMELCASENAME>.hpp"
+
+<CAMELCASENAME>::<CAMELCASENAME>(GameObject& object) : IFSM(object) { OnStateEnter(); }
+
+<CAMELCASENAME>::~<CAMELCASENAME>() {}
+
+void <CAMELCASENAME>::OnStateEnter() {}
+
+void <CAMELCASENAME>::OnStateExecution() {}
+
+void <CAMELCASENAME>::OnStateExit() {}
+
+void <CAMELCASENAME>::Update(float dt) {
+  OnStateExecution();
+  timer.Update(dt);
+}

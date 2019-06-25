@@ -27,6 +27,10 @@ class Collider : public Component {
 
   void SetOffset(Vec2 offset);
 
+  Vec2 GetOffSet() const;
+
+  Vec2 GetScale() const;
+
   Rect box;
 
   const Types Type = ColliderType;

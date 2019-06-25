@@ -1,4 +1,5 @@
 #include "RoomState.hpp"
+#include "Antagonist.hpp"
 #include "Camera.hpp"
 #include "CameraFollower.hpp"
 #include "Collider.hpp"
@@ -31,6 +32,12 @@ RoomState::RoomState() {
   playerGo->AddComponent(player);
   objects.emplace(playerGo);
   GameData::PlayerGameObject = playerGo;
+
+  GameObject* antagonist_go = new GameObject(5);
+  Antagonist* antagonist =
+      new Antagonist(*antagonist_go, currentTileMap->GetInitialPosition());
+  antagonist_go->AddComponent(antagonist);
+  objects.emplace(antagonist_go);
 
   Camera::Follow(playerGo);
 
