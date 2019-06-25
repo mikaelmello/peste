@@ -1,4 +1,5 @@
 #include "Pathfinder.hpp"
+#include "Collider.hpp"
 #include "Game.hpp"
 
 Pathfinder::Astar::Astar(GameObject& o, Heuristic* h, TileMap* tm)
@@ -10,9 +11,26 @@ Pathfinder::Astar::Astar(GameObject& o, TileMap* tm)
 Pathfinder::Astar::~Astar() { delete heuristic; }
 
 bool Pathfinder::Astar::CanWalk(std::pair<int, int>& p) {
-  int wi = 0.2 * object.box.w / tm->GetLogicalTileDimension();
-  int w = 0.8 * object.box.w / tm->GetLogicalTileDimension();
-  int hi = 0.85 * object.box.h / tm->GetLogicalTileDimension();
+  auto collider = std::dynamic_pointer_cast<Collider>(
+      object.GetComponent(GameData::Collider).lock());
+
+  float start_w = 1.0f;
+  float end_w = 1.0f;
+  float start_h = 0;
+
+  Vec2 offset = collider->GetOffSet();
+
+  if (collider) {
+    Vec2 scale = collider->GetScale();
+
+    start_w = (1.0f - scale.x) / 2.0f;
+    end_w = 1 - scale.x / 2.0f;
+    start_h = (1.0f - scale.y);
+  }
+
+  int wi = start_w * object.box.w / tm->GetLogicalTileDimension() + offset.x;
+  int w = end_w * object.box.w / tm->GetLogicalTileDimension() + offset.x;
+  int hi = start_h * object.box.h / tm->GetLogicalTileDimension();
   int h = object.box.h / tm->GetLogicalTileDimension();
 
   bool can_walk = true;

@@ -11,8 +11,9 @@
 
 Antagonist::Antagonist(GameObject& associated, Vec2 position)
     : Component(associated), position(position), stored_state(nullptr) {
-  Collider* collider = new Collider(associated);
   Sprite* sprite = new Sprite(associated, ANTAGONIST_SPRITE, 4, 0.125);
+  Collider* collider =
+      new Collider(associated, {0.6, 0.15}, {0, sprite->GetHeight() * 0.45});
 
   associated.AddComponent(collider);
   associated.AddComponent(sprite);

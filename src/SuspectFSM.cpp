@@ -4,6 +4,7 @@
 #include "Game.hpp"
 #include "Pathfinder.hpp"
 #include "PatrolFSM.hpp"
+#include "PursuitFSM.hpp"
 
 SuspectFSM::SuspectFSM(GameObject& object) : IFSM(object), rage_bias(0) {
   OnStateEnter();
@@ -12,19 +13,24 @@ SuspectFSM::SuspectFSM(GameObject& object) : IFSM(object), rage_bias(0) {
 SuspectFSM::~SuspectFSM() {}
 
 void SuspectFSM::OnStateEnter() {
-  Pathfinder::Heuristic* heuristic = new Pathfinder::Diagonal();
-  Pathfinder::Astar* pf = new Pathfinder::Astar(
-      object, heuristic,
-      Game::GetInstance().GetCurrentState().GetCurrentTileMap());
+  auto ant = std::dynamic_pointer_cast<Antagonist>(
+      object.GetComponent(GameData::Antagonist).lock());
 
-  initial = std::dynamic_pointer_cast<Antagonist>(
-                object.GetComponent(GameData::Antagonist).lock())
-                ->position;
-  Vec2 verify_position(200, 142);
+  if (ant->NearTarget()) {
+    Pathfinder::Heuristic* heuristic = new Pathfinder::Diagonal();
+    Pathfinder::Astar* pf = new Pathfinder::Astar(
+        object, heuristic,
+        Game::GetInstance().GetCurrentState().GetCurrentTileMap());
 
-  path = {0, pf->Run(initial, verify_position)};
+    initial = std::dynamic_pointer_cast<Antagonist>(
+                  object.GetComponent(GameData::Antagonist).lock())
+                  ->position;
+    Vec2 verify_position(200, 142);
 
-  delete pf;
+    path = {0, pf->Run(initial, verify_position)};
+
+    delete pf;
+  }
 }
 
 void SuspectFSM::OnStateExecution() {
@@ -33,8 +39,8 @@ void SuspectFSM::OnStateExecution() {
 
   ant->position = path.second[path.first];
   if (rage_bias == RAGE_NUMERIC_LIMIT) {
-    // printf("Entrou em modo perseguição.");
-    // ant->Push(new RageFSM(object));
+    printf("Entrou em modo perseguição.");
+    // ant->Push(new PursuitFSM(object));
   }
   // Sprite Manager.
   // Sprite Manager.
@@ -58,7 +64,7 @@ void SuspectFSM::Update(float dt) {
       object.GetComponent(GameData::Antagonist).lock());
   OnStateExecution();
 
-  if (bias_update_timer.Get() > dt) {
+  if (bias_update_timer.Get() > 2 * dt) {
     if (ant->NearTarget()) {
       rage_bias = std::min(rage_bias + 1, RAGE_NUMERIC_LIMIT);
     } else {

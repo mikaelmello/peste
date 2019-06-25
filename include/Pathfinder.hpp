@@ -100,7 +100,7 @@ class Astar {
 
   inline bool IsIn(std::set<f_and_cell>& open, std::pair<int, int> p) {
     for (auto& s : open) {
-      if (s.second.first == p.first && s.second.second == p.first) {
+      if (s.second == p) {
         return true;
       }
     }
