@@ -13,20 +13,20 @@ PursuitFSM::PursuitFSM(GameObject& object) : IFSM(object) {
 PursuitFSM::~PursuitFSM() {}
 
 void PursuitFSM::OnStateEnter() {
-  auto antCpt = object.GetComponent(AntagonistType);
-  if (!antCpt) {
+  auto antagonist = object.GetComponent(AntagonistType);
+  if (!antagonist) {
     throw std::runtime_error(
         "Nao tem antagonista no objeto passado para a PursuitFSM");
   }
-  auto ant = std::dynamic_pointer_cast<Antagonist>(antCpt);
 
   auto player = GameData::PlayerGameObject->GetComponent(PlayerType);
   if (!player) {
     throw std::runtime_error("Player game object without Player component");
   }
 
+  auto antCp = std::dynamic_pointer_cast<Antagonist>(antagonist);
   auto playerCp = std::dynamic_pointer_cast<Player>(player);
-  auto pursuit_path = pf->Run(ant->position, playerCp->position);
+  auto pursuit_path = pf->Run(antCp->position, playerCp->position);
   path = {0, pursuit_path};
 }
 

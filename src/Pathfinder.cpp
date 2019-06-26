@@ -33,7 +33,7 @@ std::vector<Vec2> Pathfinder::Astar::Run(Vec2& s, Vec2& d) {
   return path;
 }
 
-int Pathfinder::Astar::index(int i, int j) { return (i * cols) + j; }
+int Pathfinder::Astar::index(int i, int j) { return (i * rows) + j; }
 
 void Pathfinder::Astar::Search(std::vector<Vec2>& path,
                                std::pair<int, int>& start,
