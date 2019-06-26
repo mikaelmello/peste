@@ -7,6 +7,7 @@
 
 #include <string>
 #include <vector>
+#include "GameObject.hpp"
 
 namespace Helpers {
 
@@ -45,6 +46,8 @@ enum Direction {
 };
 
 Direction combine_moves(bool up, bool down, bool left, bool right);
+
+void set_collider_box(GameObject& object);
 
 }  // end namespace Helpers
 

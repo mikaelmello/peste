@@ -65,6 +65,8 @@ void Antagonist::Update(float dt) {
 
   associated.box.x = position.x * tileDim;
   associated.box.y = position.y * tileDim;
+
+  Helpers::set_collider_box(associated);
 }
 
 void Antagonist::Render() {}

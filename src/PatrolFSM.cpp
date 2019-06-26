@@ -31,10 +31,13 @@ void PatrolFSM::OnStateEnter() {
 
     auto initial = tilemap->GetInitialPosition();
 
-    initial = Vec2(426, 160);
-    auto current = std::dynamic_pointer_cast<Antagonist>(
-                       object.GetComponent(AntagonistType))
-                       ->position;
+    auto ant = object.GetComponent(Types::AntagonistType);
+
+    if (!ant) {
+      throw std::runtime_error("no antagonist component in antagonist_go");
+    }
+
+    Vec2 current = std::dynamic_pointer_cast<Antagonist>(ant)->position;
 
     try {
       auto path3 = pf->Run(dest2, dest3);
@@ -48,8 +51,8 @@ void PatrolFSM::OnStateEnter() {
 
       auto ret_path = pf->Run(current, initial);
       patrol_paths.emplace(0, ret_path);
-    } catch (std::exception ex) {
-      printf("quee\n");
+    } catch (const std::exception& ex) {
+      printf("%s\n", ex.what());
       pop_requested = true;
     }
 
@@ -134,8 +137,13 @@ void PatrolFSM::OnStateExit() {
 }
 
 void PatrolFSM::Update(float dt) {
-  auto ant = std::dynamic_pointer_cast<Antagonist>(
-      object.GetComponent(AntagonistType));
+  auto ant_cpt = object.GetComponent(Types::AntagonistType);
+
+  if (!ant_cpt) {
+    throw std::runtime_error("no antagonist component in antagonist_go");
+  }
+
+  auto ant = std::dynamic_pointer_cast<Antagonist>(ant_cpt);
 
   OnStateEnter();
 
@@ -147,7 +155,7 @@ void PatrolFSM::Update(float dt) {
   }
 
   if (ant->NearTarget()) {
-    ant->Push(new SuspectFSM(object));
+    // ant->Push(new SuspectFSM(object));
   }
 
   OnStateExecution();
