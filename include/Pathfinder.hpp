@@ -16,7 +16,9 @@ typedef std::pair<double, std::pair<int, int>> f_and_cell;
 
 struct Cell {
   Cell()
-      : f(std::numeric_limits<double>::max()), closed(false), parent({-1, -1}) {}
+      : f(std::numeric_limits<double>::max()),
+        closed(false),
+        parent({-1, -1}) {}
 
   Cell(double f, bool c, std::pair<int, int> p) : f(f), closed(c), parent(p) {}
 
@@ -71,7 +73,13 @@ class Astar {
 
   TileMap* tm;
 
-  Cell** details;
+  std::vector<Cell> details;
+
+  int rows;
+
+  int cols;
+
+  int index(int i, int j);
 
   // Funções auxiliares:
   void Search(std::vector<Vec2>& path, std::pair<int, int>& start,

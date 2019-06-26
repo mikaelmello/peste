@@ -3,7 +3,10 @@
 #include "Game.hpp"
 
 Pathfinder::Astar::Astar(GameObject& o, Heuristic* h, TileMap* tm)
-    : object(o), heuristic(h), tm(tm) {}
+    : object(o), heuristic(h), tm(tm) {
+  rows = tm->GetLogicalHeight();
+  cols = tm->GetLogicalWidth();
+}
 
 Pathfinder::Astar::Astar(GameObject& o, TileMap* tm)
     : Astar(o, new Diagonal(), tm) {}
@@ -22,28 +25,20 @@ std::vector<Vec2> Pathfinder::Astar::Run(Vec2& s, Vec2& d) {
     throw std::invalid_argument("Pathfinder: desired destination is invalid.");
   }
 
-  int row = tm->GetLogicalHeight();
-  int col = tm->GetLogicalWidth();
-
-  details = new Pathfinder::Cell*[col];
-  for (int i = 0; i < col; i++) {
-    details[i] = new Pathfinder::Cell[row];
-  }
+  details = std::vector<Cell>(rows * cols);
 
   std::vector<Vec2> path;
   Search(path, dest, start);
 
-  for (int i = 0; i < col; i++) {
-    delete details[i];
-  }
-
   return path;
 }
+
+int Pathfinder::Astar::index(int i, int j) { return (i * cols) + j; }
 
 void Pathfinder::Astar::Search(std::vector<Vec2>& path,
                                std::pair<int, int>& start,
                                std::pair<int, int>& dest) {
-  details[start.first][start.second] = Cell(0, false, start);
+  details[index(start.first, start.second)] = Cell(0, false, start);
 
   std::set<f_and_cell> open;
   open.insert(std::make_pair(0, start));
@@ -85,6 +80,10 @@ void Pathfinder::Astar::Search(std::vector<Vec2>& path,
 }
 
 bool Pathfinder::Astar::CanWalk(std::pair<int, int>& p) {
+  if (p.first <= 0 || p.first > cols || p.second <= 0 || p.second >= rows) {
+    return false;
+  }
+
   auto colliderCpt = object.GetComponent(ColliderType);
   auto spriteCpt = object.GetComponent(SpriteType);
 
@@ -94,12 +93,13 @@ bool Pathfinder::Astar::CanWalk(std::pair<int, int>& p) {
 
   auto sprite = std::dynamic_pointer_cast<Sprite>(spriteCpt);
   auto collider = std::dynamic_pointer_cast<Collider>(colliderCpt);
+  int tileDim = tm->GetLogicalTileDimension();
 
-  int cellsWidth = collider->box.w / tm->GetLogicalTileDimension();
-  int cellsHeight = collider->box.h / tm->GetLogicalTileDimension();
+  int cellsWidth = round(collider->box.w / tileDim);
+  int cellsHeight = round(collider->box.h / tileDim);
 
   int x = p.first - cellsWidth / 2;
-  int y = p.second - cellsHeight / 2;
+  int y = p.second - cellsHeight;
 
   for (int i = x; i <= (x + cellsWidth); i++) {
     for (int j = y; j <= (y + cellsHeight); j++) {
@@ -116,25 +116,23 @@ void Pathfinder::Astar::TracePath(std::pair<int, int>& dest,
                                   std::vector<Vec2>& path) {
   std::pair<int, int> aux = dest;
 
-  while (!(details[aux.first][aux.second].parent == aux)) {
+  while (!(details[index(aux.first, aux.second)].parent == aux)) {
     path.push_back({(float)aux.first, (float)aux.second});
-    aux = details[aux.first][aux.second].parent;
+    aux = details[index(aux.first, aux.second)].parent;
   }
 }
 
 void Pathfinder::Astar::SetFValue(std::pair<int, int>& p, float f_value) {
-  details[p.first][p.second].f = f_value;
+  details[index(p.first, p.second)].f = f_value;
 }
 
 void Pathfinder::Astar::SetParent(std::pair<int, int>& leaf,
                                   std::pair<int, int>& parent) {
-  details[leaf.first][leaf.second].parent = parent;
+  details[index(leaf.first, leaf.second)].parent = parent;
 }
 
 void Pathfinder::Astar::Close(std::pair<int, int>& p) {
-  int i = p.first;
-  int j = p.second;
-  details[i][j].closed = true;
+  details[index(p.first, p.second)].closed = true;
 }
 
 bool Pathfinder::Astar::IsIn(std::set<f_and_cell>& open,
@@ -148,12 +146,12 @@ bool Pathfinder::Astar::IsIn(std::set<f_and_cell>& open,
 }
 
 bool Pathfinder::Astar::Closed(std::pair<int, int>& p) {
-  return details[p.first][p.second].closed;
+  return details[index(p.first, p.second)].closed;
 }
 
 bool Pathfinder::Astar::Shorter(int cost, std::pair<int, int>& p,
                                 std::pair<int, int>& d) {
-  return cost + heuristic->Distance(p, d) < details[p.first][p.second].f;
+  return cost + heuristic->Distance(p, d) < details[index(p.first, p.second)].f;
 }
 
 std::vector<std::pair<int, int>> Pathfinder::Astar::Neighbours(

@@ -30,6 +30,8 @@ void Antagonist::Update(float dt) {
   Game& game = Game::GetInstance();
   State& state = game.GetCurrentState();
   auto tilemap = state.GetCurrentTileMap();
+  auto spriteCpt = associated.GetComponent(SpriteType);
+  auto sprite = std::dynamic_pointer_cast<Sprite>(spriteCpt);
 
   if (!state_stack.empty()) {
     auto& top_state = state_stack.top();
@@ -66,7 +68,13 @@ void Antagonist::Update(float dt) {
   associated.box.x = position.x * tileDim;
   associated.box.y = position.y * tileDim;
 
-  Helpers::set_collider_box(associated);
+  // a position está no meio horizontal e no fim vertical do sprite
+  // para renderizar, colocamos o xy da box de acordo
+  // posição * dimensão do tile - (comprimento da sprite / 2), pois o x fica no
+  // meio da sprite
+  associated.box.x = position.x * tileDim - sprite->GetWidth() / 2;
+  // posição * dimensão do tile - altura da sprite, pois o y fica la embaixo
+  associated.box.y = position.y * tileDim - sprite->GetHeight();
 }
 
 void Antagonist::Render() {}
