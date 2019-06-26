@@ -34,7 +34,9 @@ using namespace Helpers;
 #define PLAYER_DOWNRIGHT "assets/img/hope/rightdown.png"
 
 Player::Player(GameObject& associated, Vec2 position)
-    : Component(associated), position(position) {
+    : Component(associated),
+      position(position),
+      lastDirection(Helpers::Direction::NONE) {
   Sprite* sprite = new Sprite(associated, PLAYER_FRONT);
   sprite->SetScaleX(0.7, 0.7);
   Collider* collider =
