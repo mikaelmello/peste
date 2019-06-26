@@ -17,14 +17,15 @@ typedef std::pair<double, std::pair<int, int>> f_and_cell;
 struct Cell {
   Cell()
       : f(std::numeric_limits<double>::max()),
+        g(std::numeric_limits<double>::max()),
         closed(false),
         opened(false),
         parent({-1, -1}) {}
 
-  Cell(double f, bool c, std::pair<int, int> p)
-      : f(f), closed(c), opened(false), parent(p) {}
+  Cell(double f, double g, bool c, std::pair<int, int> p)
+      : f(f), g(g), closed(c), opened(false), parent(p) {}
 
-  double f;
+  double f, g;
 
   bool closed;
 
@@ -105,7 +106,7 @@ class Astar {
 
   bool Closed(std::pair<int, int>& p);
 
-  bool Shorter(int cost, std::pair<int, int>& p, std::pair<int, int>& d);
+  bool Shorter(float cost, std::pair<int, int>& p, std::pair<int, int>& d);
 
   std::vector<std::pair<int, int>> Neighbours(std::pair<int, int> p);
 };

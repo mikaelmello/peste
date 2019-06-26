@@ -38,7 +38,7 @@ int Pathfinder::Astar::index(int i, int j) { return (i * rows) + j; }
 void Pathfinder::Astar::Search(std::vector<Vec2>& path,
                                std::pair<int, int>& start,
                                std::pair<int, int>& dest) {
-  details[index(start.first, start.second)] = Cell(0, false, start);
+  details[index(start.first, start.second)] = Cell(0, 0, false, start);
 
   std::set<f_and_cell> open;
   open.insert(std::make_pair(0, start));
@@ -66,8 +66,9 @@ void Pathfinder::Astar::Search(std::vector<Vec2>& path,
         continue;
       }
 
-      if (Shorter(cost, neighbour, dest)) {
-        double f_value = cost + heuristic->Distance(neighbour, dest);
+      if (Shorter(cost, current.second, neighbour)) {
+        double f_value = details[index(neighbour.first, neighbour.second)].g +
+                         heuristic->Distance(neighbour, dest);
         SetFValue(neighbour, f_value);
         SetParent(neighbour, current.second);
 
@@ -148,9 +149,16 @@ bool Pathfinder::Astar::Closed(std::pair<int, int>& p) {
   return details[index(p.first, p.second)].closed;
 }
 
-bool Pathfinder::Astar::Shorter(int cost, std::pair<int, int>& p,
+bool Pathfinder::Astar::Shorter(float cost, std::pair<int, int>& s,
                                 std::pair<int, int>& d) {
-  return cost + heuristic->Distance(p, d) < details[index(p.first, p.second)].f;
+  bool flag = details[index(s.first, s.second)].g + cost <
+              details[index(d.first, d.second)].g;
+
+  if (flag) {
+    details[index(d.first, d.second)].g =
+        details[index(s.first, s.second)].g + cost;
+  }
+  return flag;
 }
 
 std::vector<std::pair<int, int>> Pathfinder::Astar::Neighbours(

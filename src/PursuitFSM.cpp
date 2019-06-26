@@ -26,8 +26,14 @@ void PursuitFSM::OnStateEnter() {
 
   auto antCp = std::dynamic_pointer_cast<Antagonist>(antagonist);
   auto playerCp = std::dynamic_pointer_cast<Player>(player);
-  auto pursuit_path = pf->Run(antCp->position, playerCp->position);
-  path = {0, pursuit_path};
+
+  try {
+    auto pursuit_path = pf->Run(antCp->position, playerCp->position);
+    path = {0, pursuit_path};
+  } catch (const std::exception& ex) {
+    printf("fdsafds: %s\n", ex.what());
+    pop_requested = true;
+  }
 }
 
 void PursuitFSM::OnStateExecution() {

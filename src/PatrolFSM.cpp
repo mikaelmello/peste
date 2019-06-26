@@ -53,6 +53,7 @@ void PatrolFSM::OnStateEnter() {
       patrol_paths.emplace(0, ret_path);
     } catch (const std::exception& ex) {
       printf("%s\n", ex.what());
+      patrol_paths = std::stack<std::pair<int, std::vector<Vec2>>>();
       pop_requested = true;
     }
 
@@ -158,10 +159,14 @@ void PatrolFSM::Update(float dt) {
 
   OnStateEnter();
 
+  bool enter = false;
   while (!patrol_paths.empty() &&
          patrol_paths.top().first == patrol_paths.top().second.size()) {
     patrol_paths.pop();
+    enter = true;
+  }
 
+  if (enter) {
     ant->Push(new IdleFSM(object));
   }
 

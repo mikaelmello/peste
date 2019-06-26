@@ -50,10 +50,6 @@ void Antagonist::Update(float dt) {
     }
 
     if (stored_state != nullptr) {
-      if (!state_stack.empty()) {
-        auto& exit_state = state_stack.top();
-        exit_state->OnStateExit();
-      }
       state_stack.emplace(stored_state);
       stored_state->OnStateEnter();
       stored_state = nullptr;
