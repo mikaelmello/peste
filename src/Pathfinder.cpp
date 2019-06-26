@@ -14,9 +14,12 @@ std::vector<Vec2> Pathfinder::Astar::Run(Vec2& s, Vec2& d) {
   std::pair<int, int> start = {s.x, s.y};
   std::pair<int, int> dest = {d.x, d.y};
 
-  if (!CanWalk(start) || !CanWalk(dest)) {
-    throw std::invalid_argument(
-        "Current object position or desired destination invalid");
+  if (!CanWalk(start)) {
+    throw std::invalid_argument("Pathfinder: current position is invalid");
+  }
+
+  if (!CanWalk(dest)) {
+    throw std::invalid_argument("Pathfinder: desired destination is invalid.");
   }
 
   int row = tm->GetLogicalHeight();

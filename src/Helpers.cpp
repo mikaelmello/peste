@@ -10,7 +10,9 @@
 #include <string>
 #include <unordered_map>
 #include <vector>
+#include "Collider.hpp"
 #include "SDL_include.h"
+#include "Sprite.hpp"
 
 template <typename Out>
 void Helpers::split(const std::string& s, char delim, Out result) {
@@ -95,4 +97,18 @@ Helpers::Direction Helpers::combine_moves(bool up, bool down, bool left,
   }
 
   return Helpers::Direction::NONE;
+}
+
+void Helpers::set_collider_box(GameObject& object) {
+  auto sprite =
+      std::dynamic_pointer_cast<Sprite>(object.GetComponent(Types::SpriteType));
+  auto collider = std::dynamic_pointer_cast<Collider>(
+      object.GetComponent(Types::ColliderType));
+
+  int w = sprite->GetWidth();
+  int h = sprite->GetHeight();
+  Vec2 s = collider->GetScale();
+
+  object.box.x -= (w * (1.0f - s.x) / 2.0);
+  object.box.y -= (h * (1.0f - s.y) / 2.0);
 }
