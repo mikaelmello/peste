@@ -2,6 +2,7 @@
 #include <iostream>
 #include <memory>
 #include <string>
+#include "Camera.hpp"
 #include "Collider.hpp"
 #include "Game.hpp"
 #include "GameData.hpp"
@@ -37,7 +38,7 @@ Player::Player(GameObject& associated, Vec2 position)
   Sprite* sprite = new Sprite(associated, PLAYER_FRONT);
   sprite->SetScaleX(0.7, 0.7);
   Collider* collider =
-      new Collider(associated, {0.7, 0.3}, {0, sprite->GetHeight() / 2.5});
+      new Collider(associated, {0.5, 0.3}, {0, sprite->GetHeight() * 0.35f});
   associated.AddComponent(sprite);
   associated.box.w = sprite->GetWidth();
   associated.box.h = sprite->GetHeight();
@@ -67,8 +68,10 @@ void Player::Update(float dt) {
   auto tilemap = Game::GetInstance().GetCurrentState().GetCurrentTileMap();
   int tileDim = tilemap->GetLogicalTileDimension();
 
-  auto cpt = associated.GetComponent(SpriteType);
-  auto sprite = std::dynamic_pointer_cast<Sprite>(cpt);
+  auto spriteCpt = associated.GetComponent(SpriteType);
+  auto sprite = std::dynamic_pointer_cast<Sprite>(spriteCpt);
+  auto colliderCpt = associated.GetComponent(ColliderType);
+  auto collider = std::dynamic_pointer_cast<Collider>(colliderCpt);
 
   bool up = false;
   bool down = false;
@@ -76,46 +79,52 @@ void Player::Update(float dt) {
   bool right = false;
   bool changed = false;
 
-  associated.box.x = position.x * tileDim;
-  associated.box.y = position.y * tileDim;
+  associated.box.x = position.x * tileDim - sprite->GetWidth() / 2;
+  associated.box.y = position.y * tileDim - sprite->GetHeight();
 
-  int w = associated.box.w / tileDim;
-  int h = associated.box.h / tileDim;
-  int x = position.x + w / 4;
-  int y = position.y + h - tileDim / 4;
+  int w = round(collider->box.w / tileDim);  // comprimento da box em celulas
+  if (w % 2 == 1) w--;
+  int h = round(collider->box.h / tileDim);  // altura da box em
 
-  canwalk = true;
+  // inicio da "box de colisao" imaginaria com celulas
+  int x = position.x - w / 2;
+  int y = position.y - h;
+
   if (input.IsKeyDown(UP_ARROW_KEY)) {
+    canwalk = true;
     up = true;
-    for (int i = 0; i < w / 2 && canwalk; i++) {
-      canwalk = tilemap->CanWalk(x + i, y - 1);
+    for (int i = 0; i < w && canwalk; i++) {
+      canwalk &= tilemap->CanWalk(x + i, y - 1);
     }
     if (canwalk) {
       position.y -= 1;
     }
   }
   if (input.IsKeyDown(DOWN_ARROW_KEY)) {
+    canwalk = true;
     down = true;
-    for (int i = 0; i < w / 2 && canwalk; i++) {
-      canwalk = tilemap->CanWalk(x + i, y + tileDim / 4 + 1);
+    for (int i = 0; i < w && canwalk; i++) {
+      canwalk &= tilemap->CanWalk(x + i, y + h + 1);
     }
     if (canwalk) {
       position.y += 1;
     }
   }
   if (input.IsKeyDown(LEFT_ARROW_KEY)) {
+    canwalk = true;
     left = true;
-    for (int i = 0; i < tileDim / 4 && canwalk; i++) {
-      canwalk = tilemap->CanWalk(x - 1, y + i);
+    for (int i = 0; i < h && canwalk; i++) {
+      canwalk &= tilemap->CanWalk(x - 1, y + i);
     }
     if (canwalk) {
       position.x -= 1;
     }
   }
   if (input.IsKeyDown(RIGHT_ARROW_KEY)) {
+    canwalk = true;
     right = true;
-    for (int i = 0; i < tileDim / 4 && canwalk; i++) {
-      canwalk = tilemap->CanWalk(x + w / 2 + 1, y + i);
+    for (int i = 0; i < h && canwalk; i++) {
+      canwalk &= tilemap->CanWalk(x + w + 1, y + i);
     }
     if (canwalk) {
       position.x += 1;
@@ -137,7 +146,26 @@ void Player::Update(float dt) {
   associated.box.h = sprite->GetHeight();
 }
 
-void Player::Render() {}
+void Player::Render() {
+  Vec2 point = Vec2(0, 0) - Camera::pos;
+  SDL_Point points[5];
+  SDL_Point points2[2];
+  points[0] = {(int)point.x, (int)point.y};
+  points[4] = {(int)point.x, (int)point.y};
+
+  point = (Vec2(1024, 0)) - Camera::pos;
+  points[1] = {(int)point.x, (int)point.y};
+
+  point = (Vec2(1024, 768)) - Camera::pos;
+  points[2] = {(int)point.x, (int)point.y};
+
+  point = (Vec2(0, 768)) - Camera::pos;
+  points[3] = {(int)point.x, (int)point.y};
+
+  SDL_SetRenderDrawColor(Game::GetInstance().GetRenderer(), 255, 255, 0,
+                         SDL_ALPHA_OPAQUE);
+  SDL_RenderDrawLines(Game::GetInstance().GetRenderer(), points, 5);
+}
 
 bool Player::Is(Types type) const { return type == this->Type; }
 

@@ -27,9 +27,7 @@ InventoryState::InventoryState() {
 
     auto sprite = std::dynamic_pointer_cast<Sprite>(spriteComponent);
     sprite->SetMaxDimensions(itemWidth - 20, itemHeight - 20);
-    printf("dim %d %d\n", sprite->GetWidth(), sprite->GetHeight());
     auto position = getGridPosition(index);
-    printf("dim %f %f\n", position.x, position.y);
     item->box.SetCenter(position);
     item->ReverseDelete();
     objects.emplace(item);
