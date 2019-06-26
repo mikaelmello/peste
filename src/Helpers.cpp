@@ -98,17 +98,3 @@ Helpers::Direction Helpers::combine_moves(bool up, bool down, bool left,
 
   return Helpers::Direction::NONE;
 }
-
-void Helpers::set_collider_box(GameObject& object) {
-  auto sprite =
-      std::dynamic_pointer_cast<Sprite>(object.GetComponent(Types::SpriteType));
-  auto collider = std::dynamic_pointer_cast<Collider>(
-      object.GetComponent(Types::ColliderType));
-
-  int w = sprite->GetWidth();
-  int h = sprite->GetHeight();
-  Vec2 s = collider->GetScale();
-
-  object.box.x -= (w * (1.0f - s.x) / 2.0);
-  object.box.y -= (h * (1.0f - s.y) / 2.0);
-}

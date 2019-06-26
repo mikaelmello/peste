@@ -34,7 +34,7 @@ void PatrolFSM::OnStateEnter() {
     auto ant = object.GetComponent(Types::AntagonistType);
 
     if (!ant) {
-      throw std::runtime_error("no antagonist component in antagonist_go");
+      throw std::runtime_error("No antagonist component in antagonist_go");
     }
 
     Vec2 current = std::dynamic_pointer_cast<Antagonist>(ant)->position;
@@ -62,8 +62,12 @@ void PatrolFSM::OnStateEnter() {
 
 void PatrolFSM::OnStateExecution() {
   if (!patrol_paths.empty()) {
-    auto ant = std::dynamic_pointer_cast<Antagonist>(
-        object.GetComponent(AntagonistType));
+    auto antCpt = object.GetComponent(AntagonistType);
+    if (!antCpt) {
+      throw std::runtime_error(
+          "Nao tem antagonista no objeto passado para a PatrolFSM");
+    }
+    auto ant = std::dynamic_pointer_cast<Antagonist>(antCpt);
     std::pair<int, int> previous = {ant->position.x, ant->position.y};
 
     int& k = patrol_paths.top().first;
@@ -89,8 +93,11 @@ void PatrolFSM::OnStateExecution() {
     }
 
     if (sprite_code != sprite_status) {
-      auto sprite =
-          std::dynamic_pointer_cast<Sprite>(object.GetComponent(SpriteType));
+      auto spriteCpt = object.GetComponent(SpriteType);
+      if (!spriteCpt) {
+        throw std::runtime_error("O gameobject na patrol fsm nao tem sprite");
+      }
+      auto sprite = std::dynamic_pointer_cast<Sprite>(spriteCpt);
       std::string sprite_path;
       switch (sprite_code) {
         case LEFT_WALK_CODE:
@@ -130,8 +137,12 @@ void PatrolFSM::OnStateExecution() {
 }
 
 void PatrolFSM::OnStateExit() {
-  auto sprite =
-      std::dynamic_pointer_cast<Sprite>(object.GetComponent(SpriteType));
+  auto spriteCpt = object.GetComponent(SpriteType);
+  if (!spriteCpt) {
+    throw std::runtime_error(
+        "O gameobject na patrol fsm em on state exit nao tem sprite");
+  }
+  auto sprite = std::dynamic_pointer_cast<Sprite>(spriteCpt);
   sprite_status = IDLE_CODE;
   sprite->Open(IDLE_SPRITE);
 }

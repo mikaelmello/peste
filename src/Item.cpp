@@ -75,8 +75,11 @@ bool Item::Is(Types type) const { return type == this->Type; }
 void Item::SetCenter(Vec2 pos) { associated.box.SetCenter(pos); }
 
 void Item::SetScale(float scaleX, float scaleY) {
-  auto sprite = associated.GetComponent(SpriteType);
-  auto spriteSharedPtr = std::dynamic_pointer_cast<Sprite>(sprite);
+  auto spriteCpt = associated.GetComponent(SpriteType);
+  if (!spriteCpt) {
+    throw std::runtime_error("Nao tem sprite no Item ao setar a escala");
+  }
+  auto sprite = std::dynamic_pointer_cast<Sprite>(spriteCpt);
 
-  spriteSharedPtr->SetScaleX(scaleX, scaleY);
+  sprite->SetScaleX(scaleX, scaleY);
 }

@@ -69,8 +69,13 @@ void Player::Update(float dt) {
   int tileDim = tilemap->GetLogicalTileDimension();
 
   auto spriteCpt = associated.GetComponent(SpriteType);
-  auto sprite = std::dynamic_pointer_cast<Sprite>(spriteCpt);
   auto colliderCpt = associated.GetComponent(ColliderType);
+
+  if (!spriteCpt || !colliderCpt) {
+    throw std::runtime_error("Nao tem sprite nem collider no player");
+  }
+
+  auto sprite = std::dynamic_pointer_cast<Sprite>(spriteCpt);
   auto collider = std::dynamic_pointer_cast<Collider>(colliderCpt);
 
   bool up = false;

@@ -30,7 +30,11 @@ void Antagonist::Update(float dt) {
   Game& game = Game::GetInstance();
   State& state = game.GetCurrentState();
   auto tilemap = state.GetCurrentTileMap();
+
   auto spriteCpt = associated.GetComponent(SpriteType);
+  if (!spriteCpt) {
+    throw std::runtime_error("Sprite nao encontrado no Antagonista");
+  }
   auto sprite = std::dynamic_pointer_cast<Sprite>(spriteCpt);
 
   if (!state_stack.empty()) {

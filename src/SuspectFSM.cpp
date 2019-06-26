@@ -13,8 +13,13 @@ SuspectFSM::SuspectFSM(GameObject& object) : IFSM(object), rage_bias(0) {}
 SuspectFSM::~SuspectFSM() {}
 
 void SuspectFSM::OnStateEnter() {
-  auto ant = std::dynamic_pointer_cast<Antagonist>(
-      object.GetComponent(AntagonistType));
+  auto antCpt = object.GetComponent(AntagonistType);
+  if (!antCpt) {
+    throw std::runtime_error(
+        "Nao tem antagonista no objeto passado para a SuspectFSM em "
+        "StateEnter");
+  }
+  auto ant = std::dynamic_pointer_cast<Antagonist>(antCpt);
 
   if (ant->NearTarget()) {
     Pathfinder::Astar* pf = new Pathfinder::Astar(
@@ -35,8 +40,13 @@ void SuspectFSM::OnStateEnter() {
 }
 
 void SuspectFSM::OnStateExecution() {
-  auto ant = std::dynamic_pointer_cast<Antagonist>(
-      object.GetComponent(AntagonistType));
+  auto antCpt = object.GetComponent(AntagonistType);
+  if (!antCpt) {
+    throw std::runtime_error(
+        "Nao tem antagonista no objeto passado para a SuspectFSM em "
+        "StateExecution");
+  }
+  auto ant = std::dynamic_pointer_cast<Antagonist>(antCpt);
 
   if (path.first < path.second.size()) {
     ant->position = path.second[path.first];
@@ -48,22 +58,31 @@ void SuspectFSM::OnStateExecution() {
 }
 
 void SuspectFSM::OnStateExit() {
-  Pathfinder::Astar* pf = new Pathfinder::Astar(
+  Pathfinder::Astar pf = Pathfinder::Astar(
       object, Game::GetInstance().GetCurrentState().GetCurrentTileMap());
 
-  Vec2 current = std::dynamic_pointer_cast<Antagonist>(
-                     object.GetComponent(AntagonistType))
-                     ->position;
+  auto antCpt = object.GetComponent(AntagonistType);
+  if (!antCpt) {
+    throw std::runtime_error(
+        "Nao tem antagonista no objeto passado para a SuspectFSM em "
+        "StateExit");
+  }
+  auto ant = std::dynamic_pointer_cast<Antagonist>(antCpt);
 
-  auto return_path = pf->Run(current, initial);
+  Vec2 current = ant->position;
+
+  auto return_path = pf.Run(current, initial);
   PatrolFSM::patrol_paths.emplace(0, return_path);
-
-  delete pf;
 }
 
 void SuspectFSM::Update(float dt) {
-  auto ant = std::dynamic_pointer_cast<Antagonist>(
-      object.GetComponent(AntagonistType));
+  auto antCpt = object.GetComponent(AntagonistType);
+  if (!antCpt) {
+    throw std::runtime_error(
+        "Nao tem antagonista no objeto passado para a SuspectFSM em "
+        "Update");
+  }
+  auto ant = std::dynamic_pointer_cast<Antagonist>(antCpt);
   OnStateExecution();
 
   if (bias_update_timer.Get() > 3 * dt) {

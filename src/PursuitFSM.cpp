@@ -13,8 +13,12 @@ PursuitFSM::PursuitFSM(GameObject& object) : IFSM(object) {
 PursuitFSM::~PursuitFSM() {}
 
 void PursuitFSM::OnStateEnter() {
-  auto ant = std::dynamic_pointer_cast<Antagonist>(
-      object.GetComponent(AntagonistType));
+  auto antCpt = object.GetComponent(AntagonistType);
+  if (!antCpt) {
+    throw std::runtime_error(
+        "Nao tem antagonista no objeto passado para a PursuitFSM");
+  }
+  auto ant = std::dynamic_pointer_cast<Antagonist>(antCpt);
 
   auto player = GameData::PlayerGameObject->GetComponent(PlayerType);
   if (!player) {
@@ -27,8 +31,12 @@ void PursuitFSM::OnStateEnter() {
 }
 
 void PursuitFSM::OnStateExecution() {
-  auto ant = std::dynamic_pointer_cast<Antagonist>(
-      object.GetComponent(AntagonistType));
+  auto antCpt = object.GetComponent(AntagonistType);
+  if (!antCpt) {
+    throw std::runtime_error(
+        "Nao tem antagonista no objeto passado para a PursuitFSM em Execution");
+  }
+  auto ant = std::dynamic_pointer_cast<Antagonist>(antCpt);
 
   if (path.first < path.second.size()) {
     ant->position = path.second[path.first];
@@ -38,8 +46,12 @@ void PursuitFSM::OnStateExecution() {
 void PursuitFSM::OnStateExit() {}
 
 void PursuitFSM::Update(float dt) {
-  auto ant = std::dynamic_pointer_cast<Antagonist>(
-      object.GetComponent(AntagonistType));
+  auto antCpt = object.GetComponent(AntagonistType);
+  if (!antCpt) {
+    throw std::runtime_error(
+        "Nao tem antagonista no objeto passado para a PursuitFSM em Update");
+  }
+  auto ant = std::dynamic_pointer_cast<Antagonist>(antCpt);
 
   if (timer.Get() >= 1) {
     OnStateEnter();

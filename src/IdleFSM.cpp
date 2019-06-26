@@ -7,8 +7,11 @@ IdleFSM::IdleFSM(GameObject& object) : IFSM(object) { OnStateEnter(); }
 IdleFSM::~IdleFSM() {}
 
 void IdleFSM::OnStateEnter() {
-  auto sprite =
-      std::dynamic_pointer_cast<Sprite>(object.GetComponent(SpriteType));
+  auto spriteCpt = object.GetComponent(SpriteType);
+  if (!spriteCpt) {
+    throw std::runtime_error("Nao tem sprite no OnStateEnter do IdleFSM");
+  }
+  auto sprite = std::dynamic_pointer_cast<Sprite>(spriteCpt);
   sprite->Open(IDLE_SPRITE_ANTAGONIST);
 
   timer.Restart();
