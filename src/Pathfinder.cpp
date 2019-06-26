@@ -59,19 +59,20 @@ void Pathfinder::Astar::Search(std::vector<Vec2>& path,
     float cost = 1.0f;
 
     for (auto neighbour : neighbours) {
-      if (counter == 4) cost = std::sqrt(2);
+      if (counter == 4) cost = 1.4;
       counter++;
 
       if (!CanWalk(neighbour) || Closed(neighbour)) {
         continue;
       }
 
-      if (Shorter(cost, neighbour, dest) || !IsIn(open, neighbour)) {
+      if (Shorter(cost, neighbour, dest)) {
         double f_value = cost + heuristic->Distance(neighbour, dest);
         SetFValue(neighbour, f_value);
         SetParent(neighbour, current.second);
 
-        if (!IsIn(open, neighbour)) {
+        if (!IsIn(neighbour)) {
+          SetOpened(neighbour);
           open.insert({f_value, neighbour});
         }
       }
@@ -135,14 +136,12 @@ void Pathfinder::Astar::Close(std::pair<int, int>& p) {
   details[index(p.first, p.second)].closed = true;
 }
 
-bool Pathfinder::Astar::IsIn(std::set<f_and_cell>& open,
-                             std::pair<int, int> p) {
-  for (auto& s : open) {
-    if (s.second == p) {
-      return true;
-    }
-  }
-  return false;
+void Pathfinder::Astar::SetOpened(std::pair<int, int> p) {
+  details[index(p.first, p.second)].opened = true;
+}
+
+bool Pathfinder::Astar::IsIn(std::pair<int, int> p) {
+  return details[index(p.first, p.second)].opened;
 }
 
 bool Pathfinder::Astar::Closed(std::pair<int, int>& p) {

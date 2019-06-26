@@ -18,13 +18,17 @@ struct Cell {
   Cell()
       : f(std::numeric_limits<double>::max()),
         closed(false),
+        opened(false),
         parent({-1, -1}) {}
 
-  Cell(double f, bool c, std::pair<int, int> p) : f(f), closed(c), parent(p) {}
+  Cell(double f, bool c, std::pair<int, int> p)
+      : f(f), closed(c), opened(false), parent(p) {}
 
   double f;
 
   bool closed;
+
+  bool opened;
 
   std::pair<int, int> parent;
 };
@@ -93,9 +97,11 @@ class Astar {
 
   void SetParent(std::pair<int, int>& leaf, std::pair<int, int>& parent);
 
+  void SetOpened(std::pair<int, int> p);
+
   void Close(std::pair<int, int>& p);
 
-  bool IsIn(std::set<f_and_cell>& open, std::pair<int, int> p);
+  bool IsIn(std::pair<int, int> p);
 
   bool Closed(std::pair<int, int>& p);
 
