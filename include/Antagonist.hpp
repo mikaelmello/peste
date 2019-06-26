@@ -4,7 +4,15 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *                  INCLUDES E DEFINES
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-#define ANTAGONIST_SPRITE "assets/img/terry/idle_terry.png"
+#define LEFT_WALK_SPRITE "assets/img/terry/idle_terry.png"
+#define RIGHT_WALK_SPRITE "assets/img/terry/idle_terry.png"
+#define DOWN_WALK_SPRITE "assets/img/terry/idle_terry.png"
+#define UP_WALK_SPRITE "assets/img/terry/idle_terry.png"
+#define LEFT_DOWN_WALK_SPRITE "assets/img/terry/idle_terry.png"
+#define LEFT_UP_WALK_SPRITE "assets/img/terry/idle_terry.png"
+#define RIGHT_DOWN_WALK_SPRITE "assets/img/terry/idle_terry.png"
+#define RIGHT_UP_WALK_SPRITE "assets/img/terry/idle_terry.png"
+#define IDLE_SPRITE "assets/img/terry/idle_terry.png"
 #define ANTAGONIST_DISTANCE 50
 
 #include <memory>
@@ -13,6 +21,7 @@
 #include "Component.hpp"
 #include "GameData.hpp"
 #include "GameObject.hpp"
+#include "Helpers.hpp"
 #include "IFSM.hpp"
 #include "Timer.hpp"
 #include "Types.hpp"
@@ -37,14 +46,22 @@ class Antagonist : public Component {
 
   bool NearTarget();
 
+  void SpriteManager(Helpers::Action action);
+
   const Types Type = Types::AntagonistType;
 
   Vec2 position;
 
  private:
+  void SpriteMovement();
+
+  Vec2 previous_position;
+
   IFSM* stored_state;
 
   std::stack<std::unique_ptr<IFSM>> state_stack;
+
+  Helpers::Direction last_direction;
 };
 
 #endif

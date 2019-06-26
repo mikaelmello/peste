@@ -55,6 +55,8 @@ void SuspectFSM::OnStateExecution() {
   if (rage_bias == RAGE_NUMERIC_LIMIT) {
     ant->Push(new PursuitFSM(object));
   }
+
+  ant->SpriteManager(Helpers::Action::SUSPECTING);
 }
 
 void SuspectFSM::OnStateExit() {

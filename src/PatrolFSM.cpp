@@ -69,72 +69,14 @@ void PatrolFSM::OnStateExecution() {
           "Nao tem antagonista no objeto passado para a PatrolFSM");
     }
     auto ant = std::dynamic_pointer_cast<Antagonist>(antCpt);
-    std::pair<int, int> previous = {ant->position.x, ant->position.y};
 
     int& k = patrol_paths.top().first;
     std::vector<Vec2>& top = patrol_paths.top().second;
     ant->position = top[k];
     k++;
 
-    // Isso será usado em pelo menos 3 estados. Repensar.
-    std::pair<int, int> delta = {ant->position.x - previous.first,
-                                 ant->position.y - previous.second};
-
-    std::vector<std::pair<int, int>> deltas = {{-1, 0}, {1, 0},  {0, 1},
-                                               {0, -1}, {-1, 1}, {-1, -1},
-                                               {1, 1},  {1, -1}, {0, 0}};
-
-    int sprite_code;
-    auto it = std::find(deltas.begin(), deltas.end(), delta);
-
-    if (it != deltas.end()) {
-      sprite_code = std::distance(deltas.begin(), it);
-    } else {
-      sprite_code = IDLE_CODE;
-    }
-
-    if (sprite_code != sprite_status) {
-      auto spriteCpt = object.GetComponent(SpriteType);
-      if (!spriteCpt) {
-        throw std::runtime_error("O gameobject na patrol fsm nao tem sprite");
-      }
-      auto sprite = std::dynamic_pointer_cast<Sprite>(spriteCpt);
-      std::string sprite_path;
-      switch (sprite_code) {
-        case LEFT_WALK_CODE:
-          sprite_path = LEFT_WALK_SPRITE;
-          break;
-        case RIGHT_WALK_CODE:
-          sprite_path = RIGHT_WALK_SPRITE;
-          break;
-        case DOWN_WALK_CODE:
-          sprite_path = DOWN_WALK_SPRITE;
-          break;
-        case UP_WALK_CODE:
-          sprite_path = UP_WALK_SPRITE;
-          break;
-        case LEFT_DOWN_WALK_CODE:
-          sprite_path = LEFT_DOWN_WALK_SPRITE;
-          break;
-        case LEFT_UP_WALK_CODE:
-          sprite_path = LEFT_UP_WALK_SPRITE;
-          break;
-        case RIGHT_DOWN_WALK_CODE:
-          sprite_path = RIGHT_DOWN_WALK_SPRITE;
-          break;
-        case RIGHT_UP_WALK_CODE:
-          sprite_path = RIGHT_UP_WALK_SPRITE;
-          break;
-        default:
-          sprite_path = IDLE_SPRITE;
-          sprite_code = IDLE_CODE;
-          break;
-      }
-      sprite->Open(sprite_path);
-      sprite_status = sprite_code;
-    }
+    ant->SpriteManager(Helpers::Action::MOVING);
   }
-  // Isso será usado em pelo menos 3 estados. Repensar.
 }
 
 void PatrolFSM::OnStateExit() {

@@ -12,7 +12,7 @@
 
 Antagonist::Antagonist(GameObject& associated, Vec2 position)
     : Component(associated), position(position), stored_state(nullptr) {
-  Sprite* sprite = new Sprite(associated, ANTAGONIST_SPRITE, 4, 0.125);
+  Sprite* sprite = new Sprite(associated, IDLE_SPRITE, 4, 0.125);
   Collider* collider =
       new Collider(associated, {0.6, 0.15}, {0, sprite->GetHeight() * 0.45});
 
@@ -24,9 +24,14 @@ Antagonist::~Antagonist() { delete stored_state; }
 
 void Antagonist::NotifyCollision(std::shared_ptr<GameObject> other) {}
 
-void Antagonist::Start() { state_stack.emplace(new PatrolFSM(associated)); }
+void Antagonist::Start() {
+  last_direction = Helpers::Direction::NONE;
+  state_stack.emplace(new PatrolFSM(associated));
+}
 
 void Antagonist::Update(float dt) {
+  previous_position = position;
+
   Game& game = Game::GetInstance();
   State& state = game.GetCurrentState();
   auto tilemap = state.GetCurrentTileMap();
@@ -95,6 +100,79 @@ bool Antagonist::NearTarget() {
   auto playerCp = std::dynamic_pointer_cast<Player>(player);
   double dist = position.Distance(playerCp->position);
   return dist <= ANTAGONIST_DISTANCE;
+}
+
+void Antagonist::SpriteManager(Helpers::Action action) {
+  switch (action) {
+    case Helpers::Action::IDLE:
+      break;
+    case Helpers::Action::MOVING:
+      SpriteMovement();
+      break;
+    case Helpers::Action::SUSPECTING:
+      break;
+    case Helpers::Action::CHASING:
+      break;
+    case Helpers::Action::ATTACKING:
+      break;
+    default:
+      break;
+  }
+}
+
+void Antagonist::SpriteMovement() {
+  auto spriteCpt = associated.GetComponent(SpriteType);
+  if (!spriteCpt) {
+    throw std::runtime_error("O gameobject do antagonista nao tem sprite");
+  }
+
+  Vec2 delta = position - previous_position;
+
+  bool up = delta.y == -1;
+  bool down = delta.y == 1;
+  bool left = delta.x == -1;
+  bool right = delta.x == 1;
+
+  auto direction = Helpers::combine_moves(up, down, left, right);
+
+  if (last_direction == direction) {
+    return;
+  }
+
+  auto sprite = std::dynamic_pointer_cast<Sprite>(spriteCpt);
+
+  switch (direction) {
+    case Helpers::Direction::RIGHT:
+      sprite->Open(RIGHT_WALK_SPRITE);
+      break;
+    case Helpers::Direction::LEFT:
+      sprite->Open(LEFT_WALK_SPRITE);
+      break;
+    case Helpers::Direction::UP:
+      sprite->Open(UP_WALK_SPRITE);
+      break;
+    case Helpers::Direction::DOWN:
+      sprite->Open(DOWN_WALK_SPRITE);
+      break;
+    case Helpers::Direction::UPRIGHT:
+      sprite->Open(RIGHT_UP_WALK_SPRITE);
+      break;
+    case Helpers::Direction::UPLEFT:;
+      sprite->Open(LEFT_UP_WALK_SPRITE);
+      break;
+    case Helpers::Direction::DOWNRIGHT:
+      sprite->Open(RIGHT_DOWN_WALK_SPRITE);
+      break;
+    case Helpers::Direction::DOWNLEFT:
+      sprite->Open(LEFT_DOWN_WALK_SPRITE);
+      break;
+    default:
+      sprite->Open(IDLE_SPRITE);  // mudar
+      // IdleSpriteManager();
+      break;
+  }
+
+  last_direction = direction;
 }
 
 bool Antagonist::Is(Types type) const { return type == this->Type; }

@@ -47,6 +47,14 @@ enum Direction {
 
 Direction combine_moves(bool up, bool down, bool left, bool right);
 
+enum Action {
+  IDLE,
+  MOVING,
+  SUSPECTING,
+  CHASING,
+  ATTACKING,
+};
+
 }  // end namespace Helpers
 
 #endif

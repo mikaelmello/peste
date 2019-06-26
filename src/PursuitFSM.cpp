@@ -31,7 +31,7 @@ void PursuitFSM::OnStateEnter() {
     auto pursuit_path = pf->Run(antCp->position, playerCp->position);
     path = {0, pursuit_path};
   } catch (const std::exception& ex) {
-    printf("fdsafds: %s\n", ex.what());
+    printf("Exception: %s\n", ex.what());
     pop_requested = true;
   }
 }
@@ -47,6 +47,8 @@ void PursuitFSM::OnStateExecution() {
   if (path.first < path.second.size()) {
     ant->position = path.second[path.first];
   }
+
+  ant->SpriteManager(Helpers::Action::CHASING);
 }
 
 void PursuitFSM::OnStateExit() {}
