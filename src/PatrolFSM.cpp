@@ -12,8 +12,7 @@
 
 std::stack<std::pair<int, std::vector<Vec2>>> PatrolFSM::patrol_paths;
 
-PatrolFSM::PatrolFSM(GameObject& object)
-    : IFSM(object), sprite_status(IDLE_CODE) {}
+PatrolFSM::PatrolFSM(GameObject& object) : IFSM(object) {}
 
 PatrolFSM::~PatrolFSM() {}
 
@@ -75,19 +74,19 @@ void PatrolFSM::OnStateExecution() {
     ant->position = top[k];
     k++;
 
-    ant->SpriteManager(Helpers::Action::MOVING);
+    ant->AssetsManager(Helpers::Action::MOVING);
   }
 }
 
 void PatrolFSM::OnStateExit() {
-  auto spriteCpt = object.GetComponent(SpriteType);
-  if (!spriteCpt) {
+  auto ant_cpt = object.GetComponent(SpriteType);
+  if (!ant_cpt) {
     throw std::runtime_error(
-        "O gameobject na patrol fsm em on state exit nao tem sprite");
+        "O gameobject na patrol fsm em on state exit nao tem antagonist");
   }
-  auto sprite = std::dynamic_pointer_cast<Sprite>(spriteCpt);
-  sprite_status = IDLE_CODE;
-  sprite->Open(IDLE_SPRITE);
+  auto ant = std::dynamic_pointer_cast<Antagonist>(ant_cpt);
+
+  ant->AssetsManager(Helpers::Action::IDLE);
 }
 
 void PatrolFSM::Update(float dt) {

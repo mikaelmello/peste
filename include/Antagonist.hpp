@@ -13,6 +13,46 @@
 #define RIGHT_DOWN_WALK_SPRITE "assets/img/terry/idle_terry.png"
 #define RIGHT_UP_WALK_SPRITE "assets/img/terry/idle_terry.png"
 #define IDLE_SPRITE "assets/img/terry/idle_terry.png"
+
+#define RIGHT_IDLE_SPRITE_ANTAGONIST "assets/img/terry/idle_terry.png"
+#define LEFT_IDLE_SPRITE_ANTAGONIST "assets/img/terry/idle_terry.png"
+#define UP_IDLE_SPRITE_ANTAGONIST "assets/img/terry/idle_terry.png"
+#define DOWN_IDLE_SPRITE_ANTAGONIST "assets/img/terry/idle_terry.png"
+#define UPRIGHT_IDLE_SPRITE_ANTAGONIST "assets/img/terry/idle_terry.png"
+#define UPLEFT_IDLE_SPRITE_ANTAGONIST "assets/img/terry/idle_terry.png"
+#define DOWNRIGHT_IDLE_SPRITE_ANTAGONIST "assets/img/terry/idle_terry.png"
+#define DOWNLEFT_IDLE_SPRITE_ANTAGONIST "assets/img/terry/idle_terry.png"
+
+#define RIGHT_ATTACK_SPRITE_ANTAGONIST "assets/img/terry/idle_terry.png"
+#define LEFT_ATTACK_SPRITE_ANTAGONIST "assets/img/terry/idle_terry.png"
+#define UP_ATTACK_SPRITE_ANTAGONIST "assets/img/terry/idle_terry.png"
+#define DOWN_ATTACK_SPRITE_ANTAGONIST "assets/img/terry/idle_terry.png"
+#define UPRIGHT_ATTACK_SPRITE_ANTAGONIST "assets/img/terry/idle_terry.png"
+#define UPLEFT_ATTACK_SPRITE_ANTAGONIST "assets/img/terry/idle_terry.png"
+#define DOWNRIGHT_ATTACK_SPRITE_ANTAGONIST "assets/img/terry/idle_terry.png"
+#define DOWNLEFT_ATTACK_SPRITE_ANTAGONIST "assets/img/terry/idle_terry.png"
+
+#define WALKING_WALK_SET                                                    \
+  {                                                                         \
+    LEFT_WALK_SPRITE, RIGHT_WALK_SPRITE, DOWN_WALK_SPRITE, UP_WALK_SPRITE,  \
+        LEFT_DOWN_WALK_SPRITE, LEFT_UP_WALK_SPRITE, RIGHT_DOWN_WALK_SPRITE, \
+        RIGHT_UP_WALK_SPRITE                                                \
+  }
+
+#define SUSPECTING_WALK_SET                                                 \
+  {                                                                         \
+    LEFT_WALK_SPRITE, RIGHT_WALK_SPRITE, DOWN_WALK_SPRITE, UP_WALK_SPRITE,  \
+        LEFT_DOWN_WALK_SPRITE, LEFT_UP_WALK_SPRITE, RIGHT_DOWN_WALK_SPRITE, \
+        RIGHT_UP_WALK_SPRITE                                                \
+  }
+
+#define CHASING_WALK_SET                                                    \
+  {                                                                         \
+    LEFT_WALK_SPRITE, RIGHT_WALK_SPRITE, DOWN_WALK_SPRITE, UP_WALK_SPRITE,  \
+        LEFT_DOWN_WALK_SPRITE, LEFT_UP_WALK_SPRITE, RIGHT_DOWN_WALK_SPRITE, \
+        RIGHT_UP_WALK_SPRITE                                                \
+  }
+
 #define ANTAGONIST_DISTANCE 50
 
 #include <memory>
@@ -46,14 +86,18 @@ class Antagonist : public Component {
 
   bool NearTarget();
 
-  void SpriteManager(Helpers::Action action);
+  void AssetsManager(Helpers::Action action);
 
   const Types Type = Types::AntagonistType;
 
   Vec2 position;
 
  private:
-  void SpriteMovement();
+  void MoveAssetsManager(std::vector<std::string> set);
+
+  void IdleAssetsManager();
+
+  void AtackAssetsManager();
 
   Vec2 previous_position;
 

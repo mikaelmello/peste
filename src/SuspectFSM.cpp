@@ -56,7 +56,7 @@ void SuspectFSM::OnStateExecution() {
     ant->Push(new PursuitFSM(object));
   }
 
-  ant->SpriteManager(Helpers::Action::SUSPECTING);
+  ant->AssetsManager(Helpers::Action::SUSPECTING);
 }
 
 void SuspectFSM::OnStateExit() {

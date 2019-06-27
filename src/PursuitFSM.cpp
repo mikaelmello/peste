@@ -48,7 +48,7 @@ void PursuitFSM::OnStateExecution() {
     ant->position = path.second[path.first];
   }
 
-  ant->SpriteManager(Helpers::Action::CHASING);
+  ant->AssetsManager(Helpers::Action::CHASING);
 }
 
 void PursuitFSM::OnStateExit() {}

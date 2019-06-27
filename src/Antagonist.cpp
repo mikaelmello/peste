@@ -102,30 +102,38 @@ bool Antagonist::NearTarget() {
   return dist <= ANTAGONIST_DISTANCE;
 }
 
-void Antagonist::SpriteManager(Helpers::Action action) {
+void Antagonist::AssetsManager(Helpers::Action action) {
   switch (action) {
     case Helpers::Action::IDLE:
+      IdleAssetsManager();
       break;
     case Helpers::Action::MOVING:
-      SpriteMovement();
+      MoveAssetsManager(WALKING_WALK_SET);
       break;
     case Helpers::Action::SUSPECTING:
+      MoveAssetsManager(SUSPECTING_WALK_SET);
       break;
     case Helpers::Action::CHASING:
+      MoveAssetsManager(CHASING_WALK_SET);
       break;
     case Helpers::Action::ATTACKING:
+      AtackAssetsManager();
       break;
     default:
+      IdleAssetsManager();
       break;
   }
 }
 
-void Antagonist::SpriteMovement() {
+void Antagonist::MoveAssetsManager(std::vector<std::string> set) {
+  if (set.size() != 8) {
+    throw std::runtime_error("O set de MoveAssetsManager deve ter 8 imagens");
+  }
+
   auto spriteCpt = associated.GetComponent(SpriteType);
   if (!spriteCpt) {
     throw std::runtime_error("O gameobject do antagonista nao tem sprite");
   }
-
   Vec2 delta = position - previous_position;
 
   bool up = delta.y == -1;
@@ -143,36 +151,111 @@ void Antagonist::SpriteMovement() {
 
   switch (direction) {
     case Helpers::Direction::RIGHT:
-      sprite->Open(RIGHT_WALK_SPRITE);
+      sprite->Open(set[0]);
       break;
     case Helpers::Direction::LEFT:
-      sprite->Open(LEFT_WALK_SPRITE);
+      sprite->Open(set[1]);
       break;
     case Helpers::Direction::UP:
-      sprite->Open(UP_WALK_SPRITE);
+      sprite->Open(set[2]);
       break;
     case Helpers::Direction::DOWN:
-      sprite->Open(DOWN_WALK_SPRITE);
+      sprite->Open(set[3]);
       break;
     case Helpers::Direction::UPRIGHT:
-      sprite->Open(RIGHT_UP_WALK_SPRITE);
+      sprite->Open(set[4]);
       break;
     case Helpers::Direction::UPLEFT:;
-      sprite->Open(LEFT_UP_WALK_SPRITE);
+      sprite->Open(set[5]);
       break;
     case Helpers::Direction::DOWNRIGHT:
-      sprite->Open(RIGHT_DOWN_WALK_SPRITE);
+      sprite->Open(set[6]);
       break;
     case Helpers::Direction::DOWNLEFT:
-      sprite->Open(LEFT_DOWN_WALK_SPRITE);
+      sprite->Open(set[7]);
       break;
     default:
-      sprite->Open(IDLE_SPRITE);  // mudar
-      // IdleSpriteManager();
+      IdleAssetsManager();
       break;
   }
 
   last_direction = direction;
+}
+
+void Antagonist::IdleAssetsManager() {
+  auto spriteCpt = associated.GetComponent(SpriteType);
+  if (!spriteCpt) {
+    throw std::runtime_error("O gameobject do antagonista nao tem sprite");
+  }
+  auto sprite = std::dynamic_pointer_cast<Sprite>(spriteCpt);
+
+  switch (last_direction) {
+    case Helpers::Direction::RIGHT:
+      sprite->Open(RIGHT_IDLE_SPRITE_ANTAGONIST);
+      break;
+    case Helpers::Direction::LEFT:
+      sprite->Open(LEFT_IDLE_SPRITE_ANTAGONIST);
+      break;
+    case Helpers::Direction::UP:
+      sprite->Open(UP_IDLE_SPRITE_ANTAGONIST);
+      break;
+    case Helpers::Direction::DOWN:
+      sprite->Open(DOWN_IDLE_SPRITE_ANTAGONIST);
+      break;
+    case Helpers::Direction::UPRIGHT:
+      sprite->Open(UPRIGHT_IDLE_SPRITE_ANTAGONIST);
+      break;
+    case Helpers::Direction::UPLEFT:;
+      sprite->Open(UPLEFT_IDLE_SPRITE_ANTAGONIST);
+      break;
+    case Helpers::Direction::DOWNRIGHT:
+      sprite->Open(DOWNRIGHT_IDLE_SPRITE_ANTAGONIST);
+      break;
+    case Helpers::Direction::DOWNLEFT:
+      sprite->Open(DOWNLEFT_IDLE_SPRITE_ANTAGONIST);
+      break;
+    default:
+      sprite->Open(DOWN_IDLE_SPRITE_ANTAGONIST);
+      break;
+  }
+}
+
+void Antagonist::AtackAssetsManager() {
+  auto spriteCpt = associated.GetComponent(SpriteType);
+  if (!spriteCpt) {
+    throw std::runtime_error("O gameobject do antagonista nao tem sprite");
+  }
+  auto sprite = std::dynamic_pointer_cast<Sprite>(spriteCpt);
+
+  switch (last_direction) {
+    case Helpers::Direction::RIGHT:
+      sprite->Open(RIGHT_ATTACK_SPRITE_ANTAGONIST);
+      break;
+    case Helpers::Direction::LEFT:
+      sprite->Open(LEFT_ATTACK_SPRITE_ANTAGONIST);
+      break;
+    case Helpers::Direction::UP:
+      sprite->Open(UP_ATTACK_SPRITE_ANTAGONIST);
+      break;
+    case Helpers::Direction::DOWN:
+      sprite->Open(DOWN_ATTACK_SPRITE_ANTAGONIST);
+      break;
+    case Helpers::Direction::UPRIGHT:
+      sprite->Open(UPRIGHT_ATTACK_SPRITE_ANTAGONIST);
+      break;
+    case Helpers::Direction::UPLEFT:;
+      sprite->Open(UPLEFT_ATTACK_SPRITE_ANTAGONIST);
+      break;
+    case Helpers::Direction::DOWNRIGHT:
+      sprite->Open(DOWNRIGHT_ATTACK_SPRITE_ANTAGONIST);
+      break;
+    case Helpers::Direction::DOWNLEFT:
+      sprite->Open(DOWNLEFT_ATTACK_SPRITE_ANTAGONIST);
+      break;
+    default:
+      sprite->Open(DOWN_IDLE_SPRITE_ANTAGONIST);
+      break;
+  }
 }
 
 bool Antagonist::Is(Types type) const { return type == this->Type; }

@@ -1,5 +1,5 @@
 #include "IdleFSM.hpp"
-#include "Sprite.hpp"
+#include "Antagonist.hpp"
 #include "Types.hpp"
 
 IdleFSM::IdleFSM(GameObject& object) : IFSM(object) { OnStateEnter(); }
@@ -7,14 +7,13 @@ IdleFSM::IdleFSM(GameObject& object) : IFSM(object) { OnStateEnter(); }
 IdleFSM::~IdleFSM() {}
 
 void IdleFSM::OnStateEnter() {
-  auto spriteCpt = object.GetComponent(SpriteType);
-  if (!spriteCpt) {
-    throw std::runtime_error("Nao tem sprite no OnStateEnter do IdleFSM");
+  auto ant_cpt = object.GetComponent(Types::AntagonistType);
+  if (!ant_cpt) {
+    throw std::runtime_error("Nao tem antagonist no OnStateEnter do IdleFSM");
   }
-  auto sprite = std::dynamic_pointer_cast<Sprite>(spriteCpt);
-  sprite->Open(IDLE_SPRITE_ANTAGONIST);
+  auto ant = std::dynamic_pointer_cast<Antagonist>(ant_cpt);
 
-  timer.Restart();
+  ant->AssetsManager(Helpers::Action::IDLE);
 }
 
 void IdleFSM::OnStateExecution() {
