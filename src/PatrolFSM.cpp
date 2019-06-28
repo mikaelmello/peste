@@ -22,7 +22,7 @@ void PatrolFSM::OnStateEnter() {
   auto tilemap = state.GetCurrentTileMap();
 
   if (patrol_paths.empty()) {
-    Pathfinder::Astar* pf = new Pathfinder::Astar(object, tilemap);
+    Pathfinder::Astar pf = Pathfinder::Astar(object, tilemap);
 
     auto dest1 = Vec2(100, 192);
     auto dest2 = Vec2(100, 142);
@@ -38,19 +38,19 @@ void PatrolFSM::OnStateEnter() {
     Vec2 current = std::dynamic_pointer_cast<Antagonist>(ant)->position;
 
     try {
-      auto path3 = pf->Run(dest2, dest3);
+      auto path3 = pf.Run(dest2, dest3);
       patrol_paths.emplace(0, path3);
       printf("Calculei 1.\n");
 
-      auto path2 = pf->Run(dest1, dest2);
+      auto path2 = pf.Run(dest1, dest2);
       patrol_paths.emplace(0, path2);
       printf("Calculei 2.\n");
 
-      auto path1 = pf->Run(initial, dest1);
+      auto path1 = pf.Run(initial, dest1);
       patrol_paths.emplace(0, path1);
       printf("Calculei 3.\n");
 
-      auto ret_path = pf->Run(current, initial);
+      auto ret_path = pf.Run(current, initial);
       patrol_paths.emplace(0, ret_path);
       printf("Calculei 4.\n");
 
@@ -68,8 +68,6 @@ void PatrolFSM::OnStateEnter() {
       // patrol_paths = std::stack<std::pair<int, std::vector<Vec2>>>();
       // pop_requested = true;
     }
-
-    delete pf;
   }
 }
 

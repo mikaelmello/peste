@@ -38,7 +38,6 @@ class Player : public Component {
                       Helpers::Direction lastDirection);
 
   void OpenWalkingSprite(const std::shared_ptr<Sprite>& sprite,
-                         Helpers::Direction lastDirection,
                          Helpers::Direction direction);
 
   Helpers::Direction lastDirection;

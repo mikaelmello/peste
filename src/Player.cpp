@@ -17,8 +17,8 @@ using namespace Helpers;
 
 #define PLAYER_FRONT_ANIM "assets/img/hope/front_anim.png"
 #define PLAYER_BACK_ANIM "assets/img/hope/back_anim.png"
-#define PLAYER_LEFT_ANIM "assets/img/hope/back_anim.png"
-#define PLAYER_RIGHT_ANIM "assets/img/hope/back_anim.png"
+#define PLAYER_LEFT_ANIM "assets/img/hope/left_anim.png"
+#define PLAYER_RIGHT_ANIM "assets/img/hope/right_anim.png"
 #define PLAYER_UPLEFT_ANIM "assets/img/hope/back_anim.png"
 #define PLAYER_DOWNLEFT_ANIM "assets/img/hope/back_anim.png"
 #define PLAYER_UPRIGHT_ANIM "assets/img/hope/back_anim.png"
@@ -143,11 +143,10 @@ void Player::Update(float dt) {
   if (direction == Direction::NONE) {
     OpenIdleSprite(sprite, lastDirection);
   } else if (lastDirection != direction) {
-    OpenWalkingSprite(sprite, lastDirection, direction);
-    sprite->SetFrameCount(5);
+    OpenWalkingSprite(sprite, direction);
     sprite->SetFrameTime(0.1);
-    lastDirection = direction;
   }
+  lastDirection = direction;
 
   associated.box.w = sprite->GetWidth();
   associated.box.h = sprite->GetHeight();
@@ -210,31 +209,39 @@ void Player::OpenIdleSprite(const std::shared_ptr<Sprite>& sprite,
 }
 
 void Player::OpenWalkingSprite(const std::shared_ptr<Sprite>& sprite,
-                               Direction lastDirection, Direction direction) {
+                               Direction direction) {
   switch (direction) {
     case Direction::UP:
       sprite->Open(PLAYER_BACK_ANIM);
+      sprite->SetFrameCount(5);
       break;
     case Direction::DOWN:
       sprite->Open(PLAYER_FRONT_ANIM);
+      sprite->SetFrameCount(5);
       break;
     case Direction::LEFT:
       sprite->Open(PLAYER_LEFT_ANIM);
+      sprite->SetFrameCount(8);
       break;
     case Direction::RIGHT:
       sprite->Open(PLAYER_RIGHT_ANIM);
+      sprite->SetFrameCount(8);
       break;
     case Direction::UPLEFT:
       sprite->Open(PLAYER_UPLEFT_ANIM);
+      sprite->SetFrameCount(5);
       break;
     case Direction::UPRIGHT:
       sprite->Open(PLAYER_UPRIGHT_ANIM);
+      sprite->SetFrameCount(5);
       break;
     case Direction::DOWNLEFT:
       sprite->Open(PLAYER_DOWNLEFT_ANIM);
+      sprite->SetFrameCount(5);
       break;
     case Direction::DOWNRIGHT:
       sprite->Open(PLAYER_DOWNRIGHT_ANIM);
+      sprite->SetFrameCount(5);
       break;
   }
 }
