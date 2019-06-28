@@ -22,7 +22,7 @@ void SuspectFSM::OnStateEnter() {
   auto ant = std::dynamic_pointer_cast<Antagonist>(antCpt);
 
   if (ant->NearTarget()) {
-    Pathfinder::Astar* pf = new Pathfinder::Astar(
+    Pathfinder::Astar pf = Pathfinder::Astar(
         object, Game::GetInstance().GetCurrentState().GetCurrentTileMap());
 
     initial = ant->position;
@@ -33,9 +33,7 @@ void SuspectFSM::OnStateEnter() {
     }
 
     auto playerCp = std::dynamic_pointer_cast<Player>(player);
-    path = {0, pf->Run(initial, playerCp->position)};
-
-    delete pf;
+    path = {0, pf.Run(initial, playerCp->position)};
   }
 }
 
