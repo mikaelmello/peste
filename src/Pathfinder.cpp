@@ -18,6 +18,7 @@ std::vector<Vec2> Pathfinder::Astar::Run(Vec2& s, Vec2& d) {
   std::pair<int, int> dest = {d.x, d.y};
 
   if (!CanWalk(start)) {
+    printf("%d %d\n", start.first, start.second);
     throw std::invalid_argument("Pathfinder: current position is invalid");
   }
 
@@ -82,7 +83,7 @@ void Pathfinder::Astar::Search(std::vector<Vec2>& path,
 }
 
 bool Pathfinder::Astar::CanWalk(std::pair<int, int>& p) {
-  if (p.first <= 0 || p.first > cols || p.second <= 0 || p.second >= rows) {
+  if (p.first < 0 || p.first >= cols || p.second < 0 || p.second >= rows) {
     return false;
   }
 
@@ -119,8 +120,8 @@ void Pathfinder::Astar::TracePath(std::pair<int, int>& dest,
   std::pair<int, int> aux = dest;
 
   while (!(details[index(aux.first, aux.second)].parent == aux)) {
-    path.push_back({(float)aux.first, (float)aux.second});
     aux = details[index(aux.first, aux.second)].parent;
+    path.emplace_back(aux.first, aux.second);
   }
 }
 

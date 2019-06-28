@@ -4,6 +4,8 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *                  INCLUDES E DEFINES
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+#define BREATHING_ANTAGONIST_SOUND "assets/audio/terry/monster_breathing.wav"
+
 #define LEFT_WALK_SPRITE "assets/img/terry/idle_terry.png"
 #define RIGHT_WALK_SPRITE "assets/img/terry/idle_terry.png"
 #define DOWN_WALK_SPRITE "assets/img/terry/idle_terry.png"
@@ -97,7 +99,7 @@ class Antagonist : public Component {
 
   void IdleAssetsManager();
 
-  void AtackAssetsManager();
+  void AttackAssetsManager();
 
   Vec2 previous_position;
 
@@ -106,6 +108,8 @@ class Antagonist : public Component {
   std::stack<std::unique_ptr<IFSM>> state_stack;
 
   Helpers::Direction last_direction;
+
+  Helpers::Action last_action;
 };
 
 #endif

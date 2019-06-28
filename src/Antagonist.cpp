@@ -1,6 +1,7 @@
 #include "Antagonist.hpp"
 #include <iostream>
 #include <string>
+#include "AttackFSM.hpp"
 #include "Collider.hpp"
 #include "Game.hpp"
 #include "GameObject.hpp"
@@ -8,14 +9,17 @@
 #include "Pathfinder.hpp"
 #include "PatrolFSM.hpp"
 #include "Player.hpp"
+#include "Sound.hpp"
 #include "Sprite.hpp"
 
 Antagonist::Antagonist(GameObject& associated, Vec2 position)
     : Component(associated), position(position), stored_state(nullptr) {
+  // Sound* sound = new Sound(associated, BREATHING_ANTAGONIST_SOUND);
   Sprite* sprite = new Sprite(associated, IDLE_SPRITE, 4, 0.125);
   Collider* collider =
       new Collider(associated, {0.6, 0.15}, {0, sprite->GetHeight() * 0.45});
 
+  // associated.AddComponent(sound);
   associated.AddComponent(collider);
   associated.AddComponent(sprite);
 }
@@ -25,6 +29,7 @@ Antagonist::~Antagonist() { delete stored_state; }
 void Antagonist::NotifyCollision(std::shared_ptr<GameObject> other) {}
 
 void Antagonist::Start() {
+  last_action = Helpers::Action::IDLE;
   last_direction = Helpers::Direction::NONE;
   state_stack.emplace(new PatrolFSM(associated));
 }
@@ -80,6 +85,8 @@ void Antagonist::Update(float dt) {
   associated.box.x = position.x * tileDim - sprite->GetWidth() / 2;
   // posição * dimensão do tile - altura da sprite, pois o y fica la embaixo
   associated.box.y = position.y * tileDim - sprite->GetHeight();
+
+  // printf("%s\n", position.ToString().c_str());
 }
 
 void Antagonist::Render() {}
@@ -117,12 +124,14 @@ void Antagonist::AssetsManager(Helpers::Action action) {
       MoveAssetsManager(CHASING_WALK_SET);
       break;
     case Helpers::Action::ATTACKING:
-      AtackAssetsManager();
+      AttackAssetsManager();
       break;
     default:
+      action = Helpers::Action::IDLE;
       IdleAssetsManager();
       break;
   }
+  last_action = action;
 }
 
 void Antagonist::MoveAssetsManager(std::vector<std::string> set) {
@@ -187,7 +196,17 @@ void Antagonist::IdleAssetsManager() {
   if (!spriteCpt) {
     throw std::runtime_error("O gameobject do antagonista nao tem sprite");
   }
+
+  auto soundCpt = associated.GetComponent(SoundType);
+  if (!soundCpt) {
+    // throw std::runtime_error("O gameobject do antagonista nao tem sound");
+  }
+
   auto sprite = std::dynamic_pointer_cast<Sprite>(spriteCpt);
+  // auto sound = std::dynamic_pointer_cast<Sound>(soundCpt);
+
+  // sound->Open(BREATHING_ANTAGONIST_SOUND);
+  // sound->Play();
 
   switch (last_direction) {
     case Helpers::Direction::RIGHT:
@@ -220,7 +239,7 @@ void Antagonist::IdleAssetsManager() {
   }
 }
 
-void Antagonist::AtackAssetsManager() {
+void Antagonist::AttackAssetsManager() {
   auto spriteCpt = associated.GetComponent(SpriteType);
   if (!spriteCpt) {
     throw std::runtime_error("O gameobject do antagonista nao tem sprite");
