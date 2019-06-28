@@ -14,12 +14,12 @@
 
 Antagonist::Antagonist(GameObject& associated, Vec2 position)
     : Component(associated), position(position), stored_state(nullptr) {
-  // Sound* sound = new Sound(associated, BREATHING_ANTAGONIST_SOUND);
+  Sound* sound = new Sound(associated, BREATHING_ANTAGONIST_SOUND);
   Sprite* sprite = new Sprite(associated, IDLE_SPRITE, 4, 0.125);
-  Collider* collider =
-      new Collider(associated, {0.6, 0.15}, {0, sprite->GetHeight() * 0.45});
+  Collider* collider = new Collider(associated, {0.6, 0.15},
+                                    {0, (float)(sprite->GetHeight() * 0.45)});
 
-  // associated.AddComponent(sound);
+  associated.AddComponent(sound);
   associated.AddComponent(collider);
   associated.AddComponent(sprite);
 }

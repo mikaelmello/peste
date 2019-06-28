@@ -38,7 +38,6 @@ Player::Player(GameObject& associated, Vec2 position)
       position(position),
       lastDirection(Helpers::Direction::NONE) {
   Sprite* sprite = new Sprite(associated, PLAYER_FRONT);
-  sprite->SetScaleX(0.7, 0.7);
   Collider* collider =
       new Collider(associated, {0.5, 0.3}, {0, sprite->GetHeight() * 0.35f});
   associated.AddComponent(sprite);

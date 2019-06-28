@@ -18,7 +18,6 @@ std::vector<Vec2> Pathfinder::Astar::Run(Vec2& s, Vec2& d) {
   std::pair<int, int> dest = {d.x, d.y};
 
   if (!CanWalk(start)) {
-    printf("%d %d\n", start.first, start.second);
     throw std::invalid_argument("Pathfinder: current position is invalid");
   }
 
@@ -99,6 +98,7 @@ bool Pathfinder::Astar::CanWalk(std::pair<int, int>& p) {
   int tileDim = tm->GetLogicalTileDimension();
 
   int cellsWidth = round(collider->box.w / tileDim);
+  if (cellsWidth % 2 == 1) cellsWidth--;
   int cellsHeight = round(collider->box.h / tileDim);
 
   int x = p.first - cellsWidth / 2;
