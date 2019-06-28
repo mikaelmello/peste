@@ -20,11 +20,7 @@ TileMap::TileMap(GameObject& associated, const std::string& file)
   Load(file);
 }
 
-TileMap::~TileMap() {
-  if (tileSet != nullptr) {
-    free(tileSet);
-  }
-}
+TileMap::~TileMap() {}
 
 void TileMap::Load(const std::string& file) {
   std::ifstream infile(file);
@@ -59,7 +55,8 @@ void TileMap::Load(const std::string& file) {
   auto configuredTileset = tilesets.front();
   auto path = split(configuredTileset["image"].get<std::string>(), '/');
 
-  tileSet = new TileSet(tileWidth, tileHeight, "assets/img/" + path.back());
+  TileSet* ts = new TileSet(tileWidth, tileHeight, "assets/img/" + path.back());
+  tileSet = std::shared_ptr<TileSet>(ts);
 
   if (tileHeight != tileWidth || tileHeight % logicalTileDimension != 0) {
     throw std::invalid_argument(
@@ -92,7 +89,9 @@ void TileMap::Load(const std::string& file) {
   }
 }
 
-void TileMap::SetTileSet(TileSet* tileSet) { this->tileSet = tileSet; }
+void TileMap::SetTileSet(std::shared_ptr<TileSet> tileSet) {
+  this->tileSet = tileSet;
+}
 
 void TileMap::SetParallax(int layer, float xFactor, float yFactor) {
   if (layer < 0 || layer >= layers.size()) {
