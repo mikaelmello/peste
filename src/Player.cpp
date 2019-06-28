@@ -143,10 +143,10 @@ void Player::Update(float dt) {
   if (direction == Direction::NONE) {
     OpenIdleSprite(sprite, lastDirection);
   } else if (lastDirection != direction) {
-    OpenWalkingSprite(sprite, lastDirection, direction);
+    OpenWalkingSprite(sprite, direction);
     sprite->SetFrameTime(0.1);
-    lastDirection = direction;
   }
+  lastDirection = direction;
 
   associated.box.w = sprite->GetWidth();
   associated.box.h = sprite->GetHeight();
@@ -209,7 +209,7 @@ void Player::OpenIdleSprite(const std::shared_ptr<Sprite>& sprite,
 }
 
 void Player::OpenWalkingSprite(const std::shared_ptr<Sprite>& sprite,
-                               Direction lastDirection, Direction direction) {
+                               Direction direction) {
   switch (direction) {
     case Direction::UP:
       sprite->Open(PLAYER_BACK_ANIM);
