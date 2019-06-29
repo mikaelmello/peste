@@ -30,7 +30,14 @@ class Blocker : public Component {
 
   const Types Type = BlockerType;
 
+  void Block();
+
+  void Unblock();
+
+  bool IsBlocking() const;
+
  private:
+  bool block;
 };
 
 #endif

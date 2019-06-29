@@ -1,5 +1,5 @@
-#ifndef PickupItem_H
-#define PickupItem_H
+#ifndef ACTIONMESSAGE_H
+#define ACTIONMESSAGE_H
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *                  INCLUDES E DEFINES
@@ -11,11 +11,11 @@
 #include "GameObject.hpp"
 #include "Types.hpp"
 
-class PickupItem : public Component {
+class ActionMessage : public Component {
  public:
-  PickupItem(GameObject& associated, Vec2 position);
+  ActionMessage(GameObject& associated, Vec2 position, const std::string& file);
 
-  ~PickupItem();
+  ~ActionMessage();
 
   void Start() override;
 
@@ -27,7 +27,7 @@ class PickupItem : public Component {
 
   void Render() override;
 
-  const Types Type = PickupItemType;
+  const Types Type = ActionMessageType;
 
  private:
 };

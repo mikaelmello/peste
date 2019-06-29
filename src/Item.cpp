@@ -2,13 +2,13 @@
 #include <iostream>
 #include <memory>
 #include <string>
+#include "ActionMessage.hpp"
 #include "Blocker.hpp"
 #include "Camera.hpp"
 #include "Collider.hpp"
 #include "Game.hpp"
 #include "GameObject.hpp"
 #include "InputManager.hpp"
-#include "PickupItem.hpp"
 #include "Player.hpp"
 #include "RoomState.hpp"
 #include "Sprite.hpp"
@@ -38,7 +38,8 @@ Item::Item(GameObject& associated, const std::string& name,
   associated.box.h = sprite->GetHeight();
 
   GameObject* pickupGo = new GameObject(associated.priority);
-  PickupItem* pickup = new PickupItem(*pickupGo, position);
+  ActionMessage* pickup =
+      new ActionMessage(*pickupGo, position, "assets/img/x.png");
   pickupGo->AddComponent(pickup);
 
   State& state = Game::GetInstance().GetCurrentState();
@@ -47,6 +48,7 @@ Item::Item(GameObject& associated, const std::string& name,
   GameObject* blocker_go = new GameObject(associated.priority);
   Blocker* blocker =
       new Blocker(*blocker_go, {1, 0.3}, {0, sprite->GetHeight() / 2.5});
+  blocker->Unblock();
   blocker_go->box = associated.box;
   blocker_go->AddComponent(blocker);
   state.AddObject(blocker_go);
