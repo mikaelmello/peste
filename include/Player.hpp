@@ -41,6 +41,12 @@ class Player : public Component {
                          Helpers::Direction direction);
 
   Helpers::Direction lastDirection;
+
+  bool blocked;
+
+  Vec2 lastPos;
+
+  Vec2 lastCoordinates;
 };
 
 #endif

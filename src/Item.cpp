@@ -2,6 +2,7 @@
 #include <iostream>
 #include <memory>
 #include <string>
+#include "Blocker.hpp"
 #include "Camera.hpp"
 #include "Collider.hpp"
 #include "Game.hpp"
@@ -9,6 +10,7 @@
 #include "InputManager.hpp"
 #include "PickupItem.hpp"
 #include "Player.hpp"
+#include "RoomState.hpp"
 #include "Sprite.hpp"
 #include "TileMap.hpp"
 #include "TutorialState.hpp"
@@ -29,6 +31,7 @@ Item::Item(GameObject& associated, const std::string& name,
       new Collider(associated, {1, 0.3}, {0, sprite->GetHeight() / 2.5});
   associated.AddComponent(collider);
   associated.AddComponent(sprite);
+
   associated.box.x = position.x * 8;
   associated.box.y = position.y * 8;
   associated.box.w = sprite->GetWidth();
@@ -40,6 +43,13 @@ Item::Item(GameObject& associated, const std::string& name,
 
   State& state = Game::GetInstance().GetCurrentState();
   pickupItemGo = state.AddObject(pickupGo);
+
+  GameObject* blocker_go = new GameObject(associated.priority);
+  Blocker* blocker =
+      new Blocker(*blocker_go, {1, 0.3}, {0, sprite->GetHeight() / 2.5});
+  blocker_go->box = associated.box;
+  blocker_go->AddComponent(blocker);
+  state.AddObject(blocker_go);
 }
 
 Item::~Item() {}

@@ -17,6 +17,7 @@ enum Types {
   InventoryType,
   AntagonistType,
   PickupItemType,
+  BlockerType,
 };
 
 #endif

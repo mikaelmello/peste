@@ -152,7 +152,6 @@ bool TileMap::CanWalk(int x, int y) {
   if (x < 0 || x >= logicalWidth || y < 0 || y >= logicalHeight) {
     return false;
   }
-
   return walkable[y][x];
 }
 

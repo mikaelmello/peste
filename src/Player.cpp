@@ -36,7 +36,8 @@ using namespace Helpers;
 Player::Player(GameObject& associated, Vec2 position)
     : Component(associated),
       position(position),
-      lastDirection(Helpers::Direction::NONE) {
+      lastDirection(Helpers::Direction::NONE),
+      blocked(false) {
   Sprite* sprite = new Sprite(associated, PLAYER_FRONT);
   sprite->SetScaleX(0.7, 0.7);
   Collider* collider =
@@ -46,6 +47,7 @@ Player::Player(GameObject& associated, Vec2 position)
   associated.box.h = sprite->GetHeight();
   // just for debugging purposes
   associated.AddComponent(collider);
+  lastCoordinates = {associated.box.x, associated.box.y};
 }
 
 Player::~Player() {}
@@ -59,13 +61,33 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
       GameData::AddToInventory(other);
     }
   }
+
+  auto blocker_cpt = other->GetComponent(BlockerType);
+  if (blocker_cpt) {
+    Vec2 relative;
+    relative.x = lastCoordinates.x - associated.box.x;
+    relative.y = lastCoordinates.y - associated.box.y;
+
+    associated.box.x += (lastCoordinates.x - associated.box.x);
+    associated.box.y += (lastCoordinates.y - associated.box.y);
+
+    if (relative.x > 0)
+      position.x += 1;
+    else if (relative.x < 0)
+      position.x += -1;
+    if (relative.y > 0)
+      position.y += 1;
+    else if (relative.y < 0)
+      position.y += -1;
+
+    blocked = true;
+  }
 }
 
 void Player::Start() {}
 
 void Player::Update(float dt) {
   InputManager& input = InputManager::GetInstance();
-  Vec2 oldPos(position.x, position.y);
   bool canwalk = true;
   auto tilemap = Game::GetInstance().GetCurrentState().GetCurrentTileMap();
   int tileDim = tilemap->GetLogicalTileDimension();
@@ -79,6 +101,18 @@ void Player::Update(float dt) {
 
   auto sprite = std::dynamic_pointer_cast<Sprite>(spriteCpt);
   auto collider = std::dynamic_pointer_cast<Collider>(colliderCpt);
+
+  if (blocked) {
+    OpenIdleSprite(sprite, lastDirection);
+    associated.box.w = sprite->GetWidth();
+    associated.box.h = sprite->GetHeight();
+    blocked = false;
+    return;
+  }
+  Vec2 oldPos(position.x, position.y);
+
+  lastCoordinates = {associated.box.x, associated.box.y};
+  lastPos = position;
 
   bool up = false;
   bool down = false;
