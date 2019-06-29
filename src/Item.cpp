@@ -25,8 +25,8 @@ Item::Item(GameObject& associated, const std::string& name,
   Sprite* sprite = new Sprite(associated, spritePath);
   sprite->SetScaleX(0.07, 0.07);
 
-  Collider* collider =
-      new Collider(associated, {1, 0.3}, {0, sprite->GetHeight() / 2.5});
+  Collider* collider = new Collider(associated, {1, 0.3},
+                                    {0, (float)(sprite->GetHeight() / 2.5)});
   associated.AddComponent(collider);
   associated.AddComponent(sprite);
   associated.box.x = position.x * 8;

@@ -37,6 +37,7 @@ PatrolFSM::PatrolFSM(GameObject& object) : IFSM(object) {
 
     auto path1 = pf.Run(initial, dest3);
     paths.emplace(0, path1);
+
   } catch (const std::exception& ex) {
     printf("%s\n", ex.what());
   }

@@ -199,14 +199,14 @@ void Antagonist::IdleAssetsManager() {
 
   auto soundCpt = associated.GetComponent(SoundType);
   if (!soundCpt) {
-    // throw std::runtime_error("O gameobject do antagonista nao tem sound");
+    throw std::runtime_error("O gameobject do antagonista nao tem sound");
   }
 
   auto sprite = std::dynamic_pointer_cast<Sprite>(spriteCpt);
-  // auto sound = std::dynamic_pointer_cast<Sound>(soundCpt);
+  auto sound = std::dynamic_pointer_cast<Sound>(soundCpt);
 
-  // sound->Open(BREATHING_ANTAGONIST_SOUND);
-  // sound->Play();
+  sound->Open(BREATHING_ANTAGONIST_SOUND);
+  sound->Play();
 
   switch (last_direction) {
     case Helpers::Direction::RIGHT:

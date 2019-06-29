@@ -55,6 +55,12 @@ enum Action {
   ATTACKING,
 };
 
+// Verifica se @param object pode andar sobre a posição @param p.
+// @param object tem que possuir um collider e a posição considerada
+// é a centro-horizontal / fim-vertical.
+bool CanWalk(GameObject& object, Vec2& p);
+
+bool CanWalk(GameObject& object, std::pair<int, int>& p);
 }  // end namespace Helpers
 
 #endif
