@@ -119,3 +119,7 @@ Vec2 Sprite::GetScale() {
 
   SDL_Surface* surface = nullptr;
 }
+
+float Sprite::GetFrameTime() const { return frameTime; }
+
+int Sprite::GetFrameCount() const { return frameCount; }
