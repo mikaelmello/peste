@@ -121,20 +121,19 @@ bool Helpers::CanWalk(GameObject& object, Vec2& p) {
   int tileDim = tilemap->GetLogicalTileDimension();
 
   int cellsWidth = round(collider->box.w / tileDim);
-  if (cellsWidth % 2 == 1) cellsWidth--;
   int cellsHeight = round(collider->box.h / tileDim);
+  if (cellsWidth % 2 == 1) cellsWidth--;
 
   int x = p.x - cellsWidth / 2;
   int y = p.y - cellsHeight;
 
-  for (int i = x; i <= (x + cellsWidth); i++) {
-    for (int j = y; j <= (y + cellsHeight); j++) {
-      if (!tilemap->CanWalk(i, j)) {
-        return false;
-      }
-    }
-  }
-  return true;
+  bool answer = true;
+
+  answer &= tilemap->CanWalk(x, y);
+  answer &= tilemap->CanWalk(x, y + cellsHeight);
+  answer &= tilemap->CanWalk(x + cellsWidth, y);
+  answer &= tilemap->CanWalk(x + cellsWidth, y + cellsHeight);
+  return answer;
 }
 
 bool Helpers::CanWalk(GameObject& object, std::pair<int, int>& p) {

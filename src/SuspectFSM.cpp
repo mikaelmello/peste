@@ -15,34 +15,33 @@ SuspectFSM::~SuspectFSM() {}
 void SuspectFSM::OnStateEnter() {
   auto antCpt = object.GetComponent(AntagonistType);
   if (!antCpt) {
-    throw std::runtime_error(
-        "Nao tem antagonista no objeto passado para a SuspectFSM em "
-        "StateEnter");
+    throw std::runtime_error("sem antagonist em SuspectFSM::OnStateEnter");
   }
   auto ant = std::dynamic_pointer_cast<Antagonist>(antCpt);
 
   if (ant->NearTarget()) {
-    Pathfinder::Astar pf = Pathfinder::Astar(
-        object, Game::GetInstance().GetCurrentState().GetCurrentTileMap());
+    Game& game = Game::GetInstance();
+    State& state = game.GetCurrentState();
+    auto tilemap = state.GetCurrentTileMap();
 
-    initial = ant->position;
+    Walkable w = GetWalkable(object, *GameData::PlayerGameObject);
 
-    auto player = GameData::PlayerGameObject->GetComponent(PlayerType);
-    if (!player) {
-      throw std::runtime_error("Player game object without Player component");
+    if (w.can_walk) {
+      auto pf = Pathfinder::Astar(object, tilemap);
+
+      initial = ant->position;
+      path = {0, pf.Run(initial, w.walkable)};
+
+    } else {
+      pop_requested = true;
     }
-
-    auto playerCp = std::dynamic_pointer_cast<Player>(player);
-    path = {0, pf.Run(initial, playerCp->position)};
   }
 }
 
 void SuspectFSM::OnStateExecution() {
   auto antCpt = object.GetComponent(AntagonistType);
   if (!antCpt) {
-    throw std::runtime_error(
-        "Nao tem antagonista no objeto passado para a SuspectFSM em "
-        "StateExecution");
+    throw std::runtime_error("sem antagonist em SuspectFSM::OnStateExecution");
   }
   auto ant = std::dynamic_pointer_cast<Antagonist>(antCpt);
 
@@ -58,14 +57,15 @@ void SuspectFSM::OnStateExecution() {
 }
 
 void SuspectFSM::OnStateExit() {
-  Pathfinder::Astar pf = Pathfinder::Astar(
-      object, Game::GetInstance().GetCurrentState().GetCurrentTileMap());
+  Game& game = Game::GetInstance();
+  State& state = game.GetCurrentState();
+  auto tilemap = state.GetCurrentTileMap();
+
+  auto pf = Pathfinder::Astar(object, tilemap);
 
   auto antCpt = object.GetComponent(AntagonistType);
   if (!antCpt) {
-    throw std::runtime_error(
-        "Nao tem antagonista no objeto passado para a SuspectFSM em "
-        "StateExit");
+    throw std::runtime_error("sem antagonist em SuspectFSM::OnStateExit");
   }
   auto ant = std::dynamic_pointer_cast<Antagonist>(antCpt);
 
@@ -78,19 +78,16 @@ void SuspectFSM::OnStateExit() {
 void SuspectFSM::Update(float dt) {
   auto antCpt = object.GetComponent(AntagonistType);
   if (!antCpt) {
-    throw std::runtime_error(
-        "Nao tem antagonista no objeto passado para a SuspectFSM em "
-        "Update");
+    throw std::runtime_error("sem antagonist em SuspectFSM::Update");
   }
   auto ant = std::dynamic_pointer_cast<Antagonist>(antCpt);
   OnStateExecution();
 
   if (bias_update_timer.Get() > 3 * dt) {
-    if (ant->NearTarget()) {
+    if (ant->NearTarget())
       rage_bias = std::min(rage_bias + 1, RAGE_NUMERIC_LIMIT);
-    } else {
+    else
       rage_bias = std::max(rage_bias - 1, NO_RAGE_BIAS);
-    }
     bias_update_timer.Restart();
   }
 
