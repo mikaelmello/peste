@@ -38,8 +38,7 @@ using namespace Helpers;
 Player::Player(GameObject& associated, Vec2 position)
     : Component(associated),
       position(position),
-      lastDirection(Helpers::Direction::NONE),
-      blocked(false) {
+      lastDirection(Helpers::Direction::NONE) {
   Sprite* sprite = new Sprite(associated, PLAYER_FRONT);
   sprite->SetScaleX(0.7, 0.7);
   Collider* collider =
@@ -49,7 +48,6 @@ Player::Player(GameObject& associated, Vec2 position)
   associated.box.h = sprite->GetHeight();
   // just for debugging purposes
   associated.AddComponent(collider);
-  lastCoordinates = {associated.box.x, associated.box.y};
 }
 
 Player::~Player() {}
@@ -79,6 +77,7 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
 void Player::Start() {}
 
 void Player::Update(float dt) {
+  Vec2 oldPos(position.x, position.y);
   InputManager& input = InputManager::GetInstance();
   bool canwalk = true;
   auto tilemap = Game::GetInstance().GetCurrentState().GetCurrentTileMap();
@@ -93,18 +92,6 @@ void Player::Update(float dt) {
 
   auto sprite = std::dynamic_pointer_cast<Sprite>(spriteCpt);
   auto collider = std::dynamic_pointer_cast<Collider>(colliderCpt);
-
-  if (blocked) {
-    OpenIdleSprite(sprite, lastDirection);
-    associated.box.w = sprite->GetWidth();
-    associated.box.h = sprite->GetHeight();
-    blocked = false;
-    return;
-  }
-  Vec2 oldPos(position.x, position.y);
-
-  lastCoordinates = {associated.box.x, associated.box.y};
-  lastPos = position;
 
   bool up = false;
   bool down = false;
