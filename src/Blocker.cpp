@@ -9,7 +9,7 @@
 #include "TileMap.hpp"
 
 Blocker::Blocker(GameObject& associated, Vec2 scale, Vec2 offset)
-    : Component(associated), block(true), colliding(false) {
+    : Component(associated), block(true) {
   Collider* collider = new Collider(associated, scale, offset);
   associated.AddComponent(collider);
 
@@ -23,7 +23,7 @@ Blocker::Blocker(GameObject& associated, Vec2 scale, Vec2 offset)
 
   for (int i = beginX; i < endX; i++) {
     for (int j = beginY; j < endY; j++) {
-      tilemap->SetWalk(i, j, !block);
+      tilemap->SetWalk(i, j, false);
     }
   }
 }
@@ -55,6 +55,7 @@ void Blocker::Unblock() {
       tilemap->SetWalk(i, j, true);
     }
   }
+  block = false;
 }
 
 bool Blocker::IsBlocking() const { return block; }

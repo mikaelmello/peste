@@ -40,8 +40,6 @@ class Blocker : public Component {
  private:
   bool block;
 
-  bool colliding;
-
   int beginX, endX, beginY, endY;
 
   TileMap* tilemap;
