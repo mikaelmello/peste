@@ -182,7 +182,6 @@ void Player::Update(float dt) {
     OpenIdleSprite(sprite, lastDirection);
   } else if (lastDirection != direction) {
     OpenWalkingSprite(sprite, direction);
-    sprite->SetFrameTime(0.1);
   }
   lastDirection = direction;
 
@@ -282,4 +281,5 @@ void Player::OpenWalkingSprite(const std::shared_ptr<Sprite>& sprite,
       sprite->SetFrameCount(5);
       break;
   }
+  sprite->SetFrameTime(0.05);
 }
