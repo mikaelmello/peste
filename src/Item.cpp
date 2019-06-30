@@ -43,14 +43,6 @@ Item::Item(GameObject& associated, const std::string& name,
 
   State& state = Game::GetInstance().GetCurrentState();
   pickupItemGo = state.AddObject(pickupGo);
-
-  GameObject* blocker_go = new GameObject(associated.priority);
-  Blocker* blocker =
-      new Blocker(*blocker_go, {1, 0.3}, {0, sprite->GetHeight() / 2.5});
-  blocker->Unblock();
-  blocker_go->box = associated.box;
-  blocker_go->AddComponent(blocker);
-  state.AddObject(blocker_go);
 }
 
 Item::~Item() {}

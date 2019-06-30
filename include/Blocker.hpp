@@ -9,6 +9,7 @@
 #include <string>
 #include "Component.hpp"
 #include "GameObject.hpp"
+#include "TileMap.hpp"
 #include "Types.hpp"
 #include "Vec2.hpp"
 
@@ -40,6 +41,10 @@ class Blocker : public Component {
   bool block;
 
   bool colliding;
+
+  int beginX, endX, beginY, endY;
+
+  TileMap* tilemap;
 };
 
 #endif

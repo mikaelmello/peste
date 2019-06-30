@@ -54,8 +54,8 @@ Door::Door(GameObject& associated, Helpers::Direction direction, Vec2 position,
   closeDoorGo = state.AddObject(closeGo);
 
   GameObject* blocker_go = new GameObject(associated.priority);
-  Blocker* blocker = new Blocker(*blocker_go);
   blocker_go->box = associated.box;
+  Blocker* blocker = new Blocker(*blocker_go);
   blocker_go->AddComponent(blocker);
   auto blocker_ptr = state.AddObject(blocker_go);
 

@@ -50,6 +50,8 @@ class TileMap : public Component {
 
   Vec2 GetInitialPosition();
 
+  void SetWalk(int x, int y, bool value);
+
   void SetParallax(int layer, float xFactor, float yFactor);
 
   const Types Type = TileMapType;
@@ -72,6 +74,7 @@ class TileMap : public Component {
 
   std::vector<Vec2> layerParallax;
   std::vector<Layer> layers;
+
   std::vector<std::vector<bool>> walkable;
 };
 
