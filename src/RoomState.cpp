@@ -5,6 +5,7 @@
 #include "CameraFollower.hpp"
 #include "Collider.hpp"
 #include "Collision.hpp"
+#include "Door.hpp"
 #include "Game.hpp"
 #include "GameData.hpp"
 #include "GameObject.hpp"
@@ -115,6 +116,12 @@ void RoomState::LoadAssets() {
   //     new Antagonist(*antagonist_go, currentTileMap->GetInitialPosition());
   // antagonist_go->AddComponent(antagonist);
   // objects.emplace(antagonist_go);
+
+  GameObject* door_go = new GameObject(5);
+  Vec2 door_pos = currentTileMap->GetInitialPosition() + Vec2(8, 8);
+  Door* door = new Door(*door_go, Helpers::Direction::LEFT, door_pos, false);
+  door_go->AddComponent(door);
+  objects.emplace(door_go);
 
   Camera::Follow(playerGo);
 

@@ -59,7 +59,8 @@
         "memory": "cpp",
         "string": "cpp",
         "optional": "cpp",
-        "string_view": "cpp"
+        "string_view": "cpp",
+        "strstream": "cpp"
     },
     "C_Cpp.clang_format_fallbackStyle": "Google",
     "editor.formatOnSave": true,

@@ -18,6 +18,7 @@ enum Types {
   AntagonistType,
   ActionMessageType,
   BlockerType,
+  DoorType,
 };
 
 #endif

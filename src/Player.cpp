@@ -5,6 +5,7 @@
 #include "Blocker.hpp"
 #include "Camera.hpp"
 #include "Collider.hpp"
+#include "Door.hpp"
 #include "Game.hpp"
 #include "GameData.hpp"
 #include "GameObject.hpp"
@@ -60,6 +61,17 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
   if (item_cpt) {
     if (input.KeyPress(X_KEY)) {
       GameData::AddToInventory(other);
+    }
+  }
+
+  auto door_cpt = other->GetComponent(DoorType);
+  if (door_cpt) {
+    auto door = std::dynamic_pointer_cast<Door>(door_cpt);
+    if (input.KeyPress(X_KEY)) {
+      if (door->IsOpen())
+        door->Close();
+      else
+        door->Open();
     }
   }
 

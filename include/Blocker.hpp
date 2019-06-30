@@ -38,6 +38,8 @@ class Blocker : public Component {
 
  private:
   bool block;
+
+  bool colliding;
 };
 
 #endif
