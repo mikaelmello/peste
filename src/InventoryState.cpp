@@ -12,11 +12,11 @@ InventoryState::InventoryState() {
   objects.emplace(background_go);
 
   // based on the image loaded above
-  itemWidth = 80;
-  itemHeight = 80;
-  gridWidth = 5;
-  gridHeight = 5;
-  initialPosition = {90, 203};
+  itemWidth = 158;
+  itemHeight = 105;
+  gridWidth = 3;
+  gridHeight = 3;
+  initialPosition = {461, 234};
 
   int index = 0;
   for (auto item : GameData::PlayerInventory) {
@@ -26,7 +26,7 @@ InventoryState::InventoryState() {
     }
 
     auto sprite = std::dynamic_pointer_cast<Sprite>(spriteComponent);
-    sprite->SetMaxDimensions(itemWidth - 20, itemHeight - 20);
+    sprite->SetDimensions(itemWidth - 20, itemHeight - 20);
     auto position = getGridPosition(index);
     item->box.SetCenter(position);
     item->ReverseDelete();
