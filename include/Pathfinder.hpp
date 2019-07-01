@@ -34,28 +34,25 @@ struct Cell {
   std::pair<int, int> parent;
 };
 
-class Heuristic {
- public:
+struct Heuristic {
   double virtual Distance(std::pair<int, int> a, std::pair<int, int> b) = 0;
+  virtual ~Heuristic(){};
 };
 
-class Euclidian : public Heuristic {
- public:
+struct Euclidian : public Heuristic {
   inline double Distance(std::pair<int, int> a, std::pair<int, int> b) {
     return std::sqrt((a.first - b.first) * (a.first - b.first) +
                      (a.second - b.second) * (a.second - b.second));
   }
 };
 
-class Manhattan : public Heuristic {
- public:
+struct Manhattan : public Heuristic {
   inline double Distance(std::pair<int, int> a, std::pair<int, int> b) {
     return std::abs(a.first - b.first) + std::abs(a.second - b.second);
   }
 };
 
-class Diagonal : public Heuristic {
- public:
+struct Diagonal : public Heuristic {
   inline double Distance(std::pair<int, int> a, std::pair<int, int> b) {
     return std::max(std::abs(a.first - b.first), std::abs(a.second - b.second));
   }

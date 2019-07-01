@@ -29,7 +29,6 @@ void Collider::Render() {
 #ifdef DEBUG
   Vec2 center = box.Center();
   SDL_Point points[5];
-  SDL_Point points2[2];
 
   Vec2 point = (Vec2(box.x, box.y) - center)
                    .GetRotated(Helpers::deg_to_rad(associated.angleDeg)) +

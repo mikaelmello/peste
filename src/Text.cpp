@@ -15,10 +15,10 @@
 Text::Text(GameObject& associated, const std::string& fontFile, int fontSize,
            TextStyle style, const std::string& text, SDL_Color color)
     : Component(associated),
+      text(text),
+      style(style),
       fontFile(fontFile),
       fontSize(fontSize),
-      style(style),
-      text(text),
       color(color),
       blink(false),
       display(true) {

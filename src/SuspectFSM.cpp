@@ -46,7 +46,7 @@ void SuspectFSM::OnStateExecution() {
   }
   auto ant = std::dynamic_pointer_cast<Antagonist>(antCpt);
 
-  if (path.first < path.second.size()) {
+  if (path.first < (long long)path.second.size()) {
     ant->position = path.second[path.first];
   }
 
@@ -104,7 +104,7 @@ void SuspectFSM::Update(float dt) {
     pop_request_timer.Restart();
   }
 
-  if (path.first < path.second.size() - 1) {
+  if (path.first < (long long)path.second.size() - 1) {
     path.first++;
   }
 

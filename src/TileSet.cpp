@@ -9,7 +9,7 @@ TileSet::TileSet(int tileWidth, int tileHeight, const std::string& file)
 }
 
 void TileSet::RenderTile(unsigned int index, float x, float y) {
-  if (index >= (rows * columns)) {
+  if ((long long)index >= (rows * columns)) {
     return;
   }
 

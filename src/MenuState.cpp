@@ -9,7 +9,7 @@
 #include "TutorialState.hpp"
 
 MenuState::MenuState()
-    : position({100, 100}), im(InputManager::GetInstance()), options(nullptr) {}
+    : position({100, 100}), options(nullptr), im(InputManager::GetInstance()) {}
 
 MenuState::~MenuState() {}
 
@@ -106,7 +106,7 @@ void MenuState::LoadAssets() {
   buttons.emplace_back(quit_button_go);
   objects.emplace(quit_button_go);
 
-  for (int i = 0; i < buttons.size(); i++) {
+  for (int i = 0; i < (int)buttons.size(); i++) {
     buttons[i]->box =
         buttons[i]->box.GetCentered(position + Vec2(0, i * buttons[i]->box.h));
   }

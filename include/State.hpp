@@ -55,7 +55,7 @@ class State {
   bool quitRequested;
   bool started;
 
-  TileMap* currentTileMap = nullptr;
+  TileMap* currentTileMap;
 
   struct GameObjectComp {
     bool operator()(const std::shared_ptr<GameObject>& lhs,

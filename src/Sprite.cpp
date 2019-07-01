@@ -15,11 +15,11 @@
 Sprite::Sprite(GameObject& associated, int frameCount, float frameTime,
                float secondsToSelfDestruct)
     : Component(associated),
-      scale(1, 1),
       frameCount(frameCount),
-      frameTime(frameTime),
       currentFrame(0),
-      secondsToSelfDestruct(secondsToSelfDestruct) {}
+      frameTime(frameTime),
+      secondsToSelfDestruct(secondsToSelfDestruct),
+      scale(1, 1) {}
 
 Sprite::Sprite(GameObject& associated, const std::string& file, int frameCount,
                float frameTime, float secondsToSelfDestruct)
@@ -114,11 +114,7 @@ void Sprite::SetFrameCount(int frameCount) {
 
 void Sprite::SetFrameTime(float frameTime) { this->frameTime = frameTime; }
 
-Vec2 Sprite::GetScale() {
-  return scale;
-
-  SDL_Surface* surface = nullptr;
-}
+Vec2 Sprite::GetScale() { return scale; }
 
 void Sprite::SetDimensions(int maxWidth, int maxHeight) {
   double xScale = (double)maxWidth / (double)width;

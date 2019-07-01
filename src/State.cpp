@@ -18,7 +18,11 @@
 #include "TileSet.hpp"
 #include "Vec2.hpp"
 
-State::State() : quitRequested(false), started(false), popRequested(false) {}
+State::State()
+    : popRequested(false),
+      quitRequested(false),
+      started(false),
+      currentTileMap(nullptr) {}
 
 State::~State() {}
 

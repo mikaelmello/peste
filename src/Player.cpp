@@ -97,7 +97,6 @@ void Player::Update(float dt) {
   bool down = false;
   bool left = false;
   bool right = false;
-  bool changed = false;
 
   associated.box.x = position.x * tileDim - sprite->GetWidth() / 2;
   associated.box.y = position.y * tileDim - sprite->GetHeight();
@@ -165,9 +164,9 @@ void Player::Update(float dt) {
 }
 
 void Player::Render() {
+#if DEBUG
   Vec2 point = Vec2(0, 0) - Camera::pos;
   SDL_Point points[5];
-  SDL_Point points2[2];
   points[0] = {(int)point.x, (int)point.y};
   points[4] = {(int)point.x, (int)point.y};
 
@@ -183,6 +182,7 @@ void Player::Render() {
   SDL_SetRenderDrawColor(Game::GetInstance().GetRenderer(), 255, 255, 0,
                          SDL_ALPHA_OPAQUE);
   SDL_RenderDrawLines(Game::GetInstance().GetRenderer(), points, 5);
+#endif
 }
 
 bool Player::Is(Types type) const { return type == this->Type; }
@@ -216,6 +216,9 @@ void Player::OpenIdleSprite(const std::shared_ptr<Sprite>& sprite,
       break;
     case Direction::DOWNRIGHT:
       sprite->Open(PLAYER_DOWNRIGHT);
+      break;
+    case Direction::NONE:
+      sprite->Open(PLAYER_FRONT);
       break;
   }
 }
@@ -255,6 +258,8 @@ void Player::OpenWalkingSprite(const std::shared_ptr<Sprite>& sprite,
       sprite->Open(PLAYER_DOWNRIGHT_ANIM);
       sprite->SetFrameCount(5);
       break;
+    default:
+      return OpenIdleSprite(sprite, direction);
   }
   sprite->SetFrameTime(0.05);
 }

@@ -27,7 +27,7 @@ Item::Item(GameObject& associated, const std::string& name,
   Sprite* sprite = new Sprite(associated, spritePath);
 
   Collider* collider =
-      new Collider(associated, {1, 0.3}, {0, sprite->GetHeight() / 2.5});
+      new Collider(associated, {1, 0.3}, {0, sprite->GetHeight() * 0.35f});
   associated.AddComponent(collider);
   associated.AddComponent(sprite);
 

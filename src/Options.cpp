@@ -3,7 +3,7 @@
 #include <stdexcept>
 
 Options::Options(GameObject& c, std::vector<std::shared_ptr<GameObject>>& b)
-    : cursor(c), buttons(b), op(0) {
+    : op(0), cursor(c), buttons(b) {
   if (b.size() == 0) {
     throw std::invalid_argument("must have at least 1 option");
   }

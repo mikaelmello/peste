@@ -114,7 +114,8 @@ void PatrolFSM::Update(float dt) {
 
   bool enter = false;
   while (!patrol_paths.empty() &&
-         (patrol_paths.top().first == patrol_paths.top().second.size())) {
+         (patrol_paths.top().first ==
+          (long long)patrol_paths.top().second.size())) {
     patrol_paths.pop();
     enter = true;
   }

@@ -5,7 +5,7 @@
 #include "MenuState.hpp"
 #include "SDL_include.h"
 
-int main(int argc, char** argv) {
+int main() {
   try {
     auto roomState = new MenuState();
     Game& game = Game::GetInstance();

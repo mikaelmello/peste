@@ -11,7 +11,7 @@ class IFSM {
  public:
   IFSM(GameObject& object);
 
-  ~IFSM();
+  virtual ~IFSM();
 
   inline bool PopRequested() { return pop_requested; }
 

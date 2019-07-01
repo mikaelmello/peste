@@ -5,13 +5,13 @@
 #include "Component.hpp"
 
 GameObject::GameObject(double priority)
-    : isDead(false),
-      started(false),
-      angleDeg(0),
+    : angleDeg(0),
       priority(priority),
+      isDead(false),
+      started(false),
       render(true) {}
 
-GameObject::~GameObject() { components.clear(); }
+GameObject::~GameObject() {}
 
 void GameObject::Start() {
   started = true;

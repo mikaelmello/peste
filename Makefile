@@ -10,7 +10,7 @@ RM       = rm -f
 
 all: all-before $(BIN) all-after
 
-debug: CXXFLAGS = -DDEBUG $(CXXINCS) -std=c++14 -g3 -ggdb3
+debug: CXXFLAGS = -DDEBUG $(CXXINCS) -std=c++14 -g3 -ggdb3 -Wall -Wextra -D_GLIBCXX_DEBUG -D_GLIBCXX_DEBUG_PEDANTIC -D_FORTIFY_SOURCE=2 -fsanitize=address -fsanitize=undefined -fno-sanitize-recover
 debug: all
 
 clean: clean-custom
