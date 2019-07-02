@@ -5,7 +5,7 @@
 #include "Types.hpp"
 
 InventoryState::InventoryState()
-    : inventoryCursorIndex(0), cursorIndex(Inventory) {
+    : inventoryCursorIndex(0), cursorIndex(Inventory), page(Items) {
   GameObject* background_go = new GameObject(-1);
   Sprite* background_sprite =
       new Sprite(*background_go, "assets/img/inventory/background.png");
@@ -47,6 +47,14 @@ InventoryState::InventoryState()
   Sprite* cursor_sprite = new Sprite(*cursorGo, "assets/img/menu/cursor.png");
   cursorGo->AddComponent(cursor_sprite);
   objects.insert(cursorGo);
+
+  pageGo = std::make_shared<GameObject>(0);
+  auto sprite_path = (page == Items) ? "assets/img/inventory/items.png"
+                                     : "assets/img/inventory/clues.png";
+  Sprite* page_sprite = new Sprite(*pageGo, sprite_path);
+  pageGo->AddComponent(page_sprite);
+  pageGo->box.SetCenter(512, 380);
+  objects.insert(pageGo);
 }
 
 Vec2 InventoryState::getGridPosition(int index) {
