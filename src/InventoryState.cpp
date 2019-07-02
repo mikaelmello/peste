@@ -4,10 +4,10 @@
 #include "Sprite.hpp"
 #include "Types.hpp"
 
-InventoryState::InventoryState() {
+InventoryState::InventoryState() : cursorPositionIndex(0) {
   GameObject* background_go = new GameObject(-1);
   Sprite* background_sprite =
-      new Sprite(*background_go, "assets/img/temp_inventory.png");
+      new Sprite(*background_go, "assets/img/inventory/background.png");
   background_go->AddComponent(background_sprite);
   objects.emplace(background_go);
 
@@ -30,9 +30,14 @@ InventoryState::InventoryState() {
     auto position = getGridPosition(index);
     item->box.SetCenter(position);
     item->ReverseDelete();
-    objects.emplace(item);
+    objects.insert(item);
     index += 1;
   }
+
+  cursorGo = std::make_shared<GameObject>(5);
+  Sprite* cursor_sprite = new Sprite(*cursorGo, "assets/img/menu/cursor.png");
+  cursorGo->AddComponent(cursor_sprite);
+  objects.insert(cursorGo);
 }
 
 Vec2 InventoryState::getGridPosition(int index) {
@@ -58,6 +63,22 @@ void InventoryState::Update(float dt) {
   quitRequested |= im.QuitRequested();
   popRequested |= im.KeyPress(ESCAPE_KEY);
 
+  int cursorRow = cursorPositionIndex / gridWidth;
+  int cursorColumn = (cursorPositionIndex % gridWidth);
+
+  if (im.KeyPress(UP_ARROW_KEY)) {
+    cursorRow = std::max(0, cursorRow - 1);
+  } else if (im.KeyPress(DOWN_ARROW_KEY)) {
+    cursorRow = std::min(gridHeight - 1, cursorRow + 1);
+  } else if (im.KeyPress(LEFT_ARROW_KEY)) {
+    cursorColumn = std::max(0, cursorColumn - 1);
+  } else if (im.KeyPress(RIGHT_ARROW_KEY)) {
+    cursorColumn = std::min(gridWidth - 1, cursorColumn + 1);
+  }
+  cursorPositionIndex = cursorRow * gridWidth + cursorColumn;
+  auto cursorPos = getGridPosition(cursorPositionIndex);
+  cursorGo->box.x = cursorPos.x;
+  cursorGo->box.y = cursorPos.y;
   UpdateArray(dt);
 }
 

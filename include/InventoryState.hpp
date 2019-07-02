@@ -46,6 +46,11 @@ class InventoryState : public State {
 
   // Gets the XY position to render an item
   Vec2 getGridPosition(int index);
+
+  std::shared_ptr<GameObject> cursorGo;
+
+  // Index of the item the cursor is on
+  int cursorPositionIndex;
 };
 
 #endif
