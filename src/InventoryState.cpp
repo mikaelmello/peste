@@ -82,6 +82,7 @@ void InventoryState::Update(float dt) {
 
   if (cursorIndex == Inventory) {
     auto cursorPos = getGridPosition(inventoryCursorIndex);
+    updateShowcase();
     cursorGo->box.x = cursorPos.x;
     cursorGo->box.y = cursorPos.y;
 
@@ -129,6 +130,40 @@ void InventoryState::Start() {
   LoadAssets();
   StartArray();
   started = true;
+}
+
+void InventoryState::updateShowcase() {
+  if (inventoryCursorIndex >= (int)GameData::PlayerInventory.size()) {
+    return;
+  }
+
+  auto item = GameData::PlayerInventory[inventoryCursorIndex];
+  auto spriteComponent = item->GetComponent(SpriteType);
+  if (!spriteComponent) {
+    printf("osh\n");
+    throw std::runtime_error("Item sem sprite!!");
+  }
+
+  auto item_sprite = std::dynamic_pointer_cast<Sprite>(spriteComponent);
+
+  if (!showcaseGo) {
+    showcaseGo = std::make_shared<GameObject>(1);
+    Sprite* showcaseSprite = new Sprite(*showcaseGo, item_sprite->GetFile());
+    showcaseGo->AddComponent(showcaseSprite);
+    showcaseSprite->SetDimensions(120, 270);
+    showcaseGo->box.SetCenter({90, 230});
+    objects.insert(showcaseGo);
+  } else {
+    auto spriteCpt = showcaseGo->GetComponent(SpriteType);
+    if (!spriteCpt) {
+      throw new std::runtime_error("Sem sprite no showcase oh no");
+    }
+
+    auto sprite = std::dynamic_pointer_cast<Sprite>(spriteCpt);
+    sprite->Open(item_sprite->GetFile());
+    sprite->SetDimensions(120, 270);
+    showcaseGo->box.SetCenter({115, 400});
+  }
 }
 
 void InventoryState::Pause() {}

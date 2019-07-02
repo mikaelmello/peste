@@ -29,6 +29,8 @@ class InventoryState : public State {
   void Render();
 
  private:
+  void updateShowcase();
+
   // Width of the inventory item
   int itemWidth;
 
@@ -57,6 +59,10 @@ class InventoryState : public State {
 
   // GameObject of the page, this way we can easily retrieve it
   std::shared_ptr<GameObject> pageGo;
+
+  // GameObject of the item sprite being showcased, this way we can easily
+  // retrieve it
+  std::shared_ptr<GameObject> showcaseGo;
 
   // Index of the inventory item the cursor is on
   int inventoryCursorIndex;
