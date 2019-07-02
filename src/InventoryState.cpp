@@ -4,7 +4,8 @@
 #include "Sprite.hpp"
 #include "Types.hpp"
 
-InventoryState::InventoryState() : cursorPositionIndex(0) {
+InventoryState::InventoryState()
+    : inventoryCursorIndex(0), cursorIndex(Inventory) {
   GameObject* background_go = new GameObject(-1);
   Sprite* background_sprite =
       new Sprite(*background_go, "assets/img/inventory/background.png");
@@ -17,6 +18,14 @@ InventoryState::InventoryState() : cursorPositionIndex(0) {
   gridWidth = 3;
   gridHeight = 3;
   initialPosition = {461, 234};
+
+  menuLength = 3;
+  menuItemPositions = {{200, 700}, {511, 700}, {820, 700}};
+  if (menuLength != menuItemPositions.size()) {
+    throw new std::runtime_error(
+        "Mano, tu acabou de setar o tamanho de um menu e nao colocou o mesmo "
+        "tanto de posiçoes, ta de sacanagem ne");
+  }
 
   int index = 0;
   for (auto item : GameData::PlayerInventory) {
@@ -63,22 +72,48 @@ void InventoryState::Update(float dt) {
   quitRequested |= im.QuitRequested();
   popRequested |= im.KeyPress(ESCAPE_KEY);
 
-  int cursorRow = cursorPositionIndex / gridWidth;
-  int cursorColumn = (cursorPositionIndex % gridWidth);
+  if (cursorIndex == Inventory) {
+    auto cursorPos = getGridPosition(inventoryCursorIndex);
+    cursorGo->box.x = cursorPos.x;
+    cursorGo->box.y = cursorPos.y;
 
-  if (im.KeyPress(UP_ARROW_KEY)) {
-    cursorRow = std::max(0, cursorRow - 1);
-  } else if (im.KeyPress(DOWN_ARROW_KEY)) {
-    cursorRow = std::min(gridHeight - 1, cursorRow + 1);
-  } else if (im.KeyPress(LEFT_ARROW_KEY)) {
-    cursorColumn = std::max(0, cursorColumn - 1);
-  } else if (im.KeyPress(RIGHT_ARROW_KEY)) {
-    cursorColumn = std::min(gridWidth - 1, cursorColumn + 1);
+    int cursorRow = inventoryCursorIndex / gridWidth;
+    int cursorColumn = (inventoryCursorIndex % gridWidth);
+    if (im.KeyPress(UP_ARROW_KEY)) {
+      cursorRow = std::max(0, cursorRow - 1);
+    } else if (im.KeyPress(DOWN_ARROW_KEY)) {
+      if (cursorRow == gridHeight - 1) {
+        cursorIndex = Menu;
+        menuCursorIndex = menuLength - 1;
+        if (cursorColumn == 0) {
+          menuCursorIndex--;
+        }
+      }
+      cursorRow = std::min(gridHeight - 1, cursorRow + 1);
+    } else if (im.KeyPress(LEFT_ARROW_KEY)) {
+      cursorColumn = std::max(0, cursorColumn - 1);
+    } else if (im.KeyPress(RIGHT_ARROW_KEY)) {
+      cursorColumn = std::min(gridWidth - 1, cursorColumn + 1);
+    }
+    inventoryCursorIndex = cursorRow * gridWidth + cursorColumn;
+  } else if (cursorIndex == Menu) {
+    Vec2 newPos = menuItemPositions[menuCursorIndex];
+    cursorGo->box.x = newPos.x;
+    cursorGo->box.y = newPos.y;
+
+    if (im.KeyPress(UP_ARROW_KEY)) {
+      cursorIndex = Inventory;
+      inventoryCursorIndex = (gridHeight - 1) * gridWidth;
+      if (menuCursorIndex == 2) {
+        inventoryCursorIndex += gridWidth - 1;
+      }
+    } else if (im.KeyPress(LEFT_ARROW_KEY)) {
+      menuCursorIndex = std::max(0, menuCursorIndex - 1);
+    } else if (im.KeyPress(RIGHT_ARROW_KEY)) {
+      menuCursorIndex = std::min(menuLength - 1, menuCursorIndex + 1);
+    }
   }
-  cursorPositionIndex = cursorRow * gridWidth + cursorColumn;
-  auto cursorPos = getGridPosition(cursorPositionIndex);
-  cursorGo->box.x = cursorPos.x;
-  cursorGo->box.y = cursorPos.y;
+
   UpdateArray(dt);
 }
 

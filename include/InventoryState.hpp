@@ -41,6 +41,11 @@ class InventoryState : public State {
   // Height of the inventory grid
   int gridHeight;
 
+  // Length of the menu row
+  int menuLength;
+
+  std::vector<Vec2> menuItemPositions;
+
   // position of the first item in the grid
   Vec2 initialPosition;
 
@@ -49,8 +54,18 @@ class InventoryState : public State {
 
   std::shared_ptr<GameObject> cursorGo;
 
-  // Index of the item the cursor is on
-  int cursorPositionIndex;
+  // Index of the inventory item the cursor is on
+  int inventoryCursorIndex;
+
+  // Index of the menu item the cursor is on
+  int menuCursorIndex;
+
+  enum CursorPosition {
+    Inventory,
+    Menu,
+  };
+
+  CursorPosition cursorIndex;
 };
 
 #endif
