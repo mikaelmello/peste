@@ -67,44 +67,44 @@ void MenuState::Pause() {}
 void MenuState::Resume() {}
 
 void MenuState::LoadAssets() {
-  auto cursor_go = new GameObject(10001);
+  auto cursor_go = std::make_shared<GameObject>(10001);
   Sprite* cursor_sprite = new Sprite(*cursor_go, MENU_CURSOR_SPRITE);
   cursor_go->AddComponent(cursor_sprite);
-  objects.emplace(cursor_go);
+  objects.insert(cursor_go);
 
-  GameObject* background_go = new GameObject();
+  auto background_go = std::make_shared<GameObject>();
   Sprite* background_sprite =
       new Sprite(*background_go, MENU_BACKGROUND_SPRITE);
   background_go->AddComponent(background_sprite);
-  objects.emplace(background_go);
+  objects.insert(background_go);
 
-  GameObject* play_button_go = new GameObject();
+  auto play_button_go = std::make_shared<GameObject>();
   Sprite* play_button_sprite =
       new Sprite(*play_button_go, MENU_PLAY_BUTTON_SPRITE);
   play_button_go->AddComponent(play_button_sprite);
-  buttons.emplace_back(play_button_go);
-  objects.emplace(play_button_go);
+  buttons.push_back(play_button_go);
+  objects.insert(play_button_go);
 
-  GameObject* tutorial_button_go = new GameObject();
+  auto tutorial_button_go = std::make_shared<GameObject>();
   Sprite* tutorial_button_sprite =
       new Sprite(*tutorial_button_go, MENU_TUTORIAL_BUTTON_SPRITE);
   tutorial_button_go->AddComponent(tutorial_button_sprite);
-  buttons.emplace_back(tutorial_button_go);
-  objects.emplace(tutorial_button_go);
+  buttons.push_back(tutorial_button_go);
+  objects.insert(tutorial_button_go);
 
-  GameObject* credits_button_go = new GameObject();
+  auto credits_button_go = std::make_shared<GameObject>();
   Sprite* credits_button_sprite =
       new Sprite(*credits_button_go, MENU_CREDITS_BUTTON_SPRITE);
   credits_button_go->AddComponent(credits_button_sprite);
-  buttons.emplace_back(credits_button_go);
-  objects.emplace(credits_button_go);
+  buttons.push_back(credits_button_go);
+  objects.insert(credits_button_go);
 
-  GameObject* quit_button_go = new GameObject();
+  auto quit_button_go = std::make_shared<GameObject>();
   Sprite* quit_button_sprite =
       new Sprite(*quit_button_go, MENU_QUIT_BUTTON_SPRITE);
   quit_button_go->AddComponent(quit_button_sprite);
-  buttons.emplace_back(quit_button_go);
-  objects.emplace(quit_button_go);
+  buttons.push_back(quit_button_go);
+  objects.insert(quit_button_go);
 
   for (int i = 0; i < (int)buttons.size(); i++) {
     buttons[i]->box =
