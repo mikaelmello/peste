@@ -128,6 +128,7 @@ void InventoryState::Update(float dt) {
 
 void InventoryState::Start() {
   LoadAssets();
+  SortObjects();
   StartArray();
   started = true;
 }
@@ -153,6 +154,7 @@ void InventoryState::updateShowcase() {
     showcaseSprite->SetDimensions(120, 270);
     showcaseGo->box.SetCenter({90, 230});
     objects.push_back(showcaseGo);
+    SortObjects();
   } else {
     auto spriteCpt = showcaseGo->GetComponent(SpriteType);
     if (!spriteCpt) {
