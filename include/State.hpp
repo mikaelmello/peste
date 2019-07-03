@@ -44,6 +44,8 @@ class State {
 
   bool PopRequested() const;
 
+  void SortObjects();
+
  protected:
   void StartArray();
 
@@ -64,7 +66,7 @@ class State {
     }
   };
 
-  std::multiset<std::shared_ptr<GameObject>, GameObjectComp> objects;
+  std::vector<std::shared_ptr<GameObject>> objects;
   std::queue<std::shared_ptr<GameObject>> enqueuedObjects;
 };
 

@@ -31,7 +31,7 @@ void TutorialState::LoadAssets() {
   Sprite* background_sprite =
       new Sprite(*background_tutorial, TUTORIAL_BACKGROUND_SPRITE);
   background_tutorial->AddComponent(background_sprite);
-  objects.emplace(background_tutorial);
+  objects.emplace_back(background_tutorial);
 }
 
 void TutorialState::Render() { RenderArray(); }

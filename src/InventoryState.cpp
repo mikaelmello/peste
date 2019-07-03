@@ -10,7 +10,7 @@ InventoryState::InventoryState()
   Sprite* background_sprite =
       new Sprite(*background_go, "assets/img/inventory/background.png");
   background_go->AddComponent(background_sprite);
-  objects.emplace(background_go);
+  objects.emplace_back(background_go);
 
   // based on the image loaded above
   itemWidth = 158;
@@ -39,14 +39,14 @@ InventoryState::InventoryState()
     auto position = getGridPosition(index);
     item->box.SetCenter(position);
     item->ReverseDelete();
-    objects.insert(item);
+    objects.push_back(item);
     index += 1;
   }
 
   cursorGo = std::make_shared<GameObject>(5);
   Sprite* cursor_sprite = new Sprite(*cursorGo, "assets/img/menu/cursor.png");
   cursorGo->AddComponent(cursor_sprite);
-  objects.insert(cursorGo);
+  objects.push_back(cursorGo);
 }
 
 Vec2 InventoryState::getGridPosition(int index) {

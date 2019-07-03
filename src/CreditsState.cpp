@@ -30,7 +30,7 @@ void CreditsState::LoadAssets() {
   Sprite* background_sprite =
       new Sprite(*background_go, CREDIT_BACKGROUND_SPRITE);
   background_go->AddComponent(background_sprite);
-  objects.emplace(background_go);
+  objects.emplace_back(background_go);
 }
 
 void CreditsState::Render() { RenderArray(); }

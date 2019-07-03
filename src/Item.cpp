@@ -51,6 +51,11 @@ void Item::NotifyCollision(std::shared_ptr<GameObject> other) {
   auto playerComponent = other->GetComponent(PlayerType);
   if (playerComponent) {
     colliding = true;
+    if (other->box.y + other->box.h < associated.box.y + associated.box.h) {
+      associated.SetPriority(other->priority + 1);
+    } else {
+      associated.SetPriority(other->priority - 1);
+    }
   }
 }
 

@@ -70,46 +70,48 @@ void MenuState::LoadAssets() {
   auto cursor_go = std::make_shared<GameObject>(10001);
   Sprite* cursor_sprite = new Sprite(*cursor_go, MENU_CURSOR_SPRITE);
   cursor_go->AddComponent(cursor_sprite);
-  objects.insert(cursor_go);
+  objects.push_back(cursor_go);
 
   auto background_go = std::make_shared<GameObject>();
   Sprite* background_sprite =
       new Sprite(*background_go, MENU_BACKGROUND_SPRITE);
   background_go->AddComponent(background_sprite);
-  objects.insert(background_go);
+  objects.push_back(background_go);
 
   auto play_button_go = std::make_shared<GameObject>();
   Sprite* play_button_sprite =
       new Sprite(*play_button_go, MENU_PLAY_BUTTON_SPRITE);
   play_button_go->AddComponent(play_button_sprite);
   buttons.push_back(play_button_go);
-  objects.insert(play_button_go);
+  objects.push_back(play_button_go);
 
   auto tutorial_button_go = std::make_shared<GameObject>();
   Sprite* tutorial_button_sprite =
       new Sprite(*tutorial_button_go, MENU_TUTORIAL_BUTTON_SPRITE);
   tutorial_button_go->AddComponent(tutorial_button_sprite);
   buttons.push_back(tutorial_button_go);
-  objects.insert(tutorial_button_go);
+  objects.push_back(tutorial_button_go);
 
   auto credits_button_go = std::make_shared<GameObject>();
   Sprite* credits_button_sprite =
       new Sprite(*credits_button_go, MENU_CREDITS_BUTTON_SPRITE);
   credits_button_go->AddComponent(credits_button_sprite);
   buttons.push_back(credits_button_go);
-  objects.insert(credits_button_go);
+  objects.push_back(credits_button_go);
 
   auto quit_button_go = std::make_shared<GameObject>();
   Sprite* quit_button_sprite =
       new Sprite(*quit_button_go, MENU_QUIT_BUTTON_SPRITE);
   quit_button_go->AddComponent(quit_button_sprite);
   buttons.push_back(quit_button_go);
-  objects.insert(quit_button_go);
+  objects.push_back(quit_button_go);
 
   for (int i = 0; i < (int)buttons.size(); i++) {
     buttons[i]->box =
         buttons[i]->box.GetCentered(position + Vec2(0, i * buttons[i]->box.h));
   }
+
+  SortObjects();
 
   options = std::make_shared<Options>(Options(*cursor_go, buttons));
 }

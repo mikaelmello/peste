@@ -44,19 +44,19 @@ void EnemyState::LoadAssets() {
   Sprite* bckgSprite = new Sprite(*bckgGo, "assets/img/black.jpg");
   bckgGo->AddComponent(new CameraFollower(*bckgGo));
   bckgGo->AddComponent(bckgSprite);
-  objects.emplace(bckgGo);
+  objects.emplace_back(bckgGo);
 
   GameObject* mapGo = new GameObject(5);
   currentTileMap = new TileMap(*mapGo, "assets/map/map.json");
   currentTileMap->SetParallax(1, 0, 0);
   mapGo->AddComponent(currentTileMap);
-  objects.emplace(mapGo);
+  objects.emplace_back(mapGo);
 
   GameObject* antagonist_go = new GameObject(5);
   Antagonist* antagonist =
       new Antagonist(*antagonist_go, currentTileMap->GetInitialPosition());
   antagonist_go->AddComponent(antagonist);
-  objects.emplace(antagonist_go);
+  objects.emplace_back(antagonist_go);
 
   Camera::Follow(antagonist_go);
 }

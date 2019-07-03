@@ -21,13 +21,13 @@ RoomState::RoomState() {
   Sprite* bckgSprite = new Sprite(*bckgGo, "assets/img/black.jpg");
   bckgGo->AddComponent(new CameraFollower(*bckgGo, {512, 334}));
   bckgGo->AddComponent(bckgSprite);
-  objects.emplace(bckgGo);
+  objects.emplace_back(bckgGo);
 
   GameObject* mapGo = new GameObject(5);
   currentTileMap = new TileMap(*mapGo, "assets/map/map.json");
   currentTileMap->SetParallax(1, 0, 0);
   mapGo->AddComponent(currentTileMap);
-  objects.emplace(mapGo);
+  objects.emplace_back(mapGo);
 }
 
 RoomState::~RoomState() {
@@ -108,20 +108,20 @@ void RoomState::LoadAssets() {
   GameObject* playerGo = new GameObject(6);
   Player* player = new Player(*playerGo, currentTileMap->GetInitialPosition());
   playerGo->AddComponent(player);
-  objects.emplace(playerGo);
+  objects.emplace_back(playerGo);
   GameData::PlayerGameObject = playerGo;
 
   // GameObject* antagonist_go = new GameObject(5);
   // Antagonist* antagonist =
   //     new Antagonist(*antagonist_go, currentTileMap->GetInitialPosition());
   // antagonist_go->AddComponent(antagonist);
-  // objects.emplace(antagonist_go);
+  // objects.emplace_back(antagonist_go);
 
   GameObject* door_go = new GameObject(5);
   Vec2 door_pos = currentTileMap->GetInitialPosition() + Vec2(8, 8);
   Door* door = new Door(*door_go, Helpers::Direction::LEFT, door_pos, false);
   door_go->AddComponent(door);
-  objects.emplace(door_go);
+  objects.emplace_back(door_go);
 
   Camera::Follow(playerGo);
 
@@ -129,7 +129,9 @@ void RoomState::LoadAssets() {
   Item* lamp = new Item(*lampGo, "Lamp", "A lamp", "assets/img/item/lamp.png",
                         currentTileMap->GetInitialPosition() - Vec2(3, 3));
   lampGo->AddComponent(lamp);
-  objects.emplace(lampGo);
+  objects.emplace_back(lampGo);
+
+  SortObjects();
 }
 
 void RoomState::Render() { RenderArray(); }

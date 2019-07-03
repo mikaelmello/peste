@@ -57,9 +57,14 @@ void State::StartArray() {
 }
 
 void State::UpdateArray(float dt) {
+  bool hasObject = !enqueuedObjects.empty();
   while (!enqueuedObjects.empty()) {
-    objects.insert(enqueuedObjects.front());
+    objects.push_back(enqueuedObjects.front());
     enqueuedObjects.pop();
+  }
+
+  if (hasObject) {
+    SortObjects();
   }
 
   std::for_each(objects.begin(), objects.end(),
@@ -71,3 +76,7 @@ void State::RenderArray() {
 }
 
 TileMap* State::GetCurrentTileMap() { return currentTileMap; }
+
+void State::SortObjects() {
+  sort(objects.begin(), objects.end(), GameObjectComp());
+}

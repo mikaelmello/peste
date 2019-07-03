@@ -12,6 +12,8 @@
 #include "Rect.hpp"
 #include "Types.hpp"
 
+class State;
+
 class GameObject {
  public:
   GameObject(double priority = 1000);
@@ -41,6 +43,8 @@ class GameObject {
   inline void ToggleRender() { render = !render; }
 
   std::shared_ptr<Component> GetComponent(Types type);
+
+  void SetPriority(double newPriority);
 
   Rect box;
 
