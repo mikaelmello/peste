@@ -105,7 +105,7 @@ void RoomState::Pause() {
 void RoomState::Resume() { Camera::Follow(GameData::PlayerGameObject); }
 
 void RoomState::LoadAssets() {
-  GameObject* playerGo = new GameObject(6);
+  GameObject* playerGo = new GameObject(7);
   Player* player = new Player(*playerGo, currentTileMap->GetInitialPosition());
   playerGo->AddComponent(player);
   objects.emplace_back(playerGo);
@@ -117,7 +117,7 @@ void RoomState::LoadAssets() {
   // antagonist_go->AddComponent(antagonist);
   // objects.emplace_back(antagonist_go);
 
-  GameObject* door_go = new GameObject(5);
+  GameObject* door_go = new GameObject(6);
   Vec2 door_pos = currentTileMap->GetInitialPosition() + Vec2(8, 8);
   Door* door = new Door(*door_go, Helpers::Direction::LEFT, door_pos, false);
   door_go->AddComponent(door);
@@ -125,7 +125,7 @@ void RoomState::LoadAssets() {
 
   Camera::Follow(playerGo);
 
-  GameObject* lampGo = new GameObject(5);
+  GameObject* lampGo = new GameObject(6);
   Item* lamp = new Item(*lampGo, "Lamp", "A lamp", "assets/img/item/lamp.png",
                         currentTileMap->GetInitialPosition() - Vec2(3, 3));
   lampGo->AddComponent(lamp);
