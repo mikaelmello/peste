@@ -22,7 +22,7 @@ RoomState::RoomState() {
   objects.emplace(bckgGo);
 
   GameObject* mapGo = new GameObject(5);
-  currentTileMap = new TileMap(*mapGo, "assets/map/map.json");
+  currentTileMap = new TileMap(*mapGo, "assets/map/mapa_test.json");
   currentTileMap->SetParallax(1, 0, 0);
   mapGo->AddComponent(currentTileMap);
   objects.emplace(mapGo);
@@ -109,13 +109,13 @@ void RoomState::LoadAssets() {
   objects.emplace(playerGo);
   GameData::PlayerGameObject = playerGo;
 
-  GameObject* antagonist_go = new GameObject(5);
+  /*GameObject* antagonist_go = new GameObject(5);
   Antagonist* antagonist =
       new Antagonist(*antagonist_go, currentTileMap->GetInitialPosition());
   antagonist_go->AddComponent(antagonist);
-  objects.emplace(antagonist_go);
+  objects.emplace(antagonist_go);*/
 
-  Camera::Follow(playerGo);
+  // Camera::Follow(playerGo);
 
   GameObject* lampGo = new GameObject(5);
   Item* lamp = new Item(*lampGo, "Lamp", "A lamp", "assets/img/item/lamp.png",

@@ -53,6 +53,10 @@ class Sprite : public Component {
 
   Vec2 GetScale();
 
+  float GetFrameTime() const;
+
+  int GetFrameCount() const;
+
   const Types Type = SpriteType;
 
  private:

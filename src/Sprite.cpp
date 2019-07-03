@@ -136,3 +136,7 @@ void Sprite::SetMaxDimensions(int maxHeight, int maxWidth) {
   double minScale = std::min(xScale, yScale);
   SetScaleX(minScale, minScale);
 }
+
+float Sprite::GetFrameTime() const { return frameTime; }
+
+int Sprite::GetFrameCount() const { return frameCount; }

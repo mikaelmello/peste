@@ -26,7 +26,13 @@ Antagonist::Antagonist(GameObject& associated, Vec2 position)
 
 Antagonist::~Antagonist() { delete stored_state; }
 
-void Antagonist::NotifyCollision(std::shared_ptr<GameObject> other) {}
+void Antagonist::NotifyCollision(std::shared_ptr<GameObject> other) {
+  auto player_cpt = other->GetComponent(Types::PlayerType);
+  if (player_cpt && (last_action != Helpers::Action::ATTACKING)) {
+    printf("Push no ataque!\n");
+    // Push(new AttackFSM(associated));
+  }
+}
 
 void Antagonist::Start() {
   last_action = Helpers::Action::IDLE;
