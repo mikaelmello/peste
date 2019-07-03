@@ -29,6 +29,8 @@ class InventoryState : public State {
   void Render();
 
  private:
+  void updateShowcase();
+
   // Width of the inventory item
   int itemWidth;
 
@@ -52,7 +54,15 @@ class InventoryState : public State {
   // Gets the XY position to render an item
   Vec2 getGridPosition(int index);
 
+  // GameObject of the cursor, this way we can easily retrieve it
   std::shared_ptr<GameObject> cursorGo;
+
+  // GameObject of the page, this way we can easily retrieve it
+  std::shared_ptr<GameObject> pageGo;
+
+  // GameObject of the item sprite being showcased, this way we can easily
+  // retrieve it
+  std::shared_ptr<GameObject> showcaseGo;
 
   // Index of the inventory item the cursor is on
   int inventoryCursorIndex;
@@ -60,12 +70,13 @@ class InventoryState : public State {
   // Index of the menu item the cursor is on
   int menuCursorIndex;
 
-  enum CursorPosition {
-    Inventory,
-    Menu,
-  };
+  enum CursorPosition { Inventory, Menu };
+
+  enum Page { Items, Clues };
 
   CursorPosition cursorIndex;
+
+  Page page;
 };
 
 #endif

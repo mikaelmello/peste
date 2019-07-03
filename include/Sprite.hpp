@@ -53,10 +53,13 @@ class Sprite : public Component {
 
   Vec2 GetScale();
 
+  std::string GetFile();
+
   const Types Type = SpriteType;
 
  private:
   std::shared_ptr<SDL_Texture> texture;
+  std::string file;
   int width;
   int height;
   int frameCount;

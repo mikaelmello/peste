@@ -5,7 +5,7 @@
 #include "Types.hpp"
 
 InventoryState::InventoryState()
-    : inventoryCursorIndex(0), cursorIndex(Inventory) {
+    : inventoryCursorIndex(0), cursorIndex(Inventory), page(Items) {
   GameObject* background_go = new GameObject(-1);
   Sprite* background_sprite =
       new Sprite(*background_go, "assets/img/inventory/background.png");
@@ -47,6 +47,14 @@ InventoryState::InventoryState()
   Sprite* cursor_sprite = new Sprite(*cursorGo, "assets/img/menu/cursor.png");
   cursorGo->AddComponent(cursor_sprite);
   objects.push_back(cursorGo);
+
+  pageGo = std::make_shared<GameObject>(0);
+  auto sprite_path = (page == Items) ? "assets/img/inventory/items.png"
+                                     : "assets/img/inventory/clues.png";
+  Sprite* page_sprite = new Sprite(*pageGo, sprite_path);
+  pageGo->AddComponent(page_sprite);
+  pageGo->box.SetCenter(512, 380);
+  objects.push_back(pageGo);
 }
 
 Vec2 InventoryState::getGridPosition(int index) {
@@ -74,6 +82,7 @@ void InventoryState::Update(float dt) {
 
   if (cursorIndex == Inventory) {
     auto cursorPos = getGridPosition(inventoryCursorIndex);
+    updateShowcase();
     cursorGo->box.x = cursorPos.x;
     cursorGo->box.y = cursorPos.y;
 
@@ -121,6 +130,40 @@ void InventoryState::Start() {
   LoadAssets();
   StartArray();
   started = true;
+}
+
+void InventoryState::updateShowcase() {
+  if (inventoryCursorIndex >= (int)GameData::PlayerInventory.size()) {
+    return;
+  }
+
+  auto item = GameData::PlayerInventory[inventoryCursorIndex];
+  auto spriteComponent = item->GetComponent(SpriteType);
+  if (!spriteComponent) {
+    printf("osh\n");
+    throw std::runtime_error("Item sem sprite!!");
+  }
+
+  auto item_sprite = std::dynamic_pointer_cast<Sprite>(spriteComponent);
+
+  if (!showcaseGo) {
+    showcaseGo = std::make_shared<GameObject>(1);
+    Sprite* showcaseSprite = new Sprite(*showcaseGo, item_sprite->GetFile());
+    showcaseGo->AddComponent(showcaseSprite);
+    showcaseSprite->SetDimensions(120, 270);
+    showcaseGo->box.SetCenter({90, 230});
+    objects.push_back(showcaseGo);
+  } else {
+    auto spriteCpt = showcaseGo->GetComponent(SpriteType);
+    if (!spriteCpt) {
+      throw new std::runtime_error("Sem sprite no showcase oh no");
+    }
+
+    auto sprite = std::dynamic_pointer_cast<Sprite>(spriteCpt);
+    sprite->Open(item_sprite->GetFile());
+    sprite->SetDimensions(120, 270);
+    showcaseGo->box.SetCenter({115, 400});
+  }
 }
 
 void InventoryState::Pause() {}

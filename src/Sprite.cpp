@@ -30,6 +30,7 @@ Sprite::Sprite(GameObject& associated, const std::string& file, int frameCount,
 Sprite::~Sprite() {}
 
 void Sprite::Open(const std::string& file) {
+  this->file = file;
   texture = Resources::GetImage(file);
   int return_code =
       SDL_QueryTexture(texture.get(), nullptr, nullptr, &width, &height);
@@ -85,6 +86,8 @@ int Sprite::GetWidth() const { return round(scale.x * (width / frameCount)); }
 int Sprite::GetHeight() const { return round(scale.y * height); }
 
 bool Sprite::IsOpen() const { return (bool)texture; }
+
+std::string Sprite::GetFile() { return this->file; }
 
 void Sprite::SetScaleX(float scaleX, float scaleY) {
   Vec2 oldCenter = associated.box.Center();
