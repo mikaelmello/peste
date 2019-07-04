@@ -21,19 +21,11 @@ using namespace Helpers;
 #define PLAYER_BACK_ANIM "assets/img/hope/back_anim.png"
 #define PLAYER_LEFT_ANIM "assets/img/hope/left_anim.png"
 #define PLAYER_RIGHT_ANIM "assets/img/hope/right_anim.png"
-#define PLAYER_UPLEFT_ANIM "assets/img/hope/back_anim.png"
-#define PLAYER_DOWNLEFT_ANIM "assets/img/hope/back_anim.png"
-#define PLAYER_UPRIGHT_ANIM "assets/img/hope/back_anim.png"
-#define PLAYER_DOWNRIGHT_ANIM "assets/img/hope/back_anim.png"
 
 #define PLAYER_FRONT "assets/img/hope/front.png"
 #define PLAYER_BACK "assets/img/hope/back.png"
 #define PLAYER_LEFT "assets/img/hope/left.png"
 #define PLAYER_RIGHT "assets/img/hope/right.png"
-#define PLAYER_UPLEFT "assets/img/hope/leftup.png"
-#define PLAYER_UPRIGHT "assets/img/hope/rightup.png"
-#define PLAYER_DOWNLEFT "assets/img/hope/leftdown.png"
-#define PLAYER_DOWNRIGHT "assets/img/hope/rightdown.png"
 
 Player::Player(GameObject& associated, Vec2 position)
     : Component(associated),
@@ -206,16 +198,16 @@ void Player::OpenIdleSprite(const std::shared_ptr<Sprite>& sprite,
       sprite->Open(PLAYER_RIGHT);
       break;
     case Direction::UPLEFT:
-      sprite->Open(PLAYER_UPLEFT);
+      sprite->Open(PLAYER_BACK);
       break;
     case Direction::UPRIGHT:
-      sprite->Open(PLAYER_UPRIGHT);
+      sprite->Open(PLAYER_BACK);
       break;
     case Direction::DOWNLEFT:
-      sprite->Open(PLAYER_DOWNLEFT);
+      sprite->Open(PLAYER_FRONT);
       break;
     case Direction::DOWNRIGHT:
-      sprite->Open(PLAYER_DOWNRIGHT);
+      sprite->Open(PLAYER_FRONT);
       break;
     case Direction::NONE:
       sprite->Open(PLAYER_FRONT);
@@ -243,19 +235,19 @@ void Player::OpenWalkingSprite(const std::shared_ptr<Sprite>& sprite,
       sprite->SetFrameCount(8);
       break;
     case Direction::UPLEFT:
-      sprite->Open(PLAYER_UPLEFT_ANIM);
+      sprite->Open(PLAYER_BACK_ANIM);
       sprite->SetFrameCount(5);
       break;
     case Direction::UPRIGHT:
-      sprite->Open(PLAYER_UPRIGHT_ANIM);
+      sprite->Open(PLAYER_BACK_ANIM);
       sprite->SetFrameCount(5);
       break;
     case Direction::DOWNLEFT:
-      sprite->Open(PLAYER_DOWNLEFT_ANIM);
+      sprite->Open(PLAYER_FRONT_ANIM);
       sprite->SetFrameCount(5);
       break;
     case Direction::DOWNRIGHT:
-      sprite->Open(PLAYER_DOWNRIGHT_ANIM);
+      sprite->Open(PLAYER_FRONT_ANIM);
       sprite->SetFrameCount(5);
       break;
     default:
