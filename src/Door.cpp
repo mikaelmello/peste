@@ -16,7 +16,7 @@
 
 Door::Door(GameObject& associated, Helpers::Direction direction, Vec2 position,
            bool open)
-    : Component(associated), position(position), open(open) {
+    : Component(associated), position(position), open(open), colliding(false) {
   Collider* collider = new Collider(associated);
   Sprite* sprite = new Sprite(associated);
 
@@ -25,11 +25,11 @@ Door::Door(GameObject& associated, Helpers::Direction direction, Vec2 position,
   associated.box.w = sprite->GetWidth();
   associated.box.h = sprite->GetHeight();
 
-  if (direction == Helpers::Direction::RIGHT) {
+  if (direction == Helpers::Direction::LEFT) {
     sprite->Open(LEFT_DOOR);
-    collider->SetScale({2, 1.5});
+    collider->SetScale({4, 1.5});
     collider->SetOffset({1, 0.75});
-  } else if (direction == Helpers::Direction::LEFT) {
+  } else if (direction == Helpers::Direction::RIGHT) {
     sprite->Open(RIGHT_DOOR);
     collider->SetScale({4, 1.5});
     collider->SetOffset({2, 0.75});

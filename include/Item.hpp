@@ -48,6 +48,7 @@ class Item : public Component {
   bool colliding;
 
   std::shared_ptr<GameObject> pickupItemGo;
+  std::shared_ptr<GameObject> priorityChangerGo;
 };
 
 #endif

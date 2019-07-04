@@ -19,6 +19,7 @@ enum Types {
   ActionMessageType,
   BlockerType,
   DoorType,
+  PriorityChangerType,
 };
 
 #endif

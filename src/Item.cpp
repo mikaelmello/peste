@@ -10,6 +10,7 @@
 #include "GameObject.hpp"
 #include "InputManager.hpp"
 #include "Player.hpp"
+#include "PriorityChanger.hpp"
 #include "RoomState.hpp"
 #include "Sprite.hpp"
 #include "TileMap.hpp"
@@ -41,8 +42,14 @@ Item::Item(GameObject& associated, const std::string& name,
       new ActionMessage(*pickupGo, position, "assets/img/x.png");
   pickupGo->AddComponent(pickup);
 
+  GameObject* pcGo = new GameObject(associated.priority);
+  pcGo->box = associated.box;
+  PriorityChanger* priChanger = new PriorityChanger(*pcGo, associated);
+  pcGo->AddComponent(priChanger);
+
   State& state = Game::GetInstance().GetCurrentState();
   pickupItemGo = state.AddObject(pickupGo);
+  priorityChangerGo = state.AddObject(pcGo);
 }
 
 Item::~Item() {}
@@ -51,11 +58,6 @@ void Item::NotifyCollision(std::shared_ptr<GameObject> other) {
   auto playerComponent = other->GetComponent(PlayerType);
   if (playerComponent) {
     colliding = true;
-    if (other->box.y + other->box.h < associated.box.y + associated.box.h) {
-      associated.SetPriority(other->priority + 1);
-    } else {
-      associated.SetPriority(other->priority - 1);
-    }
   }
 }
 
@@ -72,7 +74,10 @@ void Item::Render() {
   colliding = false;
 }
 
-void Item::Pickup() { pickupItemGo->RequestDelete(); }
+void Item::Pickup() {
+  pickupItemGo->RequestDelete();
+  priorityChangerGo->RequestDelete();
+}
 
 void Item::HidePickupDialog() { pickupItemGo->DisableRender(); }
 
