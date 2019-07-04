@@ -31,6 +31,8 @@ class InventoryState : public State {
  private:
   void updateShowcase();
 
+  void createShowcase(std::shared_ptr<GameObject> item);
+
   // Width of the inventory item
   int itemWidth;
 

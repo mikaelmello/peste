@@ -22,13 +22,19 @@ InventoryState::InventoryState()
   menuLength = 3;
   menuItemPositions = {{200, 700}, {511, 700}, {820, 700}};
   if (menuLength != menuItemPositions.size()) {
-    throw new std::runtime_error(
+    throw std::runtime_error(
         "Mano, tu acabou de setar o tamanho de um menu e nao colocou o mesmo "
         "tanto de posiçoes, ta de sacanagem ne");
   }
 
   int index = 0;
+  bool showcaseCreated = false;
   for (auto item : GameData::PlayerInventory) {
+    if (!showcaseCreated) {
+      createShowcase(item);
+      showcaseCreated = true;
+    }
+
     auto spriteComponent = item->GetComponent(SpriteType);
     if (!spriteComponent) {
       throw std::runtime_error("Item sem sprite!!");
@@ -43,7 +49,7 @@ InventoryState::InventoryState()
     index += 1;
   }
 
-  cursorGo = std::make_shared<GameObject>(5);
+  cursorGo = std::make_shared<GameObject>(5000);
   Sprite* cursor_sprite = new Sprite(*cursorGo, "assets/img/menu/cursor.png");
   cursorGo->AddComponent(cursor_sprite);
   objects.push_back(cursorGo);
@@ -133,9 +139,34 @@ void InventoryState::Start() {
   started = true;
 }
 
+void InventoryState::createShowcase(std::shared_ptr<GameObject> item) {
+  if (showcaseGo) {
+    throw std::runtime_error("Tentando criar showcase ja criado!");
+  }
+
+  auto spriteComponent = item->GetComponent(SpriteType);
+  if (!spriteComponent) {
+    throw std::runtime_error("Item sem sprite na criacao do showcase!!");
+  }
+
+  auto item_sprite = std::dynamic_pointer_cast<Sprite>(spriteComponent);
+
+  showcaseGo = std::make_shared<GameObject>(1);
+  Sprite* showcaseSprite = new Sprite(*showcaseGo, item_sprite->GetFile());
+  showcaseGo->AddComponent(showcaseSprite);
+  showcaseSprite->SetDimensions(120, 270);
+  showcaseGo->box.SetCenter({90, 230});
+  objects.push_back(showcaseGo);
+  SortObjects();
+}
+
 void InventoryState::updateShowcase() {
   if (inventoryCursorIndex >= (int)GameData::PlayerInventory.size()) {
     return;
+  }
+
+  if (!showcaseGo) {
+    throw std::runtime_error("mermao, tu ainda nao criou o showcase");
   }
 
   auto item = GameData::PlayerInventory[inventoryCursorIndex];
@@ -147,25 +178,15 @@ void InventoryState::updateShowcase() {
 
   auto item_sprite = std::dynamic_pointer_cast<Sprite>(spriteComponent);
 
-  if (!showcaseGo) {
-    showcaseGo = std::make_shared<GameObject>(1);
-    Sprite* showcaseSprite = new Sprite(*showcaseGo, item_sprite->GetFile());
-    showcaseGo->AddComponent(showcaseSprite);
-    showcaseSprite->SetDimensions(120, 270);
-    showcaseGo->box.SetCenter({90, 230});
-    objects.push_back(showcaseGo);
-    SortObjects();
-  } else {
-    auto spriteCpt = showcaseGo->GetComponent(SpriteType);
-    if (!spriteCpt) {
-      throw new std::runtime_error("Sem sprite no showcase oh no");
-    }
-
-    auto sprite = std::dynamic_pointer_cast<Sprite>(spriteCpt);
-    sprite->Open(item_sprite->GetFile());
-    sprite->SetDimensions(120, 270);
-    showcaseGo->box.SetCenter({115, 400});
+  auto spriteCpt = showcaseGo->GetComponent(SpriteType);
+  if (!spriteCpt) {
+    throw std::runtime_error("Sem sprite no showcase oh no");
   }
+
+  auto sprite = std::dynamic_pointer_cast<Sprite>(spriteCpt);
+  sprite->Open(item_sprite->GetFile());
+  sprite->SetDimensions(120, 270);
+  showcaseGo->box.SetCenter({115, 400});
 }
 
 void InventoryState::Pause() {}

@@ -10,7 +10,7 @@ std::vector<std::shared_ptr<GameObject>> GameData::PlayerInventory;
 void GameData::AddToInventory(std::shared_ptr<GameObject> item) {
   auto item_type_cpt = item->GetComponent(ItemType);
   if (!item_type_cpt) {
-    throw new std::invalid_argument(
+    throw std::invalid_argument(
         "Trying to add game object without an item component in the inventory");
   }
 
