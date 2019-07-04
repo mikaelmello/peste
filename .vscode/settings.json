@@ -64,6 +64,9 @@
     },
     "C_Cpp.clang_format_fallbackStyle": "Google",
     "editor.formatOnSave": true,
+    "[json]": {
+        "editor.formatOnSave": false,
+    },
     "C_Cpp.default.includePath": [
         "${workspaceFolder}/include"
     ],
