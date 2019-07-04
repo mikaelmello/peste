@@ -25,9 +25,11 @@ class PursuitFSM : public IFSM {
   void Update(float dt);
 
  private:
-  std::pair<int, std::vector<Vec2>> path;
+  unsigned stack_original_size;
 
   std::unique_ptr<Pathfinder::Astar> pf;
+
+  Vec2 initial;
 
   Timer timer;
 };

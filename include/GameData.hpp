@@ -14,6 +14,8 @@ class GameData {
   static GameObject* PlayerGameObject;
   static std::vector<std::shared_ptr<GameObject>> PlayerInventory;
 
+  static bool player_was_hit;
+
   static void AddToInventory(std::shared_ptr<GameObject> item);
 };
 

@@ -10,8 +10,6 @@
 #include "SuspectFSM.hpp"
 #include "Types.hpp"
 
-std::stack<std::pair<int, std::vector<Vec2>>> PatrolFSM::patrol_paths;
-
 PatrolFSM::PatrolFSM(GameObject& object) : IFSM(object) {
   Game& game = Game::GetInstance();
   State& state = game.GetCurrentState();
@@ -50,7 +48,7 @@ void PatrolFSM::OnStateEnter() {
   State& state = game.GetCurrentState();
   auto tilemap = state.GetCurrentTileMap();
 
-  if (patrol_paths.empty()) {
+  if (Antagonist::paths.empty()) {
     auto ant = object.GetComponent(Types::AntagonistType);
     if (!ant) {
       throw std::runtime_error("No antagonist component in antagonist_go");
@@ -62,9 +60,9 @@ void PatrolFSM::OnStateEnter() {
     Pathfinder::Astar pf = Pathfinder::Astar(object, tilemap);
     auto return_path = pf.Run(current, initial);
 
-    patrol_paths = paths;
+    Antagonist::paths = paths;
     if (return_path.size() > 0) {
-      patrol_paths.emplace(0, return_path);
+      Antagonist::paths.emplace(0, return_path);
     }
   }
 }
@@ -76,11 +74,11 @@ void PatrolFSM::OnStateExecution() {
         "Nao tem antagonista no objeto passado para a PatrolFSM");
   }
 
-  if (!patrol_paths.empty()) {
+  if (!Antagonist::paths.empty()) {
     auto ant = std::dynamic_pointer_cast<Antagonist>(antCpt);
 
-    int& k = patrol_paths.top().first;
-    std::vector<Vec2>& top = patrol_paths.top().second;
+    unsigned& k = Antagonist::paths.top().first;
+    std::vector<Vec2>& top = Antagonist::paths.top().second;
 
     ant->position = top[k];
     k++;
@@ -111,9 +109,10 @@ void PatrolFSM::Update(float dt) {
   OnStateEnter();
 
   bool enter = false;
-  while (!patrol_paths.empty() &&
-         (patrol_paths.top().first == patrol_paths.top().second.size())) {
-    patrol_paths.pop();
+  while (!Antagonist::paths.empty() &&
+         (Antagonist::paths.top().first ==
+          Antagonist::paths.top().second.size())) {
+    Antagonist::paths.pop();
     enter = true;
   }
 
@@ -121,7 +120,7 @@ void PatrolFSM::Update(float dt) {
     ant->Push(new IdleFSM(object));
   }
 
-  if (ant->NearTarget()) {
+  if (ant->NearTarget(50)) {
     ant->Push(new SuspectFSM(object));
   }
 

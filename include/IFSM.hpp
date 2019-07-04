@@ -11,7 +11,7 @@ class IFSM {
  public:
   IFSM(GameObject& object);
 
-  ~IFSM();
+  virtual ~IFSM();
 
   inline bool PopRequested() { return pop_requested; }
 
@@ -29,9 +29,9 @@ class IFSM {
 
     Vec2 walkable;
 
-    Walkable(): can_walk(false) {}
-    
-    Walkable(bool cw, Vec2 w): can_walk(cw), walkable(w) {}
+    Walkable() : can_walk(false) {}
+
+    Walkable(bool cw, Vec2 w) : can_walk(cw), walkable(w) {}
   };
   // Retorna uma posição da collider->box de @param pivot
   // que seja andável para @param object.

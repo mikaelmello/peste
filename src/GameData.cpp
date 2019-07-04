@@ -7,6 +7,8 @@ GameObject* GameData::PlayerGameObject = nullptr;
 
 std::vector<std::shared_ptr<GameObject>> GameData::PlayerInventory;
 
+bool GameData::player_was_hit = false;
+
 void GameData::AddToInventory(std::shared_ptr<GameObject> item) {
   auto item_type_cpt = item->GetComponent(ItemType);
   if (!item_type_cpt) {
