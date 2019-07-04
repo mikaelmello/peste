@@ -57,7 +57,8 @@ Game::Game(const std::string& title, int width, int height)
     throw std::runtime_error("Failed to create a window");
   }
 
-  renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+  renderer = SDL_CreateRenderer(
+      window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
   if (renderer == nullptr) {
     throw std::runtime_error(
         "Failed to create a 2D rendering context for the window");
