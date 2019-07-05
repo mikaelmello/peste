@@ -111,11 +111,11 @@ void RoomState::LoadAssets() {
   objects.push_back(playerGo);
   GameData::PlayerGameObject = playerGo;
 
-  // GameObject* antagonist_go = new GameObject(5);
-  // Antagonist* antagonist =
-  //     new Antagonist(*antagonist_go, currentTileMap->GetInitialPosition());
-  // antagonist_go->AddComponent(antagonist);
-  // objects.emplace_back(antagonist_go);
+  GameObject* antagonist_go = new GameObject(5);
+  Antagonist* antagonist =
+      new Antagonist(*antagonist_go, currentTileMap->GetInitialPosition());
+  antagonist_go->AddComponent(antagonist);
+  objects.emplace_back(antagonist_go);
 
   GameObject* door_go = new GameObject(6);
   Vec2 door_pos = currentTileMap->GetInitialPosition() + Vec2(8, 8);

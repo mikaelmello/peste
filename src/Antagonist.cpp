@@ -227,6 +227,7 @@ void Antagonist::IdleAssetsManager() {
   auto sprite = std::dynamic_pointer_cast<Sprite>(spriteCpt);
   auto sound = std::dynamic_pointer_cast<Sound>(soundCpt);
 
+  sound->Stop();
   sound->Open(BREATHING_ANTAGONIST_SOUND);
   sound->Play();
 
@@ -274,6 +275,7 @@ void Antagonist::AttackAssetsManager() {
 
   auto sound = std::dynamic_pointer_cast<Sound>(soundCpt);
   if (last_action != Helpers::Action::ATTACKING || !sound->IsOpen()) {
+    sound->Stop();
     sound->Open(ATTACK_ROAR_ANTAGONIST);
     sound->Play();
   }
