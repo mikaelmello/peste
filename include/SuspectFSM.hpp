@@ -29,9 +29,9 @@ class SuspectFSM : public IFSM {
  private:
   int rage_bias;
 
-  Vec2 initial;
+  unsigned stack_original_size;
 
-  std::pair<int, std::vector<Vec2>> path;
+  Vec2 initial;
 
   Timer bias_update_timer;
 

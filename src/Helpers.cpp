@@ -11,6 +11,7 @@
 #include <unordered_map>
 #include <vector>
 #include "Collider.hpp"
+#include "Game.hpp"
 #include "SDL_include.h"
 #include "Sprite.hpp"
 
@@ -97,4 +98,45 @@ Helpers::Direction Helpers::combine_moves(bool up, bool down, bool left,
   }
 
   return Helpers::Direction::NONE;
+}
+
+bool Helpers::CanWalk(GameObject& object, Vec2& p) {
+  Game& game = Game::GetInstance();
+  State& state = game.GetCurrentState();
+  auto tilemap = state.GetCurrentTileMap();
+
+  int rows = tilemap->GetLogicalHeight();
+  int cols = tilemap->GetLogicalWidth();
+
+  if (p.x < 0 || p.x >= cols || p.y < 0 || p.y >= rows) {
+    return false;
+  }
+
+  auto colliderCpt = object.GetComponent(ColliderType);
+  if (!colliderCpt) {
+    throw std::runtime_error("object sem collider em Helpers::CanWalk");
+  }
+
+  auto collider = std::dynamic_pointer_cast<Collider>(colliderCpt);
+  int tileDim = tilemap->GetLogicalTileDimension();
+
+  int cellsWidth = round(collider->box.w / tileDim);
+  int cellsHeight = round(collider->box.h / tileDim);
+  if (cellsWidth % 2 == 1) cellsWidth--;
+
+  int x = p.x - cellsWidth / 2;
+  int y = p.y - cellsHeight;
+
+  bool answer = true;
+
+  answer &= tilemap->CanWalk(x, y);
+  answer &= tilemap->CanWalk(x, y + cellsHeight);
+  answer &= tilemap->CanWalk(x + cellsWidth, y);
+  answer &= tilemap->CanWalk(x + cellsWidth, y + cellsHeight);
+  return answer;
+}
+
+bool Helpers::CanWalk(GameObject& object, std::pair<int, int>& p) {
+  Vec2 point(p.first, p.second);
+  return CanWalk(object, point);
 }

@@ -1,37 +1,49 @@
 #include "PursuitFSM.hpp"
 #include "Antagonist.hpp"
+#include "Collider.hpp"
 #include "Game.hpp"
 #include "Player.hpp"
 #include "Types.hpp"
 
 PursuitFSM::PursuitFSM(GameObject& object) : IFSM(object) {
+  auto antagonist_cpt = object.GetComponent(AntagonistType);
+  if (!antagonist_cpt) {
+    throw std::runtime_error("sem antagonista em PursuitFSM::OnStateEnter");
+  }
+
   auto tile_map = Game::GetInstance().GetCurrentState().GetCurrentTileMap();
   pf = std::unique_ptr<Pathfinder::Astar>(
       new Pathfinder::Astar(object, tile_map));
+
+  auto ant = std::dynamic_pointer_cast<Antagonist>(antagonist_cpt);
+
+  stack_original_size = Antagonist::paths.size();
+  initial = ant->position;
+  OnStateEnter();
 }
 
 PursuitFSM::~PursuitFSM() {}
 
 void PursuitFSM::OnStateEnter() {
-  auto antagonist = object.GetComponent(AntagonistType);
-  if (!antagonist) {
-    throw std::runtime_error(
-        "Nao tem antagonista no objeto passado para a PursuitFSM");
+  auto antagonist_cpt = object.GetComponent(AntagonistType);
+  if (!antagonist_cpt) {
+    throw std::runtime_error("sem antagonista em PursuitFSM::OnStateEnter");
   }
+  auto ant = std::dynamic_pointer_cast<Antagonist>(antagonist_cpt);
 
-  auto player = GameData::PlayerGameObject->GetComponent(PlayerType);
-  if (!player) {
-    throw std::runtime_error("Player game object without Player component");
-  }
+  Walkable w = GetWalkable(object, *GameData::PlayerGameObject);
 
-  auto antCp = std::dynamic_pointer_cast<Antagonist>(antagonist);
-  auto playerCp = std::dynamic_pointer_cast<Player>(player);
+  if (w.can_walk) {
+    try {
+      auto pursuit_path = pf->Run(ant->position, w.walkable);
+      Antagonist::paths.emplace(0, pursuit_path);
 
-  try {
-    auto pursuit_path = pf->Run(antCp->position, playerCp->position);
-    path = {0, pursuit_path};
-  } catch (const std::exception& ex) {
-    printf("Exception: %s\n", ex.what());
+    } catch (const std::exception& ex) {
+      printf("%s\n", ex.what());
+      pop_requested = true;
+    }
+
+  } else {
     pop_requested = true;
   }
 }
@@ -39,39 +51,59 @@ void PursuitFSM::OnStateEnter() {
 void PursuitFSM::OnStateExecution() {
   auto antCpt = object.GetComponent(AntagonistType);
   if (!antCpt) {
-    throw std::runtime_error(
-        "Nao tem antagonista no objeto passado para a PursuitFSM em Execution");
+    throw std::runtime_error("sem antagonista em PursuitFSM::Execution");
   }
   auto ant = std::dynamic_pointer_cast<Antagonist>(antCpt);
 
-  if (path.first < path.second.size()) {
-    ant->position = path.second[path.first];
+  unsigned& k = Antagonist::paths.top().first;
+  std::vector<Vec2>& path = Antagonist::paths.top().second;
+
+  if (k < path.size()) {
+    ant->position = path[k];
   }
 
   ant->AssetsManager(Helpers::Action::CHASING);
 }
 
-void PursuitFSM::OnStateExit() {}
+void PursuitFSM::OnStateExit() {
+  while (stack_original_size < Antagonist::paths.size()) {
+    Antagonist::paths.pop();
+  }
+
+  auto antCpt = object.GetComponent(AntagonistType);
+  if (!antCpt) {
+    throw std::runtime_error("sem antagonista em PursuitFSM::OnStateExit");
+  }
+  auto ant = std::dynamic_pointer_cast<Antagonist>(antCpt);
+
+  auto return_path = pf->Run(ant->position, initial);
+  Antagonist::paths.emplace(0, return_path);
+}
 
 void PursuitFSM::Update(float dt) {
   auto antCpt = object.GetComponent(AntagonistType);
   if (!antCpt) {
-    throw std::runtime_error(
-        "Nao tem antagonista no objeto passado para a PursuitFSM em Update");
+    throw std::runtime_error("sem antagonista em PursuitFSM::Update");
   }
   auto ant = std::dynamic_pointer_cast<Antagonist>(antCpt);
 
-  if (timer.Get() >= 1) {
+  if (timer.Get() >= 1.0f) {
+    if (stack_original_size < Antagonist::paths.size()) {
+      Antagonist::paths.pop();
+    }
     OnStateEnter();
     timer.Restart();
   }
-  OnStateExecution();
 
-  if (path.first < path.second.size() - 1) {
-    path.first++;
+  OnStateExecution();
+  unsigned& k = Antagonist::paths.top().first;
+  std::vector<Vec2>& path = Antagonist::paths.top().second;
+
+  if (k < path.size() - 1) {
+    k++;
   }
 
-  if (!ant->NearTarget()) {
+  if (!ant->NearTarget(40)) {
     pop_requested = true;
   }
 

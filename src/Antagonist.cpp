@@ -12,21 +12,28 @@
 #include "Sound.hpp"
 #include "Sprite.hpp"
 
+std::stack<std::pair<unsigned, std::vector<Vec2>>> Antagonist::paths;
+
 Antagonist::Antagonist(GameObject& associated, Vec2 position)
     : Component(associated), position(position), stored_state(nullptr) {
-  // Sound* sound = new Sound(associated, BREATHING_ANTAGONIST_SOUND);
+  Sound* sound = new Sound(associated, BREATHING_ANTAGONIST_SOUND);
   Sprite* sprite = new Sprite(associated, IDLE_SPRITE, 4, 0.125);
   Collider* collider =
       new Collider(associated, {0.6, 0.15}, {0, sprite->GetHeight() * 0.45f});
 
-  // associated.AddComponent(sound);
+  associated.AddComponent(sound);
   associated.AddComponent(collider);
   associated.AddComponent(sprite);
 }
 
 Antagonist::~Antagonist() { delete stored_state; }
 
-void Antagonist::NotifyCollision(std::shared_ptr<GameObject> other) {}
+void Antagonist::NotifyCollision(std::shared_ptr<GameObject> other) {
+  auto player_cpt = other->GetComponent(Types::PlayerType);
+  if (player_cpt && (last_action != Helpers::Action::ATTACKING)) {
+    Push(new AttackFSM(associated));
+  }
+}
 
 void Antagonist::Start() {
   last_action = Helpers::Action::IDLE;
@@ -98,7 +105,7 @@ void Antagonist::Push(IFSM* s) {
   stored_state = s;
 }
 
-bool Antagonist::NearTarget() {
+bool Antagonist::NearTarget(float distance_check) {
   auto player = GameData::PlayerGameObject->GetComponent(PlayerType);
   if (!player) {
     throw std::runtime_error("Player game object without Player component");
@@ -106,22 +113,24 @@ bool Antagonist::NearTarget() {
 
   auto playerCp = std::dynamic_pointer_cast<Player>(player);
   double dist = position.Distance(playerCp->position);
-  return dist <= ANTAGONIST_DISTANCE;
+  return dist <= distance_check;
 }
 
 void Antagonist::AssetsManager(Helpers::Action action) {
+  bool action_change = action != last_action;
+
   switch (action) {
     case Helpers::Action::IDLE:
       IdleAssetsManager();
       break;
     case Helpers::Action::MOVING:
-      MoveAssetsManager(WALKING_WALK_SET);
+      MoveAssetsManager(WALKING_WALK_SET, action_change);
       break;
     case Helpers::Action::SUSPECTING:
-      MoveAssetsManager(SUSPECTING_WALK_SET);
+      MoveAssetsManager(SUSPECTING_WALK_SET, action_change);
       break;
     case Helpers::Action::CHASING:
-      MoveAssetsManager(CHASING_WALK_SET);
+      MoveAssetsManager(CHASING_WALK_SET, action_change);
       break;
     case Helpers::Action::ATTACKING:
       AttackAssetsManager();
@@ -134,15 +143,28 @@ void Antagonist::AssetsManager(Helpers::Action action) {
   last_action = action;
 }
 
-void Antagonist::MoveAssetsManager(std::vector<std::string> set) {
+void Antagonist::MoveAssetsManager(std::vector<std::string> set, bool ac) {
   if (set.size() != 8) {
     throw std::runtime_error("O set de MoveAssetsManager deve ter 8 imagens");
+  }
+
+  auto soundCpt = associated.GetComponent(SoundType);
+  if (!soundCpt) {
+    throw std::runtime_error("O gameobject do antagonista não tem sound");
   }
 
   auto spriteCpt = associated.GetComponent(SpriteType);
   if (!spriteCpt) {
     throw std::runtime_error("O gameobject do antagonista nao tem sprite");
   }
+
+  if (ac) {
+    auto sound = std::dynamic_pointer_cast<Sound>(soundCpt);
+    sound->Stop();
+    sound->Open(ANTAGONIST_WALKING_SOUND);
+    sound->Play();
+  }
+
   Vec2 delta = position - previous_position;
 
   bool up = delta.y == -1;
@@ -199,14 +221,14 @@ void Antagonist::IdleAssetsManager() {
 
   auto soundCpt = associated.GetComponent(SoundType);
   if (!soundCpt) {
-    // throw std::runtime_error("O gameobject do antagonista nao tem sound");
+    throw std::runtime_error("O gameobject do antagonista nao tem sound");
   }
 
   auto sprite = std::dynamic_pointer_cast<Sprite>(spriteCpt);
-  // auto sound = std::dynamic_pointer_cast<Sound>(soundCpt);
+  auto sound = std::dynamic_pointer_cast<Sound>(soundCpt);
 
-  // sound->Open(BREATHING_ANTAGONIST_SOUND);
-  // sound->Play();
+  sound->Open(BREATHING_ANTAGONIST_SOUND);
+  sound->Play();
 
   switch (last_direction) {
     case Helpers::Direction::RIGHT:
@@ -244,6 +266,18 @@ void Antagonist::AttackAssetsManager() {
   if (!spriteCpt) {
     throw std::runtime_error("O gameobject do antagonista nao tem sprite");
   }
+
+  auto soundCpt = associated.GetComponent(SoundType);
+  if (!soundCpt) {
+    throw std::runtime_error("O gameobject do antagonista nao tem sound");
+  }
+
+  auto sound = std::dynamic_pointer_cast<Sound>(soundCpt);
+  if (last_action != Helpers::Action::ATTACKING || !sound->IsOpen()) {
+    sound->Open(ATTACK_ROAR_ANTAGONIST);
+    sound->Play();
+  }
+
   auto sprite = std::dynamic_pointer_cast<Sprite>(spriteCpt);
 
   switch (last_direction) {

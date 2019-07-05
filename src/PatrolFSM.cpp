@@ -10,9 +10,36 @@
 #include "SuspectFSM.hpp"
 #include "Types.hpp"
 
-std::stack<std::pair<int, std::vector<Vec2>>> PatrolFSM::patrol_paths;
+PatrolFSM::PatrolFSM(GameObject& object) : IFSM(object) {
+  Game& game = Game::GetInstance();
+  State& state = game.GetCurrentState();
+  auto tilemap = state.GetCurrentTileMap();
 
-PatrolFSM::PatrolFSM(GameObject& object) : IFSM(object) {}
+  Pathfinder::Astar pf = Pathfinder::Astar(object, tilemap);
+
+  auto dest1 = Vec2(426, 150);
+  auto dest2 = Vec2(100, 142);
+  auto dest3 = Vec2(200, 142);
+
+  auto initial = tilemap->GetInitialPosition();
+
+  try {
+    auto path4 = pf.Run(dest1, initial);
+    paths.emplace(0, path4);
+
+    auto path3 = pf.Run(dest2, dest1);
+    paths.emplace(0, path3);
+
+    auto path2 = pf.Run(dest3, dest2);
+    paths.emplace(0, path2);
+
+    auto path1 = pf.Run(initial, dest3);
+    paths.emplace(0, path1);
+
+  } catch (const std::exception& ex) {
+    printf("%s\n", ex.what());
+  }
+}
 
 PatrolFSM::~PatrolFSM() {}
 
@@ -21,52 +48,21 @@ void PatrolFSM::OnStateEnter() {
   State& state = game.GetCurrentState();
   auto tilemap = state.GetCurrentTileMap();
 
-  if (patrol_paths.empty()) {
-    Pathfinder::Astar pf = Pathfinder::Astar(object, tilemap);
-
-    auto dest1 = Vec2(100, 192);
-    auto dest2 = Vec2(100, 142);
-    auto dest3 = Vec2(200, 142);
-
-    auto initial = tilemap->GetInitialPosition();
+  if (Antagonist::paths.empty()) {
     auto ant = object.GetComponent(Types::AntagonistType);
-
     if (!ant) {
       throw std::runtime_error("No antagonist component in antagonist_go");
     }
 
     Vec2 current = std::dynamic_pointer_cast<Antagonist>(ant)->position;
+    auto initial = tilemap->GetInitialPosition();
 
-    try {
-      auto path3 = pf.Run(dest2, dest3);
-      patrol_paths.emplace(0, path3);
-      printf("Calculei 1.\n");
+    Pathfinder::Astar pf = Pathfinder::Astar(object, tilemap);
+    auto return_path = pf.Run(current, initial);
 
-      auto path2 = pf.Run(dest1, dest2);
-      patrol_paths.emplace(0, path2);
-      printf("Calculei 2.\n");
-
-      auto path1 = pf.Run(initial, dest1);
-      patrol_paths.emplace(0, path1);
-      printf("Calculei 3.\n");
-
-      auto ret_path = pf.Run(current, initial);
-      patrol_paths.emplace(0, ret_path);
-      printf("Calculei 4.\n");
-
-      /*printf("Início: %s\tFinal: %s\n", path1[0].ToString().c_str(),
-             path1[path1.size() - 1].ToString().c_str());
-
-      printf("Início: %s\tFinal: %s\n", path2[0].ToString().c_str(),
-             path2[path2.size() - 1].ToString().c_str());
-
-      printf("Início: %s\tFinal: %s\n", path3[0].ToString().c_str(),
-             path3[path3.size() - 1].ToString().c_str());*/
-
-    } catch (const std::exception& ex) {
-      printf("%s\n", ex.what());
-      // patrol_paths = std::stack<std::pair<int, std::vector<Vec2>>>();
-      // pop_requested = true;
+    Antagonist::paths = paths;
+    if (return_path.size() > 0) {
+      Antagonist::paths.emplace(0, return_path);
     }
   }
 }
@@ -78,15 +74,15 @@ void PatrolFSM::OnStateExecution() {
         "Nao tem antagonista no objeto passado para a PatrolFSM");
   }
 
-  if (!patrol_paths.empty()) {
+  if (!Antagonist::paths.empty()) {
     auto ant = std::dynamic_pointer_cast<Antagonist>(antCpt);
 
-    // int& k = patrol_paths.top().first;
-    // std::vector<Vec2>& top = patrol_paths.top().second;
-    // ant->position = top[k];
-    // k++;
-    ant->position = patrol_paths.top().second[patrol_paths.top().first];
-    patrol_paths.top().first++;
+    unsigned& k = Antagonist::paths.top().first;
+    std::vector<Vec2>& top = Antagonist::paths.top().second;
+
+    ant->position = top[k];
+    k++;
+
     ant->AssetsManager(Helpers::Action::MOVING);
   }
 }
@@ -113,10 +109,10 @@ void PatrolFSM::Update(float dt) {
   OnStateEnter();
 
   bool enter = false;
-  while (!patrol_paths.empty() &&
-         (patrol_paths.top().first ==
-          (long long)patrol_paths.top().second.size())) {
-    patrol_paths.pop();
+  while (!Antagonist::paths.empty() &&
+         (Antagonist::paths.top().first ==
+          Antagonist::paths.top().second.size())) {
+    Antagonist::paths.pop();
     enter = true;
   }
 
@@ -124,7 +120,7 @@ void PatrolFSM::Update(float dt) {
     ant->Push(new IdleFSM(object));
   }
 
-  if (ant->NearTarget()) {
+  if (ant->NearTarget(50)) {
     ant->Push(new SuspectFSM(object));
   }
 

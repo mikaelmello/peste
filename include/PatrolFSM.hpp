@@ -28,7 +28,7 @@ class PatrolFSM : public IFSM {
   friend class SuspectFSM;  // Verificar como reduzir o escopo de friend.
 
  private:
-   static std::stack<std::pair<int, std::vector<Vec2>>> patrol_paths;
+  std::stack<std::pair<unsigned, std::vector<Vec2>>> paths;
 };
 
 #endif

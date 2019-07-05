@@ -24,6 +24,8 @@ class AttackFSM : public IFSM {
   void Update(float dt);
 
  private:
+  float execution_time;
+
   Timer timer;
 };
 
