@@ -13,15 +13,20 @@
 #include "Types.hpp"
 
 Text::Text(GameObject& associated, const std::string& fontFile, int fontSize,
-           TextStyle style, const std::string& text, SDL_Color color)
+           TextStyle style, const std::string& text, SDL_Color color,
+           int wrapLength = -1)
     : Component(associated),
       text(text),
       style(style),
       fontFile(fontFile),
       fontSize(fontSize),
+      wrapLength(wrapLength),
       color(color),
       blink(false),
       display(true) {
+  if (wrapLength == -1 && style == TextStyle::BLENDED_WRAPPED) {
+    throw std::invalid_argument("Criando texto wrapped sem wrapLength!");
+  }
   RemakeTexture();
 }
 
@@ -96,15 +101,19 @@ void Text::RemakeTexture() {
   SDL_Surface* surface = nullptr;
 
   switch (style) {
+    case TextStyle::BLENDED_WRAPPED:
+      surface = TTF_RenderUTF8_Blended_Wrapped(font.get(), text.c_str(), color,
+                                               wrapLength);
+      break;
     case TextStyle::BLENDED:
-      surface = TTF_RenderText_Blended(font.get(), text.c_str(), color);
+      surface = TTF_RenderUTF8_Blended(font.get(), text.c_str(), color);
       break;
     case TextStyle::SOLID:
-      surface = TTF_RenderText_Solid(font.get(), text.c_str(), color);
+      surface = TTF_RenderUTF8_Solid(font.get(), text.c_str(), color);
       break;
     case TextStyle::SHADED:
       surface =
-          TTF_RenderText_Shaded(font.get(), text.c_str(), color, {0, 0, 0, 1});
+          TTF_RenderUTF8_Shaded(font.get(), text.c_str(), color, {0, 0, 0, 1});
       break;
   }
 

@@ -17,10 +17,11 @@
 
 class Text : public Component {
  public:
-  enum TextStyle { SOLID, SHADED, BLENDED };
+  enum TextStyle { SOLID, SHADED, BLENDED, BLENDED_WRAPPED };
 
   Text(GameObject& associated, const std::string& fontFile, int fontSize,
-       TextStyle style, const std::string& text, SDL_Color color);
+       TextStyle style, const std::string& text, SDL_Color color,
+       int wrapLength);
 
   ~Text();
 
@@ -54,6 +55,7 @@ class Text : public Component {
   TextStyle style;
   std::string fontFile;
   int fontSize;
+  int wrapLength;
   SDL_Color color;
   bool blink;
   bool display;
