@@ -30,6 +30,8 @@ using namespace Helpers;
 Player::Player(GameObject& associated, Vec2 position)
     : Component(associated),
       position(position),
+      frameCount(1),
+      frameTime(1),
       lastDirection(Helpers::Direction::NONE) {
   Sprite* sprite = new Sprite(associated, PLAYER_FRONT);
   Collider* collider =
@@ -84,6 +86,14 @@ void Player::Update(float dt) {
   auto sprite = std::dynamic_pointer_cast<Sprite>(spriteCpt);
   auto collider = std::dynamic_pointer_cast<Collider>(colliderCpt);
 
+  auto move = speed * dt;
+  if (input.IsKeyDown(LSHIFT_KEY)) {
+    move *= 2;
+    sprite->SetFrameTime(frameTime / 2);
+  } else {
+    sprite->SetFrameTime(frameTime);
+  }
+
   bool up = false;
   bool down = false;
   bool left = false;
@@ -104,40 +114,40 @@ void Player::Update(float dt) {
     canwalk = true;
     up = true;
     for (int i = 0; i < w && canwalk; i++) {
-      canwalk &= tilemap->CanWalk(x + i, y - 1);
+      canwalk &= tilemap->CanWalk(x + i, y - move);
     }
     if (canwalk) {
-      position.y -= 1;
+      position.y -= move;
     }
   }
   if (input.IsKeyDown(DOWN_ARROW_KEY)) {
     canwalk = true;
     down = true;
     for (int i = 0; i < w && canwalk; i++) {
-      canwalk &= tilemap->CanWalk(x + i, y + h + 1);
+      canwalk &= tilemap->CanWalk(x + i, y + h + move);
     }
     if (canwalk) {
-      position.y += 1;
+      position.y += move;
     }
   }
   if (input.IsKeyDown(LEFT_ARROW_KEY)) {
     canwalk = true;
     left = true;
     for (int i = 0; i < h && canwalk; i++) {
-      canwalk &= tilemap->CanWalk(x - 1, y + i);
+      canwalk &= tilemap->CanWalk(x - move, y + i);
     }
     if (canwalk) {
-      position.x -= 1;
+      position.x -= move;
     }
   }
   if (input.IsKeyDown(RIGHT_ARROW_KEY)) {
     canwalk = true;
     right = true;
     for (int i = 0; i < h && canwalk; i++) {
-      canwalk &= tilemap->CanWalk(x + w + 1, y + i);
+      canwalk &= tilemap->CanWalk(x + w + move, y + i);
     }
     if (canwalk) {
-      position.x += 1;
+      position.x += move;
     }
   }
 
@@ -180,8 +190,10 @@ bool Player::Is(Types type) const { return type == this->Type; }
 
 void Player::OpenIdleSprite(const std::shared_ptr<Sprite>& sprite,
                             Direction lastDirection) {
-  sprite->SetFrameCount(1);
-  sprite->SetFrameTime(1);
+  frameCount = 1;
+  frameTime = 1;
+  sprite->SetFrameCount(frameCount);
+  sprite->SetFrameTime(frameTime);
 
   switch (lastDirection) {
     case Direction::UP:
@@ -216,41 +228,44 @@ void Player::OpenIdleSprite(const std::shared_ptr<Sprite>& sprite,
 
 void Player::OpenWalkingSprite(const std::shared_ptr<Sprite>& sprite,
                                Direction direction) {
+  frameCount = 1;
   switch (direction) {
     case Direction::UP:
       sprite->Open(PLAYER_BACK_ANIM);
-      sprite->SetFrameCount(5);
+      frameCount = 5;
       break;
     case Direction::DOWN:
       sprite->Open(PLAYER_FRONT_ANIM);
-      sprite->SetFrameCount(5);
+      frameCount = 5;
       break;
     case Direction::LEFT:
       sprite->Open(PLAYER_LEFT_ANIM);
-      sprite->SetFrameCount(8);
+      frameCount = 8;
       break;
     case Direction::RIGHT:
       sprite->Open(PLAYER_RIGHT_ANIM);
-      sprite->SetFrameCount(8);
+      frameCount = 8;
       break;
     case Direction::UPLEFT:
       sprite->Open(PLAYER_BACK_ANIM);
-      sprite->SetFrameCount(5);
+      frameCount = 5;
       break;
     case Direction::UPRIGHT:
       sprite->Open(PLAYER_BACK_ANIM);
-      sprite->SetFrameCount(5);
+      frameCount = 5;
       break;
     case Direction::DOWNLEFT:
       sprite->Open(PLAYER_FRONT_ANIM);
-      sprite->SetFrameCount(5);
+      frameCount = 5;
       break;
     case Direction::DOWNRIGHT:
       sprite->Open(PLAYER_FRONT_ANIM);
-      sprite->SetFrameCount(5);
+      frameCount = 5;
       break;
     default:
       return OpenIdleSprite(sprite, direction);
   }
-  sprite->SetFrameTime(0.05);
+  sprite->SetFrameCount(frameCount);
+  frameTime = 0.4 / frameCount;
+  sprite->SetFrameTime(frameTime);
 }

@@ -149,7 +149,6 @@ void Game::Run() {
     state->Update(GetDeltaTime());
     state->Render();
     SDL_RenderPresent(renderer);
-    SDL_Delay(33);
   }
 
   while (!stateStack.empty()) {
