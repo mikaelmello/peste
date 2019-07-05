@@ -66,6 +66,14 @@ class InventoryState : public State {
   // retrieve it
   std::shared_ptr<GameObject> showcaseGo;
 
+  // GameObject of the item description being showcased, this way we can easily
+  // retrieve it
+  std::shared_ptr<GameObject> showcaseDescriptionGo;
+
+  // GameObject of the item title being showcased, this way we can easily
+  // retrieve it
+  std::shared_ptr<GameObject> showcaseTitleGo;
+
   // Index of the inventory item the cursor is on
   int inventoryCursorIndex;
 
