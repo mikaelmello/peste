@@ -96,3 +96,7 @@ void Item::SetScale(float scaleX, float scaleY) {
 
   sprite->SetScaleX(scaleX, scaleY);
 }
+
+std::string Item::GetName() { return name; }
+
+std::string Item::GetDescription() { return description; }

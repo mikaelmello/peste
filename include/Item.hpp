@@ -39,6 +39,10 @@ class Item : public Component {
 
   void Pickup();
 
+  std::string GetName();
+
+  std::string GetDescription();
+
   const Types Type = ItemType;
 
  private:
