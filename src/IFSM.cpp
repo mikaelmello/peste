@@ -79,4 +79,11 @@ IFSM::Walkable IFSM::GetWalkable(GameObject& object, GameObject& pivot) {
   if (can_walk) {
     return {can_walk, position};
   }
+
+  auto obj = object.GetComponent(Types::AntagonistType);
+  if (!obj) {
+    throw std::invalid_argument("sem antagonista em IFSM::GetWalkable");
+  }
+
+  return {false, ant->position};
 }

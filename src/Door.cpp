@@ -16,7 +16,7 @@
 
 Door::Door(GameObject& associated, Helpers::Direction direction, Vec2 position,
            bool open)
-    : Component(associated), position(position), open(open), colliding(false) {
+    : Component(associated), position(position), colliding(false), open(open) {
   Collider* collider = new Collider(associated);
   Sprite* sprite = new Sprite(associated);
 

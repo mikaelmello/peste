@@ -28,7 +28,7 @@ class TileMap : public Component {
 
   void Render();
 
-  void RenderLayer(int layer, int cameraX = 0, int cameraY = 0);
+  void RenderLayer(unsigned layer, int cameraX = 0, int cameraY = 0);
 
   bool Is(Types type) const override;
 
@@ -52,7 +52,7 @@ class TileMap : public Component {
 
   void SetWalk(int x, int y, bool value);
 
-  void SetParallax(int layer, float xFactor, float yFactor);
+  void SetParallax(unsigned layer, float xFactor, float yFactor);
 
   const Types Type = TileMapType;
 
