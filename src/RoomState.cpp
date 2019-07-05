@@ -102,13 +102,13 @@ void RoomState::Pause() {
   Camera::pos = {0, 0};
 }
 
-void RoomState::Resume() { Camera::Follow(GameData::PlayerGameObject); }
+void RoomState::Resume() { Camera::Follow(GameData::PlayerGameObject.get()); }
 
 void RoomState::LoadAssets() {
-  GameObject* playerGo = new GameObject(7);
+  auto playerGo = std::make_shared<GameObject>(7);
   Player* player = new Player(*playerGo, currentTileMap->GetInitialPosition());
   playerGo->AddComponent(player);
-  objects.emplace_back(playerGo);
+  objects.push_back(playerGo);
   GameData::PlayerGameObject = playerGo;
 
   // GameObject* antagonist_go = new GameObject(5);
@@ -123,7 +123,7 @@ void RoomState::LoadAssets() {
   door_go->AddComponent(door);
   objects.emplace_back(door_go);
 
-  Camera::Follow(playerGo);
+  Camera::Follow(playerGo.get());
 
   GameObject* lampGo = new GameObject(6);
   Item* lamp =

@@ -11,10 +11,10 @@
 
 class GameData {
  public:
-  static GameObject* PlayerGameObject;
+  static std::shared_ptr<GameObject> PlayerGameObject;
   static std::vector<std::shared_ptr<GameObject>> PlayerInventory;
 
-  static void AddToInventory(std::shared_ptr<GameObject> item);
+  static bool AddToInventory(std::shared_ptr<GameObject> item);
 };
 
 #endif

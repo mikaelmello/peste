@@ -51,7 +51,10 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
 
   if (item_cpt) {
     if (input.KeyPress(X_KEY)) {
-      GameData::AddToInventory(other);
+      auto ok = GameData::AddToInventory(other);
+      if (!ok) {
+        printf("Nao tem mais espaco\n");
+      }
     }
   }
 
@@ -88,8 +91,8 @@ void Player::Update(float dt) {
 
   auto move = speed * dt;
   if (input.IsKeyDown(LSHIFT_KEY)) {
-    move *= 2;
-    sprite->SetFrameTime(frameTime / 2);
+    move *= 1.5;
+    sprite->SetFrameTime(frameTime / 1.5f);
   } else {
     sprite->SetFrameTime(frameTime);
   }
