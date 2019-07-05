@@ -23,7 +23,7 @@ InventoryState::InventoryState()
 
   menuLength = 3;
   menuItemPositions = {{200, 700}, {511, 700}, {820, 700}};
-  if (menuLength != menuItemPositions.size()) {
+  if ((unsigned)menuLength != menuItemPositions.size()) {
     throw std::runtime_error(
         "Mano, tu acabou de setar o tamanho de um menu e nao colocou o mesmo "
         "tanto de posiçoes, ta de sacanagem ne");

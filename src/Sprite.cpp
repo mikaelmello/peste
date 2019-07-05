@@ -15,6 +15,8 @@
 Sprite::Sprite(GameObject& associated, int frameCount, float frameTime,
                float secondsToSelfDestruct)
     : Component(associated),
+      width(0),
+      height(0),
       frameCount(frameCount),
       currentFrame(0),
       frameTime(frameTime),

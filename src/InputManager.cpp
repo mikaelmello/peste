@@ -8,9 +8,8 @@ InputManager InputManager::instance;
 
 InputManager& InputManager::GetInstance() { return instance; }
 
-InputManager::InputManager() : quitRequested(false), updateCounter(0) {
-  mouseX = 0;
-  mouseY = 0;
+InputManager::InputManager()
+    : quitRequested(false), updateCounter(0), mouseX(0), mouseY(0) {
   ::memset(mouseState, 0, sizeof(bool) * 6);
   ::memset(mouseUpdate, 0, sizeof(int) * 6);
 }
