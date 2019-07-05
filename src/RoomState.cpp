@@ -13,6 +13,7 @@
 #include "InventoryState.hpp"
 #include "Item.hpp"
 #include "Player.hpp"
+#include "Terry.hpp"
 #include "TileMap.hpp"
 #include "Types.hpp"
 
@@ -110,6 +111,12 @@ void RoomState::LoadAssets() {
   playerGo->AddComponent(player);
   objects.emplace_back(playerGo);
   GameData::PlayerGameObject = playerGo;
+
+  GameObject* terryGo = new GameObject(7);
+  Terry* terry =
+      new Terry(*terryGo, currentTileMap->GetInitialPosition() + Vec2(-10, 0));
+  playerGo->AddComponent(terry);
+  objects.emplace_back(terryGo);
 
   // GameObject* antagonist_go = new GameObject(5);
   // Antagonist* antagonist =

@@ -20,6 +20,7 @@ enum Types {
   BlockerType,
   DoorType,
   PriorityChangerType,
+  TerryType,
 };
 
 #endif
