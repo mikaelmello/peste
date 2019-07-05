@@ -132,6 +132,19 @@ void InventoryState::Update(float dt) {
       menuCursorIndex = std::max(0, menuCursorIndex - 1);
     } else if (im.KeyPress(RIGHT_ARROW_KEY)) {
       menuCursorIndex = std::min(menuLength - 1, menuCursorIndex + 1);
+    } else if (im.KeyPress(ENTER_KEY)) {
+      switch (menuCursorIndex) {
+        case 0:
+          popRequested = true;
+          break;
+        case 1:
+          break;
+        case 2:
+          quitRequested = true;
+          break;
+        default:
+          break;
+      }
     }
   }
 
