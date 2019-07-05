@@ -126,10 +126,22 @@ void RoomState::LoadAssets() {
   Camera::Follow(playerGo);
 
   GameObject* lampGo = new GameObject(6);
-  Item* lamp = new Item(*lampGo, "Lamp", "A lamp", "assets/img/item/lamp.png",
-                        currentTileMap->GetInitialPosition() - Vec2(3, 3));
+  Item* lamp =
+      new Item(*lampGo, "Lamparina",
+               "Esta lamparina é a única coisa permitindo que Hope veja "
+               "ao seu redor e não seja consumido pela escuridão.",
+               "assets/img/item/lamp.png",
+               currentTileMap->GetInitialPosition() - Vec2(3, 3));
   lampGo->AddComponent(lamp);
   objects.emplace_back(lampGo);
+
+  GameObject* lamp2Go = new GameObject(6);
+  Item* lamp2 =
+      new Item(*lamp2Go, "Lamparina 2", "Esta lamparina é ruim pode esquecer",
+               "assets/img/item/lamp2.png",
+               currentTileMap->GetInitialPosition() + Vec2(3, 3));
+  lamp2Go->AddComponent(lamp2);
+  objects.emplace_back(lamp2Go);
 
   SortObjects();
 }
