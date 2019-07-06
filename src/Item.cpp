@@ -64,7 +64,6 @@ void Item::NotifyCollision(std::shared_ptr<GameObject> other) {
 void Item::Start() {}
 
 void Item::Update(float dt) {
-  std::cout << pickupItemGo->priority << std::endl;
 }
 
 void Item::Render() {

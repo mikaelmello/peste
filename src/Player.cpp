@@ -98,8 +98,6 @@ void Player::Update(float dt) {
   bool left = false;
   bool right = false;
 
-  std::cout << associated.priority << std::endl;
-
   associated.box.x = position.x * tileDim - sprite->GetWidth() / 2;
   associated.box.y = position.y * tileDim - sprite->GetHeight();
 
