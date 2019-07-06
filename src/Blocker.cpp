@@ -5,6 +5,7 @@
 #include "Collider.hpp"
 #include "Game.hpp"
 #include "GameObject.hpp"
+#include "Helpers.hpp"
 #include "Sprite.hpp"
 #include "TileMap.hpp"
 
@@ -16,10 +17,17 @@ Blocker::Blocker(GameObject& associated, Vec2 scale, Vec2 offset)
   tilemap = Game::GetInstance().GetCurrentState().GetCurrentTileMap();
   int tileDim = tilemap->GetLogicalTileDimension();
 
-  beginX = associated.box.x / tileDim;
-  endX = (associated.box.x + associated.box.w) / tileDim + 1;
-  beginY = associated.box.y / tileDim;
-  endY = (associated.box.y + associated.box.h) / tileDim + 1;
+  Rect box = associated.box;
+  box.w *= scale.x;
+  box.h *= scale.y;
+  box.SetCenter(associated.box.Center());
+
+  box += offset.GetRotated(Helpers::deg_to_rad(associated.angleDeg));
+
+  beginX = box.x / tileDim;
+  endX = (box.x + box.w) / tileDim + 1;
+  beginY = box.y / tileDim;
+  endY = (box.y + box.h) / tileDim + 1;
 
   for (int i = beginX; i < endX; i++) {
     for (int j = beginY; j < endY; j++) {

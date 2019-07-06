@@ -41,6 +41,8 @@ class Player : public Component {
                          Helpers::Direction direction);
 
   Helpers::Direction lastDirection;
+
+  std::shared_ptr<GameObject> priorityChanger_go;
 };
 
 #endif

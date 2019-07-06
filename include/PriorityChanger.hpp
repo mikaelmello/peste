@@ -13,7 +13,8 @@
 
 class PriorityChanger : public Component {
  public:
-  PriorityChanger(GameObject& associated, GameObject& object);
+  PriorityChanger(GameObject& associated, GameObject& object,
+                  bool player = false);
 
   ~PriorityChanger();
 
@@ -31,6 +32,8 @@ class PriorityChanger : public Component {
 
  private:
   GameObject& object;
+
+  bool player;
 };
 
 #endif

@@ -31,6 +31,9 @@ class Terry : public Component {
 
  private:
   Vec2 position;
+
+  std::shared_ptr<GameObject> blocker_go;
+  std::shared_ptr<GameObject> priorityChanger_go;
 };
 
 #endif

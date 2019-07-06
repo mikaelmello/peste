@@ -11,6 +11,7 @@
 #include "GameObject.hpp"
 #include "InputManager.hpp"
 #include "Item.hpp"
+#include "PriorityChanger.hpp"
 #include "Sprite.hpp"
 #include "TileMap.hpp"
 #include "Types.hpp"
@@ -39,9 +40,17 @@ Player::Player(GameObject& associated, Vec2 position)
   associated.box.h = sprite->GetHeight();
   // just for debugging purposes
   associated.AddComponent(collider);
+
+  State& state = Game::GetInstance().GetCurrentState();
+
+  GameObject* pcGo = new GameObject(associated.priority);
+  pcGo->box = associated.box;
+  PriorityChanger* priChanger = new PriorityChanger(*pcGo, associated, true);
+  pcGo->AddComponent(priChanger);
+  priorityChanger_go = state.AddObject(pcGo);
 }
 
-Player::~Player() {}
+Player::~Player() { priorityChanger_go->RequestDelete(); }
 
 void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
   InputManager& input = InputManager::GetInstance();
@@ -88,6 +97,8 @@ void Player::Update(float dt) {
   bool down = false;
   bool left = false;
   bool right = false;
+
+  std::cout << associated.priority << std::endl;
 
   associated.box.x = position.x * tileDim - sprite->GetWidth() / 2;
   associated.box.y = position.y * tileDim - sprite->GetHeight();
@@ -152,6 +163,8 @@ void Player::Update(float dt) {
 
   associated.box.w = sprite->GetWidth();
   associated.box.h = sprite->GetHeight();
+
+  priorityChanger_go->box = associated.box;
 }
 
 void Player::Render() {
