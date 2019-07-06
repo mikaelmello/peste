@@ -38,7 +38,7 @@ Door::Door(GameObject& associated, Helpers::Direction direction, Vec2 position,
     collider->SetScale({1, 0.3});
   }
 
-  GameObject* openGo = new GameObject(associated.priority);
+  GameObject* openGo = new GameObject();
   ActionMessage* openMsg =
       new ActionMessage(*openGo, position, "assets/img/open_msg.png");
   openGo->AddComponent(openMsg);
@@ -46,7 +46,7 @@ Door::Door(GameObject& associated, Helpers::Direction direction, Vec2 position,
   State& state = Game::GetInstance().GetCurrentState();
   openDoorGo = state.AddObject(openGo);
 
-  GameObject* closeGo = new GameObject(associated.priority);
+  GameObject* closeGo = new GameObject();
   ActionMessage* closeMsg =
       new ActionMessage(*closeGo, position, "assets/img/close_msg.png");
   closeGo->AddComponent(closeMsg);

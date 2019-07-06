@@ -13,17 +13,18 @@
 #include "InventoryState.hpp"
 #include "Item.hpp"
 #include "Player.hpp"
+#include "Terry.hpp"
 #include "TileMap.hpp"
 #include "Types.hpp"
 
 RoomState::RoomState() {
-  GameObject* bckgGo = new GameObject(5);
+  GameObject* bckgGo = new GameObject(3);
   Sprite* bckgSprite = new Sprite(*bckgGo, "assets/img/black.jpg");
   bckgGo->AddComponent(new CameraFollower(*bckgGo, {512, 334}));
   bckgGo->AddComponent(bckgSprite);
   objects.emplace_back(bckgGo);
 
-  GameObject* mapGo = new GameObject(5);
+  GameObject* mapGo = new GameObject(4);
   currentTileMap = new TileMap(*mapGo, "assets/map/map.json");
   currentTileMap->SetParallax(1, 0, 0);
   mapGo->AddComponent(currentTileMap);
@@ -111,11 +112,17 @@ void RoomState::LoadAssets() {
   objects.push_back(playerGo);
   GameData::PlayerGameObject = playerGo;
 
-  GameObject* antagonist_go = new GameObject(5);
-  Antagonist* antagonist =
-      new Antagonist(*antagonist_go, currentTileMap->GetInitialPosition());
-  antagonist_go->AddComponent(antagonist);
-  objects.emplace_back(antagonist_go);
+  GameObject* terryGo = new GameObject(7);
+  Terry* terry =
+      new Terry(*terryGo, currentTileMap->GetInitialPosition() + Vec2(-14, 0));
+  playerGo->AddComponent(terry);
+  objects.emplace_back(terryGo);
+
+  // GameObject* antagonist_go = new GameObject(5);
+  // Antagonist* antagonist =
+  //     new Antagonist(*antagonist_go, currentTileMap->GetInitialPosition());
+  // antagonist_go->AddComponent(antagonist);
+  // objects.emplace_back(antagonist_go);
 
   GameObject* door_go = new GameObject(6);
   Vec2 door_pos = currentTileMap->GetInitialPosition() + Vec2(8, 8);

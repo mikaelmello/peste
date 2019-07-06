@@ -37,7 +37,7 @@ Item::Item(GameObject& associated, const std::string& name,
   associated.box.w = sprite->GetWidth();
   associated.box.h = sprite->GetHeight();
 
-  GameObject* pickupGo = new GameObject(associated.priority);
+  GameObject* pickupGo = new GameObject();
   ActionMessage* pickup =
       new ActionMessage(*pickupGo, position, "assets/img/x.png");
   pickupGo->AddComponent(pickup);
@@ -63,7 +63,8 @@ void Item::NotifyCollision(std::shared_ptr<GameObject> other) {
 
 void Item::Start() {}
 
-void Item::Update(float dt) {}
+void Item::Update(float dt) {
+}
 
 void Item::Render() {
   if (colliding) {

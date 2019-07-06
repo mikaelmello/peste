@@ -1,5 +1,5 @@
-#ifndef PRIORITYCHANGER_H
-#define PRIORITYCHANGER_H
+#ifndef TERRY_H
+#define TERRY_H
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *                  INCLUDES E DEFINES
@@ -11,12 +11,11 @@
 #include "GameObject.hpp"
 #include "Types.hpp"
 
-class PriorityChanger : public Component {
+class Terry : public Component {
  public:
-  PriorityChanger(GameObject& associated, GameObject& object,
-                  bool player = false);
+  Terry(GameObject& associated, Vec2 position);
 
-  ~PriorityChanger();
+  ~Terry();
 
   void Start() override;
 
@@ -28,12 +27,13 @@ class PriorityChanger : public Component {
 
   void Render() override;
 
-  const Types Type = PriorityChangerType;
+  const Types Type = TerryType;
 
  private:
-  GameObject& object;
+  Vec2 position;
 
-  bool player;
+  std::shared_ptr<GameObject> blocker_go;
+  std::shared_ptr<GameObject> priorityChanger_go;
 };
 
 #endif
