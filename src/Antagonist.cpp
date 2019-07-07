@@ -185,27 +185,35 @@ void Antagonist::MoveAssetsManager(std::vector<std::string> set, bool ac) {
   switch (direction) {
     case Helpers::Direction::LEFT:
       sprite->Open(set[0]);
+      sprite->SetFrameCount(8);
       break;
     case Helpers::Direction::RIGHT:
       sprite->Open(set[1]);
+      sprite->SetFrameCount(8);
       break;
     case Helpers::Direction::DOWN:
       sprite->Open(set[2]);
+      sprite->SetFrameCount(5);
       break;
     case Helpers::Direction::UP:
       sprite->Open(set[3]);
+      sprite->SetFrameCount(5);
       break;
     case Helpers::Direction::DOWNLEFT:
       sprite->Open(set[4]);
+      sprite->SetFrameCount(5);
       break;
     case Helpers::Direction::UPLEFT:;
       sprite->Open(set[5]);
+      sprite->SetFrameCount(5);
       break;
     case Helpers::Direction::DOWNRIGHT:
       sprite->Open(set[6]);
+      sprite->SetFrameCount(5);
       break;
     case Helpers::Direction::UPRIGHT:
       sprite->Open(set[7]);
+      sprite->SetFrameCount(8);
       break;
     default:
       IdleAssetsManager();
@@ -235,35 +243,35 @@ void Antagonist::IdleAssetsManager() {
 
   switch (last_direction) {
     case Helpers::Direction::RIGHT:
-      sprite->SetFrameCount(8);
+      sprite->SetFrameCount(4);
       sprite->Open(RIGHT_IDLE_SPRITE_ANTAGONIST);
       break;
     case Helpers::Direction::LEFT:
-      sprite->SetFrameCount(8);
+      sprite->SetFrameCount(4);
       sprite->Open(LEFT_IDLE_SPRITE_ANTAGONIST);
       break;
     case Helpers::Direction::UP:
-      sprite->SetFrameCount(5);
+      sprite->SetFrameCount(4);
       sprite->Open(UP_IDLE_SPRITE_ANTAGONIST);
       break;
     case Helpers::Direction::DOWN:
-      sprite->SetFrameCount(5);
+      sprite->SetFrameCount(4);
       sprite->Open(DOWN_IDLE_SPRITE_ANTAGONIST);
       break;
     case Helpers::Direction::UPRIGHT:
-      sprite->SetFrameCount(5);
+      sprite->SetFrameCount(4);
       sprite->Open(UPRIGHT_IDLE_SPRITE_ANTAGONIST);
       break;
     case Helpers::Direction::UPLEFT:;
-      sprite->SetFrameCount(5);
+      sprite->SetFrameCount(4);
       sprite->Open(UPLEFT_IDLE_SPRITE_ANTAGONIST);
       break;
     case Helpers::Direction::DOWNRIGHT:
-      sprite->SetFrameCount(5);
+      sprite->SetFrameCount(4);
       sprite->Open(DOWNRIGHT_IDLE_SPRITE_ANTAGONIST);
       break;
     case Helpers::Direction::DOWNLEFT:
-      sprite->SetFrameCount(5);
+      sprite->SetFrameCount(4);
       sprite->Open(DOWNLEFT_IDLE_SPRITE_ANTAGONIST);
       break;
     default:
