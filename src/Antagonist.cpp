@@ -184,27 +184,35 @@ void Antagonist::MoveAssetsManager(std::vector<std::string> set, bool ac) {
 
   switch (direction) {
     case Helpers::Direction::LEFT:
+      sprite->SetFrameCount(8);
       sprite->Open(set[0]);
       break;
     case Helpers::Direction::RIGHT:
+      sprite->SetFrameCount(8);
       sprite->Open(set[1]);
       break;
     case Helpers::Direction::DOWN:
+      sprite->SetFrameCount(5);
       sprite->Open(set[2]);
       break;
     case Helpers::Direction::UP:
+      sprite->SetFrameCount(5);
       sprite->Open(set[3]);
       break;
     case Helpers::Direction::DOWNLEFT:
+      sprite->SetFrameCount(5);
+      sprite->SetFrameCount(5);
       sprite->Open(set[4]);
       break;
     case Helpers::Direction::UPLEFT:;
       sprite->Open(set[5]);
       break;
     case Helpers::Direction::DOWNRIGHT:
+      sprite->SetFrameCount(5);
       sprite->Open(set[6]);
       break;
     case Helpers::Direction::UPRIGHT:
+      sprite->SetFrameCount(5);
       sprite->Open(set[7]);
       break;
     default:
@@ -235,35 +243,35 @@ void Antagonist::IdleAssetsManager() {
 
   switch (last_direction) {
     case Helpers::Direction::RIGHT:
-      sprite->SetFrameCount(8);
+      sprite->SetFrameCount(4);
       sprite->Open(RIGHT_IDLE_SPRITE_ANTAGONIST);
       break;
     case Helpers::Direction::LEFT:
-      sprite->SetFrameCount(8);
+      sprite->SetFrameCount(4);
       sprite->Open(LEFT_IDLE_SPRITE_ANTAGONIST);
       break;
     case Helpers::Direction::UP:
-      sprite->SetFrameCount(5);
+      sprite->SetFrameCount(4);
       sprite->Open(UP_IDLE_SPRITE_ANTAGONIST);
       break;
     case Helpers::Direction::DOWN:
-      sprite->SetFrameCount(5);
+      sprite->SetFrameCount(4);
       sprite->Open(DOWN_IDLE_SPRITE_ANTAGONIST);
       break;
     case Helpers::Direction::UPRIGHT:
-      sprite->SetFrameCount(5);
+      sprite->SetFrameCount(4);
       sprite->Open(UPRIGHT_IDLE_SPRITE_ANTAGONIST);
       break;
     case Helpers::Direction::UPLEFT:;
-      sprite->SetFrameCount(5);
+      sprite->SetFrameCount(4);
       sprite->Open(UPLEFT_IDLE_SPRITE_ANTAGONIST);
       break;
     case Helpers::Direction::DOWNRIGHT:
-      sprite->SetFrameCount(5);
+      sprite->SetFrameCount(4);
       sprite->Open(DOWNRIGHT_IDLE_SPRITE_ANTAGONIST);
       break;
     case Helpers::Direction::DOWNLEFT:
-      sprite->SetFrameCount(5);
+      sprite->SetFrameCount(4);
       sprite->Open(DOWNLEFT_IDLE_SPRITE_ANTAGONIST);
       break;
     default:
@@ -294,27 +302,35 @@ void Antagonist::AttackAssetsManager() {
 
   switch (last_direction) {
     case Helpers::Direction::RIGHT:
+      sprite->SetFrameCount(4);
       sprite->Open(RIGHT_ATTACK_SPRITE_ANTAGONIST);
       break;
     case Helpers::Direction::LEFT:
+      sprite->SetFrameCount(4);
       sprite->Open(LEFT_ATTACK_SPRITE_ANTAGONIST);
       break;
     case Helpers::Direction::UP:
+      sprite->SetFrameCount(4);
       sprite->Open(UP_ATTACK_SPRITE_ANTAGONIST);
       break;
     case Helpers::Direction::DOWN:
+      sprite->SetFrameCount(4);
       sprite->Open(DOWN_ATTACK_SPRITE_ANTAGONIST);
       break;
     case Helpers::Direction::UPRIGHT:
+      sprite->SetFrameCount(4);
       sprite->Open(UPRIGHT_ATTACK_SPRITE_ANTAGONIST);
       break;
     case Helpers::Direction::UPLEFT:;
+      sprite->SetFrameCount(4);
       sprite->Open(UPLEFT_ATTACK_SPRITE_ANTAGONIST);
       break;
     case Helpers::Direction::DOWNRIGHT:
+      sprite->SetFrameCount(4);
       sprite->Open(DOWNRIGHT_ATTACK_SPRITE_ANTAGONIST);
       break;
     case Helpers::Direction::DOWNLEFT:
+      sprite->SetFrameCount(4);
       sprite->Open(DOWNLEFT_ATTACK_SPRITE_ANTAGONIST);
       break;
     default:
