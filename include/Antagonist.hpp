@@ -70,7 +70,7 @@
 
 class Antagonist : public Component {
  public:
-  Antagonist(GameObject& associated, Vec2 position);
+  Antagonist(GameObject& associated, std::vector<Vec2> path);
 
   ~Antagonist();
 
@@ -108,6 +108,8 @@ class Antagonist : public Component {
   IFSM* stored_state;
 
   std::stack<std::unique_ptr<IFSM>> state_stack;
+
+  std::vector<Vec2> path;
 
   Helpers::Direction last_direction;
 

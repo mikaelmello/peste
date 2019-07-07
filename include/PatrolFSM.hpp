@@ -5,7 +5,9 @@
  *                  INCLUDES E DEFINES
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+#include <memory>
 #include <stack>
+#include "Antagonist.hpp"
 #include "GameObject.hpp"
 #include "IFSM.hpp"
 #include "SuspectFSM.hpp"
@@ -13,7 +15,7 @@
 
 class PatrolFSM : public IFSM {
  public:
-  PatrolFSM(GameObject& object);
+  PatrolFSM(GameObject& object, std::vector<Vec2>& points);
 
   ~PatrolFSM();
 
@@ -29,6 +31,8 @@ class PatrolFSM : public IFSM {
 
  private:
   std::stack<std::pair<unsigned, std::vector<Vec2>>> paths;
+
+  std::weak_ptr<Antagonist> ant;
 };
 
 #endif

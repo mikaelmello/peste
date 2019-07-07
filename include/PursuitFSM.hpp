@@ -5,6 +5,7 @@
  *                  INCLUDES E DEFINES
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+#include "Antagonist.hpp"
 #include "GameObject.hpp"
 #include "IFSM.hpp"
 #include "Pathfinder.hpp"
@@ -32,6 +33,8 @@ class PursuitFSM : public IFSM {
   Vec2 initial;
 
   Timer timer;
+
+  std::weak_ptr<Antagonist> ant;
 };
 
 #endif

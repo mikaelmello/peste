@@ -9,7 +9,24 @@ IFSM::IFSM(GameObject& object) : object(object), pop_requested(false) {}
 
 IFSM::~IFSM() {}
 
-IFSM::Walkable IFSM::GetWalkable(GameObject& object, GameObject& pivot) {
+bool IFSM::UpdatePosition() {
+  auto antagonist_cpt = object.GetComponent(AntagonistType);
+  if (!antagonist_cpt) {
+    throw std::runtime_error("objeto sem antagonista em IFSM::UpdatePosition");
+  }
+
+  auto ant = std::dynamic_pointer_cast<Antagonist>(antagonist_cpt);
+
+  unsigned& k = ant->paths.top().first;
+  std::vector<Vec2>& path = ant->paths.top().second;
+
+  if (k < path.size()) {
+    ant->position = path[k++];
+  }
+  return k >= path.size();
+}
+
+IFSM::Walkable IFSM::GetWalkable(GameObject& pivot) {
   Game& game = Game::GetInstance();
   State& state = game.GetCurrentState();
   auto tilemap = state.GetCurrentTileMap();

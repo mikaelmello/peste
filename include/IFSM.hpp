@@ -24,6 +24,8 @@ class IFSM {
   void virtual Update(float dt) = 0;
 
  protected:
+  bool UpdatePosition();
+  
   struct Walkable {
     bool can_walk;
 
@@ -34,8 +36,8 @@ class IFSM {
     Walkable(bool cw, Vec2 w) : can_walk(cw), walkable(w) {}
   };
   // Retorna uma posição da collider->box de @param pivot
-  // que seja andável para @param object.
-  static Walkable GetWalkable(GameObject& object, GameObject& pivot);
+  // que seja andável para IFSM::object.
+  Walkable GetWalkable(GameObject& pivot);
 
   GameObject& object;
 

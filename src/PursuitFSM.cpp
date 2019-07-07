@@ -6,36 +6,31 @@
 #include "Types.hpp"
 
 PursuitFSM::PursuitFSM(GameObject& object) : IFSM(object) {
+  Game& game = Game::GetInstance();
+  State& state = game.GetCurrentState();
+  auto tilemap = state.GetCurrentTileMap();
+
   auto antagonist_cpt = object.GetComponent(AntagonistType);
   if (!antagonist_cpt) {
-    throw std::runtime_error("sem antagonista em PursuitFSM::OnStateEnter");
+    throw std::runtime_error("sem antagonista em PursuitFSM::PursuitFSM");
   }
+  ant = std::dynamic_pointer_cast<Antagonist>(antagonist_cpt);
 
-  auto tile_map = Game::GetInstance().GetCurrentState().GetCurrentTileMap();
-  pf = std::unique_ptr<Pathfinder::Astar>(
-      new Pathfinder::Astar(object, tile_map));
-
-  auto ant = std::dynamic_pointer_cast<Antagonist>(antagonist_cpt);
+  auto pf_ptr = new Pathfinder::Astar(object, tilemap);
+  pf = std::unique_ptr<Pathfinder::Astar>(pf_ptr);
 
   stack_original_size = Antagonist::paths.size();
-  initial = ant->position;
-  OnStateEnter();
+  initial = ant.lock()->position;
 }
 
 PursuitFSM::~PursuitFSM() {}
 
 void PursuitFSM::OnStateEnter() {
-  auto antagonist_cpt = object.GetComponent(AntagonistType);
-  if (!antagonist_cpt) {
-    throw std::runtime_error("sem antagonista em PursuitFSM::OnStateEnter");
-  }
-  auto ant = std::dynamic_pointer_cast<Antagonist>(antagonist_cpt);
-
-  Walkable w = GetWalkable(object, *GameData::PlayerGameObject);
+  Walkable w = GetWalkable(*GameData::PlayerGameObject);
 
   if (w.can_walk) {
     try {
-      auto pursuit_path = pf->Run(ant->position, w.walkable);
+      auto pursuit_path = pf->Run(ant.lock()->position, w.walkable);
       Antagonist::paths.emplace(0, pursuit_path);
 
     } catch (const std::exception& ex) {
@@ -49,20 +44,11 @@ void PursuitFSM::OnStateEnter() {
 }
 
 void PursuitFSM::OnStateExecution() {
-  auto antCpt = object.GetComponent(AntagonistType);
-  if (!antCpt) {
-    throw std::runtime_error("sem antagonista em PursuitFSM::Execution");
+  bool finished = UpdatePosition();
+  if (finished) {
+    OnStateEnter();
   }
-  auto ant = std::dynamic_pointer_cast<Antagonist>(antCpt);
-
-  unsigned& k = Antagonist::paths.top().first;
-  std::vector<Vec2>& path = Antagonist::paths.top().second;
-
-  if (k < path.size()) {
-    ant->position = path[k];
-  }
-
-  ant->AssetsManager(Helpers::Action::CHASING);
+  ant.lock()->AssetsManager(Helpers::Action::CHASING);
 }
 
 void PursuitFSM::OnStateExit() {
@@ -70,42 +56,18 @@ void PursuitFSM::OnStateExit() {
     Antagonist::paths.pop();
   }
 
-  auto antCpt = object.GetComponent(AntagonistType);
-  if (!antCpt) {
-    throw std::runtime_error("sem antagonista em PursuitFSM::OnStateExit");
-  }
-  auto ant = std::dynamic_pointer_cast<Antagonist>(antCpt);
-
-  auto return_path = pf->Run(ant->position, initial);
+  auto return_path = pf->Run(ant.lock()->position, initial);
   Antagonist::paths.emplace(0, return_path);
 }
 
 void PursuitFSM::Update(float dt) {
-  auto antCpt = object.GetComponent(AntagonistType);
-  if (!antCpt) {
-    throw std::runtime_error("sem antagonista em PursuitFSM::Update");
-  }
-  auto ant = std::dynamic_pointer_cast<Antagonist>(antCpt);
-
-  if (timer.Get() >= 1.0f) {
-    if (stack_original_size < Antagonist::paths.size()) {
-      Antagonist::paths.pop();
-    }
+  if (timer.Get() >= 0.75f) {
+    Antagonist::paths.pop();
     OnStateEnter();
     timer.Restart();
   }
 
   OnStateExecution();
-  unsigned& k = Antagonist::paths.top().first;
-  std::vector<Vec2>& path = Antagonist::paths.top().second;
-
-  if (k < path.size() - 1) {
-    k++;
-  }
-
-  if (!ant->NearTarget(40)) {
-    pop_requested = true;
-  }
-
+  pop_requested = !ant.lock()->NearTarget(40);
   timer.Update(dt);
 }

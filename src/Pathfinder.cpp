@@ -11,7 +11,7 @@ Pathfinder::Astar::Astar(GameObject& o, std::shared_ptr<Heuristic> h,
 }
 
 Pathfinder::Astar::Astar(GameObject& o, TileMap* tm)
-    : Astar(o, std::shared_ptr<Heuristic>(new Diagonal()), tm) {}
+    : Astar(o, std::shared_ptr<Heuristic>(new Euclidian()), tm) {}
 
 Pathfinder::Astar::~Astar() {}
 

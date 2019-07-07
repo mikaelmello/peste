@@ -14,8 +14,14 @@
 
 std::stack<std::pair<unsigned, std::vector<Vec2>>> Antagonist::paths;
 
-Antagonist::Antagonist(GameObject& associated, Vec2 position)
-    : Component(associated), position(position), stored_state(nullptr) {
+Antagonist::Antagonist(GameObject& associated, std::vector<Vec2> path)
+    : Component(associated), position(0, 0), stored_state(nullptr), path(path) {
+  if (path.empty()) {
+    throw std::invalid_argument("antagonist without path");
+  }
+
+  position = path[0];
+
   Sound* sound = new Sound(associated, BREATHING_ANTAGONIST_SOUND);
   Sprite* sprite = new Sprite(associated, IDLE_SPRITE, 4, 0.125);
   Collider* collider =
@@ -38,8 +44,10 @@ void Antagonist::NotifyCollision(std::shared_ptr<GameObject> other) {
 void Antagonist::Start() {
   last_action = Helpers::Action::IDLE;
   last_direction = Helpers::Direction::NONE;
-  state_stack.emplace(new PatrolFSM(associated));
+  state_stack.emplace(new PatrolFSM(associated, path));
 }
+
+#include "Collider.hpp"
 
 void Antagonist::Update(float dt) {
   previous_position = position;
@@ -59,11 +67,6 @@ void Antagonist::Update(float dt) {
     if (top_state->PopRequested()) {
       top_state->OnStateExit();
       state_stack.pop();
-
-      if (!state_stack.empty()) {
-        auto& enter_state = state_stack.top();
-        enter_state->OnStateEnter();
-      }
     }
 
     if (stored_state != nullptr) {
@@ -73,7 +76,7 @@ void Antagonist::Update(float dt) {
     }
 
     if (state_stack.empty()) {
-      state_stack.emplace(new PatrolFSM(associated));
+      state_stack.emplace(new PatrolFSM(associated, path));
     }
 
     auto& state = state_stack.top();

@@ -112,8 +112,9 @@ void RoomState::LoadAssets() {
   GameData::PlayerGameObject = playerGo;
 
   GameObject* antagonist_go = new GameObject(5);
-  Antagonist* antagonist =
-      new Antagonist(*antagonist_go, currentTileMap->GetInitialPosition());
+  std::vector<Vec2> points = {{68, 199},  {88, 132},  {110, 66},
+                              {199, 106}, {332, 132}, {326, 195}};
+  Antagonist* antagonist = new Antagonist(*antagonist_go, points);
   antagonist_go->AddComponent(antagonist);
   objects.emplace_back(antagonist_go);
 

@@ -8,6 +8,7 @@
 #define IDLE_SPRITE_ANTAGONIST "assets/img/terry/idle_terry.png"
 
 #include <stack>
+#include "Antagonist.hpp"
 #include "GameObject.hpp"
 #include "IFSM.hpp"
 #include "Timer.hpp"
@@ -32,6 +33,8 @@ class IdleFSM : public IFSM {
   int counter;
 
   Timer timer;
+
+  std::weak_ptr<Antagonist> ant;
 };
 
 #endif
