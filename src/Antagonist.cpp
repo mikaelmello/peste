@@ -87,7 +87,8 @@ void Antagonist::Update(float dt) {
 
   associated.box.x = position.x * tileDim;
   associated.box.y = position.y * tileDim;
-
+  associated.box.w = sprite->GetWidth();
+  associated.box.h = sprite->GetHeight();
   // a position está no meio horizontal e no fim vertical do sprite
   // para renderizar, colocamos o xy da box de acordo
   // posição * dimensão do tile - (comprimento da sprite / 2), pois o x fica no
@@ -95,8 +96,6 @@ void Antagonist::Update(float dt) {
   associated.box.x = position.x * tileDim - sprite->GetWidth() / 2;
   // posição * dimensão do tile - altura da sprite, pois o y fica la embaixo
   associated.box.y = position.y * tileDim - sprite->GetHeight();
-
-  // printf("%s\n", position.ToString().c_str());
 }
 
 void Antagonist::Render() {}
@@ -184,19 +183,19 @@ void Antagonist::MoveAssetsManager(std::vector<std::string> set, bool ac) {
   auto sprite = std::dynamic_pointer_cast<Sprite>(spriteCpt);
 
   switch (direction) {
-    case Helpers::Direction::RIGHT:
+    case Helpers::Direction::LEFT:
       sprite->Open(set[0]);
       break;
-    case Helpers::Direction::LEFT:
+    case Helpers::Direction::RIGHT:
       sprite->Open(set[1]);
       break;
-    case Helpers::Direction::UP:
+    case Helpers::Direction::DOWN:
       sprite->Open(set[2]);
       break;
-    case Helpers::Direction::DOWN:
+    case Helpers::Direction::UP:
       sprite->Open(set[3]);
       break;
-    case Helpers::Direction::UPRIGHT:
+    case Helpers::Direction::DOWNLEFT:
       sprite->Open(set[4]);
       break;
     case Helpers::Direction::UPLEFT:;
@@ -205,7 +204,7 @@ void Antagonist::MoveAssetsManager(std::vector<std::string> set, bool ac) {
     case Helpers::Direction::DOWNRIGHT:
       sprite->Open(set[6]);
       break;
-    case Helpers::Direction::DOWNLEFT:
+    case Helpers::Direction::UPRIGHT:
       sprite->Open(set[7]);
       break;
     default:
@@ -236,27 +235,35 @@ void Antagonist::IdleAssetsManager() {
 
   switch (last_direction) {
     case Helpers::Direction::RIGHT:
+      sprite->SetFrameCount(8);
       sprite->Open(RIGHT_IDLE_SPRITE_ANTAGONIST);
       break;
     case Helpers::Direction::LEFT:
+      sprite->SetFrameCount(8);
       sprite->Open(LEFT_IDLE_SPRITE_ANTAGONIST);
       break;
     case Helpers::Direction::UP:
+      sprite->SetFrameCount(5);
       sprite->Open(UP_IDLE_SPRITE_ANTAGONIST);
       break;
     case Helpers::Direction::DOWN:
+      sprite->SetFrameCount(5);
       sprite->Open(DOWN_IDLE_SPRITE_ANTAGONIST);
       break;
     case Helpers::Direction::UPRIGHT:
+      sprite->SetFrameCount(5);
       sprite->Open(UPRIGHT_IDLE_SPRITE_ANTAGONIST);
       break;
     case Helpers::Direction::UPLEFT:;
+      sprite->SetFrameCount(5);
       sprite->Open(UPLEFT_IDLE_SPRITE_ANTAGONIST);
       break;
     case Helpers::Direction::DOWNRIGHT:
+      sprite->SetFrameCount(5);
       sprite->Open(DOWNRIGHT_IDLE_SPRITE_ANTAGONIST);
       break;
     case Helpers::Direction::DOWNLEFT:
+      sprite->SetFrameCount(5);
       sprite->Open(DOWNLEFT_IDLE_SPRITE_ANTAGONIST);
       break;
     default:
