@@ -1,7 +1,7 @@
+#include "ActionMessage.hpp"
 #include <iostream>
 #include <memory>
 #include <string>
-#include "ActionMessage.hpp"
 #include "Collider.hpp"
 #include "GameObject.hpp"
 #include "Sprite.hpp"
@@ -14,6 +14,8 @@ ActionMessage::ActionMessage(GameObject& associated, Vec2 position,
 
   associated.box.x = position.x * 8;
   associated.box.y = position.y * 8 - 30;
+
+  std::cout << position.x << " " << position.y << std::endl;
 }
 
 ActionMessage::~ActionMessage() {}

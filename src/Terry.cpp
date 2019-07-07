@@ -10,6 +10,7 @@
 #include "PriorityChanger.hpp"
 #include "Sprite.hpp"
 #include "TileMap.hpp"
+#include "Types.hpp"
 
 #define TERRY_IDLE_SPRITE "assets/img/npc/npc.png"
 
@@ -22,32 +23,34 @@ Terry::Terry(GameObject& associated, Vec2 position)
   associated.box.h = sprite->GetHeight();
   associated.AddComponent(collider);
 
+  std::cout << position.x << " " << position.y << std::endl;
+
   State& state = Game::GetInstance().GetCurrentState();
 
   auto tilemap = state.GetCurrentTileMap();
   int tileDim = tilemap->GetLogicalTileDimension();
 
-  associated.box.x = position.x * tileDim - sprite->GetWidth() / 2;
-  associated.box.y = position.y * tileDim - sprite->GetHeight();
+  associated.box.x = position.x * tileDim;
+  associated.box.y = position.y * tileDim;
 
-  // GameObject* bgo = new GameObject(associated.priority);
-  // bgo->box = associated.box;
-  // Blocker* blocker =
-  //     new Blocker(*bgo, {0.5, 0.3f}, {0, sprite->GetHeight() * 0.35f});
-  // bgo->AddComponent(blocker);
-  // blocker_go = state.AddObject(bgo);
+  GameObject* bgo = new GameObject(associated.priority);
+  bgo->box = associated.box;
+  Blocker* blocker =
+      new Blocker(*bgo, {0.5, 0.3f}, {0, sprite->GetHeight() * 0.35f});
+  bgo->AddComponent(blocker);
+  blocker_go = state.AddObject(bgo);
 
-  // GameObject* pcGo = new GameObject(associated.priority);
-  // pcGo->box = associated.box;
-  // PriorityChanger* priChanger = new PriorityChanger(*pcGo, associated);
-  // pcGo->AddComponent(priChanger);
-  // priorityChanger_go = state.AddObject(pcGo);
+  GameObject* pcGo = new GameObject(associated.priority);
+  pcGo->box = associated.box;
+  PriorityChanger* priChanger = new PriorityChanger(*pcGo, associated);
+  pcGo->AddComponent(priChanger);
+  priorityChanger_go = state.AddObject(pcGo);
 
-  // GameObject* talkGo = new GameObject();
-  // ActionMessage* talkMsg =
-  //     new ActionMessage(*talkGo, position, "assets/img/open_msg.png");
-  // talkGo->AddComponent(talkMsg);
-  // talkMessageGo = state.AddObject(talkGo);
+  GameObject* talkGo = new GameObject();
+  ActionMessage* talkMsg =
+      new ActionMessage(*talkGo, position, "assets/img/open_msg.png");
+  talkGo->AddComponent(talkMsg);
+  talkMessageGo = state.AddObject(talkGo);
 }
 
 Terry::~Terry() {
@@ -57,11 +60,8 @@ Terry::~Terry() {
 }
 
 void Terry::NotifyCollision(std::shared_ptr<GameObject> other) {
-  // add new state with dialogue if hope press x when colliding with terry
-  printf("%d\n", other.get());
-  auto playerComponent = other.get()->GetComponent(PlayerType);
+  auto playerComponent = other->GetComponent(PlayerType);
   if (playerComponent) {
-    std::cout << "colliding" << std::endl;
     colliding = true;
   }
 }
@@ -71,12 +71,12 @@ void Terry::Start() {}
 void Terry::Update(float dt) {}
 
 void Terry::Render() {
-  // if (colliding) {
-  //   ShowTalkDialog();
-  // } else {
-  //   HideTalkDialog();
-  // }
-  // colliding = false;
+  if (colliding) {
+    ShowTalkDialog();
+  } else {
+    HideTalkDialog();
+  }
+  colliding = false;
 }
 
 void Terry::ShowTalkDialog() { talkMessageGo->EnableRender(); }

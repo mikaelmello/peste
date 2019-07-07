@@ -85,9 +85,6 @@ void RoomState::Update(float dt) {
       if (collides) {
         go1->NotifyCollision(go2);
         go2->NotifyCollision(go1);
-
-        printf("\n%d %lf collides with %d %lf\n", go1.get(), go1->priority,
-               go2.get(), go2->priority);
       }
     }
   }
@@ -115,10 +112,10 @@ void RoomState::LoadAssets() {
   objects.emplace_back(playerGo);
   GameData::PlayerGameObject = playerGo;
 
-  GameObject* terryGo = new GameObject(7);
-  Terry* terry =
-      new Terry(*terryGo, currentTileMap->GetInitialPosition() + Vec2(-18, 0));
-  playerGo->AddComponent(terry);
+  GameObject* terryGo = new GameObject(5);
+  Terry* terry = new Terry(
+      *terryGo, currentTileMap->GetInitialPosition() + Vec2(-18, -18));
+  terryGo->AddComponent(terry);
   objects.emplace_back(terryGo);
 
   // GameObject* antagonist_go = new GameObject(5);
@@ -127,32 +124,31 @@ void RoomState::LoadAssets() {
   // antagonist_go->AddComponent(antagonist);
   // objects.emplace_back(antagonist_go);
 
-  // GameObject* door_go = new GameObject(6);
-  // Vec2 door_pos = currentTileMap->GetInitialPosition() + Vec2(8, 8);
-  // Door* door = new Door(*door_go, Helpers::Direction::LEFT, door_pos, false);
-  // door_go->AddComponent(door);
-  // objects.emplace_back(door_go);
+  GameObject* door_go = new GameObject(6);
+  Vec2 door_pos = currentTileMap->GetInitialPosition() + Vec2(8, 8);
+  Door* door = new Door(*door_go, Helpers::Direction::LEFT, door_pos, false);
+  door_go->AddComponent(door);
+  objects.emplace_back(door_go);
 
   Camera::Follow(playerGo);
 
-  // GameObject* lampGo = new GameObject(6);
-  // Item* lamp =
-  //     new Item(*lampGo, "Lamparina",
-  //              "Esta lamparina é a única coisa permitindo que Hope veja "
-  //              "ao seu redor e não seja consumido pela escuridão.",
-  //              "assets/img/item/lamp.png",
-  //              currentTileMap->GetInitialPosition() - Vec2(3, 3));
-  // lampGo->AddComponent(lamp);
-  // objects.emplace_back(lampGo);
+  GameObject* lampGo = new GameObject(6);
+  Item* lamp =
+      new Item(*lampGo, "Lamparina",
+               "Esta lamparina é a única coisa permitindo que Hope veja "
+               "ao seu redor e não seja consumido pela escuridão.",
+               "assets/img/item/lamp.png",
+               currentTileMap->GetInitialPosition() - Vec2(3, 3));
+  lampGo->AddComponent(lamp);
+  objects.emplace_back(lampGo);
 
-  // GameObject* lamp2Go = new GameObject(6);
-  // Item* lamp2 =
-  //     new Item(*lamp2Go, "Lamparina 2", "Esta lamparina é ruim pode
-  //     esquecer",
-  //              "assets/img/item/lamp2.png",
-  //              currentTileMap->GetInitialPosition() + Vec2(3, 3));
-  // lamp2Go->AddComponent(lamp2);
-  // objects.emplace_back(lamp2Go);
+  GameObject* lamp2Go = new GameObject(6);
+  Item* lamp2 =
+      new Item(*lamp2Go, "Lamparina 2", "Esta lamparina é ruim pode esquecer",
+               "assets/img/item/lamp2.png",
+               currentTileMap->GetInitialPosition() + Vec2(3, 3));
+  lamp2Go->AddComponent(lamp2);
+  objects.emplace_back(lamp2Go);
 
   SortObjects();
 }
