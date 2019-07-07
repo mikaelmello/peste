@@ -27,11 +27,11 @@ Door::Door(GameObject& associated, Helpers::Direction direction, Vec2 position,
 
   if (direction == Helpers::Direction::LEFT) {
     sprite->Open(LEFT_DOOR);
-    collider->SetScale({4, 1.5});
+    collider->SetScale({4, 1});
     collider->SetOffset({1, 0.75});
   } else if (direction == Helpers::Direction::RIGHT) {
     sprite->Open(RIGHT_DOOR);
-    collider->SetScale({4, 1.5});
+    collider->SetScale({4, 1});
     collider->SetOffset({2, 0.75});
   } else if (direction == Helpers::Direction::UP) {
     sprite->Open(UP_DOOR);
@@ -57,16 +57,20 @@ Door::Door(GameObject& associated, Helpers::Direction direction, Vec2 position,
   blocker_go->box = associated.box;
   Blocker* blocker = new Blocker(*blocker_go);
   blocker_go->AddComponent(blocker);
-  auto blocker_ptr = state.AddObject(blocker_go);
+  blockerGo = state.AddObject(blocker_go);
 
   this->blocker = std::dynamic_pointer_cast<Blocker>(
-      blocker_ptr->GetComponent(Types::BlockerType));
+      blockerGo->GetComponent(Types::BlockerType));
 
   associated.AddComponent(collider);
   associated.AddComponent(sprite);
 }
 
-Door::~Door() {}
+Door::~Door() {
+  closeDoorGo->RequestDelete();
+  openDoorGo->RequestDelete();
+  blockerGo->RequestDelete();
+}
 
 void Door::NotifyCollision(std::shared_ptr<GameObject> other) {
   auto playerComponent = other->GetComponent(PlayerType);

@@ -43,11 +43,11 @@ Player::Player(GameObject& associated, Vec2 position)
 
   State& state = Game::GetInstance().GetCurrentState();
 
-  GameObject* pcGo = new GameObject(associated.priority);
-  pcGo->box = associated.box;
-  PriorityChanger* priChanger = new PriorityChanger(*pcGo, associated, true);
-  pcGo->AddComponent(priChanger);
-  priorityChanger_go = state.AddObject(pcGo);
+  // GameObject* pcGo = new GameObject(associated.priority);
+  // pcGo->box = associated.box;
+  // PriorityChanger* priChanger = new PriorityChanger(*pcGo, associated, true);
+  // pcGo->AddComponent(priChanger);
+  // priorityChanger_go = state.AddObject(pcGo);
 }
 
 Player::~Player() { priorityChanger_go->RequestDelete(); }
@@ -71,6 +71,11 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
       else
         door->Open();
     }
+  }
+
+  auto terry_cpt = other->GetComponent(TerryType);
+  if (terry_cpt) {
+    std::cout << "colliding with terry" << std::endl;
   }
 }
 
@@ -162,7 +167,7 @@ void Player::Update(float dt) {
   associated.box.w = sprite->GetWidth();
   associated.box.h = sprite->GetHeight();
 
-  priorityChanger_go->box = associated.box;
+  // priorityChanger_go->box = associated.box;
 }
 
 void Player::Render() {

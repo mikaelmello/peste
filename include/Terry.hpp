@@ -27,13 +27,19 @@ class Terry : public Component {
 
   void Render() override;
 
+  void ShowTalkDialog();
+  void HideTalkDialog();
+
   const Types Type = TerryType;
 
  private:
   Vec2 position;
 
+  bool colliding;
+
   std::shared_ptr<GameObject> blocker_go;
   std::shared_ptr<GameObject> priorityChanger_go;
+  std::shared_ptr<GameObject> talkMessageGo;
 };
 
 #endif

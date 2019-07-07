@@ -51,6 +51,7 @@ class Door : public Component {
 
   std::shared_ptr<GameObject> openDoorGo;
   std::shared_ptr<GameObject> closeDoorGo;
+  std::shared_ptr<GameObject> blockerGo;
 
   std::shared_ptr<Blocker> blocker;
 };
