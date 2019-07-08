@@ -1,7 +1,7 @@
+#include "ActionMessage.hpp"
 #include <iostream>
 #include <memory>
 #include <string>
-#include "ActionMessage.hpp"
 #include "Collider.hpp"
 #include "GameObject.hpp"
 #include "Sprite.hpp"

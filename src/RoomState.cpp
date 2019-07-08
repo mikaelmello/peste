@@ -112,10 +112,10 @@ void RoomState::LoadAssets() {
   objects.push_back(playerGo);
   GameData::PlayerGameObject = playerGo;
 
-  GameObject* terryGo = new GameObject(7);
-  Terry* terry =
-      new Terry(*terryGo, currentTileMap->GetInitialPosition() + Vec2(-14, 0));
-  playerGo->AddComponent(terry);
+  GameObject* terryGo = new GameObject(5);
+  Terry* terry = new Terry(
+      *terryGo, currentTileMap->GetInitialPosition() + Vec2(-18, -18));
+  terryGo->AddComponent(terry);
   objects.emplace_back(terryGo);
 
   // GameObject* antagonist_go = new GameObject(5);

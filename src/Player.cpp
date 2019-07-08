@@ -5,6 +5,7 @@
 #include "Blocker.hpp"
 #include "Camera.hpp"
 #include "Collider.hpp"
+#include "DialogueState.hpp"
 #include "Door.hpp"
 #include "Game.hpp"
 #include "GameData.hpp"
@@ -175,7 +176,7 @@ void Player::Update(float dt) {
   associated.box.w = sprite->GetWidth();
   associated.box.h = sprite->GetHeight();
 
-  priorityChanger_go->box = associated.box;
+  // priorityChanger_go->box = associated.box;
 }
 
 void Player::Render() {

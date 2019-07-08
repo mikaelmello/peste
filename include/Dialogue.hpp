@@ -1,5 +1,5 @@
-#ifndef TERRY_H
-#define TERRY_H
+#ifndef DIALOGUE_H
+#define DIALOGUE_H
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *                  INCLUDES E DEFINES
@@ -9,13 +9,15 @@
 #include <string>
 #include "Component.hpp"
 #include "GameObject.hpp"
+#include "Helpers.hpp"
 #include "Types.hpp"
 
-class Terry : public Component {
+class Dialogue : public Component {
  public:
-  Terry(GameObject& associated, Vec2 position);
+  Dialogue(GameObject& associated, const std::string& interlocutor,
+           const std::string& text);
 
-  ~Terry();
+  ~Dialogue();
 
   void Start() override;
 
@@ -27,21 +29,11 @@ class Terry : public Component {
 
   void Render() override;
 
-  void ShowTalkDialog();
-  void HideTalkDialog();
-
-  void Talk();
-
-  const Types Type = TerryType;
+  const Types Type = DialogueType;
 
  private:
-  Vec2 position;
-
-  bool colliding;
-
-  std::shared_ptr<GameObject> blocker_go;
-  std::shared_ptr<GameObject> priorityChanger_go;
-  std::shared_ptr<GameObject> talkMessageGo;
+  std::shared_ptr<GameObject> interlocutorGo;
+  std::shared_ptr<GameObject> textGo;
 };
 
 #endif
