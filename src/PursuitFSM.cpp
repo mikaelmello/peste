@@ -43,8 +43,8 @@ void PursuitFSM::OnStateEnter() {
   }
 }
 
-void PursuitFSM::OnStateExecution() {
-  bool finished = UpdatePosition();
+void PursuitFSM::OnStateExecution(float dt) {
+  bool finished = UpdatePosition(dt);
   if (finished) {
     OnStateEnter();
   }
@@ -67,7 +67,7 @@ void PursuitFSM::Update(float dt) {
     timer.Restart();
   }
 
-  OnStateExecution();
+  OnStateExecution(dt);
   pop_requested = !ant.lock()->NearTarget(40);
   timer.Update(dt);
 }

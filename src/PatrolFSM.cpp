@@ -44,8 +44,8 @@ void PatrolFSM::OnStateEnter() {
   }
 }
 
-void PatrolFSM::OnStateExecution() {
-  bool must_pop = UpdatePosition();
+void PatrolFSM::OnStateExecution(float dt) {
+  bool must_pop = UpdatePosition(dt);
   if (must_pop) {
     Antagonist::paths.pop();
     ant.lock()->Push(new IdleFSM(object));
@@ -59,9 +59,9 @@ void PatrolFSM::OnStateExit() {
 
 void PatrolFSM::Update(float dt) {
   OnStateEnter();
-  OnStateExecution();
+  OnStateExecution(dt);
 
   if (ant.lock()->NearTarget(50)) {
-    // ant.lock()->Push(new SuspectFSM(object));
+    ant.lock()->Push(new SuspectFSM(object));
   }
 }

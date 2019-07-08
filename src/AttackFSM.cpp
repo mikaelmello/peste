@@ -30,7 +30,7 @@ void AttackFSM::OnStateEnter() {
   ant.lock()->AssetsManager(Helpers::Action::ATTACKING);
 }
 
-void AttackFSM::OnStateExecution() {
+void AttackFSM::OnStateExecution(float dt) {
   GameData::player_was_hit = IsColliding();
   pop_requested = true;
 }
@@ -39,7 +39,7 @@ void AttackFSM::OnStateExit() {}
 
 void AttackFSM::Update(float dt) {
   if (timer.Get() >= execution_time) {
-    OnStateExecution();
+    OnStateExecution(dt);
   }
 
   pop_requested |= !IsColliding();

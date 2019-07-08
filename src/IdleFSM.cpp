@@ -16,7 +16,7 @@ void IdleFSM::OnStateEnter() {
   ant.lock()->AssetsManager(Helpers::Action::IDLE);
 }
 
-void IdleFSM::OnStateExecution() {}
+void IdleFSM::OnStateExecution(float dt) {}
 
 void IdleFSM::OnStateExit() {}
 

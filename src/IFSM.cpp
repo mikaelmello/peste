@@ -9,7 +9,7 @@ IFSM::IFSM(GameObject& object) : object(object), pop_requested(false) {}
 
 IFSM::~IFSM() {}
 
-bool IFSM::UpdatePosition() {
+bool IFSM::UpdatePosition(float dt) {
   auto antagonist_cpt = object.GetComponent(AntagonistType);
   if (!antagonist_cpt) {
     throw std::runtime_error("objeto sem antagonista em IFSM::UpdatePosition");
@@ -20,9 +20,17 @@ bool IFSM::UpdatePosition() {
   unsigned& k = ant->paths.top().first;
   std::vector<Vec2>& path = ant->paths.top().second;
 
-  if (k < path.size()) {
+  bool update = timer.Get() <= 0.1;
+
+  if (k < path.size() && update) {
     ant->position = path[k++];
   }
+
+  if (!update) {
+    timer.Restart();
+  }
+
+  timer.Update(dt);
   return k >= path.size();
 }
 

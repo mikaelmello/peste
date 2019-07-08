@@ -41,11 +41,16 @@ void SuspectFSM::OnStateEnter() {
   }
 }
 
-void SuspectFSM::OnStateExecution() {
-  UpdatePosition();
+void SuspectFSM::OnStateExecution(float dt) {
+  bool go_idle = UpdatePosition(dt);
 
   if (rage_bias == RAGE_NUMERIC_LIMIT) {
     ant.lock()->Push(new PursuitFSM(object));
+  }
+
+  if (go_idle) {
+    ant.lock()->AssetsManager(Helpers::Action::IDLE);
+    return;
   }
 
   ant.lock()->AssetsManager(Helpers::Action::SUSPECTING);
@@ -79,7 +84,7 @@ void SuspectFSM::Update(float dt) {
     bias_update_timer.Restart();
   }
 
-  OnStateExecution();
+  OnStateExecution(dt);
   bias_update_timer.Update(dt);
 
   if (rage_bias == NO_RAGE_BIAS) {

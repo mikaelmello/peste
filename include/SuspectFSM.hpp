@@ -21,7 +21,7 @@ class SuspectFSM : public IFSM {
 
   void OnStateEnter();
 
-  void OnStateExecution();
+  void OnStateExecution(float dt);
 
   void OnStateExit();
 

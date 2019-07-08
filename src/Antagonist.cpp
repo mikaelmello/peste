@@ -123,7 +123,7 @@ void Antagonist::AssetsManager(Helpers::Action action) {
 
   switch (action) {
     case Helpers::Action::IDLE:
-      IdleAssetsManager();
+      IdleAssetsManager(action_change);
       break;
     case Helpers::Action::MOVING:
       MoveAssetsManager(WALKING_WALK_SET, action_change);
@@ -139,7 +139,7 @@ void Antagonist::AssetsManager(Helpers::Action action) {
       break;
     default:
       action = Helpers::Action::IDLE;
-      IdleAssetsManager();
+      IdleAssetsManager(true);
       break;
   }
   last_action = action;
@@ -169,14 +169,14 @@ void Antagonist::MoveAssetsManager(std::vector<std::string> set, bool ac) {
 
   Vec2 delta = position - previous_position;
 
-  bool up = delta.y == -1;
-  bool down = delta.y == 1;
-  bool left = delta.x == -1;
-  bool right = delta.x == 1;
+  bool up = delta.y <= -1;
+  bool down = delta.y >= 1;
+  bool left = delta.x <= -1;
+  bool right = delta.x >= 1;
 
   auto direction = Helpers::combine_moves(up, down, left, right);
 
-  if (last_direction == direction) {
+  if (last_direction == direction || direction == Helpers::Direction::NONE) {
     return;
   }
 
@@ -201,7 +201,6 @@ void Antagonist::MoveAssetsManager(std::vector<std::string> set, bool ac) {
       break;
     case Helpers::Direction::DOWNLEFT:
       sprite->SetFrameCount(5);
-      sprite->SetFrameCount(5);
       sprite->Open(set[4]);
       break;
     case Helpers::Direction::UPLEFT:;
@@ -216,14 +215,16 @@ void Antagonist::MoveAssetsManager(std::vector<std::string> set, bool ac) {
       sprite->Open(set[7]);
       break;
     default:
-      IdleAssetsManager();
+      // IdleAssetsManager();
       break;
   }
 
   last_direction = direction;
 }
 
-void Antagonist::IdleAssetsManager() {
+void Antagonist::IdleAssetsManager(bool action_change) {
+  if (!action_change) return;
+
   auto spriteCpt = associated.GetComponent(SpriteType);
   if (!spriteCpt) {
     throw std::runtime_error("O gameobject do antagonista nao tem sprite");

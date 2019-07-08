@@ -99,7 +99,7 @@ class Antagonist : public Component {
  private:
   void MoveAssetsManager(std::vector<std::string> set, bool ac);
 
-  void IdleAssetsManager();
+  void IdleAssetsManager(bool action_change);
 
   void AttackAssetsManager();
 

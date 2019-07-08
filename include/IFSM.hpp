@@ -6,6 +6,7 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 #include "GameObject.hpp"
+#include "Timer.hpp"
 
 class IFSM {
  public:
@@ -17,15 +18,15 @@ class IFSM {
 
   void virtual OnStateEnter() = 0;
 
-  void virtual OnStateExecution() = 0;
+  void virtual OnStateExecution(float dt) = 0;
 
   void virtual OnStateExit() = 0;
 
   void virtual Update(float dt) = 0;
 
  protected:
-  bool UpdatePosition();
-  
+  bool UpdatePosition(float dt);
+
   struct Walkable {
     bool can_walk;
 
@@ -42,6 +43,9 @@ class IFSM {
   GameObject& object;
 
   bool pop_requested;
+
+ private:
+  Timer timer;
 };
 
 #endif
