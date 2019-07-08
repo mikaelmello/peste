@@ -50,6 +50,8 @@ Game::Game(const std::string& title, int width, int height)
   if (return_code != mix_flags) {
     throw std::runtime_error("Failed to init the SDL_Mixer library");
   }
+  // teste
+  Mix_AllocateChannels(32);
 
   window = SDL_CreateWindow(title.c_str(), SDL_WINDOWPOS_CENTERED,
                             SDL_WINDOWPOS_CENTERED, width, height, 0);
@@ -149,7 +151,6 @@ void Game::Run() {
     state->Update(GetDeltaTime());
     state->Render();
     SDL_RenderPresent(renderer);
-    SDL_Delay(33);
   }
 
   while (!stateStack.empty()) {

@@ -84,7 +84,7 @@ void TileMap::Load(const std::string& file) {
   }
 
   // default parallax factor
-  for (int i = 0; i < layers.size(); i++) {
+  for (unsigned i = 0; i < layers.size(); i++) {
     layerParallax.push_back({0, 0});
   }
 }
@@ -93,8 +93,8 @@ void TileMap::SetTileSet(std::shared_ptr<TileSet> tileSet) {
   this->tileSet = tileSet;
 }
 
-void TileMap::SetParallax(int layer, float xFactor, float yFactor) {
-  if (layer < 0 || layer >= layers.size()) {
+void TileMap::SetParallax(unsigned layer, float xFactor, float yFactor) {
+  if (layer >= layers.size()) {
     throw std::invalid_argument("Invalid layer to add parallax factors");
   }
 
@@ -109,7 +109,7 @@ int& TileMap::At(int x, int y, int z) {
   return layers[z].data[index];
 }
 
-void TileMap::RenderLayer(int layer, int cameraX, int cameraY) {
+void TileMap::RenderLayer(unsigned layer, int cameraX, int cameraY) {
   if (!layers[layer].visible) {
     return;
   }
@@ -131,7 +131,7 @@ void TileMap::RenderLayer(int layer, int cameraX, int cameraY) {
 }
 
 void TileMap::Render() {
-  for (int i = 0; i < layers.size(); i++) {
+  for (unsigned i = 0; i < layers.size(); i++) {
     RenderLayer(i, Camera::pos.x, Camera::pos.y);
   }
 }

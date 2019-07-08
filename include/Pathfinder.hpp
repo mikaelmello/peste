@@ -60,7 +60,7 @@ struct Diagonal : public Heuristic {
 
 class Astar {
  public:
-  Astar(GameObject& object, Heuristic* h, TileMap* tm);
+  Astar(GameObject& object, std::shared_ptr<Heuristic> h, TileMap* tm);
 
   Astar(GameObject& object, TileMap* tm);
 
@@ -71,7 +71,7 @@ class Astar {
  private:
   GameObject& object;
 
-  Heuristic* heuristic;
+  std::shared_ptr<Heuristic> heuristic;
 
   TileMap* tm;
 
@@ -83,11 +83,10 @@ class Astar {
 
   int index(int i, int j);
 
-  // Funções auxiliares:
+  int GetGValue(std::pair<int, int>& p);
+
   void Search(std::vector<Vec2>& path, std::pair<int, int>& start,
               std::pair<int, int>& dest);
-
-  bool CanWalk(std::pair<int, int>& p);
 
   void TracePath(std::pair<int, int>& dest, std::vector<Vec2>& path);
 
@@ -95,17 +94,17 @@ class Astar {
 
   void SetParent(std::pair<int, int>& leaf, std::pair<int, int>& parent);
 
-  void SetOpened(std::pair<int, int> p);
+  void SetOpened(std::pair<int, int>& p);
 
   void Close(std::pair<int, int>& p);
 
-  bool IsIn(std::pair<int, int> p);
+  bool IsIn(std::pair<int, int>& p);
 
   bool Closed(std::pair<int, int>& p);
 
   bool Shorter(float cost, std::pair<int, int>& p, std::pair<int, int>& d);
 
-  std::vector<std::pair<int, int>> Neighbours(std::pair<int, int> p);
+  std::vector<std::pair<int, int>> Neighbours(std::pair<int, int>& p);
 };
 
 }  // namespace Pathfinder

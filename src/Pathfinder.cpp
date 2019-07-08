@@ -1,29 +1,30 @@
 #include "Pathfinder.hpp"
 #include "Collider.hpp"
 #include "Game.hpp"
+#include "Helpers.hpp"
 
-Pathfinder::Astar::Astar(GameObject& o, Heuristic* h, TileMap* tm)
+Pathfinder::Astar::Astar(GameObject& o, std::shared_ptr<Heuristic> h,
+                         TileMap* tm)
     : object(o), heuristic(h), tm(tm) {
   rows = tm->GetLogicalHeight();
   cols = tm->GetLogicalWidth();
 }
 
 Pathfinder::Astar::Astar(GameObject& o, TileMap* tm)
-    : Astar(o, new Diagonal(), tm) {}
+    : Astar(o, std::shared_ptr<Heuristic>(new Diagonal()), tm) {}
 
-Pathfinder::Astar::~Astar() { delete heuristic; }
+Pathfinder::Astar::~Astar() {}
 
 std::vector<Vec2> Pathfinder::Astar::Run(Vec2& s, Vec2& d) {
   std::pair<int, int> start = {s.x, s.y};
   std::pair<int, int> dest = {d.x, d.y};
 
-  if (!CanWalk(start)) {
-    printf("%d %d\n", start.first, start.second);
+  if (!Helpers::CanWalk(object, start)) {
     throw std::invalid_argument("Pathfinder: current position is invalid");
   }
 
-  if (!CanWalk(dest)) {
-    throw std::invalid_argument("Pathfinder: desired destination is invalid.");
+  if (!Helpers::CanWalk(object, dest)) {
+    throw std::domain_error("Pathfinder: desired destination is invalid.");
   }
 
   details = std::vector<Cell>(rows * cols);
@@ -63,56 +64,26 @@ void Pathfinder::Astar::Search(std::vector<Vec2>& path,
       if (counter == 4) cost = 1.4;
       counter++;
 
-      if (!CanWalk(neighbour) || Closed(neighbour)) {
+      if (!Helpers::CanWalk(object, neighbour) || Closed(neighbour)) {
         continue;
       }
 
       if (Shorter(cost, current.second, neighbour)) {
-        double f_value = details[index(neighbour.first, neighbour.second)].g +
-                         heuristic->Distance(neighbour, dest);
-        SetFValue(neighbour, f_value);
+        double f = GetGValue(neighbour) + heuristic->Distance(neighbour, dest);
+        SetFValue(neighbour, f);
         SetParent(neighbour, current.second);
 
         if (!IsIn(neighbour)) {
           SetOpened(neighbour);
-          open.insert({f_value, neighbour});
+          open.insert({f, neighbour});
         }
       }
     }
   }
 }
 
-bool Pathfinder::Astar::CanWalk(std::pair<int, int>& p) {
-  if (p.first < 0 || p.first >= cols || p.second < 0 || p.second >= rows) {
-    return false;
-  }
-
-  auto colliderCpt = object.GetComponent(ColliderType);
-  auto spriteCpt = object.GetComponent(SpriteType);
-
-  if (!colliderCpt || !spriteCpt) {
-    throw std::runtime_error("Nao tem collider nem sprite no path finder");
-  }
-
-  auto sprite = std::dynamic_pointer_cast<Sprite>(spriteCpt);
-  auto collider = std::dynamic_pointer_cast<Collider>(colliderCpt);
-  int tileDim = tm->GetLogicalTileDimension();
-
-  int cellsWidth = round(collider->box.w / tileDim);
-  int cellsHeight = round(collider->box.h / tileDim);
-
-  int x = p.first - cellsWidth / 2;
-  int y = p.second - cellsHeight;
-
-  for (int i = x; i <= (x + cellsWidth); i++) {
-    for (int j = y; j <= (y + cellsHeight); j++) {
-      if (!tm->CanWalk(i, j)) {
-        return false;
-      }
-    }
-  }
-
-  return true;
+int Pathfinder::Astar::GetGValue(std::pair<int, int>& p) {
+  return details[index(p.first, p.second)].g;
 }
 
 void Pathfinder::Astar::TracePath(std::pair<int, int>& dest,
@@ -138,11 +109,11 @@ void Pathfinder::Astar::Close(std::pair<int, int>& p) {
   details[index(p.first, p.second)].closed = true;
 }
 
-void Pathfinder::Astar::SetOpened(std::pair<int, int> p) {
+void Pathfinder::Astar::SetOpened(std::pair<int, int>& p) {
   details[index(p.first, p.second)].opened = true;
 }
 
-bool Pathfinder::Astar::IsIn(std::pair<int, int> p) {
+bool Pathfinder::Astar::IsIn(std::pair<int, int>& p) {
   return details[index(p.first, p.second)].opened;
 }
 
@@ -163,7 +134,7 @@ bool Pathfinder::Astar::Shorter(float cost, std::pair<int, int>& s,
 }
 
 std::vector<std::pair<int, int>> Pathfinder::Astar::Neighbours(
-    std::pair<int, int> p) {
+    std::pair<int, int>& p) {
   int i = p.first;
   int j = p.second;
 

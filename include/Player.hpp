@@ -34,6 +34,12 @@ class Player : public Component {
   Vec2 position;
 
  private:
+  const double speed = 40;
+
+  int frameCount;
+
+  float frameTime;
+
   void OpenIdleSprite(const std::shared_ptr<Sprite>& sprite,
                       Helpers::Direction lastDirection);
 

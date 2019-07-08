@@ -5,6 +5,8 @@
  *                  INCLUDES E DEFINES
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 #define BREATHING_ANTAGONIST_SOUND "assets/audio/terry/monster_breathing.wav"
+#define ANTAGONIST_WALKING_SOUND "assets/audio/monster/monster_walking.wav"
+#define ATTACK_ROAR_ANTAGONIST "assets/audio/monster/monster_scream.wav"
 
 #define LEFT_WALK_SPRITE "assets/img/terry/idle_terry.png"
 #define RIGHT_WALK_SPRITE "assets/img/terry/idle_terry.png"
@@ -55,8 +57,6 @@
         RIGHT_UP_WALK_SPRITE                                                \
   }
 
-#define ANTAGONIST_DISTANCE 50
-
 #include <memory>
 #include <stack>
 #include <string>
@@ -86,7 +86,7 @@ class Antagonist : public Component {
 
   void Push(IFSM* s);
 
-  bool NearTarget();
+  bool NearTarget(float distance_check);
 
   void AssetsManager(Helpers::Action action);
 
@@ -94,8 +94,10 @@ class Antagonist : public Component {
 
   Vec2 position;
 
+  static std::stack<std::pair<unsigned, std::vector<Vec2>>> paths;
+
  private:
-  void MoveAssetsManager(std::vector<std::string> set);
+  void MoveAssetsManager(std::vector<std::string> set, bool ac);
 
   void IdleAssetsManager();
 
