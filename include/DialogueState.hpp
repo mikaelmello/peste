@@ -30,6 +30,7 @@ class DialogueState : public State {
 
  private:
   unsigned int dialogueIndex;
+  std::vector<std::pair<std::string, std::string>> script;
 };
 
 #endif

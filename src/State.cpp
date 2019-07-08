@@ -1,6 +1,7 @@
 #include "State.hpp"
 #include <algorithm>
 #include <cmath>
+#include <iostream>
 #include <memory>
 #include <string>
 #include "Camera.hpp"

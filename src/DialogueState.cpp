@@ -10,21 +10,7 @@
 
 DialogueState::DialogueState(
     const std::vector<std::pair<std::string, std::string>>& script)
-    : dialogueIndex(0) {
-  int i = 1;
-  for (auto p : script) {
-    GameObject* dialogue_go = new GameObject(i);
-    dialogue_go->box = Rect(43, 500, 1024, 183);
-    Dialogue* dialogue = new Dialogue(*dialogue_go, p.first, p.second);
-    dialogue_go->AddComponent(dialogue);
-    objects.emplace_back(dialogue_go);
-    i++;
-    // std::cout << p.first << std::endl;
-    // std::cout << p.second << std::endl;
-  }
-
-  SortObjects();
-
+    : dialogueIndex(0), script(script) {
   Camera::Unfollow();
 }
 
@@ -43,7 +29,7 @@ void DialogueState::Update(float dt) {
   popRequested |= im.KeyPress(ESCAPE_KEY);
 
   if (im.KeyPress(X_KEY)) {
-    dialogueIndex++;
+    dialogueIndex += 3;
   }
 
   if (dialogueIndex >= objects.size()) {
@@ -51,6 +37,7 @@ void DialogueState::Update(float dt) {
   }
 
   UpdateArray(dt);
+  std::cout << objects.size() << std::endl;
 }
 
 void DialogueState::Start() {
@@ -63,12 +50,22 @@ void DialogueState::Pause() {}
 
 void DialogueState::Resume() {}
 
-void DialogueState::LoadAssets() {}
+void DialogueState::LoadAssets() {
+  int i = 1;
+  for (auto p : script) {
+    auto dialogue_go = std::make_shared<GameObject>(i);
+    dialogue_go->box = Rect(43, 500, 1024, 183);
+    Dialogue* dialogue = new Dialogue(*dialogue_go, p.first, p.second);
+    dialogue_go->AddComponent(dialogue);
+    objects.push_back(dialogue_go);
+    i += 3;
+  }
+}
 
 void DialogueState::Render() {
   if (dialogueIndex < objects.size()) {
     objects[dialogueIndex]->Render();
-    // objects[dialogueIndex + 1]->Render();
-    // objects[dialogueIndex + 2]->Render();
+    objects[dialogueIndex + 1]->Render();
+    objects[dialogueIndex + 2]->Render();
   }
 }
