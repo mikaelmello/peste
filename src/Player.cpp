@@ -5,6 +5,7 @@
 #include "Blocker.hpp"
 #include "Camera.hpp"
 #include "Collider.hpp"
+#include "DialogueState.hpp"
 #include "Door.hpp"
 #include "Game.hpp"
 #include "GameData.hpp"
@@ -75,6 +76,9 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
 
   auto terry_cpt = other->GetComponent(TerryType);
   if (terry_cpt) {
+    if (input.KeyPress(X_KEY)) {
+      Game::GetInstance().Push(new DialogueState());
+    }
   }
 }
 

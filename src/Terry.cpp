@@ -23,8 +23,6 @@ Terry::Terry(GameObject& associated, Vec2 position)
   associated.box.h = sprite->GetHeight();
   associated.AddComponent(collider);
 
-  std::cout << position.x << " " << position.y << std::endl;
-
   State& state = Game::GetInstance().GetCurrentState();
 
   auto tilemap = state.GetCurrentTileMap();

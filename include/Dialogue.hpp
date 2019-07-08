@@ -8,12 +8,14 @@
 #include <memory>
 #include <string>
 #include "Component.hpp"
-#include "Types.hpp"
 #include "GameObject.hpp"
+#include "Helpers.hpp"
+#include "Types.hpp"
 
 class Dialogue : public Component {
  public:
-  Dialogue(GameObject& associated);
+  Dialogue(GameObject& associated, const std::string& interlocutor,
+           const std::string& text);
 
   ~Dialogue();
 
@@ -30,6 +32,8 @@ class Dialogue : public Component {
   const Types Type = DialogueType;
 
  private:
+  std::shared_ptr<GameObject> interlocutorGo;
+  std::shared_ptr<GameObject> textGo;
 };
 
 #endif

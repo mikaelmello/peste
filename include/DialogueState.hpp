@@ -27,6 +27,9 @@ class DialogueState : public State {
   void Update(float dt);
 
   void Render();
+
+ private:
+  unsigned int dialogueIndex;
 };
 
 #endif

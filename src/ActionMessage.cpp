@@ -14,8 +14,6 @@ ActionMessage::ActionMessage(GameObject& associated, Vec2 position,
 
   associated.box.x = position.x * 8;
   associated.box.y = position.y * 8 - 30;
-
-  std::cout << position.x << " " << position.y << std::endl;
 }
 
 ActionMessage::~ActionMessage() {}
