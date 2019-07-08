@@ -21,6 +21,7 @@ enum Types {
   DoorType,
   PriorityChangerType,
   TerryType,
+  FurnitureType,
 };
 
 #endif
