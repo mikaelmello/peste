@@ -15,7 +15,7 @@
 Furniture::Furniture(GameObject& associated, const std::string& file,
                      Vec2 position, Interaction interaction)
     : Component(associated), interact(false), colliding(false) {
-  Collider* collider = new Collider(associated, {2, 2}, {1, 1});
+  Collider* collider = new Collider(associated, {1.5, 1.5}, {0.75, 0.75});
   Sprite* sprite = new Sprite(associated, file);
   associated.AddComponent(collider);
   associated.AddComponent(sprite);
@@ -66,12 +66,12 @@ void Furniture::Start() {}
 void Furniture::Update(float dt) {}
 
 void Furniture::Render() {
-  if (colliding && interact) {
-    ShowInteractionDialog();
-  } else {
-    HideInteractionDialog();
-  }
-  colliding = false;
+  // if (colliding && interact) {
+  //   ShowInteractionDialog();
+  // } else {
+  //   HideInteractionDialog();
+  // }
+  // colliding = false;
 }
 
 void Furniture::ShowInteractionDialog() { interactMsgGo->EnableRender(); }

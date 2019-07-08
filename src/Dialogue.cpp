@@ -14,25 +14,25 @@ Dialogue::Dialogue(GameObject& associated, const std::string& interlocutor,
   Sprite* sprite = new Sprite(associated, "assets/img/dialogue.png");
   associated.AddComponent(sprite);
 
-  State& state = Game::GetInstance().GetCurrentState();
+  // State& state = Game::GetInstance().GetCurrentState();
 
-  GameObject* interlocutor_go = new GameObject(associated.priority + 1);
-  interlocutor_go->box.x = associated.box.x + 35;
-  interlocutor_go->box.y = associated.box.y + 20;
-  Text* itor = new Text(*interlocutor_go, "assets/font/tox-typewriter.ttf", 25,
+  // GameObject* interlocutor_go = new GameObject(associated.priority + 1);
+  associated.box.x = associated.box.x + 35;
+  associated.box.y = associated.box.y + 20;
+  Text* itor = new Text(associated, "assets/font/tox-typewriter.ttf", 25,
                         Text::BLENDED_WRAPPED, interlocutor, {0, 0, 0, 0},
                         associated.box.w - 26);
-  interlocutor_go->AddComponent(itor);
-  interlocutorGo = state.AddObject(interlocutor_go);
+  associated.AddComponent(itor);
+  // interlocutorGo = state.AddObject(interlocutor_go);
 
-  GameObject* text_go = new GameObject(associated.priority + 1);
-  text_go->box.x = associated.box.x + 25;
-  text_go->box.y = associated.box.y + 45;
-  Text* txt = new Text(*text_go, "assets/font/tox-typewriter.ttf", 25,
+  // GameObject* text_go = new GameObject(associated.priority + 1);
+  associated.box.x = associated.box.x + 25;
+  associated.box.y = associated.box.y + 45;
+  Text* txt = new Text(associated, "assets/font/tox-typewriter.ttf", 25,
                        Text::BLENDED_WRAPPED, text, {0, 0, 0, 0},
                        associated.box.w - 26);
-  text_go->AddComponent(txt);
-  textGo = state.AddObject(text_go);
+  associated.AddComponent(txt);
+  // textGo = state.AddObject(text_go);
   std::cout << "ok" << std::endl;
 }
 

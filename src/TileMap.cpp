@@ -54,6 +54,7 @@ void TileMap::Load(const std::string& file) {
 
   auto configuredTileset = tilesets.front();
   auto path = split(configuredTileset["image"].get<std::string>(), '/');
+  printf("ok\n");
 
   TileSet* ts = new TileSet(tileWidth, tileHeight, "assets/img/" + path.back());
   tileSet = std::shared_ptr<TileSet>(ts);

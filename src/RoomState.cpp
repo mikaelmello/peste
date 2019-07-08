@@ -6,6 +6,7 @@
 #include "Collider.hpp"
 #include "Collision.hpp"
 #include "Door.hpp"
+#include "Furniture.hpp"
 #include "Game.hpp"
 #include "GameData.hpp"
 #include "GameObject.hpp"
@@ -16,6 +17,8 @@
 #include "Terry.hpp"
 #include "TileMap.hpp"
 #include "Types.hpp"
+
+#define IMG_PATH "assets/img/furniture/"
 
 RoomState::RoomState() {
   GameObject* bckgGo = new GameObject(3);
@@ -106,17 +109,18 @@ void RoomState::Pause() {
 void RoomState::Resume() { Camera::Follow(GameData::PlayerGameObject.get()); }
 
 void RoomState::LoadAssets() {
+  LoadAssetsFurnitureFirstFloor();
   auto playerGo = std::make_shared<GameObject>(7);
   Player* player = new Player(*playerGo, currentTileMap->GetInitialPosition());
   playerGo->AddComponent(player);
   objects.push_back(playerGo);
   GameData::PlayerGameObject = playerGo;
 
-  GameObject* terryGo = new GameObject(5);
-  Terry* terry = new Terry(
-      *terryGo, currentTileMap->GetInitialPosition() + Vec2(-18, -18));
-  terryGo->AddComponent(terry);
-  objects.emplace_back(terryGo);
+  // GameObject* terryGo = new GameObject(5);
+  // Terry* terry = new Terry(
+  //     *terryGo, currentTileMap->GetInitialPosition() + Vec2(-18, -18));
+  // terryGo->AddComponent(terry);
+  // objects.emplace_back(terryGo);
 
   // GameObject* antagonist_go = new GameObject(5);
   // Antagonist* antagonist =
@@ -124,33 +128,42 @@ void RoomState::LoadAssets() {
   // antagonist_go->AddComponent(antagonist);
   // objects.emplace_back(antagonist_go);
 
-  GameObject* door_go = new GameObject(6);
-  Vec2 door_pos = currentTileMap->GetInitialPosition() + Vec2(8, 8);
-  Door* door = new Door(*door_go, Helpers::Direction::LEFT, door_pos, false);
-  door_go->AddComponent(door);
-  objects.emplace_back(door_go);
+  // GameObject* door_go = new GameObject(6);
+  // Vec2 door_pos = currentTileMap->GetInitialPosition() + Vec2(8, 8);
+  // Door* door = new Door(*door_go, Helpers::Direction::LEFT, door_pos, false);
+  // door_go->AddComponent(door);
+  // objects.emplace_back(door_go);
 
   Camera::Follow(playerGo.get());
 
-  GameObject* lampGo = new GameObject(6);
-  Item* lamp =
-      new Item(*lampGo, "Lamparina",
-               "Esta lamparina é a única coisa permitindo que Hope veja "
-               "ao seu redor e não seja consumido pela escuridão.",
-               "assets/img/item/lamp.png",
-               currentTileMap->GetInitialPosition() - Vec2(3, 3));
-  lampGo->AddComponent(lamp);
-  objects.emplace_back(lampGo);
+  // GameObject* lampGo = new GameObject(6);
+  // Item* lamp =
+  //     new Item(*lampGo, "Lamparina",
+  //              "Esta lamparina é a única coisa permitindo que Hope veja "
+  //              "ao seu redor e não seja consumido pela escuridão.",
+  //              "assets/img/item/lamp.png",
+  //              currentTileMap->GetInitialPosition() - Vec2(3, 3));
+  // lampGo->AddComponent(lamp);
+  // objects.emplace_back(lampGo);
 
-  GameObject* lamp2Go = new GameObject(6);
-  Item* lamp2 =
-      new Item(*lamp2Go, "Lamparina 2", "Esta lamparina é ruim pode esquecer",
-               "assets/img/item/lamp2.png",
-               currentTileMap->GetInitialPosition() + Vec2(3, 3));
-  lamp2Go->AddComponent(lamp2);
-  objects.emplace_back(lamp2Go);
+  // GameObject* lamp2Go = new GameObject(6);
+  // Item* lamp2 =
+  //     new Item(*lamp2Go, "Lamparina 2", "Esta lamparina é ruim pode
+  //     esquecer",
+  //              "assets/img/item/lamp2.png",
+  //              currentTileMap->GetInitialPosition() + Vec2(3, 3));
+  // lamp2Go->AddComponent(lamp2);
+  // objects.emplace_back(lamp2Go);
 
   SortObjects();
 }
 
 void RoomState::Render() { RenderArray(); }
+
+void RoomState::LoadAssetsFurnitureFirstFloor() {
+  GameObject* fGo = new GameObject(6);
+  Furniture* f = new Furniture(*fGo, "assets/img/furniture/cabinet.png",
+                               {53, 340}, Interaction::NONE);
+  fGo->AddComponent(f);
+  objects.emplace_back(fGo);
+}

@@ -18,9 +18,11 @@ DialogueState::DialogueState(
     Dialogue* dialogue = new Dialogue(*dialogue_go, p.first, p.second);
     dialogue_go->AddComponent(dialogue);
     objects.emplace_back(dialogue_go);
-    i += 2;
+    i++;
+    // std::cout << p.first << std::endl;
+    // std::cout << p.second << std::endl;
   }
-  std::cout << objects.size() << std::endl;
+
   SortObjects();
 
   Camera::Unfollow();
@@ -41,7 +43,7 @@ void DialogueState::Update(float dt) {
   popRequested |= im.KeyPress(ESCAPE_KEY);
 
   if (im.KeyPress(X_KEY)) {
-    dialogueIndex += 3;
+    dialogueIndex++;
   }
 
   if (dialogueIndex >= objects.size()) {
@@ -64,9 +66,9 @@ void DialogueState::Resume() {}
 void DialogueState::LoadAssets() {}
 
 void DialogueState::Render() {
-  if (dialogueIndex + 2 < objects.size()) {
+  if (dialogueIndex < objects.size()) {
     objects[dialogueIndex]->Render();
-    objects[dialogueIndex + 1]->Render();
-    objects[dialogueIndex + 2]->Render();
+    // objects[dialogueIndex + 1]->Render();
+    // objects[dialogueIndex + 2]->Render();
   }
 }

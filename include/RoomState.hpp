@@ -27,6 +27,8 @@ class RoomState : public State {
   void Update(float dt);
 
   void Render();
+
+  void LoadAssetsFurnitureFirstFloor();
 };
 
 #endif

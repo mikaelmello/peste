@@ -176,7 +176,9 @@ void Player::Update(float dt) {
   associated.box.w = sprite->GetWidth();
   associated.box.h = sprite->GetHeight();
 
-  // priorityChanger_go->box = associated.box;
+  priorityChanger_go->box = associated.box;
+  std::cout << "X:" << position.x << std::endl;
+  std::cout << "Y:" << position.y << std::endl << std::endl;
 }
 
 void Player::Render() {
@@ -280,6 +282,7 @@ void Player::OpenWalkingSprite(const std::shared_ptr<Sprite>& sprite,
     default:
       return OpenIdleSprite(sprite, direction);
   }
+
   sprite->SetFrameCount(frameCount);
   frameTime = 0.4 / frameCount;
   sprite->SetFrameTime(frameTime);
