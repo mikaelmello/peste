@@ -61,12 +61,19 @@ enum Action {
 bool CanWalk(GameObject& object, Vec2& p);
 
 bool CanWalk(GameObject& object, std::pair<int, int>& p);
-}  // end namespace Helpers
 
 enum Interaction {
   HIDE,
   LOOK,
-  NONE,
+  NOTHING,
 };
+
+enum Floor {
+  FIRST,
+  SECOND,
+  BASEMENT
+};                  
+
+}  // end namespace Helpers
 
 #endif

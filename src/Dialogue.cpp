@@ -24,7 +24,6 @@ Dialogue::Dialogue(GameObject& associated, const std::string& interlocutor,
                         associated.box.w - 26);
   interlocutor_go->AddComponent(itor);
   interlocutorGo = state.AddObject(interlocutor_go);
-  printf("%d\n", interlocutorGo.get());
 
   GameObject* text_go = new GameObject(associated.priority + 1);
   text_go->box.x = associated.box.x + 25;

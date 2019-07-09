@@ -1,5 +1,5 @@
-#ifndef FURNITURE_H
-#define FURNITURE_H
+#ifndef STAIRS_H
+#define STAIRS_H
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *                  INCLUDES E DEFINES
@@ -12,12 +12,12 @@
 #include "Helpers.hpp"
 #include "Types.hpp"
 
-class Furniture : public Component {
+class Stairs : public Component {
  public:
-  Furniture(GameObject& associated, const std::string& file, Vec2 position,
-            Helpers::Interaction interaction, bool fullblock = true);
+  Stairs(GameObject& associated, Helpers::Direction direction, Vec2 position,
+         Helpers::Floor floor);
 
-  ~Furniture();
+  ~Stairs();
 
   void Start() override;
 
@@ -29,22 +29,14 @@ class Furniture : public Component {
 
   void Render() override;
 
-  void ShowInteractionDialog();
+  void ShowInteractDialog();
+  void HideInteractDialog();
 
-  void HideInteractionDialog();
-
-  Helpers::Interaction GetInteraction();
-
-  const Types Type = FurnitureType;
+  const Types Type = StairsType;
 
  private:
-  std::shared_ptr<GameObject> interactMsgGo;
-  std::shared_ptr<GameObject> blockerGo;
-
-  bool interact;
+  std::shared_ptr<GameObject> actionMessageGo;
   bool colliding;
-
-  Helpers::Interaction interaction;
 };
 
 #endif
