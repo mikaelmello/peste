@@ -132,7 +132,7 @@ void InventoryState::Update(float dt) {
       menuCursorIndex = std::max(0, menuCursorIndex - 1);
     } else if (im.KeyPress(RIGHT_ARROW_KEY)) {
       menuCursorIndex = std::min(menuLength - 1, menuCursorIndex + 1);
-    } else if (im.KeyPress(ENTER_KEY)) {
+    } else if (im.KeyPress(SPACE_BAR_KEY)) {
       switch (menuCursorIndex) {
         case 0:
           popRequested = true;
