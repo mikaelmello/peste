@@ -11,8 +11,7 @@
 
 class Options {
  public:
-  Options(GameObject& cursor,
-          std::vector<std::shared_ptr<GameObject>>& buttons);
+  Options(GameObject& cursor, std::vector<std::shared_ptr<GameObject>> buttons);
 
   ~Options();
 
@@ -29,11 +28,13 @@ class Options {
   int GetOperation() const;
 
  private:
+  void SetCursorPosition(unsigned i);
+
   unsigned op;
 
   GameObject& cursor;
 
-  std::vector<std::shared_ptr<GameObject>>& buttons;
+  std::vector<std::shared_ptr<GameObject>> buttons;
 };
 
 #endif

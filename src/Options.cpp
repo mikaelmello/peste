@@ -2,20 +2,19 @@
 
 #include <stdexcept>
 
-Options::Options(GameObject& c, std::vector<std::shared_ptr<GameObject>>& b)
+Options::Options(GameObject& c, std::vector<std::shared_ptr<GameObject>> b)
     : op(0), cursor(c), buttons(b) {
   if (b.size() == 0) {
     throw std::invalid_argument("must have at least 1 option");
   }
-
-  cursor.box = cursor.box.GetCentered(buttons[0]->box.Center());
+  SetCursorPosition(0);
 }
 
 Options::~Options() {}
 
 Options& Options::operator++() {
   op = (op + 1) % buttons.size();
-  cursor.box = cursor.box.GetCentered(buttons[op]->box.Center());
+  SetCursorPosition(op);
   return *this;
 }
 
@@ -27,7 +26,7 @@ Options Options::operator++(int) {
 
 Options& Options::operator--() {
   op = op != 0 ? op - 1 : buttons.size() - 1;
-  cursor.box = cursor.box.GetCentered(buttons[op]->box.Center());
+  SetCursorPosition(op);
   return *this;
 }
 
@@ -39,7 +38,12 @@ Options Options::operator--(int) {
 
 void Options::Last() {
   op = buttons.size() - 1;
-  cursor.box = cursor.box.GetCentered(buttons[op]->box.Center());
+  SetCursorPosition(op);
 }
 
 int Options::GetOperation() const { return op; }
+
+void Options::SetCursorPosition(unsigned i) {
+  cursor.box.x = (buttons[i]->box.x + buttons[i]->box.w * 0.85);
+  cursor.box.y = buttons[i]->box.y;
+}
