@@ -99,7 +99,7 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
   auto stairs_cpt = other->GetComponent(StairsType);
   if (stairs_cpt) {
     if (input.KeyPress(X_KEY)) {
-      if (GameData::player_floor == Helpers::Floor::FIRST) {
+      if (GameData::hope_is_in == Helpers::Floor::GROUND_FLOOR) {
         if (position.x < 275) {
           position.x = 220;
           position.y = 590;
@@ -107,8 +107,8 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
           position.x = 350;
           position.y = 590;
         }
-        GameData::player_floor = Helpers::Floor::SECOND;
-      } else if (GameData::player_floor == Helpers::Floor::SECOND) {
+        GameData::hope_is_in = Helpers::Floor::FIRST_FLOOR;
+      } else if (GameData::hope_is_in == Helpers::Floor::FIRST_FLOOR) {
         if (position.x < 275) {
           position.x = 220;
           position.y = 206;
@@ -116,7 +116,7 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
           position.x = 350;
           position.y = 206;
         }
-        GameData::player_floor = Helpers::Floor::FIRST;
+        GameData::hope_is_in = Helpers::Floor::GROUND_FLOOR;
       }
     }
   }
@@ -221,8 +221,8 @@ void Player::Update(float dt) {
   associated.box.h = sprite->GetHeight();
 
   priorityChanger_go->box = associated.box;
-  std::cout << "X:" << position.x << std::endl;
-  std::cout << "Y:" << position.y << std::endl << std::endl;
+  // std::cout << "X:" << position.x << std::endl;
+  // std::cout << "Y:" << position.y << std::endl << std::endl;
 }
 
 void Player::Render() {

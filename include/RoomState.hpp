@@ -5,6 +5,7 @@
  *                  INCLUDES E DEFINES
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+#include "Helpers.hpp"
 #include "Music.hpp"
 #include "State.hpp"
 
@@ -28,11 +29,22 @@ class RoomState : public State {
 
   void Render();
 
+ private:
   void LoadFurnitureFirstFloor();
+
   void LoadFurnitureSecondFloor();
+
   void LoadFurnitureBasement();
+
   void LoadDoors();
+
   void LoadStairs();
+
+  void LoadAntagonist();
+
+  std::shared_ptr<GameObject> ant;
+
+  Helpers::Floor last_known = Helpers::Floor::GROUND_FLOOR;
 };
 
 #endif

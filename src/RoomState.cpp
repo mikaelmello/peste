@@ -22,6 +22,7 @@
 #define IMG_PATH "assets/img/furniture/"
 
 RoomState::RoomState() {
+  last_known = Helpers::Floor::GROUND_FLOOR;
   GameObject* bckgGo = new GameObject(3);
   Sprite* bckgSprite = new Sprite(*bckgGo, "assets/img/black.jpg");
   bckgGo->AddComponent(new CameraFollower(*bckgGo, {512, 334}));
@@ -93,6 +94,11 @@ void RoomState::Update(float dt) {
     }
   }
 
+  if (GameData::hope_is_in != last_known) {
+    LoadAntagonist();
+    last_known = GameData::hope_is_in;
+  }
+
   UpdateArray(dt);
 }
 
@@ -113,6 +119,7 @@ void RoomState::LoadAssets() {
   LoadFurnitureFirstFloor();
   LoadFurnitureSecondFloor();
   LoadFurnitureBasement();
+  // LoadAntagonist();
   LoadDoors();
   LoadStairs();
 
@@ -122,7 +129,7 @@ void RoomState::LoadAssets() {
   objects.push_back(playerGo);
   GameData::PlayerGameObject = playerGo;
 
-  std::cout << objects.size() << std::endl;
+  // std::cout << objects.size() << std::endl;
   // GameObject* terryGo = new GameObject(5);
   // Terry* terry = new Terry(
   //     *terryGo, currentTileMap->GetInitialPosition() + Vec2(-18, -18));
@@ -236,6 +243,7 @@ void RoomState::LoadFurnitureFirstFloor() {
   furnitureGo = new GameObject(6);
   furniture = new Furniture(*furnitureGo, "assets/img/furniture/pantry3.png",
                             {66, 174}, Helpers::Interaction::NOTHING);
+
   furnitureGo->AddComponent(furniture);
   objects.emplace_back(furnitureGo);
 
@@ -272,6 +280,7 @@ void RoomState::LoadFurnitureSecondFloor() {
   furnitureGo = new GameObject(7);
   furniture = new Furniture(*furnitureGo, "assets/img/furniture/bed2.png",
                             {91, 545}, Helpers::Interaction::HIDE);
+
   furnitureGo->AddComponent(furniture);
   objects.emplace_back(furnitureGo);
 
@@ -320,6 +329,7 @@ void RoomState::LoadFurnitureSecondFloor() {
   furniture =
       new Furniture(*furnitureGo, "assets/img/furniture/book_shelf2.png",
                     {334, 757}, Helpers::Interaction::NOTHING, false);
+
   furnitureGo->AddComponent(furniture);
   objects.emplace_back(furnitureGo);
 
@@ -327,6 +337,7 @@ void RoomState::LoadFurnitureSecondFloor() {
   furniture =
       new Furniture(*furnitureGo, "assets/img/furniture/book_shelf1.png",
                     {206, 757}, Helpers::Interaction::NOTHING, false);
+
   furnitureGo->AddComponent(furniture);
   objects.emplace_back(furnitureGo);
 
@@ -353,6 +364,7 @@ void RoomState::LoadFurnitureSecondFloor() {
   furnitureGo = new GameObject(7);
   furniture = new Furniture(*furnitureGo, "assets/img/furniture/bedTerry.png",
                             {55, 736}, Helpers::Interaction::HIDE);
+
   furnitureGo->AddComponent(furniture);
   objects.emplace_back(furnitureGo);
 
@@ -373,12 +385,14 @@ void RoomState::LoadFurnitureSecondFloor() {
   furnitureGo = new GameObject(7);
   furniture = new Furniture(*furnitureGo, "assets/img/furniture/cabinet.png",
                             {35, 870}, Helpers::Interaction::NOTHING);
+
   furnitureGo->AddComponent(furniture);
   objects.emplace_back(furnitureGo);
 
   furnitureGo = new GameObject(7);
   furniture = new Furniture(*furnitureGo, "assets/img/furniture/bedgreen.png",
                             {69, 867}, Helpers::Interaction::HIDE);
+
   furnitureGo->AddComponent(furniture);
   objects.emplace_back(furnitureGo);
 
@@ -397,12 +411,14 @@ void RoomState::LoadFurnitureBasement() {
   auto furniture =
       new Furniture(*furnitureGo, "assets/img/furniture/wheelchair.png",
                     {178, 1059}, Helpers::Interaction::NOTHING);
+
   furnitureGo->AddComponent(furniture);
   objects.emplace_back(furnitureGo);
 
   furnitureGo = new GameObject(7);
   furniture = new Furniture(*furnitureGo, "assets/img/furniture/bedPacient.png",
                             {254, 1059}, Helpers::Interaction::HIDE);
+
   furnitureGo->AddComponent(furniture);
   objects.emplace_back(furnitureGo);
   // end first room
@@ -411,12 +427,14 @@ void RoomState::LoadFurnitureBasement() {
   furnitureGo = new GameObject(7);
   furniture = new Furniture(*furnitureGo, "assets/img/furniture/bedPacient.png",
                             {300, 1059}, Helpers::Interaction::HIDE);
+
   furnitureGo->AddComponent(furniture);
   objects.emplace_back(furnitureGo);
 
   furnitureGo = new GameObject(7);
   furniture = new Furniture(*furnitureGo, "assets/img/furniture/serum.png",
                             {290, 1052}, Helpers::Interaction::NOTHING);
+
   furnitureGo->AddComponent(furniture);
   objects.emplace_back(furnitureGo);
 
@@ -424,6 +442,7 @@ void RoomState::LoadFurnitureBasement() {
   furniture =
       new Furniture(*furnitureGo, "assets/img/furniture/labTableRight.png",
                     {384, 1063}, Helpers::Interaction::NOTHING);
+
   furnitureGo->AddComponent(furniture);
   objects.emplace_back(furnitureGo);
 
@@ -440,12 +459,14 @@ void RoomState::LoadFurnitureBasement() {
   furniture =
       new Furniture(*furnitureGo, "assets/img/furniture/labTableFront.png",
                     {47, 1145}, Helpers::Interaction::NOTHING);
+
   furnitureGo->AddComponent(furniture);
   objects.emplace_back(furnitureGo);
 
   furnitureGo = new GameObject(7);
   furniture = new Furniture(*furnitureGo, "assets/img/furniture/lab_stuff.png",
                             {46, 1146}, Helpers::Interaction::NOTHING);
+
   furnitureGo->AddComponent(furniture);
   objects.emplace_back(furnitureGo);
 
@@ -557,13 +578,13 @@ void RoomState::LoadStairs() {
   // begin first floor
   auto stairsGo = new GameObject(8);
   auto stairs = new Stairs(*stairsGo, Helpers::Direction::DOWN, {202, 125},
-                           Helpers::Floor::FIRST);
+                           Helpers::Floor::GROUND_FLOOR);
   stairsGo->AddComponent(stairs);
   objects.emplace_back(stairsGo);
 
   stairsGo = new GameObject(8);
   stairs = new Stairs(*stairsGo, Helpers::Direction::DOWN, {330, 125},
-                      Helpers::Floor::FIRST);
+                      Helpers::Floor::GROUND_FLOOR);
   stairsGo->AddComponent(stairs);
   objects.emplace_back(stairsGo);
   // end first floor
@@ -571,14 +592,49 @@ void RoomState::LoadStairs() {
   // begin second floor
   stairsGo = new GameObject(8);
   stairs = new Stairs(*stairsGo, Helpers::Direction::UP, {202, 585},
-                      Helpers::Floor::SECOND);
+                      Helpers::Floor::FIRST_FLOOR);
   stairsGo->AddComponent(stairs);
   objects.emplace_back(stairsGo);
 
   stairsGo = new GameObject(8);
   stairs = new Stairs(*stairsGo, Helpers::Direction::UP, {330, 585},
-                      Helpers::Floor::SECOND);
+                      Helpers::Floor::FIRST_FLOOR);
   stairsGo->AddComponent(stairs);
   objects.emplace_back(stairsGo);
   // end second floor
+}
+
+void RoomState::LoadAntagonist() {
+  if (ant) {
+    auto ant_cpt = ant->GetComponent(AntagonistType);
+    if (!ant_cpt) {
+      throw std::runtime_error("sem Antagonist em RoomState::LoadAntagonist");
+    }
+    auto ant_cpt_ptr = std::dynamic_pointer_cast<Antagonist>(ant_cpt);
+
+    ant->RemoveComponent(ant_cpt_ptr.get());
+  } else {
+    ant = std::make_shared<GameObject>(8);
+    objects.emplace_back(ant);
+  }
+
+  std::vector<Vec2> path;
+
+  switch (GameData::hope_is_in) {
+    case Helpers::Floor::BASEMENT:
+      path = {{215, 1092}};
+      break;
+    case Helpers::Floor::GROUND_FLOOR:
+      path = {{203, 181}};
+      break;
+    case Helpers::Floor::FIRST_FLOOR:
+      path = {{209, 584}};
+      break;
+    default:
+      path = {{203, 181}};
+      break;
+  }
+
+  auto antagonist_cpt = new Antagonist(*ant.get(), path);
+  ant->AddComponent(antagonist_cpt);
 }

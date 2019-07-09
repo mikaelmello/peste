@@ -21,7 +21,7 @@ class GameData {
 
   static bool player_is_hidden;
 
-  static Helpers::Floor player_floor;
+  static Helpers::Floor hope_is_in;
 };
 
 #endif

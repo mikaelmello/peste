@@ -23,11 +23,10 @@ void AttackFSM::OnStateEnter() {
   if (!sprite_cpt) {
     throw std::runtime_error("objeto nao possui cpt sprite em AttackFSM");
   }
+  ant.lock()->AssetsManager(Helpers::Action::ATTACKING);
 
   auto sprite = std::dynamic_pointer_cast<Sprite>(sprite_cpt);
   execution_time = sprite->GetFrameCount() * sprite->GetFrameTime();
-
-  ant.lock()->AssetsManager(Helpers::Action::ATTACKING);
 }
 
 void AttackFSM::OnStateExecution(float dt) {
@@ -42,8 +41,8 @@ void AttackFSM::Update(float dt) {
     OnStateExecution(dt);
   }
 
-  pop_requested |= !IsColliding();
   timer.Update(dt);
+  pop_requested |= !IsColliding();
 }
 
 bool AttackFSM::IsColliding() {

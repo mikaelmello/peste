@@ -69,10 +69,10 @@ enum Interaction {
 };
 
 enum Floor {
-  FIRST,
-  SECOND,
-  BASEMENT
-};                  
+  BASEMENT,
+  GROUND_FLOOR,
+  FIRST_FLOOR,
+};
 
 }  // end namespace Helpers
 
