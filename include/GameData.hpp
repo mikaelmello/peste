@@ -19,6 +19,8 @@ class GameData {
   static bool player_was_hit;
 
   static bool player_is_hidden;
+
+  static int InventoryPage;
 };
 
 #endif

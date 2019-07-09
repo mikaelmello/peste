@@ -9,6 +9,7 @@ std::vector<std::shared_ptr<GameObject>> GameData::PlayerInventory;
 
 bool GameData::player_was_hit = false;
 bool GameData::player_is_hidden = false;
+int GameData::InventoryPage = 0;
 
 bool GameData::AddToInventory(std::shared_ptr<GameObject> item) {
   auto item_type_cpt = item->GetComponent(ItemType);
@@ -19,7 +20,7 @@ bool GameData::AddToInventory(std::shared_ptr<GameObject> item) {
 
   auto item_cpt = std::dynamic_pointer_cast<Item>(item_type_cpt);
 
-  if (GameData::PlayerInventory.size() >= 9) {
+  if (GameData::PlayerInventory.size() >= 18) {
     return false;
   }
 

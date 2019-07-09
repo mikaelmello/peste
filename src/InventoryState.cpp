@@ -7,7 +7,7 @@
 #include "Types.hpp"
 
 InventoryState::InventoryState()
-    : inventoryCursorIndex(0), cursorIndex(Inventory), page(Items) {
+    : inventoryCursorIndex(0), cursorIndex(Inventory) {
   GameObject* background_go = new GameObject(-1);
   Sprite* background_sprite =
       new Sprite(*background_go, "assets/img/inventory/background.png");
@@ -19,6 +19,7 @@ InventoryState::InventoryState()
   itemHeight = 105;
   gridWidth = 3;
   gridHeight = 3;
+  gridLimit = gridWidth * gridHeight;
   initialPosition = {461, 234};
 
   menuLength = 2;
@@ -44,9 +45,10 @@ InventoryState::InventoryState()
 
     auto sprite = std::dynamic_pointer_cast<Sprite>(spriteComponent);
     sprite->SetDimensions(itemWidth - 20, itemHeight - 20);
-    auto position = getGridPosition(index);
+    auto position = getGridPosition(index % gridLimit);
     item->box.SetCenter(position);
     item->ReverseDelete();
+    item->DisableRender();
     objects.push_back(item);
     index += 1;
   }
@@ -57,12 +59,10 @@ InventoryState::InventoryState()
   objects.push_back(cursorGo);
 
   pageGo = std::make_shared<GameObject>(0);
-  auto sprite_path = (page == Items) ? "assets/img/inventory/items.png"
-                                     : "assets/img/inventory/clues.png";
-  Sprite* page_sprite = new Sprite(*pageGo, sprite_path);
+  Sprite* page_sprite = new Sprite(*pageGo);
   pageGo->AddComponent(page_sprite);
-  pageGo->box.SetCenter(510, 390);
   objects.push_back(pageGo);
+  refreshPage();
 }
 
 Vec2 InventoryState::getGridPosition(int index) {
@@ -107,7 +107,13 @@ void InventoryState::Update(float dt) {
       }
       cursorRow = std::min(gridHeight - 1, cursorRow + 1);
     } else if (im.KeyPress(LEFT_ARROW_KEY)) {
-      cursorColumn = std::max(0, cursorColumn - 1);
+      if (cursorColumn == 0) {
+        if (cursorRow == gridHeight - 1) {
+          cursorIndex = Page;
+        }
+      } else {
+        cursorColumn -= 1;
+      }
     } else if (im.KeyPress(RIGHT_ARROW_KEY)) {
       cursorColumn = std::min(gridWidth - 1, cursorColumn + 1);
     }
@@ -122,9 +128,11 @@ void InventoryState::Update(float dt) {
     cursorGo->box.y = newPos.y;
 
     if (im.KeyPress(UP_ARROW_KEY)) {
-      cursorIndex = Inventory;
-      inventoryCursorIndex = (gridHeight - 1) * gridWidth;
-      if (menuCursorIndex == 1) {
+      if (menuCursorIndex == 0) {
+        cursorIndex = Page;
+      } else if (menuCursorIndex == 1) {
+        cursorIndex = Inventory;
+        inventoryCursorIndex = (gridHeight - 1) * gridWidth;
         inventoryCursorIndex += gridWidth - 1;
       }
       updateShowcase();
@@ -144,6 +152,21 @@ void InventoryState::Update(float dt) {
           break;
       }
     }
+  } else if (cursorIndex == Page) {
+    cursorGo->box.x = 100;
+    cursorGo->box.y = 550;
+    if (im.KeyPress(SPACE_BAR_KEY)) {
+      GameData::InventoryPage = (GameData::InventoryPage + 1) % 2;
+      refreshPage();
+      updateShowcase();
+    } else if (im.KeyPress(RIGHT_ARROW_KEY)) {
+      cursorIndex = Inventory;
+      inventoryCursorIndex = (gridHeight - 1) * gridWidth;
+      updateShowcase();
+    } else if (im.KeyPress(DOWN_ARROW_KEY)) {
+      cursorIndex = Menu;
+      menuCursorIndex = 0;
+    }
   }
 
   UpdateArray(dt);
@@ -154,6 +177,32 @@ void InventoryState::Start() {
   SortObjects();
   StartArray();
   started = true;
+}
+
+void InventoryState::refreshPage() {
+  int page = GameData::InventoryPage;
+
+  auto spriteCpt = pageGo->GetComponent(SpriteType);
+  if (!spriteCpt) {
+    throw std::runtime_error("Page sem sprite");
+  }
+  auto sprite = std::dynamic_pointer_cast<Sprite>(spriteCpt);
+  auto sprite_path = (page == 0) ? "assets/img/inventory/items1.png"
+                                 : "assets/img/inventory/items2.png";
+  sprite->Open(sprite_path);
+
+  int begin = page * gridLimit;
+  int end = (page + 1) * gridLimit;
+  for (uint32_t i = 0; i < GameData::PlayerInventory.size(); i++) {
+    if (i >= begin && i < end) {
+      GameData::PlayerInventory[i]->EnableRender();
+    } else {
+      GameData::PlayerInventory[i]->DisableRender();
+    }
+  }
+
+  pageGo->box.SetCenter(510, 390);
+  inventoryCursorIndex = 0;
 }
 
 void InventoryState::createShowcase(std::shared_ptr<GameObject> item) {
@@ -200,7 +249,9 @@ void InventoryState::createShowcase(std::shared_ptr<GameObject> item) {
 }
 
 void InventoryState::updateShowcase() {
-  if (inventoryCursorIndex >= (int)GameData::PlayerInventory.size()) {
+  int itemIndex = inventoryCursorIndex + (GameData::InventoryPage * gridLimit);
+
+  if (itemIndex >= (int)GameData::PlayerInventory.size()) {
     return;
   }
 
@@ -208,7 +259,7 @@ void InventoryState::updateShowcase() {
     throw std::runtime_error("mermao, tu ainda nao criou o showcase");
   }
 
-  auto item = GameData::PlayerInventory[inventoryCursorIndex];
+  auto item = GameData::PlayerInventory[itemIndex];
   auto spriteComponent = item->GetComponent(SpriteType);
   auto itemComponent = item->GetComponent(ItemType);
   if (!spriteComponent || !itemComponent) {
