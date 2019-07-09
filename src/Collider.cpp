@@ -14,7 +14,9 @@
 #include "Vec2.hpp"
 
 Collider::Collider(GameObject& associated, Vec2 scale, Vec2 offset)
-    : Component(associated), scale(scale), offset(offset) {}
+    : Component(associated), scale(scale), offset(offset) {
+  Update(0);
+}
 
 void Collider::Update(float dt) {
   box = associated.box;
