@@ -21,8 +21,8 @@ InventoryState::InventoryState()
   gridHeight = 3;
   initialPosition = {461, 234};
 
-  menuLength = 3;
-  menuItemPositions = {{200, 700}, {511, 700}, {820, 700}};
+  menuLength = 2;
+  menuItemPositions = {{200, 630}, {820, 630}};
   if ((unsigned)menuLength != menuItemPositions.size()) {
     throw std::runtime_error(
         "Mano, tu acabou de setar o tamanho de um menu e nao colocou o mesmo "
@@ -124,7 +124,7 @@ void InventoryState::Update(float dt) {
     if (im.KeyPress(UP_ARROW_KEY)) {
       cursorIndex = Inventory;
       inventoryCursorIndex = (gridHeight - 1) * gridWidth;
-      if (menuCursorIndex == 2) {
+      if (menuCursorIndex == 1) {
         inventoryCursorIndex += gridWidth - 1;
       }
       updateShowcase();
@@ -138,8 +138,6 @@ void InventoryState::Update(float dt) {
           popRequested = true;
           break;
         case 1:
-          break;
-        case 2:
           quitRequested = true;
           break;
         default:
