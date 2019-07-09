@@ -9,6 +9,7 @@
 #include <string>
 #include "Component.hpp"
 #include "GameObject.hpp"
+#include "Sprite.hpp"
 #include "Types.hpp"
 
 class ActionMessage : public Component {
@@ -27,9 +28,12 @@ class ActionMessage : public Component {
 
   void Render() override;
 
+  void UpdateSprite(const std::string& file);
+
   const Types Type = ActionMessageType;
 
  private:
+  std::shared_ptr<Sprite> sprite_ptr;
 };
 
 #endif

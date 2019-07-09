@@ -7,6 +7,7 @@
 #include "Collider.hpp"
 #include "DialogueState.hpp"
 #include "Door.hpp"
+#include "Furniture.hpp"
 #include "Game.hpp"
 #include "GameData.hpp"
 #include "GameObject.hpp"
@@ -78,6 +79,22 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
         door->Open();
     }
   }
+
+  auto furniture_cpt = other->GetComponent(FurnitureType);
+  if (furniture_cpt) {
+    auto furniture = std::dynamic_pointer_cast<Furniture>(furniture_cpt);
+    if (input.KeyPress(X_KEY)) {
+      if (furniture->GetInteraction() == Interaction::HIDE) {
+        if (!GameData::player_is_hidden) {
+          associated.DisableRender();
+          GameData::player_is_hidden = true;
+        } else {
+          associated.EnableRender();
+          GameData::player_is_hidden = false;
+        }
+      }
+    }
+  }
 }
 
 void Player::Start() {}
@@ -88,6 +105,8 @@ void Player::Update(float dt) {
   bool canwalk = true;
   auto tilemap = Game::GetInstance().GetCurrentState().GetCurrentTileMap();
   int tileDim = tilemap->GetLogicalTileDimension();
+
+  if (GameData::player_is_hidden) return;
 
   auto spriteCpt = associated.GetComponent(SpriteType);
   auto colliderCpt = associated.GetComponent(ColliderType);

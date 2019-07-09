@@ -33,6 +33,8 @@ class Furniture : public Component {
 
   void HideInteractionDialog();
 
+  Interaction GetInteraction();
+
   const Types Type = FurnitureType;
 
  private:
@@ -41,6 +43,8 @@ class Furniture : public Component {
 
   bool interact;
   bool colliding;
+
+  Interaction interaction;
 };
 
 #endif

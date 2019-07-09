@@ -263,7 +263,7 @@ void RoomState::LoadFurnitureSecondFloor() {
 
   furnitureGo = new GameObject(7);
   furniture = new Furniture(*furnitureGo, "assets/img/furniture/bed2.png",
-                            {91, 545}, Interaction::NONE);
+                            {91, 545}, Interaction::HIDE);
   furnitureGo->AddComponent(furniture);
   objects.emplace_back(furnitureGo);
 
@@ -344,7 +344,7 @@ void RoomState::LoadFurnitureSecondFloor() {
 
   furnitureGo = new GameObject(7);
   furniture = new Furniture(*furnitureGo, "assets/img/furniture/bedTerry.png",
-                            {55, 736}, Interaction::NONE);
+                            {55, 736}, Interaction::HIDE);
   furnitureGo->AddComponent(furniture);
   objects.emplace_back(furnitureGo);
 
@@ -370,7 +370,7 @@ void RoomState::LoadFurnitureSecondFloor() {
 
   furnitureGo = new GameObject(7);
   furniture = new Furniture(*furnitureGo, "assets/img/furniture/bedgreen.png",
-                            {69, 867}, Interaction::NONE);
+                            {69, 867}, Interaction::HIDE);
   furnitureGo->AddComponent(furniture);
   objects.emplace_back(furnitureGo);
 
@@ -394,7 +394,7 @@ void RoomState::LoadFurnitureBasement() {
 
   furnitureGo = new GameObject(7);
   furniture = new Furniture(*furnitureGo, "assets/img/furniture/bedPacient.png",
-                            {254, 1059}, Interaction::NONE);
+                            {254, 1059}, Interaction::HIDE);
   furnitureGo->AddComponent(furniture);
   objects.emplace_back(furnitureGo);
   // end first room
@@ -402,7 +402,7 @@ void RoomState::LoadFurnitureBasement() {
   // begin second room
   furnitureGo = new GameObject(7);
   furniture = new Furniture(*furnitureGo, "assets/img/furniture/bedPacient.png",
-                            {300, 1059}, Interaction::NONE);
+                            {300, 1059}, Interaction::HIDE);
   furnitureGo->AddComponent(furniture);
   objects.emplace_back(furnitureGo);
 

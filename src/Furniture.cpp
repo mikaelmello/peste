@@ -5,17 +5,22 @@
 #include "Blocker.hpp"
 #include "Collider.hpp"
 #include "Game.hpp"
+#include "GameData.hpp"
 #include "GameObject.hpp"
 #include "Helpers.hpp"
 #include "PriorityChanger.hpp"
 #include "Sprite.hpp"
 
-#define HIDE_MSG "assets/img/x.png"
+#define HIDE_MSG "assets/img/hide.png"
 #define LOOK_MSG "assets/img/look.png"
+#define OUT_MSG "assets/img/x.png"
 
 Furniture::Furniture(GameObject& associated, const std::string& file,
                      Vec2 position, Interaction interaction, bool fullblock)
-    : Component(associated), interact(false), colliding(false) {
+    : Component(associated),
+      interact(false),
+      colliding(false),
+      interaction(interaction) {
   Sprite* sprite = new Sprite(associated, file);
   associated.AddComponent(sprite);
 
@@ -79,7 +84,17 @@ void Furniture::NotifyCollision(std::shared_ptr<GameObject> other) {
 
 void Furniture::Start() {}
 
-void Furniture::Update(float dt) {}
+void Furniture::Update(float dt) {
+  if (interaction == Interaction::HIDE) {
+    auto cpt = interactMsgGo->GetComponent(ActionMessageType);
+    auto action_message = std::dynamic_pointer_cast<ActionMessage>(cpt);
+    if (GameData::player_is_hidden) {
+      action_message->UpdateSprite(OUT_MSG);
+    } else {
+      action_message->UpdateSprite(HIDE_MSG);
+    }
+  }
+}
 
 void Furniture::Render() {
   if (interact) {
@@ -95,5 +110,7 @@ void Furniture::Render() {
 void Furniture::ShowInteractionDialog() { interactMsgGo->EnableRender(); }
 
 void Furniture::HideInteractionDialog() { interactMsgGo->DisableRender(); }
+
+Interaction Furniture::GetInteraction() { return interaction; }
 
 bool Furniture::Is(Types type) const { return type == this->Type; }
