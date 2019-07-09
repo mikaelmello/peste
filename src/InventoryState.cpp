@@ -226,7 +226,7 @@ void InventoryState::createShowcase(std::shared_ptr<GameObject> item) {
                Text::BLENDED_WRAPPED, item_item->GetName(), {0, 0, 0, 0}, 210);
   showcaseTitleGo->AddComponent(text);
   showcaseTitleGo->box.x = 221;
-  showcaseTitleGo->box.y = 230;
+  showcaseTitleGo->box.y = 240;
   objects.push_back(showcaseTitleGo);
 
   showcaseDescriptionGo = std::make_shared<GameObject>(1);
@@ -235,7 +235,7 @@ void InventoryState::createShowcase(std::shared_ptr<GameObject> item) {
                   {0, 0, 0, 0}, 210);
   showcaseDescriptionGo->AddComponent(text);
   showcaseDescriptionGo->box.x = 221;
-  showcaseDescriptionGo->box.y = 270;
+  showcaseDescriptionGo->box.y = 280;
   objects.push_back(showcaseDescriptionGo);
 
   showcaseGo = std::make_shared<GameObject>(1);
