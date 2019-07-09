@@ -51,9 +51,8 @@ void RoomState::Update(float dt) {
 
   InputManager& im = InputManager::GetInstance();
   quitRequested |= im.QuitRequested();
-  popRequested |= im.KeyPress(ESCAPE_KEY);
 
-  if (im.KeyPress(I_KEY)) {
+  if (im.KeyPress(ESCAPE_KEY)) {
     Game::GetInstance().Push(new InventoryState());
   }
 
