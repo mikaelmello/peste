@@ -61,7 +61,7 @@ InventoryState::InventoryState()
                                      : "assets/img/inventory/clues.png";
   Sprite* page_sprite = new Sprite(*pageGo, sprite_path);
   pageGo->AddComponent(page_sprite);
-  pageGo->box.SetCenter(512, 380);
+  pageGo->box.SetCenter(510, 390);
   objects.push_back(pageGo);
 }
 
