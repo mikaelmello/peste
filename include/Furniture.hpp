@@ -15,7 +15,7 @@
 class Furniture : public Component {
  public:
   Furniture(GameObject& associated, const std::string& file, Vec2 position,
-            Interaction interaction, bool fullblock = true);
+            Helpers::Interaction interaction, bool fullblock = true);
 
   ~Furniture();
 

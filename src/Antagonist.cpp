@@ -276,12 +276,14 @@ void Antagonist::IdleAssetsManager(bool action_change) {
       sprite->Open(DOWNLEFT_IDLE_SPRITE_ANTAGONIST);
       break;
     default:
+      sprite->SetFrameCount(4);
       sprite->Open(DOWN_IDLE_SPRITE_ANTAGONIST);
       break;
   }
 }
 
 void Antagonist::AttackAssetsManager() {
+  printf("Aqui\n");
   auto spriteCpt = associated.GetComponent(SpriteType);
   if (!spriteCpt) {
     throw std::runtime_error("O gameobject do antagonista nao tem sprite");
@@ -301,41 +303,45 @@ void Antagonist::AttackAssetsManager() {
 
   auto sprite = std::dynamic_pointer_cast<Sprite>(spriteCpt);
 
+  printf("%d\n", last_direction);
+
   switch (last_direction) {
     case Helpers::Direction::RIGHT:
-      sprite->SetFrameCount(4);
+      sprite->SetFrameCount(3);
       sprite->Open(RIGHT_ATTACK_SPRITE_ANTAGONIST);
       break;
     case Helpers::Direction::LEFT:
-      sprite->SetFrameCount(4);
+      sprite->SetFrameCount(3);
       sprite->Open(LEFT_ATTACK_SPRITE_ANTAGONIST);
       break;
     case Helpers::Direction::UP:
-      sprite->SetFrameCount(4);
+      sprite->SetFrameCount(3);
       sprite->Open(UP_ATTACK_SPRITE_ANTAGONIST);
       break;
     case Helpers::Direction::DOWN:
-      sprite->SetFrameCount(4);
+      sprite->SetFrameCount(3);
       sprite->Open(DOWN_ATTACK_SPRITE_ANTAGONIST);
       break;
     case Helpers::Direction::UPRIGHT:
-      sprite->SetFrameCount(4);
+      sprite->SetFrameCount(3);
       sprite->Open(UPRIGHT_ATTACK_SPRITE_ANTAGONIST);
       break;
     case Helpers::Direction::UPLEFT:;
-      sprite->SetFrameCount(4);
+      sprite->SetFrameCount(3);
       sprite->Open(UPLEFT_ATTACK_SPRITE_ANTAGONIST);
       break;
     case Helpers::Direction::DOWNRIGHT:
-      sprite->SetFrameCount(4);
+      sprite->SetFrameCount(3);
       sprite->Open(DOWNRIGHT_ATTACK_SPRITE_ANTAGONIST);
       break;
     case Helpers::Direction::DOWNLEFT:
-      sprite->SetFrameCount(4);
+      sprite->SetFrameCount(3);
       sprite->Open(DOWNLEFT_ATTACK_SPRITE_ANTAGONIST);
       break;
     default:
-      sprite->Open(DOWN_IDLE_SPRITE_ANTAGONIST);
+      printf("Default!\n");
+      sprite->SetFrameCount(3);
+      sprite->Open(DOWN_ATTACK_SPRITE_ANTAGONIST);
       break;
   }
 }

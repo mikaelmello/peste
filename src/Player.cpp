@@ -177,8 +177,8 @@ void Player::Update(float dt) {
   associated.box.h = sprite->GetHeight();
 
   priorityChanger_go->box = associated.box;
-  std::cout << "X:" << position.x << std::endl;
-  std::cout << "Y:" << position.y << std::endl << std::endl;
+  // std::cout << "X:" << position.x << std::endl;
+  // std::cout << "Y:" << position.y << std::endl << std::endl;
 }
 
 void Player::Render() {

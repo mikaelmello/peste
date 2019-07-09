@@ -14,7 +14,8 @@
 #define LOOK_MSG "assets/img/look.png"
 
 Furniture::Furniture(GameObject& associated, const std::string& file,
-                     Vec2 position, Interaction interaction, bool fullblock)
+                     Vec2 position, Helpers::Interaction interaction,
+                     bool fullblock)
     : Component(associated), interact(false), colliding(false) {
   Sprite* sprite = new Sprite(associated, file);
   associated.AddComponent(sprite);
@@ -26,7 +27,7 @@ Furniture::Furniture(GameObject& associated, const std::string& file,
   associated.box.w = sprite->GetWidth();
   associated.box.h = sprite->GetHeight();
 
-  if (interaction != Interaction::NONE) {
+  if (interaction != Helpers::Interaction::NULO) {
     Collider* collider = new Collider(associated, {1.5, 1.5}, {0.75, 1.5});
     associated.AddComponent(collider);
 
@@ -35,9 +36,9 @@ Furniture::Furniture(GameObject& associated, const std::string& file,
     GameObject* interactmsg_go = new GameObject();
     ActionMessage* interactMsg;
 
-    if (interaction == Interaction::HIDE) {
+    if (interaction == Helpers::Interaction::HIDE) {
       interactMsg = new ActionMessage(*interactmsg_go, position, HIDE_MSG);
-    } else if (interaction == Interaction::LOOK) {
+    } else if (interaction == Helpers::Interaction::LOOK) {
       interactMsg = new ActionMessage(*interactmsg_go, position, LOOK_MSG);
     }
     interactmsg_go->AddComponent(interactMsg);

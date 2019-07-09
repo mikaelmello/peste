@@ -9,6 +9,8 @@ std::vector<std::shared_ptr<GameObject>> GameData::PlayerInventory;
 
 bool GameData::player_was_hit = false;
 
+Helpers::Floor GameData::hope_is_in = Helpers::Floor::GROUND_FLOOR;
+
 bool GameData::AddToInventory(std::shared_ptr<GameObject> item) {
   auto item_type_cpt = item->GetComponent(ItemType);
   if (!item_type_cpt) {
