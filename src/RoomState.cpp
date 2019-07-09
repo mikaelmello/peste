@@ -244,9 +244,15 @@ void RoomState::LoadFurnitureFirstFloor() {
   objects.emplace_back(furnitureGo);
 
   furnitureGo = new GameObject(6);
+  furniture = new Furniture(*furnitureGo, "assets/img/furniture/kitchen.png",
+                            {16, 20}, Interaction::NONE);
+  furnitureGo->AddComponent(furniture);
+  objects.emplace_back(furnitureGo);
+
+  furnitureGo = new GameObject(6);
   furniture =
-      new Furniture(*furnitureGo, "assets/img/furniture/wall_cabinet.png",
-                    {32, 15}, Interaction::NONE);
+      new Furniture(*furnitureGo, "assets/img/furniture/kitchen_isle.png",
+                    {50, 80}, Interaction::NONE);
   furnitureGo->AddComponent(furniture);
   objects.emplace_back(furnitureGo);
   // end kitchen
@@ -332,7 +338,7 @@ void RoomState::LoadFurnitureSecondFloor() {
   // begin bedroom terry
   furnitureGo = new GameObject(7);
   furniture = new Furniture(*furnitureGo, "assets/img/furniture/wardrobe.png",
-                            {118, 719}, Interaction::NONE);
+                            {118, 719}, Interaction::HIDE);
   furnitureGo->AddComponent(furniture);
   objects.emplace_back(furnitureGo);
 
@@ -528,18 +534,18 @@ void RoomState::LoadFurnitureBasement() {
 }
 
 void RoomState::LoadDoors() {
-  auto doorGo = new GameObject(7);
+  auto doorGo = new GameObject(8);
   auto door =
       new Door(*doorGo, Helpers::Direction::UP, {256, 229}, false, true);
   doorGo->AddComponent(door);
   objects.emplace_back(doorGo);
 
-  doorGo = new GameObject(7);
+  doorGo = new GameObject(8);
   door = new Door(*doorGo, Helpers::Direction::UP, {256, 117}, false, true);
   doorGo->AddComponent(door);
   objects.emplace_back(doorGo);
 
-  doorGo = new GameObject(7);
+  doorGo = new GameObject(8);
   door = new Door(*doorGo, Helpers::Direction::UP, {288, 629}, true, true);
   doorGo->AddComponent(door);
   objects.emplace_back(doorGo);
