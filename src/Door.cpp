@@ -23,36 +23,22 @@
 Door::Door(GameObject& associated, Helpers::Direction direction, Vec2 position,
            bool open, bool doubledoor)
     : Component(associated), position(position), colliding(false), open(open) {
-  Sprite* sprite = new Sprite(associated);
-
-  associated.box.x = position.x * 8;
-  associated.box.y = position.y * 8;
-  associated.box.w = sprite->GetWidth();
-  associated.box.h = sprite->GetHeight();
-
   Collider* collider = new Collider(associated);
-
-  State& state = Game::GetInstance().GetCurrentState();
-
-  GameObject* blocker_go = new GameObject(associated.priority);
-  blocker_go->box = associated.box;
-  Blocker* blocker = new Blocker(*blocker_go);
+  Sprite* sprite = new Sprite(associated);
 
   if (direction == Helpers::Direction::LEFT) {
     closePath = LEFT_DOOR_CLOSED;
     openPath = LEFT_DOOR_OPEN;
     sprite->Open(LEFT_DOOR_CLOSED);
-    collider->SetScale({4, 1});
-    collider->SetOffset({1, 0.75});
+    collider->SetScale({2, 1});
+    collider->SetOffset({1, 0});
   } else if (direction == Helpers::Direction::RIGHT) {
-    // blocker = new Blocker(*blocker_go);
     closePath = RIGHT_DOOR_CLOSED;
     openPath = RIGHT_DOOR_OPEN;
     sprite->Open(RIGHT_DOOR_CLOSED);
-    collider->SetScale({4, 1});
-    collider->SetOffset({1, 0.75});
+    collider->SetScale({2, 1});
+    collider->SetOffset({1, 0});
   } else if (direction == Helpers::Direction::UP) {
-    // blocker = new Blocker(*blocker_go, {1, 0.3});
     if (doubledoor) {
       closePath = DOUBLE_DOOR_CLOSED;
       openPath = DOUBLE_DOOR_OPEN;
@@ -62,18 +48,32 @@ Door::Door(GameObject& associated, Helpers::Direction direction, Vec2 position,
       openPath = FRONT_DOOR_OPEN;
       sprite->Open(FRONT_DOOR_CLOSED);
     }
-    collider->SetScale({1, 2});
-    collider->SetOffset({0, 1});
+    collider->SetScale({1, 1.5});
+    collider->SetOffset({0, 0.75});
   }
 
-  blocker_go->AddComponent(blocker);
-  blockerGo = state.AddObject(blocker_go);
+  associated.box.x = position.x * 8;
+  associated.box.y = position.y * 8;
+  associated.box.w = sprite->GetWidth();
+  associated.box.h = sprite->GetHeight();
+
+  GameObject* blocker_go = new GameObject(associated.priority);
+  blocker_go->box = associated.box;
+  Blocker* blocker;
+
+  if (direction == Helpers::Direction::UP) {
+    blocker =
+        new Blocker(*blocker_go, {1, 0.4}, {0, sprite->GetHeight() * 0.30f});
+  } else {
+    blocker = new Blocker(*blocker_go);
+  }
 
   GameObject* openGo = new GameObject();
   ActionMessage* openMsg =
       new ActionMessage(*openGo, position, "assets/img/open_msg.png");
   openGo->AddComponent(openMsg);
 
+  State& state = Game::GetInstance().GetCurrentState();
   openDoorGo = state.AddObject(openGo);
 
   GameObject* closeGo = new GameObject();
@@ -83,8 +83,11 @@ Door::Door(GameObject& associated, Helpers::Direction direction, Vec2 position,
 
   closeDoorGo = state.AddObject(closeGo);
 
+  blocker_go->AddComponent(blocker);
+  auto blocker_ptr = state.AddObject(blocker_go);
+
   this->blocker = std::dynamic_pointer_cast<Blocker>(
-      blockerGo->GetComponent(Types::BlockerType));
+      blocker_ptr->GetComponent(Types::BlockerType));
 
   GameObject* pcGo = new GameObject(associated.priority);
   pcGo->box = associated.box;
@@ -96,11 +99,7 @@ Door::Door(GameObject& associated, Helpers::Direction direction, Vec2 position,
   associated.AddComponent(sprite);
 }
 
-Door::~Door() {
-  closeDoorGo->RequestDelete();
-  openDoorGo->RequestDelete();
-  blockerGo->RequestDelete();
-}
+Door::~Door() {}
 
 void Door::NotifyCollision(std::shared_ptr<GameObject> other) {
   auto playerComponent = other->GetComponent(PlayerType);
