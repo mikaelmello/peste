@@ -112,6 +112,7 @@ void RoomState::LoadAssets() {
   LoadFurnitureFirstFloor();
   LoadFurnitureSecondFloor();
   LoadFurnitureBasement();
+  LoadDoors();
 
   auto playerGo = std::make_shared<GameObject>(8);
   Player* player = new Player(*playerGo, currentTileMap->GetInitialPosition());
@@ -119,6 +120,7 @@ void RoomState::LoadAssets() {
   objects.push_back(playerGo);
   GameData::PlayerGameObject = playerGo;
 
+  std::cout << objects.size() << std::endl;
   // GameObject* terryGo = new GameObject(5);
   // Terry* terry = new Terry(
   //     *terryGo, currentTileMap->GetInitialPosition() + Vec2(-18, -18));
@@ -523,4 +525,12 @@ void RoomState::LoadFurnitureBasement() {
   furnitureGo->AddComponent(furniture);
   objects.emplace_back(furnitureGo);
   // end lab
+}
+
+void RoomState::LoadDoors() {
+  auto doorGo = new GameObject(7);
+  auto door =
+      new Door(*doorGo, Helpers::Direction::UP, {256, 229}, false, true);
+  doorGo->AddComponent(door);
+  objects.emplace_back(doorGo);
 }

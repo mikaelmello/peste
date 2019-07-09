@@ -31,6 +31,7 @@ class RoomState : public State {
   void LoadFurnitureFirstFloor();
   void LoadFurnitureSecondFloor();
   void LoadFurnitureBasement();
+  void LoadDoors();
 };
 
 #endif
