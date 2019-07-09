@@ -109,10 +109,11 @@ void RoomState::Pause() {
 void RoomState::Resume() { Camera::Follow(GameData::PlayerGameObject.get()); }
 
 void RoomState::LoadAssets() {
-  LoadAssetsFurnitureFirstFloor();
-  LoadAssetsFurnitureSecondFloor();
+  LoadFurnitureFirstFloor();
+  LoadFurnitureSecondFloor();
+  LoadFurnitureBasement();
 
-  auto playerGo = std::make_shared<GameObject>(7);
+  auto playerGo = std::make_shared<GameObject>(8);
   Player* player = new Player(*playerGo, currentTileMap->GetInitialPosition());
   playerGo->AddComponent(player);
   objects.push_back(playerGo);
@@ -162,7 +163,7 @@ void RoomState::LoadAssets() {
 
 void RoomState::Render() { RenderArray(); }
 
-void RoomState::LoadAssetsFurnitureFirstFloor() {
+void RoomState::LoadFurnitureFirstFloor() {
   GameObject* furnitureGo = new GameObject(6);
   Furniture* furniture =
       new Furniture(*furnitureGo, "assets/img/furniture/cabinet.png", {53, 340},
@@ -249,7 +250,7 @@ void RoomState::LoadAssetsFurnitureFirstFloor() {
   // end kitchen
 }
 
-void RoomState::LoadAssetsFurnitureSecondFloor() {
+void RoomState::LoadFurnitureSecondFloor() {
   // begin bedroom 1
   auto furnitureGo = new GameObject(7);
   auto furniture =
@@ -380,3 +381,146 @@ void RoomState::LoadAssetsFurnitureSecondFloor() {
   // end last bedroom
 }
 
+void RoomState::LoadFurnitureBasement() {
+  // begin first room
+  auto furnitureGo = new GameObject(7);
+  auto furniture =
+      new Furniture(*furnitureGo, "assets/img/furniture/wheelchair.png",
+                    {178, 1059}, Interaction::NONE);
+  furnitureGo->AddComponent(furniture);
+  objects.emplace_back(furnitureGo);
+
+  furnitureGo = new GameObject(7);
+  furniture = new Furniture(*furnitureGo, "assets/img/furniture/bedPacient.png",
+                            {254, 1059}, Interaction::NONE);
+  furnitureGo->AddComponent(furniture);
+  objects.emplace_back(furnitureGo);
+  // end first room
+
+  // begin second room
+  furnitureGo = new GameObject(7);
+  furniture = new Furniture(*furnitureGo, "assets/img/furniture/bedPacient.png",
+                            {300, 1059}, Interaction::NONE);
+  furnitureGo->AddComponent(furniture);
+  objects.emplace_back(furnitureGo);
+
+  furnitureGo = new GameObject(7);
+  furniture = new Furniture(*furnitureGo, "assets/img/furniture/serum.png",
+                            {290, 1052}, Interaction::NONE);
+  furnitureGo->AddComponent(furniture);
+  objects.emplace_back(furnitureGo);
+
+  furnitureGo = new GameObject(7);
+  furniture =
+      new Furniture(*furnitureGo, "assets/img/furniture/labTableRight.png",
+                    {384, 1063}, Interaction::NONE);
+  furnitureGo->AddComponent(furniture);
+  objects.emplace_back(furnitureGo);
+
+  furnitureGo = new GameObject(7);
+  furniture =
+      new Furniture(*furnitureGo, "assets/img/furniture/microscope2.png",
+                    {386, 1063}, Interaction::LOOK);
+  furnitureGo->AddComponent(furniture);
+  objects.emplace_back(furnitureGo);
+  // end second room
+
+  // begin lab
+  furnitureGo = new GameObject(6);
+  furniture =
+      new Furniture(*furnitureGo, "assets/img/furniture/labTableFront.png",
+                    {47, 1145}, Interaction::NONE);
+  furnitureGo->AddComponent(furniture);
+  objects.emplace_back(furnitureGo);
+
+  furnitureGo = new GameObject(7);
+  furniture = new Furniture(*furnitureGo, "assets/img/furniture/lab_stuff.png",
+                            {46, 1146}, Interaction::NONE);
+  furnitureGo->AddComponent(furniture);
+  objects.emplace_back(furnitureGo);
+
+  furnitureGo = new GameObject(7);
+  furniture = new Furniture(*furnitureGo, "assets/img/furniture/equipament.png",
+                            {60, 1144}, Interaction::LOOK);
+  furnitureGo->AddComponent(furniture);
+  objects.emplace_back(furnitureGo);
+
+  furnitureGo = new GameObject(7);
+  furniture =
+      new Furniture(*furnitureGo, "assets/img/furniture/microscope2.png",
+                    {74, 1144}, Interaction::LOOK);
+  furnitureGo->AddComponent(furniture);
+  objects.emplace_back(furnitureGo);
+
+  furnitureGo = new GameObject(6);
+  furniture =
+      new Furniture(*furnitureGo, "assets/img/furniture/labTableFront.png",
+                    {107, 1145}, Interaction::NONE);
+  furnitureGo->AddComponent(furniture);
+  objects.emplace_back(furnitureGo);
+
+  furnitureGo = new GameObject(7);
+  furniture = new Furniture(*furnitureGo, "assets/img/furniture/oldpc.png",
+                            {123, 1141}, Interaction::LOOK);
+  furnitureGo->AddComponent(furniture);
+  objects.emplace_back(furnitureGo);
+
+  furnitureGo = new GameObject(7);
+  furniture = new Furniture(*furnitureGo, "assets/img/furniture/bookpile.png",
+                            {110, 1145}, Interaction::NONE);
+  furnitureGo->AddComponent(furniture);
+  objects.emplace_back(furnitureGo);
+
+  furnitureGo = new GameObject(6);
+  furniture =
+      new Furniture(*furnitureGo, "assets/img/furniture/labTableLeft.png",
+                    {17, 1170}, Interaction::NONE);
+  furnitureGo->AddComponent(furniture);
+  objects.emplace_back(furnitureGo);
+
+  furnitureGo = new GameObject(7);
+  furniture =
+      new Furniture(*furnitureGo, "assets/img/furniture/microscope1.png",
+                    {19, 1174}, Interaction::NONE);
+  furnitureGo->AddComponent(furniture);
+  objects.emplace_back(furnitureGo);
+
+  furnitureGo = new GameObject(7);
+  furniture = new Furniture(*furnitureGo, "assets/img/furniture/papers.png",
+                            {19, 1190}, Interaction::NONE);
+  furnitureGo->AddComponent(furniture);
+  objects.emplace_back(furnitureGo);
+
+  furnitureGo = new GameObject(7);
+  furniture = new Furniture(*furnitureGo, "assets/img/furniture/chairSteel.png",
+                            {174, 1160}, Interaction::NONE, false);
+  furnitureGo->AddComponent(furniture);
+  objects.emplace_back(furnitureGo);
+
+  furnitureGo = new GameObject(7);
+  furniture = new Furniture(*furnitureGo, "assets/img/furniture/chairSteel.png",
+                            {225, 1221}, Interaction::NONE, false);
+  furnitureGo->AddComponent(furniture);
+  objects.emplace_back(furnitureGo);
+
+  furnitureGo = new GameObject(6);
+  furniture =
+      new Furniture(*furnitureGo, "assets/img/furniture/labTableRight.png",
+                    {240, 1217}, Interaction::NONE);
+  furnitureGo->AddComponent(furniture);
+  objects.emplace_back(furnitureGo);
+
+  furnitureGo = new GameObject(7);
+  furniture =
+      new Furniture(*furnitureGo, "assets/img/furniture/labTableRight.png",
+                    {240, 1242}, Interaction::NONE);
+  furnitureGo->AddComponent(furniture);
+  objects.emplace_back(furnitureGo);
+
+  furnitureGo = new GameObject(7);
+  furniture = new Furniture(*furnitureGo, "assets/img/furniture/openBook.png",
+                            {242, 1221}, Interaction::NONE);
+  furnitureGo->AddComponent(furniture);
+  objects.emplace_back(furnitureGo);
+  // end lab
+}

@@ -11,7 +11,7 @@
 #include "Sprite.hpp"
 
 #define HIDE_MSG "assets/img/x.png"
-#define LOOK_MSG "assets/img/x.png"
+#define LOOK_MSG "assets/img/look.png"
 
 Furniture::Furniture(GameObject& associated, const std::string& file,
                      Vec2 position, Interaction interaction, bool fullblock)
@@ -27,7 +27,7 @@ Furniture::Furniture(GameObject& associated, const std::string& file,
   associated.box.h = sprite->GetHeight();
 
   if (interaction != Interaction::NONE) {
-    Collider* collider = new Collider(associated, {1.5, 1.5}, {0.75, 0.75});
+    Collider* collider = new Collider(associated, {1.5, 2}, {0.75, 1});
     associated.AddComponent(collider);
 
     interact = true;
