@@ -26,6 +26,15 @@ void PriorityChanger::NotifyCollision(std::shared_ptr<GameObject> other) {
   }
 }
 
+void PriorityChanger::SetRect(float dt, Rect rect) {
+  auto colliderCpt = associated.GetComponent(ColliderType);
+  if (!colliderCpt) {
+    throw std::runtime_error("PC sem collider");
+  }
+  associated.box = rect;
+  colliderCpt->Update(dt);
+}
+
 void PriorityChanger::Start() {}
 
 void PriorityChanger::Update(float dt) {}

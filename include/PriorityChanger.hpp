@@ -9,6 +9,7 @@
 #include <string>
 #include "Component.hpp"
 #include "GameObject.hpp"
+#include "Rect.hpp"
 #include "Types.hpp"
 
 class PriorityChanger : public Component {
@@ -27,6 +28,8 @@ class PriorityChanger : public Component {
   bool Is(Types type) const override;
 
   void Render() override;
+
+  void SetRect(float dt, Rect rect);
 
   const Types Type = PriorityChangerType;
 

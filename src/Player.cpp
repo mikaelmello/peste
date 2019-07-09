@@ -195,9 +195,16 @@ void Player::Update(float dt) {
   associated.box.w = sprite->GetWidth();
   associated.box.h = sprite->GetHeight();
 
-  priorityChanger_go->box = associated.box;
-  std::cout << "X:" << position.x << std::endl;
-  std::cout << "Y:" << position.y << std::endl << std::endl;
+  auto pcCpt = priorityChanger_go->GetComponent(PriorityChangerType);
+  if (!pcCpt) {
+    throw std::runtime_error("Sem PC CPT");
+  }
+  auto pc = std::dynamic_pointer_cast<PriorityChanger>(pcCpt);
+  pc->SetRect(dt, associated.box);
+
+#if DEBUG
+  printf("X: %f\nY:%f\n\n", position.x, position.y);
+#endif
 }
 
 void Player::Render() {
