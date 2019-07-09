@@ -29,6 +29,7 @@ class RoomState : public State {
   void Render();
 
   void LoadAssetsFurnitureFirstFloor();
+  void LoadAssetsFurnitureSecondFloor();
 };
 
 #endif

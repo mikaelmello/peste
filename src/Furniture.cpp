@@ -7,17 +7,16 @@
 #include "Game.hpp"
 #include "GameObject.hpp"
 #include "Helpers.hpp"
+#include "PriorityChanger.hpp"
 #include "Sprite.hpp"
 
 #define HIDE_MSG "assets/img/x.png"
 #define LOOK_MSG "assets/img/x.png"
 
 Furniture::Furniture(GameObject& associated, const std::string& file,
-                     Vec2 position, Interaction interaction)
+                     Vec2 position, Interaction interaction, bool fullblock)
     : Component(associated), interact(false), colliding(false) {
-  Collider* collider = new Collider(associated, {1.5, 1.5}, {0.75, 0.75});
   Sprite* sprite = new Sprite(associated, file);
-  associated.AddComponent(collider);
   associated.AddComponent(sprite);
 
   State& state = Game::GetInstance().GetCurrentState();
@@ -28,9 +27,14 @@ Furniture::Furniture(GameObject& associated, const std::string& file,
   associated.box.h = sprite->GetHeight();
 
   if (interaction != Interaction::NONE) {
+    Collider* collider = new Collider(associated, {1.5, 1.5}, {0.75, 0.75});
+    associated.AddComponent(collider);
+
     interact = true;
+
     GameObject* interactmsg_go = new GameObject();
     ActionMessage* interactMsg;
+
     if (interaction == Interaction::HIDE) {
       interactMsg = new ActionMessage(*interactmsg_go, position, HIDE_MSG);
     } else if (interaction == Interaction::LOOK) {
@@ -42,7 +46,19 @@ Furniture::Furniture(GameObject& associated, const std::string& file,
 
   GameObject* blocker_go = new GameObject(associated.priority);
   blocker_go->box = associated.box;
-  Blocker* blocker = new Blocker(*blocker_go);
+  Blocker* blocker;
+  if (fullblock) {
+    blocker = new Blocker(*blocker_go);
+  } else {
+    blocker =
+        new Blocker(*blocker_go, {1, 0.4}, {0, sprite->GetHeight() * 0.30f});
+
+    GameObject* pcGo = new GameObject(associated.priority);
+    pcGo->box = associated.box;
+    PriorityChanger* priChanger = new PriorityChanger(*pcGo, associated);
+    pcGo->AddComponent(priChanger);
+    state.AddObject(pcGo);
+  }
   blocker_go->AddComponent(blocker);
   blockerGo = state.AddObject(blocker_go);
 }
@@ -66,12 +82,14 @@ void Furniture::Start() {}
 void Furniture::Update(float dt) {}
 
 void Furniture::Render() {
-  // if (colliding && interact) {
-  //   ShowInteractionDialog();
-  // } else {
-  //   HideInteractionDialog();
-  // }
-  // colliding = false;
+  if (interact) {
+    if (colliding && interact) {
+      ShowInteractionDialog();
+    } else {
+      HideInteractionDialog();
+    }
+  }
+  colliding = false;
 }
 
 void Furniture::ShowInteractionDialog() { interactMsgGo->EnableRender(); }
