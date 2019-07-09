@@ -17,7 +17,7 @@
 class Door : public Component {
  public:
   Door(GameObject& associated, Helpers::Direction direction, Vec2 position,
-       bool open);
+       bool open, bool doubledoor = false);
 
   ~Door();
 
@@ -54,6 +54,9 @@ class Door : public Component {
   std::shared_ptr<GameObject> blockerGo;
 
   std::shared_ptr<Blocker> blocker;
+
+  std::string openPath;
+  std::string closePath;
 };
 
 #endif

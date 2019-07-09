@@ -14,8 +14,14 @@
 
 std::stack<std::pair<unsigned, std::vector<Vec2>>> Antagonist::paths;
 
-Antagonist::Antagonist(GameObject& associated, Vec2 position)
-    : Component(associated), position(position), stored_state(nullptr) {
+Antagonist::Antagonist(GameObject& associated, std::vector<Vec2> path)
+    : Component(associated), position(0, 0), stored_state(nullptr), path(path) {
+  if (path.empty()) {
+    throw std::invalid_argument("antagonist without path");
+  }
+
+  position = path[0];
+
   Sound* sound = new Sound(associated, BREATHING_ANTAGONIST_SOUND);
   Sprite* sprite = new Sprite(associated, IDLE_SPRITE, 4, 0.125);
   Collider* collider =
@@ -38,8 +44,10 @@ void Antagonist::NotifyCollision(std::shared_ptr<GameObject> other) {
 void Antagonist::Start() {
   last_action = Helpers::Action::IDLE;
   last_direction = Helpers::Direction::NONE;
-  state_stack.emplace(new PatrolFSM(associated));
+  state_stack.emplace(new PatrolFSM(associated, path));
 }
+
+#include "Collider.hpp"
 
 void Antagonist::Update(float dt) {
   previous_position = position;
@@ -59,11 +67,6 @@ void Antagonist::Update(float dt) {
     if (top_state->PopRequested()) {
       top_state->OnStateExit();
       state_stack.pop();
-
-      if (!state_stack.empty()) {
-        auto& enter_state = state_stack.top();
-        enter_state->OnStateEnter();
-      }
     }
 
     if (stored_state != nullptr) {
@@ -73,7 +76,7 @@ void Antagonist::Update(float dt) {
     }
 
     if (state_stack.empty()) {
-      state_stack.emplace(new PatrolFSM(associated));
+      state_stack.emplace(new PatrolFSM(associated, path));
     }
 
     auto& state = state_stack.top();
@@ -84,7 +87,8 @@ void Antagonist::Update(float dt) {
 
   associated.box.x = position.x * tileDim;
   associated.box.y = position.y * tileDim;
-
+  associated.box.w = sprite->GetWidth();
+  associated.box.h = sprite->GetHeight();
   // a position está no meio horizontal e no fim vertical do sprite
   // para renderizar, colocamos o xy da box de acordo
   // posição * dimensão do tile - (comprimento da sprite / 2), pois o x fica no
@@ -92,8 +96,6 @@ void Antagonist::Update(float dt) {
   associated.box.x = position.x * tileDim - sprite->GetWidth() / 2;
   // posição * dimensão do tile - altura da sprite, pois o y fica la embaixo
   associated.box.y = position.y * tileDim - sprite->GetHeight();
-
-  // printf("%s\n", position.ToString().c_str());
 }
 
 void Antagonist::Render() {}
@@ -121,7 +123,7 @@ void Antagonist::AssetsManager(Helpers::Action action) {
 
   switch (action) {
     case Helpers::Action::IDLE:
-      IdleAssetsManager();
+      IdleAssetsManager(action_change);
       break;
     case Helpers::Action::MOVING:
       MoveAssetsManager(WALKING_WALK_SET, action_change);
@@ -137,7 +139,7 @@ void Antagonist::AssetsManager(Helpers::Action action) {
       break;
     default:
       action = Helpers::Action::IDLE;
-      IdleAssetsManager();
+      IdleAssetsManager(true);
       break;
   }
   last_action = action;
@@ -167,53 +169,62 @@ void Antagonist::MoveAssetsManager(std::vector<std::string> set, bool ac) {
 
   Vec2 delta = position - previous_position;
 
-  bool up = delta.y == -1;
-  bool down = delta.y == 1;
-  bool left = delta.x == -1;
-  bool right = delta.x == 1;
+  bool up = delta.y <= -1;
+  bool down = delta.y >= 1;
+  bool left = delta.x <= -1;
+  bool right = delta.x >= 1;
 
   auto direction = Helpers::combine_moves(up, down, left, right);
 
-  if (last_direction == direction) {
+  if (last_direction == direction || direction == Helpers::Direction::NONE) {
     return;
   }
 
   auto sprite = std::dynamic_pointer_cast<Sprite>(spriteCpt);
 
   switch (direction) {
-    case Helpers::Direction::RIGHT:
+    case Helpers::Direction::LEFT:
+      sprite->SetFrameCount(8);
       sprite->Open(set[0]);
       break;
-    case Helpers::Direction::LEFT:
+    case Helpers::Direction::RIGHT:
+      sprite->SetFrameCount(8);
       sprite->Open(set[1]);
       break;
-    case Helpers::Direction::UP:
+    case Helpers::Direction::DOWN:
+      sprite->SetFrameCount(5);
       sprite->Open(set[2]);
       break;
-    case Helpers::Direction::DOWN:
+    case Helpers::Direction::UP:
+      sprite->SetFrameCount(5);
       sprite->Open(set[3]);
       break;
-    case Helpers::Direction::UPRIGHT:
+    case Helpers::Direction::DOWNLEFT:
+      sprite->SetFrameCount(5);
       sprite->Open(set[4]);
       break;
     case Helpers::Direction::UPLEFT:;
       sprite->Open(set[5]);
       break;
     case Helpers::Direction::DOWNRIGHT:
+      sprite->SetFrameCount(5);
       sprite->Open(set[6]);
       break;
-    case Helpers::Direction::DOWNLEFT:
+    case Helpers::Direction::UPRIGHT:
+      sprite->SetFrameCount(5);
       sprite->Open(set[7]);
       break;
     default:
-      IdleAssetsManager();
+      // IdleAssetsManager();
       break;
   }
 
   last_direction = direction;
 }
 
-void Antagonist::IdleAssetsManager() {
+void Antagonist::IdleAssetsManager(bool action_change) {
+  if (!action_change) return;
+
   auto spriteCpt = associated.GetComponent(SpriteType);
   if (!spriteCpt) {
     throw std::runtime_error("O gameobject do antagonista nao tem sprite");
@@ -233,27 +244,35 @@ void Antagonist::IdleAssetsManager() {
 
   switch (last_direction) {
     case Helpers::Direction::RIGHT:
+      sprite->SetFrameCount(4);
       sprite->Open(RIGHT_IDLE_SPRITE_ANTAGONIST);
       break;
     case Helpers::Direction::LEFT:
+      sprite->SetFrameCount(4);
       sprite->Open(LEFT_IDLE_SPRITE_ANTAGONIST);
       break;
     case Helpers::Direction::UP:
+      sprite->SetFrameCount(4);
       sprite->Open(UP_IDLE_SPRITE_ANTAGONIST);
       break;
     case Helpers::Direction::DOWN:
+      sprite->SetFrameCount(4);
       sprite->Open(DOWN_IDLE_SPRITE_ANTAGONIST);
       break;
     case Helpers::Direction::UPRIGHT:
+      sprite->SetFrameCount(4);
       sprite->Open(UPRIGHT_IDLE_SPRITE_ANTAGONIST);
       break;
     case Helpers::Direction::UPLEFT:;
+      sprite->SetFrameCount(4);
       sprite->Open(UPLEFT_IDLE_SPRITE_ANTAGONIST);
       break;
     case Helpers::Direction::DOWNRIGHT:
+      sprite->SetFrameCount(4);
       sprite->Open(DOWNRIGHT_IDLE_SPRITE_ANTAGONIST);
       break;
     case Helpers::Direction::DOWNLEFT:
+      sprite->SetFrameCount(4);
       sprite->Open(DOWNLEFT_IDLE_SPRITE_ANTAGONIST);
       break;
     default:
@@ -284,27 +303,35 @@ void Antagonist::AttackAssetsManager() {
 
   switch (last_direction) {
     case Helpers::Direction::RIGHT:
+      sprite->SetFrameCount(4);
       sprite->Open(RIGHT_ATTACK_SPRITE_ANTAGONIST);
       break;
     case Helpers::Direction::LEFT:
+      sprite->SetFrameCount(4);
       sprite->Open(LEFT_ATTACK_SPRITE_ANTAGONIST);
       break;
     case Helpers::Direction::UP:
+      sprite->SetFrameCount(4);
       sprite->Open(UP_ATTACK_SPRITE_ANTAGONIST);
       break;
     case Helpers::Direction::DOWN:
+      sprite->SetFrameCount(4);
       sprite->Open(DOWN_ATTACK_SPRITE_ANTAGONIST);
       break;
     case Helpers::Direction::UPRIGHT:
+      sprite->SetFrameCount(4);
       sprite->Open(UPRIGHT_ATTACK_SPRITE_ANTAGONIST);
       break;
     case Helpers::Direction::UPLEFT:;
+      sprite->SetFrameCount(4);
       sprite->Open(UPLEFT_ATTACK_SPRITE_ANTAGONIST);
       break;
     case Helpers::Direction::DOWNRIGHT:
+      sprite->SetFrameCount(4);
       sprite->Open(DOWNRIGHT_ATTACK_SPRITE_ANTAGONIST);
       break;
     case Helpers::Direction::DOWNLEFT:
+      sprite->SetFrameCount(4);
       sprite->Open(DOWNLEFT_ATTACK_SPRITE_ANTAGONIST);
       break;
     default:

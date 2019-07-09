@@ -264,7 +264,7 @@
        {
         "name":"initialPositionY",
         "type":"int",
-        "value":51
+        "value":23
 }],
  "orientation":"orthogonal",
  "renderorder":"left-up",

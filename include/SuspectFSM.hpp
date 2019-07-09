@@ -8,6 +8,7 @@
 #define RAGE_NUMERIC_LIMIT 10
 #define POP_REQUEST_TIME 3
 
+#include "Antagonist.hpp"
 #include "GameObject.hpp"
 #include "IFSM.hpp"
 #include "Timer.hpp"
@@ -20,7 +21,7 @@ class SuspectFSM : public IFSM {
 
   void OnStateEnter();
 
-  void OnStateExecution();
+  void OnStateExecution(float dt);
 
   void OnStateExit();
 
@@ -36,6 +37,8 @@ class SuspectFSM : public IFSM {
   Timer bias_update_timer;
 
   Timer pop_request_timer;
+
+  std::weak_ptr<Antagonist> ant;
 };
 
 #endif

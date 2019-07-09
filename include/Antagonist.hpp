@@ -8,14 +8,14 @@
 #define ANTAGONIST_WALKING_SOUND "assets/audio/monster/monster_walking.wav"
 #define ATTACK_ROAR_ANTAGONIST "assets/audio/monster/monster_scream.wav"
 
-#define LEFT_WALK_SPRITE "assets/img/terry/idle_terry.png"
-#define RIGHT_WALK_SPRITE "assets/img/terry/idle_terry.png"
-#define DOWN_WALK_SPRITE "assets/img/terry/idle_terry.png"
-#define UP_WALK_SPRITE "assets/img/terry/idle_terry.png"
-#define LEFT_DOWN_WALK_SPRITE "assets/img/terry/idle_terry.png"
-#define LEFT_UP_WALK_SPRITE "assets/img/terry/idle_terry.png"
-#define RIGHT_DOWN_WALK_SPRITE "assets/img/terry/idle_terry.png"
-#define RIGHT_UP_WALK_SPRITE "assets/img/terry/idle_terry.png"
+#define LEFT_WALK_SPRITE "assets/img/terry/walk/left_walk.png"
+#define RIGHT_WALK_SPRITE "assets/img/terry/walk/right_walk.png"
+#define DOWN_WALK_SPRITE "assets/img/terry/walk/down_walk.png"
+#define UP_WALK_SPRITE "assets/img/terry/walk/up_walk.png"
+#define LEFT_DOWN_WALK_SPRITE "assets/img/terry/walk/down_walk.png"
+#define LEFT_UP_WALK_SPRITE "assets/img/terry/walk/up_walk.png"
+#define RIGHT_DOWN_WALK_SPRITE "assets/img/terry/walk/down_walk.png"
+#define RIGHT_UP_WALK_SPRITE "assets/img/terry/walk/up_walk.png"
 #define IDLE_SPRITE "assets/img/terry/idle_terry.png"
 
 #define RIGHT_IDLE_SPRITE_ANTAGONIST "assets/img/terry/idle_terry.png"
@@ -70,7 +70,7 @@
 
 class Antagonist : public Component {
  public:
-  Antagonist(GameObject& associated, Vec2 position);
+  Antagonist(GameObject& associated, std::vector<Vec2> path);
 
   ~Antagonist();
 
@@ -99,7 +99,7 @@ class Antagonist : public Component {
  private:
   void MoveAssetsManager(std::vector<std::string> set, bool ac);
 
-  void IdleAssetsManager();
+  void IdleAssetsManager(bool action_change);
 
   void AttackAssetsManager();
 
@@ -108,6 +108,8 @@ class Antagonist : public Component {
   IFSM* stored_state;
 
   std::stack<std::unique_ptr<IFSM>> state_stack;
+
+  std::vector<Vec2> path;
 
   Helpers::Direction last_direction;
 
