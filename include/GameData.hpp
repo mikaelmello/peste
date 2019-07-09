@@ -8,6 +8,7 @@
 #include <memory>
 #include <vector>
 #include "GameObject.hpp"
+#include "Helpers.hpp"
 
 class GameData {
  public:
@@ -19,6 +20,8 @@ class GameData {
   static bool player_was_hit;
 
   static bool player_is_hidden;
+
+  static Helpers::Floor player_floor;
 };
 
 #endif

@@ -71,8 +71,8 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
 
   auto door_cpt = other->GetComponent(DoorType);
   if (door_cpt) {
-    auto door = std::dynamic_pointer_cast<Door>(door_cpt);
     if (input.KeyPress(X_KEY)) {
+      auto door = std::dynamic_pointer_cast<Door>(door_cpt);
       if (door->IsOpen())
         door->Close();
       else
@@ -82,8 +82,8 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
 
   auto furniture_cpt = other->GetComponent(FurnitureType);
   if (furniture_cpt) {
-    auto furniture = std::dynamic_pointer_cast<Furniture>(furniture_cpt);
     if (input.KeyPress(X_KEY)) {
+      auto furniture = std::dynamic_pointer_cast<Furniture>(furniture_cpt);
       if (furniture->GetInteraction() == Interaction::HIDE) {
         if (!GameData::player_is_hidden) {
           associated.DisableRender();
@@ -92,6 +92,31 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
           associated.EnableRender();
           GameData::player_is_hidden = false;
         }
+      }
+    }
+  }
+
+  auto stairs_cpt = other->GetComponent(StairsType);
+  if (stairs_cpt) {
+    if (input.KeyPress(X_KEY)) {
+      if (GameData::player_floor == Helpers::Floor::FIRST) {
+        if (position.x < 275) {
+          position.x = 220;
+          position.y = 590;
+        } else {
+          position.x = 350;
+          position.y = 590;
+        }
+        GameData::player_floor = Helpers::Floor::SECOND;
+      } else if (GameData::player_floor == Helpers::Floor::SECOND) {
+        if (position.x < 275) {
+          position.x = 220;
+          position.y = 206;
+        } else {
+          position.x = 350;
+          position.y = 206;
+        }
+        GameData::player_floor = Helpers::Floor::FIRST;
       }
     }
   }

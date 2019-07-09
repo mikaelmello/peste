@@ -35,7 +35,7 @@ Stairs::Stairs(GameObject& associated, Helpers::Direction direction,
   } else if (direction == Helpers::Direction::UP) {
     sprite->Open(UP_STAIR);
     collider->SetScale({1, 1.2});
-    collider->SetOffset({0, -0.6});
+    collider->SetOffset({0, 0.6});
 
     actMsg = new ActionMessage(*actMsgGo, position, "assets/img/goDown.png");
   } else {
@@ -54,17 +54,17 @@ Stairs::Stairs(GameObject& associated, Helpers::Direction direction,
   blocker_go->box = associated.box;
   Blocker* blocker;
 
-  if (direction == Helpers::Direction::DOWN) {
-    GameObject* pcGo = new GameObject(associated.priority);
-    pcGo->box = associated.box;
-    PriorityChanger* priChanger = new PriorityChanger(*pcGo, associated);
-    pcGo->AddComponent(priChanger);
-    state.AddObject(pcGo);
+  GameObject* pcGo = new GameObject(associated.priority);
+  pcGo->box = associated.box;
+  PriorityChanger* priChanger = new PriorityChanger(*pcGo, associated);
+  pcGo->AddComponent(priChanger);
+  state.AddObject(pcGo);
 
+  if (direction == Helpers::Direction::DOWN) {
     blocker =
         new Blocker(*blocker_go, {1, 0.25}, {0, sprite->GetHeight() * 0.30f});
   } else if (direction == Helpers::Direction::UP) {
-    blocker = new Blocker(*blocker_go);
+    blocker = new Blocker(*blocker_go, {1, 0.6}, {0, 0.3f});
   }
 
   blocker_go->AddComponent(blocker);
@@ -80,7 +80,6 @@ void Stairs::NotifyCollision(std::shared_ptr<GameObject> other) {
   auto playerComponent = other->GetComponent(PlayerType);
   if (playerComponent) {
     colliding = true;
-    std::cout << "colliding" << std::endl;
   }
 }
 

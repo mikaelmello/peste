@@ -554,6 +554,7 @@ void RoomState::LoadDoors() {
 }
 
 void RoomState::LoadStairs() {
+  // begin first floor
   auto stairsGo = new GameObject(8);
   auto stairs = new Stairs(*stairsGo, Helpers::Direction::DOWN, {202, 125},
                            Helpers::Floor::FIRST);
@@ -561,8 +562,23 @@ void RoomState::LoadStairs() {
   objects.emplace_back(stairsGo);
 
   stairsGo = new GameObject(8);
-  stairs = new Stairs(*stairsGo, Helpers::Direction::DOWN, {312, 125},
+  stairs = new Stairs(*stairsGo, Helpers::Direction::DOWN, {330, 125},
                       Helpers::Floor::FIRST);
   stairsGo->AddComponent(stairs);
   objects.emplace_back(stairsGo);
+  // end first floor
+
+  // begin second floor
+  stairsGo = new GameObject(8);
+  stairs = new Stairs(*stairsGo, Helpers::Direction::UP, {202, 585},
+                      Helpers::Floor::SECOND);
+  stairsGo->AddComponent(stairs);
+  objects.emplace_back(stairsGo);
+
+  stairsGo = new GameObject(8);
+  stairs = new Stairs(*stairsGo, Helpers::Direction::UP, {330, 585},
+                      Helpers::Floor::SECOND);
+  stairsGo->AddComponent(stairs);
+  objects.emplace_back(stairsGo);
+  // end second floor
 }
