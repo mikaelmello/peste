@@ -533,4 +533,14 @@ void RoomState::LoadDoors() {
       new Door(*doorGo, Helpers::Direction::UP, {256, 229}, false, true);
   doorGo->AddComponent(door);
   objects.emplace_back(doorGo);
+
+  doorGo = new GameObject(7);
+  door = new Door(*doorGo, Helpers::Direction::UP, {256, 117}, false, true);
+  doorGo->AddComponent(door);
+  objects.emplace_back(doorGo);
+
+  doorGo = new GameObject(7);
+  door = new Door(*doorGo, Helpers::Direction::UP, {288, 629}, true, true);
+  doorGo->AddComponent(door);
+  objects.emplace_back(doorGo);
 }

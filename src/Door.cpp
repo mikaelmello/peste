@@ -97,6 +97,8 @@ Door::Door(GameObject& associated, Helpers::Direction direction, Vec2 position,
 
   associated.AddComponent(collider);
   associated.AddComponent(sprite);
+
+  if (open) Open();
 }
 
 Door::~Door() {}
