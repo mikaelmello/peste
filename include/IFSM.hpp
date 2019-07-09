@@ -6,6 +6,7 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 #include "GameObject.hpp"
+#include "Timer.hpp"
 
 class IFSM {
  public:
@@ -17,13 +18,15 @@ class IFSM {
 
   void virtual OnStateEnter() = 0;
 
-  void virtual OnStateExecution() = 0;
+  void virtual OnStateExecution(float dt) = 0;
 
   void virtual OnStateExit() = 0;
 
   void virtual Update(float dt) = 0;
 
  protected:
+  bool UpdatePosition(float dt);
+
   struct Walkable {
     bool can_walk;
 
@@ -34,12 +37,15 @@ class IFSM {
     Walkable(bool cw, Vec2 w) : can_walk(cw), walkable(w) {}
   };
   // Retorna uma posição da collider->box de @param pivot
-  // que seja andável para @param object.
-  static Walkable GetWalkable(GameObject& object, GameObject& pivot);
+  // que seja andável para IFSM::object.
+  Walkable GetWalkable(GameObject& pivot);
 
   GameObject& object;
 
   bool pop_requested;
+
+ private:
+  Timer timer;
 };
 
 #endif
