@@ -38,6 +38,8 @@ void GameObject::Render() {
                 [](std::shared_ptr<Component>& cpt) { cpt->Render(); });
 }
 
+bool GameObject::IsRendering() { return render; }
+
 bool GameObject::IsDead() const { return isDead; }
 
 void GameObject::RequestDelete() { isDead = true; }

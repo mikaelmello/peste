@@ -24,6 +24,7 @@ enum Types {
   DialogueType,
   FurnitureType,
   StairsType,
+  DialogType,
 };
 
 #endif

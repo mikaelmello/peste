@@ -8,6 +8,7 @@
 #include "Dialogue.hpp"
 #include "DialogueState.hpp"
 #include "Game.hpp"
+#include "GameData.hpp"
 #include "GameObject.hpp"
 #include "InputManager.hpp"
 #include "PriorityChanger.hpp"
@@ -107,7 +108,7 @@ void Terry::Talk() {
   aux.second = "Terry esta pistolito com o Hope.";
   scripts.push_back(aux);
 
-  Game::GetInstance().Push(new DialogueState(scripts));
+  GameData::InitDialog(scripts);
 }
 
 bool Terry::Is(Types type) const { return type == this->Type; }

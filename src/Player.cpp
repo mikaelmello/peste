@@ -72,7 +72,7 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
       if (!ok) {
         SCRIPT_TYPE s = {std::make_pair<std::string, std::string>(
             " ", "Nao tem mais espaco no inventario.")};
-        Game::GetInstance().Push(new DialogueState(s));
+        GameData::InitDialog(s);
       }
     }
   }
@@ -85,12 +85,12 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
         if (std::find(keys.begin(), keys.end(), door->GetKey()) == keys.end()) {
           SCRIPT_TYPE s = {
               std::make_pair<std::string, std::string>(" ", "Esta trancado.")};
-          Game::GetInstance().Push(new DialogueState(s));
+          GameData::InitDialog(s);
           return;
         } else {
           SCRIPT_TYPE s = {std::make_pair<std::string, std::string>(
               " ", "Usando chave para destrancar.")};
-          Game::GetInstance().Push(new DialogueState(s));
+          GameData::InitDialog(s);
           door->SetKey(Helpers::KeyType::NOKEY);
         }
       }

@@ -5,6 +5,7 @@
 #include "CameraFollower.hpp"
 #include "Collider.hpp"
 #include "Collision.hpp"
+#include "Dialog.hpp"
 #include "Door.hpp"
 #include "Furniture.hpp"
 #include "Game.hpp"
@@ -53,6 +54,11 @@ void RoomState::Update(float dt) {
 
   InputManager& im = InputManager::GetInstance();
   quitRequested |= im.QuitRequested();
+
+  if (GameData::DialogGameObject->IsRendering()) {
+    GameData::DialogGameObject->Update(dt);
+    return;
+  }
 
   if (im.KeyPress(ESCAPE_KEY)) {
     Game::GetInstance().Push(new InventoryState());
@@ -122,6 +128,12 @@ void RoomState::LoadAssets() {
   LoadDoors();
   LoadStairs();
   LoadItems();
+
+  auto dialogGo = std::make_shared<GameObject>(1500);
+  auto dialog = new Dialog(*dialogGo);
+  dialogGo->AddComponent(dialog);
+  objects.push_back(dialogGo);
+  GameData::DialogGameObject = dialogGo;
 
   auto playerGo = std::make_shared<GameObject>(8);
   Player* player = new Player(*playerGo, currentTileMap->GetInitialPosition());

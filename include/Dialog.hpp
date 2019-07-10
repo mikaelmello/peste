@@ -1,5 +1,5 @@
-#ifndef DIALOGUE_H
-#define DIALOGUE_H
+#ifndef DIALOG_H
+#define DIALOG_H
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *                  INCLUDES E DEFINES
@@ -9,15 +9,15 @@
 #include <string>
 #include "Component.hpp"
 #include "GameObject.hpp"
-#include "Helpers.hpp"
 #include "Types.hpp"
 
-class Dialogue : public Component {
- public:
-  Dialogue(GameObject& associated, const std::string& interlocutor,
-           const std::string& text);
+typedef std::vector<std::pair<std::string, std::string>> SCRIPT_TYPE;
 
-  ~Dialogue();
+class Dialog : public Component {
+ public:
+  Dialog(GameObject& associated);
+
+  ~Dialog();
 
   void Start() override;
 
@@ -29,9 +29,17 @@ class Dialogue : public Component {
 
   void Render() override;
 
-  const Types Type = DialogueType;
+  void SetScript(SCRIPT_TYPE script);
+
+  const Types Type = DialogType;
 
  private:
+  void Clear();
+
+  void UpdateTexts();
+  uint32_t dialogIndex;
+  SCRIPT_TYPE script;
+
   std::shared_ptr<GameObject> interlocutorGo;
   std::shared_ptr<GameObject> textGo;
 };
