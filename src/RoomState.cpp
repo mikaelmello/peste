@@ -671,7 +671,7 @@ void RoomState::LoadAntagonist() {
 void RoomState::LoadItems() {
   auto itemGo = new GameObject(7);
   auto item = new Item(*itemGo, "Chave 1", "Uma chave com aparência de velha.",
-                       "assets/img/item/key1.png", {256, 177},
+                       "assets/img/item/key1.png", {30, 886},
                        Helpers::KeyType::KEY1, 32, 32);
   itemGo->AddComponent(item);
   objects.emplace_back(itemGo);
