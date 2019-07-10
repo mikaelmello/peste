@@ -4,7 +4,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *                  INCLUDES E DEFINES
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-#define BREATHING_ANTAGONIST_SOUND "assets/audio/terry/monster_breathing.wav"
+#define BREATHING_ANTAGONIST_SOUND "assets/audio/monster/monster_grunt.wav"
 #define ANTAGONIST_WALKING_SOUND "assets/audio/monster/monster_walking.wav"
 #define ATTACK_ROAR_ANTAGONIST "assets/audio/monster/monster_scream.wav"
 

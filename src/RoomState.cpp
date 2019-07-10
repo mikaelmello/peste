@@ -142,7 +142,7 @@ void RoomState::LoadAssets() {
   // objects.emplace_back(terryGo);
 
   // GameObject* antagonist_go = new GameObject(5);
-  ant = std::make_shared<GameObject>(8);
+  ant = std::make_shared<GameObject>(11);
   Antagonist* antagonist = new Antagonist(*ant.get(), {{263, 297}});
   ant->AddComponent(antagonist);
   objects.emplace_back(ant);

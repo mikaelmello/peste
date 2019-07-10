@@ -9,6 +9,7 @@
 #include "Pathfinder.hpp"
 #include "PatrolFSM.hpp"
 #include "Player.hpp"
+#include "PriorityChanger.hpp"
 #include "Sound.hpp"
 #include "Sprite.hpp"
 
@@ -16,6 +17,9 @@ std::stack<std::pair<unsigned, std::vector<Vec2>>> Antagonist::paths;
 
 Antagonist::Antagonist(GameObject& associated, std::vector<Vec2> path)
     : Component(associated), position(0, 0), stored_state(nullptr), path(path) {
+  Game& game = Game::GetInstance();
+  State& state = game.GetCurrentState();
+
   if (path.empty()) {
     throw std::invalid_argument("antagonist without path");
   }
@@ -27,6 +31,13 @@ Antagonist::Antagonist(GameObject& associated, std::vector<Vec2> path)
       new Sprite(associated, DOWN_IDLE_SPRITE_ANTAGONIST, 4, 0.125);
   Collider* collider =
       new Collider(associated, {0.6, 0.15}, {0, sprite->GetHeight() * 0.45f});
+
+  GameObject* pc_go = new GameObject();
+  pc_go->box = associated.box;
+  PriorityChanger* priority_changer =
+      new PriorityChanger(*pc_go, associated, true);
+  pc_go->AddComponent(priority_changer);
+  state.AddObject(pc_go);
 
   associated.AddComponent(sound);
   associated.AddComponent(collider);
