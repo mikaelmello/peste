@@ -191,7 +191,7 @@ void RoomState::LoadFurnitureFirstFloor() {
   furnitureGo = new GameObject(6);
   furniture =
       new Furniture(*furnitureGo, "assets/img/furniture/piano_stool.png",
-                    {265, 352}, Helpers::Interaction::NOTHING, false);
+                    {265, 352}, Helpers::Interaction::NOTHING, true);
   furnitureGo->AddComponent(furniture);
   objects.emplace_back(furnitureGo);
 
