@@ -63,10 +63,6 @@ void Antagonist::Start() {
 void Antagonist::Update(float dt) {
   previous_position = position;
 
-  Game& game = Game::GetInstance();
-  State& state = game.GetCurrentState();
-  auto tilemap = state.GetCurrentTileMap();
-
   auto spriteCpt = associated.GetComponent(SpriteType);
   if (!spriteCpt) {
     throw std::runtime_error("Sprite nao encontrado no Antagonista");

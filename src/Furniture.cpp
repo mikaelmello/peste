@@ -39,8 +39,8 @@ Furniture::Furniture(GameObject& associated, const std::string& file,
   associated.box.h = sprite->GetHeight();
 
   if (interaction != Helpers::Interaction::NOTHING) {
-    Collider* collider =
-        new Collider(associated, {1, 1.5}, {0, sprite->GetHeight() * 0.25});
+    Collider* collider = new Collider(associated, {1, 1.5},
+                                      {0, (float)(sprite->GetHeight() * 0.25)});
     associated.AddComponent(collider);
 
     interact = true;

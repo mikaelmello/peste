@@ -48,10 +48,6 @@ bool IFSM::UpdatePosition(float dt) {
 }
 
 IFSM::Walkable IFSM::GetWalkable(GameObject& object, GameObject& pivot) {
-  Game& game = Game::GetInstance();
-  State& state = game.GetCurrentState();
-  auto tilemap = state.GetCurrentTileMap();
-
   auto antagonist_cpt = object.GetComponent(AntagonistType);
   if (!antagonist_cpt) {
     throw std::runtime_error("objeto sem antagonista em IFSM::GetWalkable");
