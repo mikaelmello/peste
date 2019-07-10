@@ -184,7 +184,7 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
   }
 }
 
-void Player::Start() {}
+void Player::Start() { sleepTimer.Restart(); }
 
 void Player::Update(float dt) {
   Vec2 oldPos(position.x, position.y);
@@ -194,6 +194,24 @@ void Player::Update(float dt) {
   int tileDim = tilemap->GetLogicalTileDimension();
 
   if (GameData::player_is_hidden) return;
+
+  sleepTimer.Update(dt);
+  int limit = 30;
+  if (sleepTimer.Get() > limit && !GameData::DialogGameObject->IsRendering()) {
+    std::vector<std::pair<std::string, std::string>> scripts[] = {
+        {
+            {"Hope", "Que sono..."},
+        },
+        {
+            {"Hope", "Não aguento mais ficar em pé... onde fica uma cama?"},
+        },
+        {
+            {"Hope", "Estou caindo de sono, preciso dormir..."},
+        },
+    };
+    sleepTimer.Restart();
+    GameData::InitDialog(scripts[rand() % 3]);
+  }
 
   auto spriteCpt = associated.GetComponent(SpriteType);
   auto colliderCpt = associated.GetComponent(ColliderType);

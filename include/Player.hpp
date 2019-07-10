@@ -41,6 +41,8 @@ class Player : public Component {
 
   float frameTime;
 
+  Timer sleepTimer;
+
   void OpenIdleSprite(const std::shared_ptr<Sprite>& sprite,
                       Helpers::Direction lastDirection);
 
