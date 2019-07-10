@@ -49,7 +49,7 @@ Terry::Terry(GameObject& associated, Vec2 position)
 
   GameObject* talkGo = new GameObject();
   ActionMessage* talkMsg =
-      new ActionMessage(*talkGo, position, "assets/img/open_msg.png");
+      new ActionMessage(*talkGo, position, "assets/img/talk.png");
   talkGo->AddComponent(talkMsg);
   talkMessageGo = state.AddObject(talkGo);
 }

@@ -97,6 +97,7 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
             // inserir som de porta emperrada
             GameData::InitDialog(s);
           } else {
+            sound_ptr->Stop();
             sound_ptr->Open("assets/audio/doors/locked_door.wav");
             sound_ptr->Play();
             SCRIPT_TYPE s = {std::make_pair<std::string, std::string>(
@@ -113,6 +114,7 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
             // inserir som de porta sendo arrombada
             GameData::InitDialog(s);
           } else {
+            sound_ptr->Stop();
             sound_ptr->Open("assets/audio/doors/open_door.wav");
             sound_ptr->Play();
             SCRIPT_TYPE s = {std::make_pair<std::string, std::string>(
@@ -143,11 +145,14 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
           GameData::player_is_hidden = false;
         }
       } else if (furniture->GetInteraction() == Helpers::Interaction::PLAY) {
+        sound_ptr->Stop();
         sound_ptr->Open("assets/audio/furniture/piano.wav");
         sound_ptr->Play();
         SCRIPT_TYPE s = {std::make_pair<std::string, std::string>(
             "HOPE", "Um piano de cauda? Nossa, que luxo!")};
         GameData::InitDialog(s);
+      } else if (furniture->GetInteraction() == Helpers::Interaction::LOOK) {
+        furniture->Look();
       }
     }
   }
@@ -285,23 +290,7 @@ void Player::Update(float dt) {
   pc->SetRect(dt, associated.box);
 }
 
-void Player::Render() {
-#if DEBUG
-  Vec2 point = Vec2(0, 0) - Camera::pos;
-  SDL_Point points[5];
-  points[0] = {(int)point.x, (int)point.y};
-  points[4] = {(int)point.x, (int)point.y};
-
-  point = (Vec2(1024, 0)) - Camera::pos;
-  points[1] = {(int)point.x, (int)point.y};
-
-  point = (Vec2(1024, 768)) - Camera::pos;
-  points[2] = {(int)point.x, (int)point.y};
-
-  point = (Vec2(0, 768)) - Camera::pos;
-  points[3] = {(int)point.x, (int)point.y};
-#endif
-}
+void Player::Render() {}
 
 bool Player::Is(Types type) const { return type == this->Type; }
 
