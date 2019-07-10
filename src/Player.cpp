@@ -170,9 +170,13 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
         if (position.x < 275) {
           position.x = 220;
           position.y = 580;
-        } else {
+        } else if (position.x < 373) {
           position.x = 350;
           position.y = 580;
+        } else {
+          GameData::hope_is_in = Helpers::Floor::BASEMENT;
+          position.x = 366;
+          position.y = 1297;
         }
       } else if (GameData::hope_is_in == Helpers::Floor::FIRST_FLOOR) {
         GameData::hope_is_in = Helpers::Floor::GROUND_FLOOR;
@@ -183,6 +187,10 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
           position.x = 350;
           position.y = 211;
         }
+      } else {
+        GameData::hope_is_in = Helpers::Floor::GROUND_FLOOR;
+        position.x = 388;
+        position.y = 206;
       }
     }
   }
