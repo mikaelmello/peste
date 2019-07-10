@@ -153,12 +153,11 @@ void RoomState::LoadAssets() {
   // terryGo->AddComponent(terry);
   // objects.emplace_back(terryGo);
 
-  // GameObject* antagonist_go = new GameObject(5);
-  ant = std::make_shared<GameObject>(11);
-  Antagonist* antagonist = new Antagonist(*ant.get(), {{263, 297}});
-  ant->AddComponent(antagonist);
-  objects.emplace_back(ant);
-  LoadAntagonist();
+  // ant = std::make_shared<GameObject>(11);
+  // Antagonist* antagonist = new Antagonist(*ant.get(), {{263, 297}});
+  // ant->AddComponent(antagonist);
+  // objects.push_back(ant);
+  // LoadAntagonist();
 
   Camera::Follow(playerGo.get());
 
@@ -650,15 +649,16 @@ void RoomState::LoadAntagonist() {
 }
 
 void RoomState::LoadItems() {
-  auto itemGo = new GameObject(7);
-  auto item =
-      new Item(*itemGo, "Chave 1", "Uma chave com aparência de velha.",
-               "assets/img/item/key1.png", {256, 177}, Helpers::KeyType::KEY1);
-  itemGo->AddComponent(item);
-  objects.emplace_back(itemGo);
+  // auto itemGo = new GameObject(7);
+  // auto item =
+  //     new Item(*itemGo, "Chave 1", "Uma chave com aparência de velha.",
+  //              "assets/img/item/key1.png", {256, 177},
+  //              Helpers::KeyType::KEY1);
+  // itemGo->AddComponent(item);
+  // objects.emplace_back(itemGo);
 
-  itemGo = new GameObject(7);
-  item = new Item(
+  auto itemGo = new GameObject(7);
+  auto item = new Item(
       *itemGo, "Pé de Cabra",
       "Bom para abrir coisas que normalmente não podem ser abertas.",
       "assets/img/item/crowbar.png", {34, 225}, Helpers::KeyType::CROWBAR);
