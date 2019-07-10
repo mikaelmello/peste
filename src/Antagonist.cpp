@@ -56,10 +56,8 @@ void Antagonist::NotifyCollision(std::shared_ptr<GameObject> other) {
 void Antagonist::Start() {
   last_action = Helpers::Action::IDLE;
   last_direction = Helpers::Direction::NONE;
-  state_stack.emplace(new PatrolFSM(associated, path));
+  stored_state = new PatrolFSM(associated, path);
 }
-
-#include "Collider.hpp"
 
 void Antagonist::Update(float dt) {
   previous_position = position;
@@ -89,6 +87,8 @@ void Antagonist::Update(float dt) {
 
     if (state_stack.empty()) {
       state_stack.emplace(new PatrolFSM(associated, path));
+      auto& state = state_stack.top();
+      state->OnStateEnter();
     }
 
     auto& state = state_stack.top();
