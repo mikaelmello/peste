@@ -48,3 +48,5 @@ Vec2& Vec2::operator=(const Vec2& v) {
   y = v.y;
   return *this;
 }
+
+bool Vec2::operator==(const Vec2& rhs) { return x == rhs.x && y == rhs.y; }

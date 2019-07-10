@@ -29,8 +29,8 @@ void SuspectFSM::OnStateEnter() {
 
   if (rage_bias == RAGE_NUMERIC_LIMIT) rage_bias--;
 
-  if (ant.lock()->NearTarget(50)) {
-    Walkable w = GetWalkable(*GameData::PlayerGameObject);
+  if (ant.lock()->NearTarget()) {
+    Walkable w = GetWalkable(object, *GameData::PlayerGameObject);
 
     if (w.can_walk) {
       auto pf = Pathfinder::Astar(object, tilemap);
@@ -84,7 +84,7 @@ void SuspectFSM::Update(float dt) {
   };
 
   if (bias_update_timer.Get() > 3 * dt) {
-    bool near = ant.lock()->NearTarget(50);
+    bool near = ant.lock()->NearTarget();
     rage_bias = near ? bound_value(rage_bias + 1) : bound_value(rage_bias - 1);
     bias_update_timer.Restart();
   }

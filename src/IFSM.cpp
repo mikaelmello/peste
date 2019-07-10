@@ -47,7 +47,7 @@ bool IFSM::UpdatePosition(float dt) {
   return shouldPop;
 }
 
-IFSM::Walkable IFSM::GetWalkable(GameObject& pivot) {
+IFSM::Walkable IFSM::GetWalkable(GameObject& object, GameObject& pivot) {
   Game& game = Game::GetInstance();
   State& state = game.GetCurrentState();
   auto tilemap = state.GetCurrentTileMap();

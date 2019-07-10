@@ -5,6 +5,7 @@
 #include "Collider.hpp"
 #include "Game.hpp"
 #include "GameObject.hpp"
+#include "IFSM.hpp"
 #include "IdleFSM.hpp"
 #include "Pathfinder.hpp"
 #include "PatrolFSM.hpp"
@@ -119,15 +120,39 @@ void Antagonist::Push(IFSM* s) {
   stored_state = s;
 }
 
-bool Antagonist::NearTarget(float distance_check) {
+bool Antagonist::NearTarget() {
+  Game& game = Game::GetInstance();
+  State& state = game.GetCurrentState();
+  auto tilemap = state.GetCurrentTileMap();
+
+  Pathfinder::Astar pf(associated, tilemap);
+
   auto player = GameData::PlayerGameObject->GetComponent(PlayerType);
   if (!player) {
     throw std::runtime_error("Player game object without Player component");
   }
-
   auto playerCp = std::dynamic_pointer_cast<Player>(player);
-  double dist = position.Distance(playerCp->position);
-  return dist <= distance_check && !GameData::player_is_hidden;
+
+  if (position == playerCp->position) {
+    return true;
+  }
+
+  IFSM::Walkable w = IFSM::GetWalkable(associated, *GameData::PlayerGameObject);
+
+  try {
+    if (w.can_walk) {
+      auto path = pf.Run(position, w.walkable);
+      return path.size() <= 150;
+    }
+    return false;
+
+  } catch (const std::exception& ex) {
+    printf("printf fdshafdsuiahfdsads %s\n", ex.what());
+    return false;
+  }
+
+  /*double dist = position.Distance(playerCp->position);
+return dist <= distance_check && !GameData::player_is_hidden;*/
 }
 
 void Antagonist::AssetsManager(Helpers::Action action) {

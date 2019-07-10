@@ -88,7 +88,7 @@ class Antagonist : public Component {
 
   void Push(IFSM* s);
 
-  bool NearTarget(float distance_check);
+  bool NearTarget();
 
   void AssetsManager(Helpers::Action action);
 
