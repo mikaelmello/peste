@@ -573,7 +573,8 @@ void RoomState::LoadDoors() {
 
   // begin first floor
   doorGo = new GameObject(8);
-  door = new Door(*doorGo, Helpers::Direction::UP, {288, 624}, true, true);
+  door = new Door(*doorGo, Helpers::Direction::UP, {288, 624}, false, true,
+                  Helpers::KeyType::KEY2);
   doorGo->AddComponent(door);
   objects.emplace_back(doorGo);
 
@@ -627,11 +628,7 @@ void RoomState::LoadStairs() {
   stairsGo->AddComponent(stairs);
   objects.emplace_back(stairsGo);
 
-  stairsGo = new GameObject(8);
-  stairs = new Stairs(*stairsGo, Helpers::Direction::UP, {380, 210},
-                      Helpers::Floor::BASEMENT);
-  stairsGo->AddComponent(stairs);
-  objects.emplace_back(stairsGo);
+  LoadTrapdoor();  // ta aqui só pra teste
   // end basement
 }
 
@@ -702,4 +699,33 @@ void RoomState::LoadItems() {
                   Helpers::KeyType::NOKEY, 32, 32);
   itemGo->AddComponent(item);
   objects.emplace_back(itemGo);
+
+  itemGo = new GameObject(7);
+  item = new Item(*itemGo, "Chave 3", "Uma chave como outra qualquer.",
+                  "assets/img/item/key3.png", {304, 893},
+                  Helpers::KeyType::KEY3, 32, 32);
+  itemGo->AddComponent(item);
+  objects.emplace_back(itemGo);
+
+  LoadLibraryKey();  // deve aparecer depois do hope entrar no quarto dos pais
+                     // do terry
+}
+
+void RoomState::LoadLibraryKey() {
+  auto itemGo = new GameObject(7);
+  auto item = new Item(*itemGo, "Chave 2", "O que será que ela abre?",
+                       "assets/img/item/key2.png", {150, 906},
+                       Helpers::KeyType::KEY2, 32, 32);
+  itemGo->AddComponent(item);
+  objects.emplace_back(itemGo);
+}
+
+void RoomState::LoadTrapdoor() {
+  //  Quando ele entrar na biblioteca, deve tocar um som alto e aparecer o
+  //  basement.
+  auto stairsGo = new GameObject(8);
+  auto stairs = new Stairs(*stairsGo, Helpers::Direction::UP, {380, 210},
+                           Helpers::Floor::BASEMENT);
+  stairsGo->AddComponent(stairs);
+  objects.emplace_back(stairsGo);
 }

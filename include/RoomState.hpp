@@ -29,6 +29,10 @@ class RoomState : public State {
 
   void Render();
 
+  void LoadLibraryKey();
+
+  void LoadTrapdoor();
+
  private:
   void LoadFurnitureFirstFloor();
 
