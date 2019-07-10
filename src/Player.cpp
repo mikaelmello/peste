@@ -79,7 +79,7 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
       auto ok = GameData::AddToInventory(other);
       if (!ok) {
         SCRIPT_TYPE s = {std::make_pair<std::string, std::string>(
-            " ", "Não tem mais espaço na minha bolsa.")};
+            "HOPE", "Não tem mais espaço na minha bolsa.")};
         GameData::InitDialog(s);
       }
     }
@@ -93,14 +93,14 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
         if (std::find(keys.begin(), keys.end(), door->GetKey()) == keys.end()) {
           if (door->GetKey() == door->GetKey() == Helpers::KeyType::CROWBAR) {
             SCRIPT_TYPE s = {std::make_pair<std::string, std::string>(
-                " ", "Está emperrada, não consigo abrir...")};
+                "HOPE", "Está emperrada, não consigo abrir...")};
             // inserir som de porta emperrada
             GameData::InitDialog(s);
           } else {
             sound_ptr->Open("assets/audio/doors/locked_door.wav");
             sound_ptr->Play();
             SCRIPT_TYPE s = {std::make_pair<std::string, std::string>(
-                " ", "Está trancado, onde será que está a chave?")};
+                "HOPE", "Está trancado, onde será que está a chave?")};
             // inserir som de porta trancada
             GameData::InitDialog(s);
           }
@@ -108,14 +108,15 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
         } else {
           if (door->GetKey() == Helpers::KeyType::CROWBAR) {
             SCRIPT_TYPE s = {std::make_pair<std::string, std::string>(
-                " ", "Vou tentar forçar a porta com isso aqui... Consegui!")};
+                "HOPE",
+                "Vou tentar forçar a porta com isso aqui... Consegui!")};
             // inserir som de porta sendo arrombada
             GameData::InitDialog(s);
           } else {
             sound_ptr->Open("assets/audio/doors/open_door.wav");
             sound_ptr->Play();
             SCRIPT_TYPE s = {std::make_pair<std::string, std::string>(
-                " ", "Consegui destrancar!")};
+                "HOPE", "Consegui destrancar!")};
             // inserir som de porta abrindo
             GameData::InitDialog(s);
           }
@@ -133,7 +134,7 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
   if (furniture_cpt) {
     if (input.KeyPress(X_KEY)) {
       auto furniture = std::dynamic_pointer_cast<Furniture>(furniture_cpt);
-      if (furniture->GetInteraction() == Interaction::HIDE) {
+      if (furniture->GetInteraction() == Helpers::Interaction::HIDE) {
         if (!GameData::player_is_hidden) {
           associated.DisableRender();
           GameData::player_is_hidden = true;
@@ -141,8 +142,12 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
           associated.EnableRender();
           GameData::player_is_hidden = false;
         }
-      } else if (furniture->GetInteraction() == Interaction::PLAY) {
-        printf("Play piano sound.\n");
+      } else if (furniture->GetInteraction() == Helpers::Interaction::PLAY) {
+        sound_ptr->Open("assets/audio/furniture/piano.wav");
+        sound_ptr->Play();
+        SCRIPT_TYPE s = {std::make_pair<std::string, std::string>(
+            "HOPE", "Um piano de cauda? Nossa, que luxo!")};
+        GameData::InitDialog(s);
       }
     }
   }

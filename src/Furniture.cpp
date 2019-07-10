@@ -9,6 +9,7 @@
 #include "GameObject.hpp"
 #include "Helpers.hpp"
 #include "PriorityChanger.hpp"
+#include "Sound.hpp"
 #include "Sprite.hpp"
 
 #define HIDE_MSG "assets/img/hide.png"
@@ -25,6 +26,9 @@ Furniture::Furniture(GameObject& associated, const std::string& file,
       interaction(interaction) {
   Sprite* sprite = new Sprite(associated, file);
   associated.AddComponent(sprite);
+
+  Sound* sound = new Sound(associated);
+  associated.AddComponent(sound);
 
   State& state = Game::GetInstance().GetCurrentState();
 
