@@ -149,6 +149,7 @@ void Game::Run() {
     InputManager::GetInstance().Update();
     CalculateDeltaTime();
     state->Update(GetDeltaTime());
+    SDL_RenderClear(renderer);
     state->Render();
     SDL_RenderPresent(renderer);
   }
