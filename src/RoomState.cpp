@@ -122,6 +122,7 @@ void RoomState::LoadAssets() {
   // LoadAntagonist();
   LoadDoors();
   LoadStairs();
+  LoadItems();
 
   auto playerGo = std::make_shared<GameObject>(8);
   Player* player = new Player(*playerGo, currentTileMap->GetInitialPosition());
@@ -624,4 +625,13 @@ void RoomState::LoadAntagonist() {
 
   auto antagonist_cpt = new Antagonist(*ant.get(), path);
   ant->AddComponent(antagonist_cpt);
+}
+
+void RoomState::LoadItems() {
+  auto itemGo = new GameObject(7);
+  auto item =
+      new Item(*itemGo, "Chave 1", "Uma chave com aparência de velha.",
+               "assets/img/item/key1.png", {256, 177}, Helpers::KeyType::KEY1);
+  itemGo->AddComponent(item);
+  objects.emplace_back(itemGo);
 }
