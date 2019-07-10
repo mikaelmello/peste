@@ -181,10 +181,10 @@ void Antagonist::MoveAssetsManager(std::vector<std::string> set, bool ac) {
 
   Vec2 delta = position - previous_position;
 
-  bool up = delta.y == -1;
-  bool down = delta.y == 1;
-  bool left = delta.x == -1;
-  bool right = delta.x == 1;
+  bool up = delta.y < 0;
+  bool down = delta.y > 0;
+  bool left = delta.x < 0;
+  bool right = delta.x > 0;
 
   auto direction = Helpers::combine_moves(up, down, left, right);
 
