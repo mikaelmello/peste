@@ -154,6 +154,7 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
       } else if (furniture->GetInteraction() == Helpers::Interaction::LOOK) {
         furniture->Look();
       } else if (furniture->GetInteraction() == Helpers::Interaction::SLEEP) {
+        furniture->RemoveInteraction();
         Lore::Sleep();
         slept = true;
       }

@@ -125,6 +125,12 @@ void Furniture::HideInteractionDialog() { interactMsgGo->DisableRender(); }
 
 Helpers::Interaction Furniture::GetInteraction() { return interaction; }
 
+void Furniture::RemoveInteraction() {
+  interaction = Helpers::Interaction::NOTHING;
+  interactMsgGo->RequestDelete();
+  interact = false;
+}
+
 void Furniture::Look() {
   SCRIPT_TYPE s = {{"HOPE", script}};
   GameData::InitDialog(s);
