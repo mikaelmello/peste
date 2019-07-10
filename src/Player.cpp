@@ -53,6 +53,11 @@ Player::Player(GameObject& associated, Vec2 position)
   PriorityChanger* priChanger = new PriorityChanger(*pcGo, associated, true);
   pcGo->AddComponent(priChanger);
   priorityChanger_go = state.AddObject(pcGo);
+
+  Sound* sound = new Sound(associated);
+  associated.AddComponent(sound);
+  auto sound_cpt = associated.GetComponent(SoundType);
+  sound_ptr = std::dynamic_pointer_cast<Sound>(sound_cpt);
 }
 
 Player::~Player() { priorityChanger_go->RequestDelete(); }
@@ -86,14 +91,34 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
       auto door = std::dynamic_pointer_cast<Door>(door_cpt);
       if (door->GetKey() != Helpers::KeyType::NOKEY) {
         if (std::find(keys.begin(), keys.end(), door->GetKey()) == keys.end()) {
-          SCRIPT_TYPE s = {std::make_pair<std::string, std::string>(
-              " ", "Está trancado, onde será que está a chave?")};
-          GameData::InitDialog(s);
+          if (door->GetKey() == door->GetKey() == Helpers::KeyType::CROWBAR) {
+            SCRIPT_TYPE s = {std::make_pair<std::string, std::string>(
+                " ", "Está emperrada, não consigo abrir...")};
+            // inserir som de porta emperrada
+            GameData::InitDialog(s);
+          } else {
+            sound_ptr->Open("assets/audio/doors/locked_door.wav");
+            sound_ptr->Play();
+            SCRIPT_TYPE s = {std::make_pair<std::string, std::string>(
+                " ", "Está trancado, onde será que está a chave?")};
+            // inserir som de porta trancada
+            GameData::InitDialog(s);
+          }
           return;
         } else {
-          SCRIPT_TYPE s = {std::make_pair<std::string, std::string>(
-              " ", "Consegui destrancar!")};
-          GameData::InitDialog(s);
+          if (door->GetKey() == Helpers::KeyType::CROWBAR) {
+            SCRIPT_TYPE s = {std::make_pair<std::string, std::string>(
+                " ", "Vou tentar forçar a porta com isso aqui... Consegui!")};
+            // inserir som de porta sendo arrombada
+            GameData::InitDialog(s);
+          } else {
+            sound_ptr->Open("assets/audio/doors/open_door.wav");
+            sound_ptr->Play();
+            SCRIPT_TYPE s = {std::make_pair<std::string, std::string>(
+                " ", "Consegui destrancar!")};
+            // inserir som de porta abrindo
+            GameData::InitDialog(s);
+          }
           door->SetKey(Helpers::KeyType::NOKEY);
         }
       }
@@ -253,6 +278,9 @@ void Player::Update(float dt) {
   }
   auto pc = std::dynamic_pointer_cast<PriorityChanger>(pcCpt);
   pc->SetRect(dt, associated.box);
+
+  std::cout << position.x << std::endl;
+  std::cout << position.y << std::endl;
 }
 
 void Player::Render() {}

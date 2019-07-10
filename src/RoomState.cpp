@@ -135,7 +135,7 @@ void RoomState::LoadAssets() {
   objects.push_back(dialogGo);
   GameData::DialogGameObject = dialogGo;
 
-  auto playerGo = std::make_shared<GameObject>(8);
+  auto playerGo = std::make_shared<GameObject>(10);
   Player* player = new Player(*playerGo, currentTileMap->GetInitialPosition());
   playerGo->AddComponent(player);
   objects.push_back(playerGo);
@@ -554,6 +554,7 @@ void RoomState::LoadFurnitureBasement() {
 }
 
 void RoomState::LoadDoors() {
+  // begin ground floor
   auto doorGo = new GameObject(8);
   auto door =
       new Door(*doorGo, Helpers::Direction::UP, {256, 229}, false, true);
@@ -565,11 +566,28 @@ void RoomState::LoadDoors() {
                   Helpers::KeyType::KEY1);
   doorGo->AddComponent(door);
   objects.emplace_back(doorGo);
+  // end ground floor
 
+  // begin first floor
   doorGo = new GameObject(8);
   door = new Door(*doorGo, Helpers::Direction::UP, {288, 629}, true, true);
   doorGo->AddComponent(door);
   objects.emplace_back(doorGo);
+
+  // doorGo = new GameObject(8);
+  // door = new Door(*doorGo, Helpers::Direction::LEFT, {133, 577}, false,
+  // false,
+  //                 Helpers::KeyType::NOKEY);
+  // doorGo->AddComponent(door);
+  // objects.emplace_back(doorGo);
+
+  // doorGo = new GameObject(8);
+  // door = new Door(*doorGo, Helpers::Direction::LEFT, {133, 577}, false,
+  // false,
+  //                 Helpers::KeyType::NOKEY);
+  // doorGo->AddComponent(door);
+  // objects.emplace_back(doorGo);
+  // begin first floor
 }
 
 void RoomState::LoadStairs() {
