@@ -6,6 +6,8 @@
 
 std::shared_ptr<GameObject> GameData::PlayerGameObject;
 std::shared_ptr<GameObject> GameData::DialogGameObject;
+std::shared_ptr<GameObject> GameData::TerryBedGameObject;
+std::shared_ptr<GameObject> GameData::TerryGameObject;
 
 std::vector<std::shared_ptr<GameObject>> GameData::PlayerInventory;
 

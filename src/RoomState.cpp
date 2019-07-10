@@ -355,12 +355,11 @@ void RoomState::LoadFurnitureSecondFloor() {
 
   // begin bedroom terry
 
-  printf("cria terry\n");
-  GameObject* terryGo = new GameObject(8);
+  auto terryGo = std::make_shared<GameObject>(8);
   Terry* terry = new Terry(*terryGo, {33, 750});
   terryGo->AddComponent(terry);
-  objects.emplace_back(terryGo);
-  printf("cria terry2\n");
+  GameData::TerryGameObject = terryGo;
+  objects.push_back(terryGo);
 
   furnitureGo = new GameObject(7);
   furniture = new Furniture(*furnitureGo, "assets/img/furniture/wardrobe.png",
@@ -368,11 +367,12 @@ void RoomState::LoadFurnitureSecondFloor() {
   furnitureGo->AddComponent(furniture);
   objects.emplace_back(furnitureGo);
 
-  furnitureGo = new GameObject(7);
-  furniture = new Furniture(*furnitureGo, "assets/img/furniture/bedTerry.png",
+  auto terryBedGo = std::make_shared<GameObject>(7);
+  furniture = new Furniture(*terryBedGo, "assets/img/furniture/bedTerry.png",
                             {55, 736}, Helpers::Interaction::HIDE);
-  furnitureGo->AddComponent(furniture);
-  objects.emplace_back(furnitureGo);
+  terryBedGo->AddComponent(furniture);
+  GameData::TerryBedGameObject = terryBedGo;
+  objects.push_back(terryBedGo);
 
   furnitureGo = new GameObject(7);
   furniture = new Furniture(*furnitureGo, "assets/img/furniture/toy2.png",

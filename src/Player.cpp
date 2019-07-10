@@ -12,6 +12,7 @@
 #include "GameObject.hpp"
 #include "InputManager.hpp"
 #include "Item.hpp"
+#include "Lore.hpp"
 #include "PriorityChanger.hpp"
 #include "Sprite.hpp"
 #include "TileMap.hpp"
@@ -153,6 +154,8 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
         GameData::InitDialog(s);
       } else if (furniture->GetInteraction() == Helpers::Interaction::LOOK) {
         furniture->Look();
+      } else if (furniture->GetInteraction() == Helpers::Interaction::SLEEP) {
+        Lore::Sleep();
       }
     }
   }
@@ -223,6 +226,10 @@ void Player::Update(float dt) {
   // hack remove
   if (input.IsKeyDown(LSHIFT_KEY) && input.IsKeyDown(SDLK_t)) {
     position = {50, 800};
+    return;
+  }
+  if (input.IsKeyDown(LSHIFT_KEY) && input.IsKeyDown(SDLK_d)) {
+    position = {50, 900};
     return;
   }
 
