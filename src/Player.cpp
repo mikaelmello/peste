@@ -5,7 +5,6 @@
 #include "Blocker.hpp"
 #include "Camera.hpp"
 #include "Collider.hpp"
-#include "DialogueState.hpp"
 #include "Door.hpp"
 #include "Furniture.hpp"
 #include "Game.hpp"
@@ -59,6 +58,10 @@ Player::Player(GameObject& associated, Vec2 position)
 Player::~Player() { priorityChanger_go->RequestDelete(); }
 
 void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
+  if (other->IsDead()) {
+    return;
+  }
+
   InputManager& input = InputManager::GetInstance();
 
   auto item_cpt = other->GetComponent(ItemType);
@@ -71,7 +74,7 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
       auto ok = GameData::AddToInventory(other);
       if (!ok) {
         SCRIPT_TYPE s = {std::make_pair<std::string, std::string>(
-            " ", "Nao tem mais espaco no inventario.")};
+            " ", "Não tem mais espaço na minha bolsa.")};
         GameData::InitDialog(s);
       }
     }
@@ -83,13 +86,13 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
       auto door = std::dynamic_pointer_cast<Door>(door_cpt);
       if (door->GetKey() != Helpers::KeyType::NOKEY) {
         if (std::find(keys.begin(), keys.end(), door->GetKey()) == keys.end()) {
-          SCRIPT_TYPE s = {
-              std::make_pair<std::string, std::string>(" ", "Esta trancado.")};
+          SCRIPT_TYPE s = {std::make_pair<std::string, std::string>(
+              " ", "Está trancado, onde será que está a chave?")};
           GameData::InitDialog(s);
           return;
         } else {
           SCRIPT_TYPE s = {std::make_pair<std::string, std::string>(
-              " ", "Usando chave para destrancar.")};
+              " ", "Consegui destrancar!")};
           GameData::InitDialog(s);
           door->SetKey(Helpers::KeyType::NOKEY);
         }

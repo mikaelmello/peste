@@ -16,7 +16,6 @@ int GameData::InventoryPage = 0;
 Helpers::Floor GameData::hope_is_in = Helpers::Floor::GROUND_FLOOR;
 
 bool GameData::AddToInventory(std::shared_ptr<GameObject> item) {
-  printf("adding\n");
   auto item_type_cpt = item->GetComponent(ItemType);
   if (!item_type_cpt) {
     throw std::invalid_argument(
