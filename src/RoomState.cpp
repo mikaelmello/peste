@@ -159,31 +159,8 @@ void RoomState::LoadAssets() {
   ant->AddComponent(antagonist);
   objects.emplace_back(ant);
   LoadAntagonist();
-  // GameObject* door_go = new GameObject(6);
-  // Vec2 door_pos = currentTileMap->GetInitialPosition() + Vec2(8, 8);
-  // Door* door = new Door(*door_go, Helpers::Direction::LEFT, door_pos, false);
-  // door_go->AddComponent(door);
-  // objects.emplace_back(door_go);
 
   Camera::Follow(playerGo.get());
-
-  GameObject* lampGo = new GameObject(6);
-  Item* lamp =
-      new Item(*lampGo, "Lamparina",
-               "Esta lamparina é a única coisa permitindo que Hope veja "
-               "ao seu redor e não seja consumido pela escuridão.",
-               "assets/img/item/lamp.png",
-               currentTileMap->GetInitialPosition() - Vec2(3, 3));
-  lampGo->AddComponent(lamp);
-  objects.emplace_back(lampGo);
-
-  GameObject* lamp2Go = new GameObject(6);
-  Item* lamp2 =
-      new Item(*lamp2Go, "Lamparina 2", "Esta lamparina é ruim pode esquecer",
-               "assets/img/item/lamp2.png",
-               currentTileMap->GetInitialPosition() + Vec2(3, 3));
-  lamp2Go->AddComponent(lamp2);
-  objects.emplace_back(lamp2Go);
 
   SortObjects();
 }
