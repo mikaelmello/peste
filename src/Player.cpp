@@ -97,6 +97,7 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
             // inserir som de porta emperrada
             GameData::InitDialog(s);
           } else {
+            sound_ptr->Stop();
             sound_ptr->Open("assets/audio/doors/locked_door.wav");
             sound_ptr->Play();
             SCRIPT_TYPE s = {std::make_pair<std::string, std::string>(
@@ -113,6 +114,7 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
             // inserir som de porta sendo arrombada
             GameData::InitDialog(s);
           } else {
+            sound_ptr->Stop();
             sound_ptr->Open("assets/audio/doors/open_door.wav");
             sound_ptr->Play();
             SCRIPT_TYPE s = {std::make_pair<std::string, std::string>(
@@ -143,11 +145,14 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
           GameData::player_is_hidden = false;
         }
       } else if (furniture->GetInteraction() == Helpers::Interaction::PLAY) {
+        sound_ptr->Stop();
         sound_ptr->Open("assets/audio/furniture/piano.wav");
         sound_ptr->Play();
         SCRIPT_TYPE s = {std::make_pair<std::string, std::string>(
             "HOPE", "Um piano de cauda? Nossa, que luxo!")};
         GameData::InitDialog(s);
+      } else if (furniture->GetInteraction() == Helpers::Interaction::LOOK) {
+        furniture->Look();
       }
     }
   }
@@ -284,8 +289,7 @@ void Player::Update(float dt) {
   auto pc = std::dynamic_pointer_cast<PriorityChanger>(pcCpt);
   pc->SetRect(dt, associated.box);
 
-  std::cout << position.x << std::endl;
-  std::cout << position.y << std::endl;
+  std::cout << position.x << " " << position.y << std::endl;
 }
 
 void Player::Render() {}

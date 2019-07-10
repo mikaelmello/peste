@@ -44,7 +44,7 @@ Item::Item(GameObject& associated, const std::string& name,
 
   GameObject* pickupGo = new GameObject();
   ActionMessage* pickup =
-      new ActionMessage(*pickupGo, position, "assets/img/x.png");
+      new ActionMessage(*pickupGo, position, "assets/img/pick.png");
   pickupGo->AddComponent(pickup);
 
   GameObject* pcGo = new GameObject(associated.priority);

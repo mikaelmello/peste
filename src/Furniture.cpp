@@ -14,16 +14,17 @@
 
 #define HIDE_MSG "assets/img/hide.png"
 #define LOOK_MSG "assets/img/look.png"
-#define OUT_MSG "assets/img/x.png"
-#define SLEEP_MSG "assets/img/x.png"
+#define OUT_MSG "assets/img/goOut.png"
+#define SLEEP_MSG "assets/img/sleep.png"
 
 Furniture::Furniture(GameObject& associated, const std::string& file,
                      Vec2 position, Helpers::Interaction interaction,
-                     bool fullblock)
+                     bool fullblock, const std::string& script)
     : Component(associated),
       interact(false),
       colliding(false),
-      interaction(interaction) {
+      interaction(interaction),
+      script(script) {
   Sprite* sprite = new Sprite(associated, file);
   associated.AddComponent(sprite);
 
@@ -38,7 +39,8 @@ Furniture::Furniture(GameObject& associated, const std::string& file,
   associated.box.h = sprite->GetHeight();
 
   if (interaction != Helpers::Interaction::NOTHING) {
-    Collider* collider = new Collider(associated, {1.5, 1.5}, {0.75, 1.5});
+    Collider* collider =
+        new Collider(associated, {1, 1.5}, {0, sprite->GetHeight() * 0.25});
     associated.AddComponent(collider);
 
     interact = true;
@@ -122,5 +124,10 @@ void Furniture::ShowInteractionDialog() { interactMsgGo->EnableRender(); }
 void Furniture::HideInteractionDialog() { interactMsgGo->DisableRender(); }
 
 Helpers::Interaction Furniture::GetInteraction() { return interaction; }
+
+void Furniture::Look() {
+  SCRIPT_TYPE s = {std::pair<std::string, std::string>("HOPE", script)};
+  GameData::InitDialog(s);
+}
 
 bool Furniture::Is(Types type) const { return type == this->Type; }
