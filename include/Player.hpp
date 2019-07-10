@@ -10,9 +10,9 @@
 #include "Component.hpp"
 #include "GameObject.hpp"
 #include "Helpers.hpp"
+#include "Sound.hpp"
 #include "Sprite.hpp"
 #include "Types.hpp"
-#include "Sound.hpp"
 
 class Player : public Component {
  public:
@@ -42,6 +42,8 @@ class Player : public Component {
   float frameTime;
 
   Timer sleepTimer;
+
+  bool slept;
 
   void OpenIdleSprite(const std::shared_ptr<Sprite>& sprite,
                       Helpers::Direction lastDirection);

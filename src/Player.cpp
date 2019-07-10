@@ -37,6 +37,7 @@ Player::Player(GameObject& associated, Vec2 position)
       position(position),
       frameCount(1),
       frameTime(1),
+      slept(false),
       lastDirection(Helpers::Direction::NONE) {
   Sprite* sprite = new Sprite(associated, PLAYER_FRONT);
   Collider* collider =
@@ -156,6 +157,7 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
         furniture->Look();
       } else if (furniture->GetInteraction() == Helpers::Interaction::SLEEP) {
         Lore::Sleep();
+        slept = true;
       }
     }
   }
@@ -198,22 +200,25 @@ void Player::Update(float dt) {
 
   if (GameData::player_is_hidden) return;
 
-  sleepTimer.Update(dt);
-  int limit = 30;
-  if (sleepTimer.Get() > limit && !GameData::DialogGameObject->IsRendering()) {
-    std::vector<std::pair<std::string, std::string>> scripts[] = {
-        {
-            {"Hope", "Que sono..."},
-        },
-        {
-            {"Hope", "Não aguento mais ficar em pé... onde fica uma cama?"},
-        },
-        {
-            {"Hope", "Estou caindo de sono, preciso dormir..."},
-        },
-    };
-    sleepTimer.Restart();
-    GameData::InitDialog(scripts[rand() % 3]);
+  if (!slept) {
+    sleepTimer.Update(dt);
+    int limit = 30;
+    if (sleepTimer.Get() > limit &&
+        !GameData::DialogGameObject->IsRendering()) {
+      std::vector<std::pair<std::string, std::string>> scripts[] = {
+          {
+              {"Hope", "Que sono..."},
+          },
+          {
+              {"Hope", "Não aguento mais ficar em pé... onde fica uma cama?"},
+          },
+          {
+              {"Hope", "Estou caindo de sono, preciso dormir..."},
+          },
+      };
+      sleepTimer.Restart();
+      GameData::InitDialog(scripts[rand() % 3]);
+    }
   }
 
   auto spriteCpt = associated.GetComponent(SpriteType);
