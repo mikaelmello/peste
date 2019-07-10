@@ -155,6 +155,13 @@ bool TileMap::CanWalk(int x, int y) {
   return walkable[y][x];
 }
 
+bool TileMap::NoDoors(int x, int y) {
+  if (x < 0 || x >= logicalWidth || y < 0 || y >= logicalHeight) {
+    return false;
+  }
+  return no_doors[y][x];
+}
+
 bool TileMap::Is(Types type) const { return type == this->Type; }
 
 int TileMap::GetDepth() { return depth; }
@@ -162,3 +169,5 @@ int TileMap::GetDepth() { return depth; }
 void TileMap::Update(float dt) {}
 
 void TileMap::SetWalk(int x, int y, bool value) { walkable[y][x] = value; }
+
+void TileMap::MergeWalkable() { no_doors = walkable; }

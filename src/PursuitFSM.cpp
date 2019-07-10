@@ -61,6 +61,7 @@ void PursuitFSM::OnStateExit() {
 }
 
 void PursuitFSM::Update(float dt) {
+  // printf("Perseguindo.\n");
   if (timer.Get() >= 0.75f) {
     Antagonist::paths.pop();
     OnStateEnter();

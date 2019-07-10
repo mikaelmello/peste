@@ -129,10 +129,10 @@ bool Helpers::CanWalk(GameObject& object, Vec2& p) {
 
   bool answer = true;
 
-  answer &= tilemap->CanWalk(x, y);
-  answer &= tilemap->CanWalk(x, y + cellsHeight);
-  answer &= tilemap->CanWalk(x + cellsWidth, y);
-  answer &= tilemap->CanWalk(x + cellsWidth, y + cellsHeight);
+  answer &= tilemap->NoDoors(x, y);
+  answer &= tilemap->NoDoors(x, y + cellsHeight);
+  answer &= tilemap->NoDoors(x + cellsWidth, y);
+  answer &= tilemap->NoDoors(x + cellsWidth, y + cellsHeight);
   return answer;
 }
 

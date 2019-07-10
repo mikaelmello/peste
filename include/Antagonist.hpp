@@ -16,7 +16,7 @@
 #define LEFT_UP_WALK_SPRITE "assets/img/terry/walk/up_walk.png"
 #define RIGHT_DOWN_WALK_SPRITE "assets/img/terry/walk/down_walk.png"
 #define RIGHT_UP_WALK_SPRITE "assets/img/terry/walk/up_walk.png"
-#define IDLE_SPRITE "assets/img/terry/idle_terry.png"
+#define fdskaljfds "assets/img/terry/idle_terry.png"
 
 #define RIGHT_IDLE_SPRITE_ANTAGONIST "assets/img/terry/idle/idle_right.png"
 #define LEFT_IDLE_SPRITE_ANTAGONIST "assets/img/terry/idle/idle_left.png"
@@ -91,6 +91,8 @@ class Antagonist : public Component {
   bool NearTarget(float distance_check);
 
   void AssetsManager(Helpers::Action action);
+
+  void NewPatrolPath(std::vector<Vec2> path);
 
   const Types Type = Types::AntagonistType;
 

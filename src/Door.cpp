@@ -108,6 +108,11 @@ void Door::NotifyCollision(std::shared_ptr<GameObject> other) {
   if (playerComponent) {
     colliding = true;
   }
+
+  auto antComponent = other->GetComponent(AntagonistType);
+  if (antComponent) {
+    Open();
+  }
 }
 
 void Door::Start() {}

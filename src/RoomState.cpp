@@ -116,12 +116,17 @@ void RoomState::Pause() {
 void RoomState::Resume() { Camera::Follow(GameData::PlayerGameObject.get()); }
 
 void RoomState::LoadAssets() {
+  Game& game = Game::GetInstance();
+  State& state = game.GetCurrentState();
+  auto tilemap = state.GetCurrentTileMap();
+
   LoadFurnitureFirstFloor();
   LoadFurnitureSecondFloor();
   LoadFurnitureBasement();
-  // LoadAntagonist();
-  LoadDoors();
   LoadStairs();
+
+  tilemap->MergeWalkable();
+  LoadDoors();
 
   auto playerGo = std::make_shared<GameObject>(8);
   Player* player = new Player(*playerGo, currentTileMap->GetInitialPosition());
@@ -137,11 +142,11 @@ void RoomState::LoadAssets() {
   // objects.emplace_back(terryGo);
 
   // GameObject* antagonist_go = new GameObject(5);
-  // Antagonist* antagonist =
-  //     new Antagonist(*antagonist_go, currentTileMap->GetInitialPosition());
-  // antagonist_go->AddComponent(antagonist);
-  // objects.emplace_back(antagonist_go);
-
+  ant = std::make_shared<GameObject>(8);
+  Antagonist* antagonist = new Antagonist(*ant.get(), {{263, 297}});
+  ant->AddComponent(antagonist);
+  objects.emplace_back(ant);
+  LoadAntagonist();
   // GameObject* door_go = new GameObject(6);
   // Vec2 door_pos = currentTileMap->GetInitialPosition() + Vec2(8, 8);
   // Door* door = new Door(*door_go, Helpers::Direction::LEFT, door_pos, false);
@@ -591,19 +596,6 @@ void RoomState::LoadStairs() {
 }
 
 void RoomState::LoadAntagonist() {
-  if (ant) {
-    auto ant_cpt = ant->GetComponent(AntagonistType);
-    if (!ant_cpt) {
-      throw std::runtime_error("sem Antagonist em RoomState::LoadAntagonist");
-    }
-    auto ant_cpt_ptr = std::dynamic_pointer_cast<Antagonist>(ant_cpt);
-
-    ant->RemoveComponent(ant_cpt_ptr.get());
-  } else {
-    ant = std::make_shared<GameObject>(8);
-    objects.emplace_back(ant);
-  }
-
   std::vector<Vec2> path;
 
   switch (GameData::hope_is_in) {
@@ -611,16 +603,24 @@ void RoomState::LoadAntagonist() {
       path = {{215, 1092}};
       break;
     case Helpers::Floor::GROUND_FLOOR:
-      path = {{203, 181}};
+      path = {{263, 297}, {361, 297}, {351, 394}, {89, 383},
+              {203, 296}, {268, 202}, {253, 93},  {82, 118},
+              {82, 243},  {40, 76},   {197, 80},  {276, 202}};
       break;
     case Helpers::Floor::FIRST_FLOOR:
-      path = {{209, 584}};
+      path = {{306, 882}, {235, 818}, {344, 724}, {245, 698}, {301, 589},
+              {170, 598}, {64, 611},  {166, 801}, {74, 826},  {168, 904},
+              {176, 704}, {201, 574}, {304, 688}, {244, 740}, {360, 841}};
       break;
     default:
-      path = {{203, 181}};
+      path = {{263, 297}};
       break;
   }
 
-  auto antagonist_cpt = new Antagonist(*ant.get(), path);
-  ant->AddComponent(antagonist_cpt);
+  auto ant_cpt = ant->GetComponent(AntagonistType);
+  if (!ant_cpt) {
+    throw std::runtime_error("sem antagonista em RoomState::LoadAntagonist");
+  }
+  auto antagonista = std::dynamic_pointer_cast<Antagonist>(ant_cpt);
+  antagonista->NewPatrolPath(path);
 }

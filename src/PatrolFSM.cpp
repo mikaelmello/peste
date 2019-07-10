@@ -58,10 +58,11 @@ void PatrolFSM::OnStateExit() {
 }
 
 void PatrolFSM::Update(float dt) {
+  // printf("Patrulando.\n");
   OnStateEnter();
   OnStateExecution(dt);
 
   if (ant.lock()->NearTarget(50)) {
-    // ant.lock()->Push(new SuspectFSM(object));
+    ant.lock()->Push(new SuspectFSM(object));
   }
 }

@@ -8,7 +8,8 @@
 #include "PursuitFSM.hpp"
 #include "Types.hpp"
 
-SuspectFSM::SuspectFSM(GameObject& object) : IFSM(object), rage_bias(0) {
+SuspectFSM::SuspectFSM(GameObject& object)
+    : IFSM(object), rage_bias(0), cooldown_lock(false) {
   stack_original_size = Antagonist::paths.size();
 
   auto antCpt = object.GetComponent(AntagonistType);
@@ -42,10 +43,14 @@ void SuspectFSM::OnStateEnter() {
 }
 
 void SuspectFSM::OnStateExecution(float dt) {
+  cooldown_lock = !(cooldown.Get() >= 0.5);
+
   bool go_idle = UpdatePosition(dt);
 
-  if (rage_bias == RAGE_NUMERIC_LIMIT) {
+  if (rage_bias == RAGE_NUMERIC_LIMIT && !cooldown_lock) {
     ant.lock()->Push(new PursuitFSM(object));
+    cooldown.Restart();
+    cooldown_lock = true;
   }
 
   if (go_idle) {
@@ -74,6 +79,7 @@ void SuspectFSM::OnStateExit() {
 }
 
 void SuspectFSM::Update(float dt) {
+  // printf("Suspeitando.\n");
   auto bound_value = [](int x) {
     return std::max(std::min(x, RAGE_NUMERIC_LIMIT), NO_RAGE_BIAS);
   };
@@ -86,6 +92,10 @@ void SuspectFSM::Update(float dt) {
 
   OnStateExecution(dt);
   bias_update_timer.Update(dt);
+
+  if (cooldown_lock) {
+    cooldown.Update(dt);
+  }
 
   if (rage_bias == NO_RAGE_BIAS) {
     pop_requested = pop_request_timer.Get() >= POP_REQUEST_TIME;
