@@ -5,7 +5,8 @@
  *                  INCLUDES E DEFINES
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-#define TUTORIAL_BACKGROUND_SPRITE "assets/img/temp_tutorial_bg.jpg"
+#define TUTORIAL_BACKGROUND_SPRITE "assets/img/menu/menu_background.png"
+#define TUTORIAL_BOX "assets/img/menu/tutorial/tutorial_box.png"
 
 #include "InputManager.hpp"
 #include "Music.hpp"

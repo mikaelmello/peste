@@ -29,6 +29,8 @@ class InventoryState : public State {
   void Render();
 
  private:
+  void refreshPage();
+
   void updateShowcase();
 
   void createShowcase(std::shared_ptr<GameObject> item);
@@ -47,6 +49,9 @@ class InventoryState : public State {
 
   // Length of the menu row
   int menuLength;
+
+  // Number of items
+  int gridLimit;
 
   std::vector<Vec2> menuItemPositions;
 
@@ -80,13 +85,9 @@ class InventoryState : public State {
   // Index of the menu item the cursor is on
   int menuCursorIndex;
 
-  enum CursorPosition { Inventory, Menu };
-
-  enum Page { Items, Clues };
+  enum CursorPosition { Inventory, Menu, Page };
 
   CursorPosition cursorIndex;
-
-  Page page;
 };
 
 #endif

@@ -5,6 +5,7 @@
 #include "CameraFollower.hpp"
 #include "Collider.hpp"
 #include "Collision.hpp"
+#include "Dialog.hpp"
 #include "Door.hpp"
 #include "Furniture.hpp"
 #include "Game.hpp"
@@ -53,9 +54,13 @@ void RoomState::Update(float dt) {
 
   InputManager& im = InputManager::GetInstance();
   quitRequested |= im.QuitRequested();
-  popRequested |= im.KeyPress(ESCAPE_KEY);
 
-  if (im.KeyPress(I_KEY)) {
+  if (GameData::DialogGameObject->IsRendering()) {
+    GameData::DialogGameObject->Update(dt);
+    return;
+  }
+
+  if (im.KeyPress(ESCAPE_KEY)) {
     Game::GetInstance().Push(new InventoryState());
   }
 
@@ -124,11 +129,18 @@ void RoomState::LoadAssets() {
   LoadFurnitureSecondFloor();
   LoadFurnitureBasement();
   LoadStairs();
+  LoadItems();
 
   tilemap->MergeWalkable();
   LoadDoors();
 
-  auto playerGo = std::make_shared<GameObject>(8);
+  auto dialogGo = std::make_shared<GameObject>(1500);
+  auto dialog = new Dialog(*dialogGo);
+  dialogGo->AddComponent(dialog);
+  objects.push_back(dialogGo);
+  GameData::DialogGameObject = dialogGo;
+
+  auto playerGo = std::make_shared<GameObject>(10);
   Player* player = new Player(*playerGo, currentTileMap->GetInitialPosition());
   playerGo->AddComponent(player);
   objects.push_back(playerGo);
@@ -155,24 +167,23 @@ void RoomState::LoadAssets() {
 
   Camera::Follow(playerGo.get());
 
-  // GameObject* lampGo = new GameObject(6);
-  // Item* lamp =
-  //     new Item(*lampGo, "Lamparina",
-  //              "Esta lamparina é a única coisa permitindo que Hope veja "
-  //              "ao seu redor e não seja consumido pela escuridão.",
-  //              "assets/img/item/lamp.png",
-  //              currentTileMap->GetInitialPosition() - Vec2(3, 3));
-  // lampGo->AddComponent(lamp);
-  // objects.emplace_back(lampGo);
+  GameObject* lampGo = new GameObject(6);
+  Item* lamp =
+      new Item(*lampGo, "Lamparina",
+               "Esta lamparina é a única coisa permitindo que Hope veja "
+               "ao seu redor e não seja consumido pela escuridão.",
+               "assets/img/item/lamp.png",
+               currentTileMap->GetInitialPosition() - Vec2(3, 3));
+  lampGo->AddComponent(lamp);
+  objects.emplace_back(lampGo);
 
-  // GameObject* lamp2Go = new GameObject(6);
-  // Item* lamp2 =
-  //     new Item(*lamp2Go, "Lamparina 2", "Esta lamparina é ruim pode
-  //     esquecer",
-  //              "assets/img/item/lamp2.png",
-  //              currentTileMap->GetInitialPosition() + Vec2(3, 3));
-  // lamp2Go->AddComponent(lamp2);
-  // objects.emplace_back(lamp2Go);
+  GameObject* lamp2Go = new GameObject(6);
+  Item* lamp2 =
+      new Item(*lamp2Go, "Lamparina 2", "Esta lamparina é ruim pode esquecer",
+               "assets/img/item/lamp2.png",
+               currentTileMap->GetInitialPosition() + Vec2(3, 3));
+  lamp2Go->AddComponent(lamp2);
+  objects.emplace_back(lamp2Go);
 
   SortObjects();
 }
@@ -190,14 +201,14 @@ void RoomState::LoadFurnitureFirstFloor() {
   // begin piano room
   furnitureGo = new GameObject(6);
   furniture = new Furniture(*furnitureGo, "assets/img/furniture/piano.png",
-                            {258, 314}, Helpers::Interaction::LOOK);
+                            {258, 314}, Helpers::Interaction::PLAY);
   furnitureGo->AddComponent(furniture);
   objects.emplace_back(furnitureGo);
 
   furnitureGo = new GameObject(6);
   furniture =
       new Furniture(*furnitureGo, "assets/img/furniture/piano_stool.png",
-                    {265, 352}, Helpers::Interaction::NOTHING, false);
+                    {265, 352}, Helpers::Interaction::NOTHING, true);
   furnitureGo->AddComponent(furniture);
   objects.emplace_back(furnitureGo);
 
@@ -390,7 +401,7 @@ void RoomState::LoadFurnitureSecondFloor() {
 
   furnitureGo = new GameObject(7);
   furniture = new Furniture(*furnitureGo, "assets/img/furniture/bedgreen.png",
-                            {69, 867}, Helpers::Interaction::HIDE);
+                            {69, 867}, Helpers::Interaction::SLEEP);
   furnitureGo->AddComponent(furniture);
   objects.emplace_back(furnitureGo);
 
@@ -548,6 +559,7 @@ void RoomState::LoadFurnitureBasement() {
 }
 
 void RoomState::LoadDoors() {
+  // begin ground floor
   auto doorGo = new GameObject(8);
   auto door =
       new Door(*doorGo, Helpers::Direction::UP, {256, 229}, false, true);
@@ -555,14 +567,32 @@ void RoomState::LoadDoors() {
   objects.emplace_back(doorGo);
 
   doorGo = new GameObject(8);
-  door = new Door(*doorGo, Helpers::Direction::UP, {256, 117}, false, true);
+  door = new Door(*doorGo, Helpers::Direction::UP, {256, 117}, false, true,
+                  Helpers::KeyType::KEY1);
   doorGo->AddComponent(door);
   objects.emplace_back(doorGo);
+  // end ground floor
 
+  // begin first floor
   doorGo = new GameObject(8);
   door = new Door(*doorGo, Helpers::Direction::UP, {288, 629}, true, true);
   doorGo->AddComponent(door);
   objects.emplace_back(doorGo);
+
+  // doorGo = new GameObject(8);
+  // door = new Door(*doorGo, Helpers::Direction::LEFT, {133, 577}, false,
+  // false,
+  //                 Helpers::KeyType::NOKEY);
+  // doorGo->AddComponent(door);
+  // objects.emplace_back(doorGo);
+
+  // doorGo = new GameObject(8);
+  // door = new Door(*doorGo, Helpers::Direction::LEFT, {133, 577}, false,
+  // false,
+  //                 Helpers::KeyType::NOKEY);
+  // doorGo->AddComponent(door);
+  // objects.emplace_back(doorGo);
+  // begin first floor
 }
 
 void RoomState::LoadStairs() {
@@ -623,4 +653,13 @@ void RoomState::LoadAntagonist() {
   }
   auto antagonista = std::dynamic_pointer_cast<Antagonist>(ant_cpt);
   antagonista->NewPatrolPath(path);
+}
+
+void RoomState::LoadItems() {
+  auto itemGo = new GameObject(7);
+  auto item =
+      new Item(*itemGo, "Chave 1", "Uma chave com aparência de velha.",
+               "assets/img/item/key1.png", {256, 177}, Helpers::KeyType::KEY1);
+  itemGo->AddComponent(item);
+  objects.emplace_back(itemGo);
 }

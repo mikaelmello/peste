@@ -9,13 +9,15 @@
 #include <string>
 #include "Component.hpp"
 #include "GameObject.hpp"
+#include "Helpers.hpp"
 #include "Types.hpp"
 #include "Vec2.hpp"
 
 class Item : public Component {
  public:
   Item(GameObject& associated, const std::string& name,
-       const std::string& description, const std::string& spritePath, Vec2 pos);
+       const std::string& description, const std::string& spritePath, Vec2 pos,
+       Helpers::KeyType keyType = Helpers::KeyType::NOKEY);
 
   ~Item();
 
@@ -43,6 +45,8 @@ class Item : public Component {
 
   std::string GetDescription();
 
+  Helpers::KeyType GetKeyType();
+
   const Types Type = ItemType;
 
  private:
@@ -53,6 +57,8 @@ class Item : public Component {
 
   std::shared_ptr<GameObject> pickupItemGo;
   std::shared_ptr<GameObject> priorityChangerGo;
+
+  Helpers::KeyType keyType;
 };
 
 #endif

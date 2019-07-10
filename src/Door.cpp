@@ -21,8 +21,12 @@
 #define DOUBLE_DOOR_OPEN "assets/img/doors/doubleDoor_front_open.png"
 
 Door::Door(GameObject& associated, Helpers::Direction direction, Vec2 position,
-           bool open, bool doubledoor)
-    : Component(associated), position(position), colliding(false), open(open) {
+           bool open, bool doubledoor, Helpers::KeyType key)
+    : Component(associated),
+      position(position),
+      colliding(false),
+      open(open),
+      key(key) {
   Collider* collider = new Collider(associated);
   Sprite* sprite = new Sprite(associated);
 
@@ -121,10 +125,11 @@ void Door::Update(float dt) {}
 
 void Door::Render() {
   if (colliding) {
-    if (open)
+    if (open) {
       ShowCloseDialog();
-    else
+    } else {
       ShowOpenDialog();
+    }
   } else {
     HideOpenDialog();
     HideCloseDialog();
@@ -171,5 +176,9 @@ void Door::Close() {
 }
 
 bool Door::IsOpen() { return open; }
+
+Helpers::KeyType Door::GetKey() { return key; }
+
+void Door::SetKey(Helpers::KeyType k) { key = k; }
 
 bool Door::Is(Types type) const { return type == this->Type; }

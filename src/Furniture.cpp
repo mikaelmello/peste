@@ -9,11 +9,13 @@
 #include "GameObject.hpp"
 #include "Helpers.hpp"
 #include "PriorityChanger.hpp"
+#include "Sound.hpp"
 #include "Sprite.hpp"
 
 #define HIDE_MSG "assets/img/hide.png"
 #define LOOK_MSG "assets/img/look.png"
 #define OUT_MSG "assets/img/x.png"
+#define SLEEP_MSG "assets/img/x.png"
 
 Furniture::Furniture(GameObject& associated, const std::string& file,
                      Vec2 position, Helpers::Interaction interaction,
@@ -24,6 +26,9 @@ Furniture::Furniture(GameObject& associated, const std::string& file,
       interaction(interaction) {
   Sprite* sprite = new Sprite(associated, file);
   associated.AddComponent(sprite);
+
+  Sound* sound = new Sound(associated);
+  associated.AddComponent(sound);
 
   State& state = Game::GetInstance().GetCurrentState();
 
@@ -43,8 +48,11 @@ Furniture::Furniture(GameObject& associated, const std::string& file,
 
     if (interaction == Helpers::Interaction::HIDE) {
       interactMsg = new ActionMessage(*interactmsg_go, position, HIDE_MSG);
-    } else if (interaction == Helpers::Interaction::LOOK) {
+    } else if (interaction == Helpers::Interaction::LOOK ||
+               interaction == Helpers::Interaction::PLAY) {
       interactMsg = new ActionMessage(*interactmsg_go, position, LOOK_MSG);
+    } else if (interaction == Helpers::Interaction::SLEEP) {
+      interactMsg = new ActionMessage(*interactmsg_go, position, SLEEP_MSG);
     }
     interactmsg_go->AddComponent(interactMsg);
     interactMsgGo = state.AddObject(interactmsg_go);
@@ -65,6 +73,7 @@ Furniture::Furniture(GameObject& associated, const std::string& file,
     pcGo->AddComponent(priChanger);
     state.AddObject(pcGo);
   }
+
   blocker_go->AddComponent(blocker);
   blockerGo = state.AddObject(blocker_go);
 }

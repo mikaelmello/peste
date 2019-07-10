@@ -5,7 +5,6 @@
 #include "Blocker.hpp"
 #include "Camera.hpp"
 #include "Collider.hpp"
-#include "DialogueState.hpp"
 #include "Door.hpp"
 #include "Furniture.hpp"
 #include "Game.hpp"
@@ -19,6 +18,8 @@
 #include "Types.hpp"
 
 using namespace Helpers;
+
+#define SCRIPT_TYPE std::vector<std::pair<std::string, std::string>>
 
 #define PLAYER_FRONT_ANIM "assets/img/hope/front_anim.png"
 #define PLAYER_BACK_ANIM "assets/img/hope/back_anim.png"
@@ -52,19 +53,34 @@ Player::Player(GameObject& associated, Vec2 position)
   PriorityChanger* priChanger = new PriorityChanger(*pcGo, associated, true);
   pcGo->AddComponent(priChanger);
   priorityChanger_go = state.AddObject(pcGo);
+
+  Sound* sound = new Sound(associated);
+  associated.AddComponent(sound);
+  auto sound_cpt = associated.GetComponent(SoundType);
+  sound_ptr = std::dynamic_pointer_cast<Sound>(sound_cpt);
 }
 
 Player::~Player() { priorityChanger_go->RequestDelete(); }
 
 void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
-  InputManager& input = InputManager::GetInstance();
-  auto item_cpt = other->GetComponent(ItemType);
+  if (other->IsDead()) {
+    return;
+  }
 
+  InputManager& input = InputManager::GetInstance();
+
+  auto item_cpt = other->GetComponent(ItemType);
   if (item_cpt) {
     if (input.KeyPress(X_KEY)) {
+      auto item = std::dynamic_pointer_cast<Item>(item_cpt);
+      if (item->GetKeyType() != Helpers::KeyType::NOKEY) {
+        keys.push_back(item->GetKeyType());
+      }
       auto ok = GameData::AddToInventory(other);
       if (!ok) {
-        printf("Nao tem mais espaco\n");
+        SCRIPT_TYPE s = {std::make_pair<std::string, std::string>(
+            "HOPE", "Não tem mais espaço na minha bolsa.")};
+        GameData::InitDialog(s);
       }
     }
   }
@@ -73,6 +89,40 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
   if (door_cpt) {
     if (input.KeyPress(X_KEY)) {
       auto door = std::dynamic_pointer_cast<Door>(door_cpt);
+      if (door->GetKey() != Helpers::KeyType::NOKEY) {
+        if (std::find(keys.begin(), keys.end(), door->GetKey()) == keys.end()) {
+          if (door->GetKey() == door->GetKey() == Helpers::KeyType::CROWBAR) {
+            SCRIPT_TYPE s = {std::make_pair<std::string, std::string>(
+                "HOPE", "Está emperrada, não consigo abrir...")};
+            // inserir som de porta emperrada
+            GameData::InitDialog(s);
+          } else {
+            sound_ptr->Open("assets/audio/doors/locked_door.wav");
+            sound_ptr->Play();
+            SCRIPT_TYPE s = {std::make_pair<std::string, std::string>(
+                "HOPE", "Está trancado, onde será que está a chave?")};
+            // inserir som de porta trancada
+            GameData::InitDialog(s);
+          }
+          return;
+        } else {
+          if (door->GetKey() == Helpers::KeyType::CROWBAR) {
+            SCRIPT_TYPE s = {std::make_pair<std::string, std::string>(
+                "HOPE",
+                "Vou tentar forçar a porta com isso aqui... Consegui!")};
+            // inserir som de porta sendo arrombada
+            GameData::InitDialog(s);
+          } else {
+            sound_ptr->Open("assets/audio/doors/open_door.wav");
+            sound_ptr->Play();
+            SCRIPT_TYPE s = {std::make_pair<std::string, std::string>(
+                "HOPE", "Consegui destrancar!")};
+            // inserir som de porta abrindo
+            GameData::InitDialog(s);
+          }
+          door->SetKey(Helpers::KeyType::NOKEY);
+        }
+      }
       if (door->IsOpen())
         door->Close();
       else
@@ -84,7 +134,7 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
   if (furniture_cpt) {
     if (input.KeyPress(X_KEY)) {
       auto furniture = std::dynamic_pointer_cast<Furniture>(furniture_cpt);
-      if (furniture->GetInteraction() == Interaction::HIDE) {
+      if (furniture->GetInteraction() == Helpers::Interaction::HIDE) {
         if (!GameData::player_is_hidden) {
           associated.DisableRender();
           GameData::player_is_hidden = true;
@@ -92,6 +142,12 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
           associated.EnableRender();
           GameData::player_is_hidden = false;
         }
+      } else if (furniture->GetInteraction() == Helpers::Interaction::PLAY) {
+        sound_ptr->Open("assets/audio/furniture/piano.wav");
+        sound_ptr->Play();
+        SCRIPT_TYPE s = {std::make_pair<std::string, std::string>(
+            "HOPE", "Um piano de cauda? Nossa, que luxo!")};
+        GameData::InitDialog(s);
       }
     }
   }
@@ -99,24 +155,25 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
   auto stairs_cpt = other->GetComponent(StairsType);
   if (stairs_cpt) {
     if (input.KeyPress(X_KEY)) {
+      std::cout << GameData::hope_is_in << std::endl;
       if (GameData::hope_is_in == Helpers::Floor::GROUND_FLOOR) {
-        if (position.x < 275) {
-          position.x = 220;
-          position.y = 590;
-        } else {
-          position.x = 350;
-          position.y = 590;
-        }
         GameData::hope_is_in = Helpers::Floor::FIRST_FLOOR;
-      } else if (GameData::hope_is_in == Helpers::Floor::FIRST_FLOOR) {
         if (position.x < 275) {
           position.x = 220;
-          position.y = 206;
+          position.y = 580;
         } else {
           position.x = 350;
-          position.y = 206;
+          position.y = 580;
         }
+      } else if (GameData::hope_is_in == Helpers::Floor::FIRST_FLOOR) {
         GameData::hope_is_in = Helpers::Floor::GROUND_FLOOR;
+        if (position.x < 275) {
+          position.x = 220;
+          position.y = 211;
+        } else {
+          position.x = 350;
+          position.y = 211;
+        }
       }
     }
   }
@@ -220,9 +277,12 @@ void Player::Update(float dt) {
   associated.box.w = sprite->GetWidth();
   associated.box.h = sprite->GetHeight();
 
-  priorityChanger_go->box = associated.box;
-  std::cout << "X:" << position.x << std::endl;
-  std::cout << "Y:" << position.y << std::endl << std::endl;
+  auto pcCpt = priorityChanger_go->GetComponent(PriorityChangerType);
+  if (!pcCpt) {
+    throw std::runtime_error("Sem PC CPT");
+  }
+  auto pc = std::dynamic_pointer_cast<PriorityChanger>(pcCpt);
+  pc->SetRect(dt, associated.box);
 }
 
 void Player::Render() {
@@ -240,10 +300,6 @@ void Player::Render() {
 
   point = (Vec2(0, 768)) - Camera::pos;
   points[3] = {(int)point.x, (int)point.y};
-
-  SDL_SetRenderDrawColor(Game::GetInstance().GetRenderer(), 255, 255, 0,
-                         SDL_ALPHA_OPAQUE);
-  SDL_RenderDrawLines(Game::GetInstance().GetRenderer(), points, 5);
 #endif
 }
 

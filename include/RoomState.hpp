@@ -42,6 +42,8 @@ class RoomState : public State {
 
   void LoadAntagonist();
 
+  void LoadItems();
+
   std::shared_ptr<GameObject> ant;
 
   Helpers::Floor last_known = Helpers::Floor::GROUND_FLOOR;

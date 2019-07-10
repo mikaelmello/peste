@@ -65,6 +65,8 @@ bool CanWalk(GameObject& object, std::pair<int, int>& p);
 enum Interaction {
   HIDE,
   LOOK,
+  PLAY,
+  SLEEP,
   NOTHING,
 };
 
@@ -72,6 +74,15 @@ enum Floor {
   BASEMENT,
   GROUND_FLOOR,
   FIRST_FLOOR,
+};
+
+enum KeyType {
+  CROWBAR,
+  KEY1,
+  KEY2,
+  KEY3,
+  KEY4,
+  NOKEY,
 };
 
 }  // end namespace Helpers

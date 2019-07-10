@@ -38,6 +38,8 @@ class GameObject {
 
   void RemoveComponent(Component* cpt);
 
+  bool IsRendering();
+
   inline void DisableRender() { render = false; }
   inline void EnableRender() { render = true; }
   inline void ToggleRender() { render = !render; }

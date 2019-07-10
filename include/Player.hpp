@@ -12,6 +12,7 @@
 #include "Helpers.hpp"
 #include "Sprite.hpp"
 #include "Types.hpp"
+#include "Sound.hpp"
 
 class Player : public Component {
  public:
@@ -49,6 +50,10 @@ class Player : public Component {
   Helpers::Direction lastDirection;
 
   std::shared_ptr<GameObject> priorityChanger_go;
+
+  std::vector<Helpers::KeyType> keys;
+
+  std::shared_ptr<Sound> sound_ptr;
 };
 
 #endif
