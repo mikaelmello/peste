@@ -29,15 +29,12 @@ bool IFSM::UpdatePosition(float dt) {
   uint32_t currentMoveIndex = ant->paths.top().first;
   auto& path = ant->paths.top().second;
 
-  printf("%d %d %d %d\n", movesCount, movesLeft, currentMoveIndex, path.size());
-
   while (currentMoveIndex < path.size() && movesLeft > 0) {
     currentMoveIndex++;
     movesLeft--;
   }
 
   if (currentMoveIndex == path.size()) {
-    printf("is popping\n");
     shouldPop = true;
     currentMoveIndex--;
     movesCount -= movesLeft;

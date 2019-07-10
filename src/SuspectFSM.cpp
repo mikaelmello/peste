@@ -79,7 +79,6 @@ void SuspectFSM::OnStateExit() {
 }
 
 void SuspectFSM::Update(float dt) {
-  // printf("Suspeitando.\n");
   auto bound_value = [](int x) {
     return std::max(std::min(x, RAGE_NUMERIC_LIMIT), NO_RAGE_BIAS);
   };
