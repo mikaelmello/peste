@@ -19,16 +19,21 @@
 
 Item::Item(GameObject& associated, const std::string& name,
            const std::string& description, const std::string& spritePath,
-           Vec2 pos)
+           Vec2 pos, Helpers::KeyType keyType)
     : Component(associated),
       name(name),
       description(description),
       position(pos),
-      colliding(false) {
+      colliding(false),
+      keyType(keyType) {
   Sprite* sprite = new Sprite(associated, spritePath);
-
-  Collider* collider =
-      new Collider(associated, {1, 0.3}, {0, sprite->GetHeight() * 0.35f});
+  Collider* collider;
+  if (keyType == Helpers::KeyType::NOKEY) {
+    collider =
+        new Collider(associated, {1, 0.3}, {0, sprite->GetHeight() * 0.35f});
+  } else {
+    collider = new Collider(associated);
+  }
   associated.AddComponent(collider);
   associated.AddComponent(sprite);
 
@@ -63,8 +68,7 @@ void Item::NotifyCollision(std::shared_ptr<GameObject> other) {
 
 void Item::Start() {}
 
-void Item::Update(float dt) {
-}
+void Item::Update(float dt) {}
 
 void Item::Render() {
   if (colliding) {
@@ -101,3 +105,5 @@ void Item::SetScale(float scaleX, float scaleY) {
 std::string Item::GetName() { return name; }
 
 std::string Item::GetDescription() { return description; }
+
+Helpers::KeyType Item::GetKeyType() { return keyType; }

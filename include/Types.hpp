@@ -23,6 +23,7 @@ enum Types {
   TerryType,
   DialogueType,
   FurnitureType,
+  StairsType,
 };
 
 #endif

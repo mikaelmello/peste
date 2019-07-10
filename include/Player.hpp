@@ -49,6 +49,8 @@ class Player : public Component {
   Helpers::Direction lastDirection;
 
   std::shared_ptr<GameObject> priorityChanger_go;
+
+  std::vector<Helpers::KeyType> keys;
 };
 
 #endif

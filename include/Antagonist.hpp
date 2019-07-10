@@ -18,23 +18,25 @@
 #define RIGHT_UP_WALK_SPRITE "assets/img/terry/walk/up_walk.png"
 #define IDLE_SPRITE "assets/img/terry/idle_terry.png"
 
-#define RIGHT_IDLE_SPRITE_ANTAGONIST "assets/img/terry/idle_terry.png"
-#define LEFT_IDLE_SPRITE_ANTAGONIST "assets/img/terry/idle_terry.png"
-#define UP_IDLE_SPRITE_ANTAGONIST "assets/img/terry/idle_terry.png"
-#define DOWN_IDLE_SPRITE_ANTAGONIST "assets/img/terry/idle_terry.png"
-#define UPRIGHT_IDLE_SPRITE_ANTAGONIST "assets/img/terry/idle_terry.png"
-#define UPLEFT_IDLE_SPRITE_ANTAGONIST "assets/img/terry/idle_terry.png"
-#define DOWNRIGHT_IDLE_SPRITE_ANTAGONIST "assets/img/terry/idle_terry.png"
-#define DOWNLEFT_IDLE_SPRITE_ANTAGONIST "assets/img/terry/idle_terry.png"
+#define RIGHT_IDLE_SPRITE_ANTAGONIST "assets/img/terry/idle/idle_right.png"
+#define LEFT_IDLE_SPRITE_ANTAGONIST "assets/img/terry/idle/idle_left.png"
+#define UP_IDLE_SPRITE_ANTAGONIST "assets/img/terry/idle/idle_down.png"
+#define DOWN_IDLE_SPRITE_ANTAGONIST "assets/img/terry/idle/idle_down.png"
+#define UPRIGHT_IDLE_SPRITE_ANTAGONIST "assets/img/terry/idle/idle_down.png"
+#define UPLEFT_IDLE_SPRITE_ANTAGONIST "assets/img/terry/idle/idle_down.png"
+#define DOWNRIGHT_IDLE_SPRITE_ANTAGONIST "assets/img/terry/idle/idle_down.png"
+#define DOWNLEFT_IDLE_SPRITE_ANTAGONIST "assets/img/terry/idle/idle_down.png"
 
-#define RIGHT_ATTACK_SPRITE_ANTAGONIST "assets/img/terry/idle_terry.png"
-#define LEFT_ATTACK_SPRITE_ANTAGONIST "assets/img/terry/idle_terry.png"
-#define UP_ATTACK_SPRITE_ANTAGONIST "assets/img/terry/idle_terry.png"
-#define DOWN_ATTACK_SPRITE_ANTAGONIST "assets/img/terry/idle_terry.png"
-#define UPRIGHT_ATTACK_SPRITE_ANTAGONIST "assets/img/terry/idle_terry.png"
-#define UPLEFT_ATTACK_SPRITE_ANTAGONIST "assets/img/terry/idle_terry.png"
-#define DOWNRIGHT_ATTACK_SPRITE_ANTAGONIST "assets/img/terry/idle_terry.png"
-#define DOWNLEFT_ATTACK_SPRITE_ANTAGONIST "assets/img/terry/idle_terry.png"
+#define RIGHT_ATTACK_SPRITE_ANTAGONIST "assets/img/terry/attack/down_attack.png"
+#define LEFT_ATTACK_SPRITE_ANTAGONIST "assets/img/terry/attack/down_attack.png"
+#define UP_ATTACK_SPRITE_ANTAGONIST "assets/img/terry/attack/up_attack.png"
+#define DOWN_ATTACK_SPRITE_ANTAGONIST "assets/img/terry/attack/down_attack.png"
+#define UPRIGHT_ATTACK_SPRITE_ANTAGONIST "assets/img/terry/attack/up_attack.png"
+#define UPLEFT_ATTACK_SPRITE_ANTAGONIST "assets/img/terry/attack/up_attack.png"
+#define DOWNRIGHT_ATTACK_SPRITE_ANTAGONIST \
+  "assets/img/terry/attack/down_attack.png"
+#define DOWNLEFT_ATTACK_SPRITE_ANTAGONIST \
+  "assets/img/terry/attack/down_attack.png"
 
 #define WALKING_WALK_SET                                                    \
   {                                                                         \

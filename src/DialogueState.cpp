@@ -37,7 +37,7 @@ void DialogueState::Update(float dt) {
   }
 
   UpdateArray(dt);
-  std::cout << objects.size() << std::endl;
+  //std::cout << objects.size() << std::endl;
 }
 
 void DialogueState::Start() {
