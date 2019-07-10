@@ -2,10 +2,12 @@
 #include <iostream>
 #include <stdexcept>
 #include <string>
+#include "Game.hpp"
 #include "GameData.hpp"
 #include "InputManager.hpp"
 #include "Resources.hpp"
 #include "SDL_include.h"
+#include "SleepState.hpp"
 #include "Sprite.hpp"
 
 bool Lore::NicePerson = false;
@@ -29,4 +31,8 @@ void Lore::Sleep() {
   sprite->Open("assets/img/furniture/bedDestroyed.png");
 
   GameData::TerryGameObject->RequestDelete();
+  GameData::TerryGameObject.reset();
+
+  auto& game = Game::GetInstance();
+  game.Push(new SleepState());
 }

@@ -14,6 +14,7 @@
 #include "Item.hpp"
 #include "Lore.hpp"
 #include "PriorityChanger.hpp"
+#include "SleepState.hpp"
 #include "Sprite.hpp"
 #include "TileMap.hpp"
 #include "Types.hpp"
@@ -35,7 +36,6 @@ Player::Player(GameObject& associated, Vec2 position)
       position(position),
       frameCount(1),
       frameTime(1),
-      slept(false),
       lastDirection(Helpers::Direction::NONE) {
   Sprite* sprite = new Sprite(associated, PLAYER_FRONT);
   Collider* collider =
@@ -156,7 +156,6 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
       } else if (furniture->GetInteraction() == Helpers::Interaction::SLEEP) {
         furniture->RemoveInteraction();
         Lore::Sleep();
-        slept = true;
       }
     }
   }
@@ -207,7 +206,7 @@ void Player::Update(float dt) {
 
   if (GameData::player_is_hidden) return;
 
-  if (!slept) {
+  if (SleepState::executed == 0) {
     sleepTimer.Update(dt);
     int limit = 30;
     if (sleepTimer.Get() > limit &&
@@ -226,6 +225,12 @@ void Player::Update(float dt) {
       sleepTimer.Restart();
       GameData::InitDialog(scripts[rand() % 3]);
     }
+  } else if (SleepState::executed == 1) {
+    SCRIPT_TYPE script = {
+        {"Hope", "MEU DEUS! QUE BARULHO É ESSE?!?!"},
+    };
+    GameData::InitDialog(script);
+    SleepState::executed++;
   }
 
   auto spriteCpt = associated.GetComponent(SpriteType);

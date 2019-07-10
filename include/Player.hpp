@@ -43,8 +43,6 @@ class Player : public Component {
 
   Timer sleepTimer;
 
-  bool slept;
-
   void OpenIdleSprite(const std::shared_ptr<Sprite>& sprite,
                       Helpers::Direction lastDirection);
 
