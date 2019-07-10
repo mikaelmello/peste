@@ -193,7 +193,7 @@ void InventoryState::refreshPage() {
 
   int begin = page * gridLimit;
   int end = (page + 1) * gridLimit;
-  for (uint32_t i = 0; i < GameData::PlayerInventory.size(); i++) {
+  for (int i = 0; i < (int64_t)GameData::PlayerInventory.size(); i++) {
     if (i >= begin && i < end) {
       GameData::PlayerInventory[i]->EnableRender();
     } else {
