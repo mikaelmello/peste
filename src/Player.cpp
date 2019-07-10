@@ -14,6 +14,7 @@
 #include "Item.hpp"
 #include "Lore.hpp"
 #include "PriorityChanger.hpp"
+#include "SleepState.hpp"
 #include "Sprite.hpp"
 #include "TileMap.hpp"
 #include "Types.hpp"
@@ -35,7 +36,6 @@ Player::Player(GameObject& associated, Vec2 position)
       position(position),
       frameCount(1),
       frameTime(1),
-      slept(false),
       lastDirection(Helpers::Direction::NONE) {
   Sprite* sprite = new Sprite(associated, PLAYER_FRONT);
   Collider* collider =
@@ -100,10 +100,13 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
             sound_ptr->Stop();
             sound_ptr->Open("assets/audio/doors/locked_door.wav");
             sound_ptr->Play();
-            SCRIPT_TYPE s = {std::make_pair<std::string, std::string>(
-                "HOPE", "Está trancado, onde será que está a chave?")};
+            SCRIPT_TYPE s[] = {
+                {{"HOPE", "Está trancado, onde será que está a chave?"}},
+                {{"HOPE", "Não tenho a chave daqui..."}},
+                {{"HOPE", "Preciso da chave..."}},
+            };
             // inserir som de porta trancada
-            GameData::InitDialog(s);
+            GameData::InitDialog(s[rand() % 3]);
           }
           return;
         } else {
@@ -156,7 +159,6 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
       } else if (furniture->GetInteraction() == Helpers::Interaction::SLEEP) {
         furniture->RemoveInteraction();
         Lore::Sleep();
-        slept = true;
       }
     }
   }
@@ -207,7 +209,7 @@ void Player::Update(float dt) {
 
   if (GameData::player_is_hidden) return;
 
-  if (!slept) {
+  if (Lore::Slept == 0) {
     sleepTimer.Update(dt);
     int limit = 30;
     if (sleepTimer.Get() > limit &&
@@ -226,6 +228,12 @@ void Player::Update(float dt) {
       sleepTimer.Restart();
       GameData::InitDialog(scripts[rand() % 3]);
     }
+  } else if (Lore::Slept == 1) {
+    SCRIPT_TYPE script = {
+        {"Hope", "MEU DEUS! QUE BARULHO É ESSE?!?!"},
+    };
+    GameData::InitDialog(script);
+    Lore::Slept++;
   }
 
   auto spriteCpt = associated.GetComponent(SpriteType);

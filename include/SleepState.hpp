@@ -33,8 +33,6 @@ class SleepState : public State {
   void Render();
 
  private:
-  static unsigned executed;
-
   Timer pop_timer;
 
   std::shared_ptr<GameObject> sound_go;

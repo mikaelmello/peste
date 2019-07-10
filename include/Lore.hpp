@@ -10,6 +10,7 @@
 class Lore {
  public:
   static bool NicePerson;
+  static int Slept;
   static void Sleep();
 };
 

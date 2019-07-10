@@ -1,9 +1,8 @@
 #include "SleepState.hpp"
 #include "GameData.hpp"
+#include "Lore.hpp"
 
-unsigned SleepState::executed = 0;
-
-SleepState::SleepState() : im(InputManager::GetInstance()) { executed++; }
+SleepState::SleepState() : im(InputManager::GetInstance()) { Lore::Slept++; }
 
 SleepState::~SleepState() {}
 
