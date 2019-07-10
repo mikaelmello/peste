@@ -19,12 +19,14 @@
 
 Furniture::Furniture(GameObject& associated, const std::string& file,
                      Vec2 position, Helpers::Interaction interaction,
-                     bool fullblock, const std::string& script)
+                     bool fullblock, std::vector<std::string> script,
+                     bool special)
     : Component(associated),
       interact(false),
       colliding(false),
       interaction(interaction),
-      script(script) {
+      script(script),
+      special(special) {
   Sprite* sprite = new Sprite(associated, file);
   associated.AddComponent(sprite);
 
@@ -126,7 +128,13 @@ void Furniture::HideInteractionDialog() { interactMsgGo->DisableRender(); }
 Helpers::Interaction Furniture::GetInteraction() { return interaction; }
 
 void Furniture::Look() {
-  SCRIPT_TYPE s = {std::pair<std::string, std::string>("HOPE", script)};
+  SCRIPT_TYPE s;
+  for (auto aux : script) {
+    s.push_back({"HOPE", aux});
+  }
+  if (special && GameData::got_key1) {
+    s.pop_back();
+  }
   GameData::InitDialog(s);
 }
 

@@ -12,6 +12,7 @@ std::vector<std::shared_ptr<GameObject>> GameData::PlayerInventory;
 bool GameData::player_was_hit = false;
 bool GameData::player_is_hidden = false;
 int GameData::InventoryPage = 0;
+bool GameData::got_key1 = false;
 
 Helpers::Floor GameData::hope_is_in = Helpers::Floor::GROUND_FLOOR;
 

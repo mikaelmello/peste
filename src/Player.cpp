@@ -75,6 +75,9 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
       auto item = std::dynamic_pointer_cast<Item>(item_cpt);
       if (item->GetKeyType() != Helpers::KeyType::NOKEY) {
         keys.push_back(item->GetKeyType());
+        if (item->GetKeyType() == Helpers::KeyType::KEY1) {
+          GameData::got_key1 = true;
+        }
       }
       auto ok = GameData::AddToInventory(other);
       if (!ok) {
