@@ -263,7 +263,6 @@ void InventoryState::updateShowcase() {
   auto spriteComponent = item->GetComponent(SpriteType);
   auto itemComponent = item->GetComponent(ItemType);
   if (!spriteComponent || !itemComponent) {
-    printf("osh\n");
     throw std::runtime_error("Item sem sprite ou item!!");
   }
 

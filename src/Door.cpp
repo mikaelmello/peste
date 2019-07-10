@@ -120,10 +120,11 @@ void Door::Update(float dt) {}
 
 void Door::Render() {
   if (colliding) {
-    if (open)
+    if (open) {
       ShowCloseDialog();
-    else
+    } else {
       ShowOpenDialog();
+    }
   } else {
     HideOpenDialog();
     HideCloseDialog();
