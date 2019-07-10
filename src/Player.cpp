@@ -248,33 +248,9 @@ void Player::Update(float dt) {
   }
   auto pc = std::dynamic_pointer_cast<PriorityChanger>(pcCpt);
   pc->SetRect(dt, associated.box);
-
-#if DEBUG
-  printf("X: %f\nY:%f\n\n", position.x, position.y);
-#endif
 }
 
-void Player::Render() {
-#if DEBUG
-  Vec2 point = Vec2(0, 0) - Camera::pos;
-  SDL_Point points[5];
-  points[0] = {(int)point.x, (int)point.y};
-  points[4] = {(int)point.x, (int)point.y};
-
-  point = (Vec2(1024, 0)) - Camera::pos;
-  points[1] = {(int)point.x, (int)point.y};
-
-  point = (Vec2(1024, 768)) - Camera::pos;
-  points[2] = {(int)point.x, (int)point.y};
-
-  point = (Vec2(0, 768)) - Camera::pos;
-  points[3] = {(int)point.x, (int)point.y};
-
-  SDL_SetRenderDrawColor(Game::GetInstance().GetRenderer(), 255, 255, 0,
-                         SDL_ALPHA_OPAQUE);
-  SDL_RenderDrawLines(Game::GetInstance().GetRenderer(), points, 5);
-#endif
-}
+void Player::Render() {}
 
 bool Player::Is(Types type) const { return type == this->Type; }
 
