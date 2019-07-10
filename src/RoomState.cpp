@@ -162,24 +162,6 @@ void RoomState::LoadAssets() {
 
   Camera::Follow(playerGo.get());
 
-  GameObject* lampGo = new GameObject(6);
-  Item* lamp =
-      new Item(*lampGo, "Lamparina",
-               "Esta lamparina é a única coisa permitindo que Hope veja "
-               "ao seu redor e não seja consumido pela escuridão.",
-               "assets/img/item/lamp.png",
-               currentTileMap->GetInitialPosition() - Vec2(3, 3));
-  lampGo->AddComponent(lamp);
-  objects.emplace_back(lampGo);
-
-  GameObject* lamp2Go = new GameObject(6);
-  Item* lamp2 =
-      new Item(*lamp2Go, "Lamparina 2", "Esta lamparina é ruim pode esquecer",
-               "assets/img/item/lamp2.png",
-               currentTileMap->GetInitialPosition() + Vec2(3, 3));
-  lamp2Go->AddComponent(lamp2);
-  objects.emplace_back(lamp2Go);
-
   SortObjects();
 }
 
@@ -635,6 +617,20 @@ void RoomState::LoadStairs() {
   stairsGo->AddComponent(stairs);
   objects.emplace_back(stairsGo);
   // end second floor
+
+  // begin basement
+  stairsGo = new GameObject(8);
+  stairs = new Stairs(*stairsGo, Helpers::Direction::DOWN, {362, 1237},
+                      Helpers::Floor::BASEMENT);
+  stairsGo->AddComponent(stairs);
+  objects.emplace_back(stairsGo);
+
+  stairsGo = new GameObject(8);
+  stairs = new Stairs(*stairsGo, Helpers::Direction::UP, {380, 210},
+                      Helpers::Floor::BASEMENT);
+  stairsGo->AddComponent(stairs);
+  objects.emplace_back(stairsGo);
+  // end basement
 }
 
 void RoomState::LoadAntagonist() {
@@ -674,17 +670,25 @@ void RoomState::LoadAntagonist() {
 
 void RoomState::LoadItems() {
   auto itemGo = new GameObject(7);
-  auto item =
-      new Item(*itemGo, "Chave 1", "Uma chave com aparência de velha.",
-               "assets/img/item/key1.png", {256, 177}, Helpers::KeyType::KEY1);
+  auto item = new Item(*itemGo, "Chave 1", "Uma chave com aparência de velha.",
+                       "assets/img/item/key1.png", {256, 177},
+                       Helpers::KeyType::KEY1, 32, 32);
   itemGo->AddComponent(item);
   objects.emplace_back(itemGo);
 
   itemGo = new GameObject(7);
-  item = new Item(
-      *itemGo, "Pé de Cabra",
-      "Bom para abrir coisas que normalmente não podem ser abertas.",
-      "assets/img/item/crowbar.png", {34, 225}, Helpers::KeyType::CROWBAR);
+  item =
+      new Item(*itemGo, "Pé de Cabra",
+               "Bom para abrir coisas que normalmente não podem ser abertas.",
+               "assets/img/item/crowbar.png", {392, 572},
+               Helpers::KeyType::CROWBAR, 96, 96);
+  itemGo->AddComponent(item);
+  objects.emplace_back(itemGo);
+
+  itemGo = new GameObject(7);
+  item = new Item(*itemGo, "Lamparina", "Uma lamparina à óleo antiga.",
+                  "assets/img/item/lamp.png", {60, 556},
+                  Helpers::KeyType::NOKEY, 64, 64);
   itemGo->AddComponent(item);
   objects.emplace_back(itemGo);
 }
