@@ -206,7 +206,7 @@ void Player::Update(float dt) {
 
   if (GameData::player_is_hidden) return;
 
-  if (SleepState::executed == 0) {
+  if (Lore::Slept == 0) {
     sleepTimer.Update(dt);
     int limit = 30;
     if (sleepTimer.Get() > limit &&
@@ -225,12 +225,12 @@ void Player::Update(float dt) {
       sleepTimer.Restart();
       GameData::InitDialog(scripts[rand() % 3]);
     }
-  } else if (SleepState::executed == 1) {
+  } else if (Lore::Slept == 1) {
     SCRIPT_TYPE script = {
         {"Hope", "MEU DEUS! QUE BARULHO É ESSE?!?!"},
     };
     GameData::InitDialog(script);
-    SleepState::executed++;
+    Lore::Slept++;
   }
 
   auto spriteCpt = associated.GetComponent(SpriteType);

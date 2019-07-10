@@ -32,8 +32,6 @@ class SleepState : public State {
 
   void Render();
 
-  static unsigned executed;
-
  private:
   Timer pop_timer;
 

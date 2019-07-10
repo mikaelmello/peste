@@ -11,6 +11,7 @@
 #include "Sprite.hpp"
 
 bool Lore::NicePerson = false;
+int Lore::Slept = 0;
 
 void Lore::Sleep() {
   if (!GameData::TerryBedGameObject) {
