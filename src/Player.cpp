@@ -91,7 +91,7 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
       auto door = std::dynamic_pointer_cast<Door>(door_cpt);
       if (door->GetKey() != Helpers::KeyType::NOKEY) {
         if (std::find(keys.begin(), keys.end(), door->GetKey()) == keys.end()) {
-          if (door->GetKey() == door->GetKey() == Helpers::KeyType::CROWBAR) {
+          if (door->GetKey() == Helpers::KeyType::CROWBAR) {
             SCRIPT_TYPE s = {std::make_pair<std::string, std::string>(
                 "HOPE", "Está emperrada, não consigo abrir...")};
             // inserir som de porta emperrada
