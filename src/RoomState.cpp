@@ -147,11 +147,6 @@ void RoomState::LoadAssets() {
   GameData::PlayerGameObject = playerGo;
 
   // std::cout << objects.size() << std::endl;
-  // GameObject* terryGo = new GameObject(5);
-  // Terry* terry = new Terry(
-  //     *terryGo, currentTileMap->GetInitialPosition() + Vec2(-18, -18));
-  // terryGo->AddComponent(terry);
-  // objects.emplace_back(terryGo);
 
   // ant = std::make_shared<GameObject>(11);
   // Antagonist* antagonist = new Antagonist(*ant.get(), {{263, 297}});
@@ -359,6 +354,14 @@ void RoomState::LoadFurnitureSecondFloor() {
   // end library
 
   // begin bedroom terry
+
+  printf("cria terry\n");
+  GameObject* terryGo = new GameObject(8);
+  Terry* terry = new Terry(*terryGo, {33, 750});
+  terryGo->AddComponent(terry);
+  objects.emplace_back(terryGo);
+  printf("cria terry2\n");
+
   furnitureGo = new GameObject(7);
   furniture = new Furniture(*furnitureGo, "assets/img/furniture/wardrobe.png",
                             {118, 719}, Helpers::Interaction::HIDE);

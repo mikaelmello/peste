@@ -6,6 +6,7 @@
 
 int main() {
   try {
+    srand(time(NULL));
     auto roomState = new MenuState();
     Game& game = Game::GetInstance();
     game.Push(roomState);

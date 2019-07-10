@@ -202,6 +202,12 @@ void Player::Update(float dt) {
     throw std::runtime_error("Nao tem sprite nem collider no player");
   }
 
+  // hack remove
+  if (input.IsKeyDown(LSHIFT_KEY) && input.IsKeyDown(SDLK_t)) {
+    position = {50, 800};
+    return;
+  }
+
   auto sprite = std::dynamic_pointer_cast<Sprite>(spriteCpt);
   auto collider = std::dynamic_pointer_cast<Collider>(colliderCpt);
 
