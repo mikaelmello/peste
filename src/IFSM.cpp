@@ -71,7 +71,7 @@ IFSM::Walkable IFSM::GetWalkable(GameObject& object, GameObject& pivot) {
   auto player = std::dynamic_pointer_cast<Player>(player_cpt);
   auto player_collider = std::dynamic_pointer_cast<Collider>(player_col_cpt);
 
-  int tile_dim = tilemap->GetLogicalTileDimension();
+  int tile_dim = 8;
 
   int cells_width = round(player_collider->box.w / tile_dim);
   int cells_height = round(player_collider->box.h / tile_dim);

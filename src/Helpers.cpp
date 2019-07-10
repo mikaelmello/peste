@@ -118,7 +118,7 @@ bool Helpers::CanWalk(GameObject& object, Vec2& p) {
   }
 
   auto collider = std::dynamic_pointer_cast<Collider>(colliderCpt);
-  int tileDim = tilemap->GetLogicalTileDimension();
+  int tileDim = 8;
 
   int cellsWidth = round(collider->box.w / tileDim);
   int cellsHeight = round(collider->box.h / tileDim);

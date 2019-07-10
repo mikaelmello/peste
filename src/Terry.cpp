@@ -29,7 +29,7 @@ Terry::Terry(GameObject& associated, Vec2 position)
   State& state = Game::GetInstance().GetCurrentState();
 
   auto tilemap = state.GetCurrentTileMap();
-  int tileDim = tilemap->GetLogicalTileDimension();
+  int tileDim = 8;
 
   associated.box.x = position.x * tileDim;
   associated.box.y = position.y * tileDim;

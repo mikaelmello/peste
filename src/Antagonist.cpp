@@ -96,12 +96,7 @@ void Antagonist::Update(float dt) {
     state->Update(dt);
   }
 
-  int tileDim = tilemap->GetLogicalTileDimension();
-
-  associated.box.x = position.x * tileDim;
-  associated.box.y = position.y * tileDim;
-  associated.box.w = sprite->GetWidth();
-  associated.box.h = sprite->GetHeight();
+  int tileDim = 8;
   // a position está no meio horizontal e no fim vertical do sprite
   // para renderizar, colocamos o xy da box de acordo
   // posição * dimensão do tile - (comprimento da sprite / 2), pois o x fica no
@@ -147,7 +142,7 @@ bool Antagonist::NearTarget() {
     return false;
 
   } catch (const std::exception& ex) {
-    printf("printf fdshafdsuiahfdsads %s\n", ex.what());
+    printf("%s\n", ex.what());
     return false;
   }
 
