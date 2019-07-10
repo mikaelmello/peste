@@ -30,6 +30,11 @@ class GameData {
 
   static std::shared_ptr<GameObject> TerryBedGameObject;
   static std::shared_ptr<GameObject> TerryGameObject;
+
+  static bool CanUseLamp();
+
+ private:
+  static bool can_visit_basement;
 };
 
 #endif

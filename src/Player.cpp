@@ -195,7 +195,7 @@ void Player::Update(float dt) {
   InputManager& input = InputManager::GetInstance();
   bool canwalk = true;
   auto tilemap = Game::GetInstance().GetCurrentState().GetCurrentTileMap();
-  int tileDim = tilemap->GetLogicalTileDimension();
+  int tileDim = 8;
 
   if (GameData::player_is_hidden) return;
 
