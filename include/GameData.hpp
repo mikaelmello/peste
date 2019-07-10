@@ -27,6 +27,11 @@ class GameData {
   static bool player_is_hidden;
 
   static Helpers::Floor hope_is_in;
+
+  static bool CanUseLamp();
+
+ private:
+  static bool can_visit_basement;
 };
 
 #endif
