@@ -19,7 +19,7 @@
 
 Item::Item(GameObject& associated, const std::string& name,
            const std::string& description, const std::string& spritePath,
-           Vec2 pos, Helpers::KeyType keyType)
+           Vec2 pos, Helpers::KeyType keyType, int maxW, int maxH)
     : Component(associated),
       name(name),
       description(description),
@@ -27,6 +27,11 @@ Item::Item(GameObject& associated, const std::string& name,
       colliding(false),
       keyType(keyType) {
   Sprite* sprite = new Sprite(associated, spritePath);
+
+  if (maxW != 0 && maxH != 0) {
+    sprite->SetDimensions(maxW, maxH);
+  }
+
   Collider* collider;
   if (keyType == Helpers::KeyType::NOKEY) {
     collider =

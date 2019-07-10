@@ -619,6 +619,20 @@ void RoomState::LoadStairs() {
   stairsGo->AddComponent(stairs);
   objects.emplace_back(stairsGo);
   // end second floor
+
+  // begin basement
+  stairsGo = new GameObject(8);
+  stairs = new Stairs(*stairsGo, Helpers::Direction::DOWN, {362, 1237},
+                      Helpers::Floor::BASEMENT);
+  stairsGo->AddComponent(stairs);
+  objects.emplace_back(stairsGo);
+
+  stairsGo = new GameObject(8);
+  stairs = new Stairs(*stairsGo, Helpers::Direction::UP, {380, 210},
+                      Helpers::Floor::BASEMENT);
+  stairsGo->AddComponent(stairs);
+  objects.emplace_back(stairsGo);
+  // end basement
 }
 
 void RoomState::LoadAntagonist() {
@@ -652,19 +666,40 @@ void RoomState::LoadAntagonist() {
 }
 
 void RoomState::LoadItems() {
-  // auto itemGo = new GameObject(7);
-  // auto item =
-  //     new Item(*itemGo, "Chave 1", "Uma chave com aparência de velha.",
-  //              "assets/img/item/key1.png", {256, 177},
-  //              Helpers::KeyType::KEY1);
-  // itemGo->AddComponent(item);
-  // objects.emplace_back(itemGo);
-
   auto itemGo = new GameObject(7);
-  auto item = new Item(
-      *itemGo, "Pé de Cabra",
-      "Bom para abrir coisas que normalmente não podem ser abertas.",
-      "assets/img/item/crowbar.png", {34, 225}, Helpers::KeyType::CROWBAR);
+  auto item = new Item(*itemGo, "Chave 1", "Uma chave com aparência de velha.",
+                       "assets/img/item/key1.png", {30, 886},
+                       Helpers::KeyType::KEY1, 32, 32);
+  itemGo->AddComponent(item);
+  objects.emplace_back(itemGo);
+
+  itemGo = new GameObject(7);
+  item =
+      new Item(*itemGo, "Pé de Cabra",
+               "Bom para abrir coisas que normalmente não podem ser abertas.",
+               "assets/img/item/crowbar.png", {291, 58},
+               Helpers::KeyType::CROWBAR, 96, 96);
+  itemGo->AddComponent(item);
+  objects.emplace_back(itemGo);
+
+  itemGo = new GameObject(7);
+  item = new Item(*itemGo, "Lamparina", "Uma lamparina à óleo antiga.",
+                  "assets/img/item/lamp.png", {60, 556},
+                  Helpers::KeyType::NOKEY, 64, 64);
+  itemGo->AddComponent(item);
+  objects.emplace_back(itemGo);
+
+  itemGo = new GameObject(7);
+  item = new Item(*itemGo, "Óleo", "Queima e lubrifica.",
+                  "assets/img/item/oil.png", {24, 241}, Helpers::KeyType::NOKEY,
+                  64, 64);
+  itemGo->AddComponent(item);
+  objects.emplace_back(itemGo);
+
+  itemGo = new GameObject(7);
+  item = new Item(*itemGo, "Isqueiro", "Pirotecnias hilariantes.",
+                  "assets/img/item/fire.png", {110, 68},
+                  Helpers::KeyType::NOKEY, 32, 32);
   itemGo->AddComponent(item);
   objects.emplace_back(itemGo);
 }

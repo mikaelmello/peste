@@ -13,6 +13,8 @@
 
 #define DOWN_STAIR "assets/img/stairs/down.png"
 #define UP_STAIR "assets/img/stairs/up.png"
+#define TRAPDOOR "assets/img/stairs/trapdoor.png"
+#define LADDER "assets/img/stairs/trapdoor_ladder.png"
 
 Stairs::Stairs(GameObject& associated, Helpers::Direction direction,
                Vec2 position, Helpers::Floor floor)
@@ -26,14 +28,22 @@ Stairs::Stairs(GameObject& associated, Helpers::Direction direction,
   ActionMessage* actMsg;
 
   if (direction == Helpers::Direction::DOWN) {
-    sprite->Open(DOWN_STAIR);
+    if (floor != Helpers::Floor::BASEMENT) {
+      sprite->Open(DOWN_STAIR);
+    } else {
+      sprite->Open(LADDER);
+    }
     collider->SetScale({1, 0.3});
     collider->SetOffset({0, sprite->GetHeight() * 0.35f});
 
     actMsg = new ActionMessage(*actMsgGo, position + Vec2(-10, 60),
                                "assets/img/goUp.png");
   } else if (direction == Helpers::Direction::UP) {
-    sprite->Open(UP_STAIR);
+    if (floor != Helpers::Floor::BASEMENT) {
+      sprite->Open(UP_STAIR);
+    } else {
+      sprite->Open(TRAPDOOR);
+    }
     collider->SetScale({1, 1.2});
     collider->SetOffset({0, 0.6});
 
@@ -64,7 +74,11 @@ Stairs::Stairs(GameObject& associated, Helpers::Direction direction,
     blocker =
         new Blocker(*blocker_go, {1, 0.25}, {0, sprite->GetHeight() * 0.30f});
   } else if (direction == Helpers::Direction::UP) {
-    blocker = new Blocker(*blocker_go, {1, 0.5}, {0, 0.25f});
+    if (floor != Helpers::Floor::BASEMENT) {
+      blocker = new Blocker(*blocker_go, {1, 0.5}, {0, 0.25f});
+    } else {
+      blocker = new Blocker(*blocker);
+    }
   }
 
   blocker_go->AddComponent(blocker);
