@@ -100,10 +100,13 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
             sound_ptr->Stop();
             sound_ptr->Open("assets/audio/doors/locked_door.wav");
             sound_ptr->Play();
-            SCRIPT_TYPE s = {std::make_pair<std::string, std::string>(
-                "HOPE", "Está trancado, onde será que está a chave?")};
+            SCRIPT_TYPE s[] = {
+                {{"HOPE", "Está trancado, onde será que está a chave?"}},
+                {{"HOPE", "Não tenho a chave daqui..."}},
+                {{"HOPE", "Preciso da chave..."}},
+            };
             // inserir som de porta trancada
-            GameData::InitDialog(s);
+            GameData::InitDialog(s[rand() % 3]);
           }
           return;
         } else {
