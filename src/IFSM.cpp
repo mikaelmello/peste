@@ -15,23 +15,39 @@ bool IFSM::UpdatePosition(float dt) {
     throw std::runtime_error("objeto sem antagonista em IFSM::UpdatePosition");
   }
 
+  bool shouldPop = false;
+
+  // numero de espaços que temos que andar
+  accumulated += speed * dt;
+
   auto ant = std::dynamic_pointer_cast<Antagonist>(antagonist_cpt);
 
-  unsigned& k = ant->paths.top().first;
-  std::vector<Vec2>& path = ant->paths.top().second;
+  uint32_t movesCount = accumulated;
+  accumulated -= movesCount;
 
-  bool update = timer.Get() <= 0.1;
+  uint32_t movesLeft = movesCount;
+  uint32_t currentMoveIndex = ant->paths.top().first;
+  auto& path = ant->paths.top().second;
 
-  if (k < path.size() && update) {
-    ant->position = path[k++];
+  printf("%d %d %d %d\n", movesCount, movesLeft, currentMoveIndex, path.size());
+
+  while (currentMoveIndex < path.size() && movesLeft > 0) {
+    currentMoveIndex++;
+    movesLeft--;
   }
 
-  if (!update) {
-    timer.Restart();
+  if (currentMoveIndex == path.size()) {
+    printf("is popping\n");
+    shouldPop = true;
+    currentMoveIndex--;
+    movesCount -= movesLeft;
+    movesLeft = 0;
   }
 
-  timer.Update(dt);
-  return k >= path.size();
+  ant->position = path[currentMoveIndex];
+  ant->paths.top().first = currentMoveIndex;
+
+  return shouldPop;
 }
 
 IFSM::Walkable IFSM::GetWalkable(GameObject& pivot) {

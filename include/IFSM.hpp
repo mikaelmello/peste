@@ -44,6 +44,10 @@ class IFSM {
 
   bool pop_requested;
 
+  float speed = 30;
+
+  float accumulated = 0;
+
  private:
   Timer timer;
 };

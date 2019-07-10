@@ -45,8 +45,10 @@ void PatrolFSM::OnStateEnter() {
 }
 
 void PatrolFSM::OnStateExecution(float dt) {
+  printf("On state execution do patrol\n");
   bool must_pop = UpdatePosition(dt);
   if (must_pop) {
+    printf("Idle???\n");
     Antagonist::paths.pop();
     ant.lock()->Push(new IdleFSM(object));
   }
@@ -58,7 +60,7 @@ void PatrolFSM::OnStateExit() {
 }
 
 void PatrolFSM::Update(float dt) {
-  // printf("Patrulando.\n");
+  printf("Patrulando.\n");
   OnStateEnter();
   OnStateExecution(dt);
 
