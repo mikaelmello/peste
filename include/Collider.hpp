@@ -38,6 +38,12 @@ class Collider : public Component {
  private:
   Vec2 scale;
   Vec2 offset;
+
+#if DEBUG
+  int r;
+  int g;
+  int b;
+#endif
 };
 
 #endif

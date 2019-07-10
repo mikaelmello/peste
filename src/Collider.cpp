@@ -16,6 +16,11 @@
 Collider::Collider(GameObject& associated, Vec2 scale, Vec2 offset)
     : Component(associated), scale(scale), offset(offset) {
   Update(0);
+#if DEBUG
+  r = rand() % 256;
+  g = rand() % 256;
+  b = rand() % 256;
+#endif
 }
 
 void Collider::Update(float dt) {
@@ -53,7 +58,7 @@ void Collider::Render() {
           center - Camera::pos;
   points[3] = {(int)point.x, (int)point.y};
 
-  SDL_SetRenderDrawColor(Game::GetInstance().GetRenderer(), 255, 0, 0,
+  SDL_SetRenderDrawColor(Game::GetInstance().GetRenderer(), r, g, b,
                          SDL_ALPHA_OPAQUE);
   SDL_RenderDrawLines(Game::GetInstance().GetRenderer(), points, 5);
 #endif  // DEBUG
