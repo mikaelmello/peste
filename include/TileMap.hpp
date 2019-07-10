@@ -36,6 +36,8 @@ class TileMap : public Component {
 
   bool CanWalk(int x, int y);
 
+  bool NoDoors(int x, int y);
+
   int GetLogicalWidth();
 
   int GetLogicalHeight();
@@ -53,6 +55,8 @@ class TileMap : public Component {
   void SetWalk(int x, int y, bool value);
 
   void SetParallax(unsigned layer, float xFactor, float yFactor);
+
+  void MergeWalkable();
 
   const Types Type = TileMapType;
 
@@ -76,6 +80,7 @@ class TileMap : public Component {
   std::vector<Layer> layers;
 
   std::vector<std::vector<bool>> walkable;
+  std::vector<std::vector<bool>> no_doors;
 };
 
 #endif

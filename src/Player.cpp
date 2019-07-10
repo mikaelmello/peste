@@ -12,14 +12,14 @@
 #include "GameObject.hpp"
 #include "InputManager.hpp"
 #include "Item.hpp"
+#include "Lore.hpp"
 #include "PriorityChanger.hpp"
+#include "SleepState.hpp"
 #include "Sprite.hpp"
 #include "TileMap.hpp"
 #include "Types.hpp"
 
 using namespace Helpers;
-
-#define SCRIPT_TYPE std::vector<std::pair<std::string, std::string>>
 
 #define PLAYER_FRONT_ANIM "assets/img/hope/front_anim.png"
 #define PLAYER_BACK_ANIM "assets/img/hope/back_anim.png"
@@ -103,10 +103,13 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
             sound_ptr->Stop();
             sound_ptr->Open("assets/audio/doors/locked_door.wav");
             sound_ptr->Play();
-            SCRIPT_TYPE s = {std::make_pair<std::string, std::string>(
-                "HOPE", "Está trancado, onde será que está a chave?")};
+            SCRIPT_TYPE s[] = {
+                {{"HOPE", "Está trancado, onde será que está a chave?"}},
+                {{"HOPE", "Não tenho a chave daqui..."}},
+                {{"HOPE", "Preciso da chave..."}},
+            };
             // inserir som de porta trancada
-            GameData::InitDialog(s);
+            GameData::InitDialog(s[rand() % 3]);
           }
           return;
         } else {
@@ -156,6 +159,9 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
         GameData::InitDialog(s);
       } else if (furniture->GetInteraction() == Helpers::Interaction::LOOK) {
         furniture->Look();
+      } else if (furniture->GetInteraction() == Helpers::Interaction::SLEEP) {
+        furniture->RemoveInteraction();
+        Lore::Sleep();
       }
     }
   }
@@ -195,22 +201,59 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
   }
 }
 
-void Player::Start() {}
+void Player::Start() { sleepTimer.Restart(); }
 
 void Player::Update(float dt) {
   Vec2 oldPos(position.x, position.y);
   InputManager& input = InputManager::GetInstance();
   bool canwalk = true;
   auto tilemap = Game::GetInstance().GetCurrentState().GetCurrentTileMap();
-  int tileDim = tilemap->GetLogicalTileDimension();
+  int tileDim = 8;
 
   if (GameData::player_is_hidden) return;
+
+  if (Lore::Slept == 0) {
+    sleepTimer.Update(dt);
+    int limit = 30;
+    if (sleepTimer.Get() > limit &&
+        !GameData::DialogGameObject->IsRendering()) {
+      SCRIPT_TYPE scripts[] = {
+          {
+              {"Hope", "Que sono..."},
+          },
+          {
+              {"Hope", "Não aguento mais ficar em pé... onde fica uma cama?"},
+          },
+          {
+              {"Hope", "Estou caindo de sono, preciso dormir..."},
+          },
+      };
+      sleepTimer.Restart();
+      GameData::InitDialog(scripts[rand() % 3]);
+    }
+  } else if (Lore::Slept == 1) {
+    SCRIPT_TYPE script = {
+        {"Hope", "MEU DEUS! QUE BARULHO É ESSE?!?!"},
+    };
+    GameData::InitDialog(script);
+    Lore::Slept++;
+  }
 
   auto spriteCpt = associated.GetComponent(SpriteType);
   auto colliderCpt = associated.GetComponent(ColliderType);
 
   if (!spriteCpt || !colliderCpt) {
     throw std::runtime_error("Nao tem sprite nem collider no player");
+  }
+
+  // hack remove
+  if (input.IsKeyDown(LSHIFT_KEY) && input.IsKeyDown(SDLK_t)) {
+    position = {50, 800};
+    return;
+  }
+  if (input.IsKeyDown(LSHIFT_KEY) && input.IsKeyDown(SDLK_d)) {
+    position = {50, 900};
+    return;
   }
 
   auto sprite = std::dynamic_pointer_cast<Sprite>(spriteCpt);
@@ -299,8 +342,6 @@ void Player::Update(float dt) {
   }
   auto pc = std::dynamic_pointer_cast<PriorityChanger>(pcCpt);
   pc->SetRect(dt, associated.box);
-
-  std::cout << position.x << " " << position.y << std::endl;
 }
 
 void Player::Render() {}

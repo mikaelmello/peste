@@ -36,6 +36,8 @@ class Furniture : public Component {
 
   Helpers::Interaction GetInteraction();
 
+  void RemoveInteraction();
+
   void Look();
 
   const Types Type = FurnitureType;

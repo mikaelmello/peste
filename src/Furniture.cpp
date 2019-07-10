@@ -41,8 +41,8 @@ Furniture::Furniture(GameObject& associated, const std::string& file,
   associated.box.h = sprite->GetHeight();
 
   if (interaction != Helpers::Interaction::NOTHING) {
-    Collider* collider =
-        new Collider(associated, {1, 1.5}, {0, sprite->GetHeight() * 0.25});
+    Collider* collider = new Collider(associated, {1, 1.5},
+                                      {0, (float)(sprite->GetHeight() * 0.25)});
     associated.AddComponent(collider);
 
     interact = true;
@@ -127,6 +127,12 @@ void Furniture::HideInteractionDialog() { interactMsgGo->DisableRender(); }
 
 Helpers::Interaction Furniture::GetInteraction() { return interaction; }
 
+void Furniture::RemoveInteraction() {
+  interaction = Helpers::Interaction::NOTHING;
+  interactMsgGo->RequestDelete();
+  interact = false;
+}
+
 void Furniture::Look() {
   SCRIPT_TYPE s;
   for (auto aux : script) {
@@ -135,6 +141,7 @@ void Furniture::Look() {
   if (special && GameData::got_key1) {
     s.pop_back();
   }
+
   GameData::InitDialog(s);
 }
 

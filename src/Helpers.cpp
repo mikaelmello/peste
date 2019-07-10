@@ -118,7 +118,7 @@ bool Helpers::CanWalk(GameObject& object, Vec2& p) {
   }
 
   auto collider = std::dynamic_pointer_cast<Collider>(colliderCpt);
-  int tileDim = tilemap->GetLogicalTileDimension();
+  int tileDim = 8;
 
   int cellsWidth = round(collider->box.w / tileDim);
   int cellsHeight = round(collider->box.h / tileDim);
@@ -129,10 +129,10 @@ bool Helpers::CanWalk(GameObject& object, Vec2& p) {
 
   bool answer = true;
 
-  answer &= tilemap->CanWalk(x, y);
-  answer &= tilemap->CanWalk(x, y + cellsHeight);
-  answer &= tilemap->CanWalk(x + cellsWidth, y);
-  answer &= tilemap->CanWalk(x + cellsWidth, y + cellsHeight);
+  answer &= tilemap->NoDoors(x, y);
+  answer &= tilemap->NoDoors(x, y + cellsHeight);
+  answer &= tilemap->NoDoors(x + cellsWidth, y);
+  answer &= tilemap->NoDoors(x + cellsWidth, y + cellsHeight);
   return answer;
 }
 

@@ -4,7 +4,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *                  INCLUDES E DEFINES
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-#define BREATHING_ANTAGONIST_SOUND "assets/audio/terry/monster_breathing.wav"
+#define BREATHING_ANTAGONIST_SOUND "assets/audio/monster/monster_grunt.wav"
 #define ANTAGONIST_WALKING_SOUND "assets/audio/monster/monster_walking.wav"
 #define ATTACK_ROAR_ANTAGONIST "assets/audio/monster/monster_scream.wav"
 
@@ -16,7 +16,7 @@
 #define LEFT_UP_WALK_SPRITE "assets/img/terry/walk/up_walk.png"
 #define RIGHT_DOWN_WALK_SPRITE "assets/img/terry/walk/down_walk.png"
 #define RIGHT_UP_WALK_SPRITE "assets/img/terry/walk/up_walk.png"
-#define IDLE_SPRITE "assets/img/terry/idle_terry.png"
+#define fdskaljfds "assets/img/terry/idle_terry.png"
 
 #define RIGHT_IDLE_SPRITE_ANTAGONIST "assets/img/terry/idle/idle_right.png"
 #define LEFT_IDLE_SPRITE_ANTAGONIST "assets/img/terry/idle/idle_left.png"
@@ -88,9 +88,11 @@ class Antagonist : public Component {
 
   void Push(IFSM* s);
 
-  bool NearTarget(float distance_check);
+  bool NearTarget();
 
   void AssetsManager(Helpers::Action action);
+
+  void NewPatrolPath(std::vector<Vec2> path);
 
   const Types Type = Types::AntagonistType;
 

@@ -30,6 +30,8 @@ class SuspectFSM : public IFSM {
  private:
   int rage_bias;
 
+  bool cooldown_lock;
+
   unsigned stack_original_size;
 
   Vec2 initial;
@@ -37,6 +39,8 @@ class SuspectFSM : public IFSM {
   Timer bias_update_timer;
 
   Timer pop_request_timer;
+
+  Timer cooldown;
 
   std::weak_ptr<Antagonist> ant;
 };

@@ -1,18 +1,22 @@
-#ifndef ENEMYSTATE_H
-#define ENEMYSTATE_H
+#ifndef SLEEPSTATE_H
+#define SLEEPSTATE_H
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *                  INCLUDES E DEFINES
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+#define WRECKING_SOUND "assets/audio/sound_effects/wrecking_wood.wav"
+
+#include "InputManager.hpp"
 #include "Music.hpp"
+#include "Sound.hpp"
 #include "State.hpp"
 
-class EnemyState : public State {
+class SleepState : public State {
  public:
-  EnemyState();
+  SleepState();
 
-  ~EnemyState();
+  ~SleepState();
 
   void Start();
 
@@ -27,6 +31,13 @@ class EnemyState : public State {
   void Update(float dt);
 
   void Render();
+
+ private:
+  Timer pop_timer;
+
+  std::shared_ptr<GameObject> sound_go;
+
+  InputManager& im;
 };
 
 #endif

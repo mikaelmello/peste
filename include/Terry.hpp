@@ -9,6 +9,7 @@
 #include <string>
 #include "Component.hpp"
 #include "GameObject.hpp"
+#include "Timer.hpp"
 #include "Types.hpp"
 
 class Terry : public Component {

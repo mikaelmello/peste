@@ -26,7 +26,7 @@ PursuitFSM::PursuitFSM(GameObject& object) : IFSM(object) {
 PursuitFSM::~PursuitFSM() {}
 
 void PursuitFSM::OnStateEnter() {
-  Walkable w = GetWalkable(*GameData::PlayerGameObject);
+  Walkable w = GetWalkable(object, *GameData::PlayerGameObject);
 
   if (w.can_walk) {
     try {
@@ -68,6 +68,6 @@ void PursuitFSM::Update(float dt) {
   }
 
   OnStateExecution(dt);
-  pop_requested = !ant.lock()->NearTarget(40);
+  pop_requested = !ant.lock()->NearTarget();
   timer.Update(dt);
 }

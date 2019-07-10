@@ -15,30 +15,39 @@ bool IFSM::UpdatePosition(float dt) {
     throw std::runtime_error("objeto sem antagonista em IFSM::UpdatePosition");
   }
 
+  bool shouldPop = false;
+
+  // numero de espaços que temos que andar
+  accumulated += speed * dt;
+
   auto ant = std::dynamic_pointer_cast<Antagonist>(antagonist_cpt);
 
-  unsigned& k = ant->paths.top().first;
-  std::vector<Vec2>& path = ant->paths.top().second;
+  uint32_t movesCount = accumulated;
+  accumulated -= movesCount;
 
-  bool update = timer.Get() <= 0.1;
+  uint32_t movesLeft = movesCount;
+  uint32_t currentMoveIndex = ant->paths.top().first;
+  auto& path = ant->paths.top().second;
 
-  if (k < path.size() && update) {
-    ant->position = path[k++];
+  while (currentMoveIndex < path.size() && movesLeft > 0) {
+    currentMoveIndex++;
+    movesLeft--;
   }
 
-  if (!update) {
-    timer.Restart();
+  if (currentMoveIndex == path.size()) {
+    shouldPop = true;
+    currentMoveIndex--;
+    movesCount -= movesLeft;
+    movesLeft = 0;
   }
 
-  timer.Update(dt);
-  return k >= path.size();
+  ant->position = path[currentMoveIndex];
+  ant->paths.top().first = currentMoveIndex;
+
+  return shouldPop;
 }
 
-IFSM::Walkable IFSM::GetWalkable(GameObject& pivot) {
-  Game& game = Game::GetInstance();
-  State& state = game.GetCurrentState();
-  auto tilemap = state.GetCurrentTileMap();
-
+IFSM::Walkable IFSM::GetWalkable(GameObject& object, GameObject& pivot) {
   auto antagonist_cpt = object.GetComponent(AntagonistType);
   if (!antagonist_cpt) {
     throw std::runtime_error("objeto sem antagonista em IFSM::GetWalkable");
@@ -58,7 +67,7 @@ IFSM::Walkable IFSM::GetWalkable(GameObject& pivot) {
   auto player = std::dynamic_pointer_cast<Player>(player_cpt);
   auto player_collider = std::dynamic_pointer_cast<Collider>(player_col_cpt);
 
-  int tile_dim = tilemap->GetLogicalTileDimension();
+  int tile_dim = 8;
 
   int cells_width = round(player_collider->box.w / tile_dim);
   int cells_height = round(player_collider->box.h / tile_dim);
