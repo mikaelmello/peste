@@ -101,6 +101,8 @@ void Antagonist::Update(float dt) {
   // para renderizar, colocamos o xy da box de acordo
   // posição * dimensão do tile - (comprimento da sprite / 2), pois o x fica no
   // meio da sprite
+  associated.box.w = sprite->GetWidth();
+  associated.box.h = sprite->GetHeight();
   associated.box.x = position.x * tileDim - sprite->GetWidth() / 2;
   // posição * dimensão do tile - altura da sprite, pois o y fica la embaixo
   associated.box.y = position.y * tileDim - sprite->GetHeight();

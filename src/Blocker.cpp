@@ -14,6 +14,7 @@ Blocker::Blocker(GameObject& associated, Vec2 scale, Vec2 offset)
   Collider* collider = new Collider(associated, scale, offset);
   associated.AddComponent(collider);
 
+  tilemap = Game::GetInstance().GetCurrentState().GetCurrentTileMap();
   int tileDim = 8;
 
   Rect box = associated.box;
