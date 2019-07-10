@@ -20,6 +20,8 @@
 
 using namespace Helpers;
 
+#define SCRIPT_TYPE std::vector<std::pair<std::string, std::string>>
+
 #define PLAYER_FRONT_ANIM "assets/img/hope/front_anim.png"
 #define PLAYER_BACK_ANIM "assets/img/hope/back_anim.png"
 #define PLAYER_LEFT_ANIM "assets/img/hope/left_anim.png"
@@ -58,13 +60,19 @@ Player::~Player() { priorityChanger_go->RequestDelete(); }
 
 void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
   InputManager& input = InputManager::GetInstance();
-  auto item_cpt = other->GetComponent(ItemType);
 
+  auto item_cpt = other->GetComponent(ItemType);
   if (item_cpt) {
     if (input.KeyPress(X_KEY)) {
+      auto item = std::dynamic_pointer_cast<Item>(item_cpt);
+      if (item->GetKeyType() != Helpers::KeyType::NOKEY) {
+        keys.push_back(item->GetKeyType());
+      }
       auto ok = GameData::AddToInventory(other);
       if (!ok) {
-        printf("Nao tem mais espaco\n");
+        SCRIPT_TYPE s = {std::make_pair<std::string, std::string>(
+            " ", "Nao tem mais espaco no inventario.")};
+        Game::GetInstance().Push(new DialogueState(s));
       }
     }
   }
@@ -73,6 +81,18 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
   if (door_cpt) {
     if (input.KeyPress(X_KEY)) {
       auto door = std::dynamic_pointer_cast<Door>(door_cpt);
+      if (door->GetKey() != Helpers::KeyType::NOKEY) {
+        if (std::find(keys.begin(), keys.end(), door->GetKey()) == keys.end()) {
+          SCRIPT_TYPE s = {
+              std::make_pair<std::string, std::string>(" ", "Esta trancado.")};
+          Game::GetInstance().Push(new DialogueState(s));
+          return;
+        } else {
+          SCRIPT_TYPE s = {std::make_pair<std::string, std::string>(
+              " ", "Usando chave para destrancar.")};
+          Game::GetInstance().Push(new DialogueState(s));
+        }
+      }
       if (door->IsOpen())
         door->Close();
       else
@@ -92,6 +112,8 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
           associated.EnableRender();
           GameData::player_is_hidden = false;
         }
+      } else if (furniture->GetInteraction() == Interaction::PLAY) {
+        // play piano sound
       }
     }
   }

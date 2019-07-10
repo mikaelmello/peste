@@ -43,7 +43,8 @@ Furniture::Furniture(GameObject& associated, const std::string& file,
 
     if (interaction == Helpers::Interaction::HIDE) {
       interactMsg = new ActionMessage(*interactmsg_go, position, HIDE_MSG);
-    } else if (interaction == Helpers::Interaction::LOOK) {
+    } else if (interaction == Helpers::Interaction::LOOK ||
+               interaction == Helpers::Interaction::PLAY) {
       interactMsg = new ActionMessage(*interactmsg_go, position, LOOK_MSG);
     }
     interactmsg_go->AddComponent(interactMsg);

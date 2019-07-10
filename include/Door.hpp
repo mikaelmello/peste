@@ -17,7 +17,8 @@
 class Door : public Component {
  public:
   Door(GameObject& associated, Helpers::Direction direction, Vec2 position,
-       bool open, bool doubledoor = false);
+       bool open, bool doubledoor = false,
+       Helpers::KeyType key = Helpers::KeyType::NOKEY);
 
   ~Door();
 
@@ -36,6 +37,8 @@ class Door : public Component {
   bool Is(Types type) const override;
 
   void Render() override;
+
+  Helpers::KeyType GetKey();
 
   const Types Type = DoorType;
 
@@ -57,6 +60,8 @@ class Door : public Component {
 
   std::string openPath;
   std::string closePath;
+
+  Helpers::KeyType key;
 };
 
 #endif
