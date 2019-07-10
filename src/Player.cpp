@@ -20,8 +20,6 @@
 
 using namespace Helpers;
 
-#define SCRIPT_TYPE std::vector<std::pair<std::string, std::string>>
-
 #define PLAYER_FRONT_ANIM "assets/img/hope/front_anim.png"
 #define PLAYER_BACK_ANIM "assets/img/hope/back_anim.png"
 #define PLAYER_LEFT_ANIM "assets/img/hope/left_anim.png"
@@ -205,7 +203,7 @@ void Player::Update(float dt) {
     int limit = 30;
     if (sleepTimer.Get() > limit &&
         !GameData::DialogGameObject->IsRendering()) {
-      std::vector<std::pair<std::string, std::string>> scripts[] = {
+      SCRIPT_TYPE scripts[] = {
           {
               {"Hope", "Que sono..."},
           },

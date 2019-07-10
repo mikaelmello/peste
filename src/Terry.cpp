@@ -90,7 +90,7 @@ void Terry::ShowTalkDialog() { talkMessageGo->EnableRender(); }
 void Terry::HideTalkDialog() { talkMessageGo->DisableRender(); }
 
 void Terry::Talk() {
-  std::vector<std::pair<std::string, std::string>> scripts[] = {
+  SCRIPT_TYPE scripts[] = {
       {
           {"Hope", "Você vive aqui há muito tempo?"},
           {"Terry", "..."},

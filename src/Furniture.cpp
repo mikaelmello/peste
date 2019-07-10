@@ -126,7 +126,7 @@ void Furniture::HideInteractionDialog() { interactMsgGo->DisableRender(); }
 Helpers::Interaction Furniture::GetInteraction() { return interaction; }
 
 void Furniture::Look() {
-  SCRIPT_TYPE s = {std::pair<std::string, std::string>("HOPE", script)};
+  SCRIPT_TYPE s = {{"HOPE", script}};
   GameData::InitDialog(s);
 }
 
