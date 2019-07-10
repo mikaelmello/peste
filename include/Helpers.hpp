@@ -66,6 +66,7 @@ enum Interaction {
   HIDE,
   LOOK,
   PLAY,
+  SLEEP,
   NOTHING,
 };
 
@@ -80,6 +81,7 @@ enum KeyType {
   KEY1,
   KEY2,
   KEY3,
+  KEY4,
   NOKEY,
 };
 

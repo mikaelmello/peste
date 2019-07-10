@@ -64,7 +64,7 @@ Stairs::Stairs(GameObject& associated, Helpers::Direction direction,
     blocker =
         new Blocker(*blocker_go, {1, 0.25}, {0, sprite->GetHeight() * 0.30f});
   } else if (direction == Helpers::Direction::UP) {
-    blocker = new Blocker(*blocker_go, {1, 0.6}, {0, 0.3f});
+    blocker = new Blocker(*blocker_go, {1, 0.5}, {0, 0.25f});
   }
 
   blocker_go->AddComponent(blocker);

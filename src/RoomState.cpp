@@ -386,7 +386,7 @@ void RoomState::LoadFurnitureSecondFloor() {
 
   furnitureGo = new GameObject(7);
   furniture = new Furniture(*furnitureGo, "assets/img/furniture/bedgreen.png",
-                            {69, 867}, Helpers::Interaction::HIDE);
+                            {69, 867}, Helpers::Interaction::SLEEP);
   furnitureGo->AddComponent(furniture);
   objects.emplace_back(furnitureGo);
 

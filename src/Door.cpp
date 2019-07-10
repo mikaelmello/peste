@@ -173,4 +173,6 @@ bool Door::IsOpen() { return open; }
 
 Helpers::KeyType Door::GetKey() { return key; }
 
+void Door::SetKey(Helpers::KeyType k) { key = k; }
+
 bool Door::Is(Types type) const { return type == this->Type; }

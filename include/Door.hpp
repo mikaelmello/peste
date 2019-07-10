@@ -40,6 +40,8 @@ class Door : public Component {
 
   Helpers::KeyType GetKey();
 
+  void SetKey(Helpers::KeyType k);
+
   const Types Type = DoorType;
 
  private:

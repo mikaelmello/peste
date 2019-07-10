@@ -91,6 +91,7 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
           SCRIPT_TYPE s = {std::make_pair<std::string, std::string>(
               " ", "Usando chave para destrancar.")};
           Game::GetInstance().Push(new DialogueState(s));
+          door->SetKey(Helpers::KeyType::NOKEY);
         }
       }
       if (door->IsOpen())
@@ -113,7 +114,7 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
           GameData::player_is_hidden = false;
         }
       } else if (furniture->GetInteraction() == Interaction::PLAY) {
-        // play piano sound
+        printf("Play piano sound.\n");
       }
     }
   }
@@ -121,24 +122,25 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
   auto stairs_cpt = other->GetComponent(StairsType);
   if (stairs_cpt) {
     if (input.KeyPress(X_KEY)) {
+      std::cout << GameData::hope_is_in << std::endl;
       if (GameData::hope_is_in == Helpers::Floor::GROUND_FLOOR) {
-        if (position.x < 275) {
-          position.x = 220;
-          position.y = 590;
-        } else {
-          position.x = 350;
-          position.y = 590;
-        }
         GameData::hope_is_in = Helpers::Floor::FIRST_FLOOR;
-      } else if (GameData::hope_is_in == Helpers::Floor::FIRST_FLOOR) {
         if (position.x < 275) {
           position.x = 220;
-          position.y = 206;
+          position.y = 580;
         } else {
           position.x = 350;
-          position.y = 206;
+          position.y = 580;
         }
+      } else if (GameData::hope_is_in == Helpers::Floor::FIRST_FLOOR) {
         GameData::hope_is_in = Helpers::Floor::GROUND_FLOOR;
+        if (position.x < 275) {
+          position.x = 220;
+          position.y = 211;
+        } else {
+          position.x = 350;
+          position.y = 211;
+        }
       }
     }
   }
