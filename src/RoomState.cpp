@@ -100,7 +100,7 @@ void RoomState::Update(float dt) {
   }
 
   if (GameData::hope_is_in != last_known) {
-    LoadAntagonist();
+    // LoadAntagonist();
     last_known = GameData::hope_is_in;
   }
 

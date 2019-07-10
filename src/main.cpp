@@ -1,6 +1,5 @@
 #define INCLUDE_SDL
 #include <iostream>
-#include "EnemyState.hpp"
 #include "Game.hpp"
 #include "MenuState.hpp"
 #include "SDL_include.h"
