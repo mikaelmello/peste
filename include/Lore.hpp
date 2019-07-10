@@ -9,14 +9,7 @@
 
 class Lore {
  public:
-  ~Lore();
-
-  static Lore& GetInstance();
-
- private:
-  Lore();
-
-  static Lore* instance;
+  static bool NicePerson;
 };
 
 #endif

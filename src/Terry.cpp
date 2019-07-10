@@ -10,6 +10,7 @@
 #include "GameData.hpp"
 #include "GameObject.hpp"
 #include "InputManager.hpp"
+#include "Lore.hpp"
 #include "PriorityChanger.hpp"
 #include "Sprite.hpp"
 #include "TileMap.hpp"
@@ -106,6 +107,7 @@ void Terry::Talk() {
           {"Hope", "Tá tudo bem?"},
       },
   };
+  Lore::NicePerson = true;
   GameData::InitDialog(scripts[rand() % 3]);
 }
 
