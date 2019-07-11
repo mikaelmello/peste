@@ -78,9 +78,9 @@ enum Floor {
 
 enum KeyType {
   CROWBAR,
-  KEY1,
-  KEY2,
-  KEY3,
+  KITCHEN,
+  LIBRARY,
+  EXIT,
   KEY4,
   NOKEY,
 };

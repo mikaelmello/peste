@@ -38,6 +38,7 @@ RoomState::RoomState() {
   objects.emplace_back(mapGo);
 
   backgroundSound = std::make_shared<Music>("assets/audio/rainwind.wav");
+  Mix_VolumeMusic(32);
 }
 
 RoomState::~RoomState() {
@@ -577,7 +578,7 @@ void RoomState::LoadDoors() {
 
   doorGo = new GameObject(8);
   door = new Door(*doorGo, Helpers::DoorStyle::DOUBLE, {256, 113}, false,
-                  Helpers::KeyType::KEY1);
+                  Helpers::KeyType::KITCHEN);
   doorGo->AddComponent(door);
   objects.emplace_back(doorGo);
   // end ground floor
@@ -585,7 +586,7 @@ void RoomState::LoadDoors() {
   // begin first floor
   doorGo = new GameObject(8);
   door = new Door(*doorGo, Helpers::DoorStyle::DOUBLE, {288, 624}, false,
-                  Helpers::KeyType::KEY2);
+                  Helpers::KeyType::LIBRARY);
   doorGo->AddComponent(door);
   objects.emplace_back(doorGo);
 
@@ -652,16 +653,13 @@ void RoomState::LoadStairs() {
                       Helpers::Floor::BASEMENT);
   stairsGo->AddComponent(stairs);
   objects.emplace_back(stairsGo);
-
-  LoadTrapdoor();  // ta aqui só pra teste
-  // end basement
 }
 
 void RoomState::LoadItems() {
   auto itemGo = new GameObject(7);
   auto item = new Item(*itemGo, "Chave 1", "Uma chave com aparência de velha.",
                        "assets/img/item/key1.png", {17, 892},
-                       Helpers::KeyType::KEY1, 32, 32);
+                       Helpers::KeyType::KITCHEN, 32, 32);
   itemGo->AddComponent(item);
   objects.emplace_back(itemGo);
 
@@ -689,29 +687,7 @@ void RoomState::LoadItems() {
   itemGo = new GameObject(7);
   item = new Item(*itemGo, "Chave 3", "Uma chave como outra qualquer.",
                   "assets/img/item/key3.png", {304, 893},
-                  Helpers::KeyType::KEY3, 32, 32);
+                  Helpers::KeyType::EXIT, 32, 32);
   itemGo->AddComponent(item);
   objects.emplace_back(itemGo);
-
-  LoadLibraryKey();  // deve aparecer depois do hope entrar no quarto dos pais
-                     // do terry
-}
-
-void RoomState::LoadLibraryKey() {
-  auto itemGo = new GameObject(7);
-  auto item = new Item(*itemGo, "Chave 2", "O que será que ela abre?",
-                       "assets/img/item/key2.png", {150, 906},
-                       Helpers::KeyType::KEY2, 32, 32);
-  itemGo->AddComponent(item);
-  objects.emplace_back(itemGo);
-}
-
-void RoomState::LoadTrapdoor() {
-  //  Quando ele entrar na biblioteca, deve tocar um som alto e aparecer o
-  //  basement.
-  auto stairsGo = new GameObject(8);
-  auto stairs = new Stairs(*stairsGo, Helpers::Direction::UP, {380, 210},
-                           Helpers::Floor::BASEMENT);
-  stairsGo->AddComponent(stairs);
-  objects.emplace_back(stairsGo);
 }

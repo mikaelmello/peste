@@ -81,7 +81,7 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
       auto item = std::dynamic_pointer_cast<Item>(item_cpt);
       if (item->GetKeyType() != Helpers::KeyType::NOKEY) {
         keys.push_back(item->GetKeyType());
-        if (item->GetKeyType() == Helpers::KeyType::KEY1) {
+        if (item->GetKeyType() == Helpers::KeyType::KITCHEN) {
           GameData::got_key1 = true;
         }
       }
@@ -140,9 +140,14 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
             // inserir som de porta abrindo
             GameData::InitDialog(s[rand() % 2]);
           }
+          if (door->GetKey() == Helpers::KeyType::LIBRARY) {
+            Lore::UnlockLibrary();
+            sound->Open("assets/audio/sound_effects/metal_clacking.wav");
+            sound->Play();
+          }
           soundPlayed = true;
           sound->Open("assets/audio/doors/open_door.wav");
-          sound->Play();
+          sound->Play(1, 64);
           door->SetKey(Helpers::KeyType::NOKEY);
         }
       }
@@ -250,15 +255,6 @@ void Player::Update(float dt) {
       GameData::InitDialog(scripts[rand() % 3]);
     }
   } else if (Lore::Slept == 1) {
-    auto itemGo = new GameObject(7);
-    auto item =
-        new Item(*itemGo, "Pé de Cabra",
-                 "Bom para abrir coisas que normalmente não podem ser abertas.",
-                 "assets/img/item/crowbar.png", {176, 368},
-                 Helpers::KeyType::CROWBAR, 96, 96);
-    itemGo->AddComponent(item);
-    Game::GetInstance().GetCurrentState().AddObject(itemGo);
-
     SCRIPT_TYPE script = {
         {"Hope", "MEU DEUS! QUE BARULHO É ESSE?!?!"},
     };
