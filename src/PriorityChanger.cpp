@@ -39,10 +39,6 @@ void PriorityChanger::Update(float dt) {
     return;
   }
 
-  if (type == PCPlayer) {
-    printf("pooooooorra\n");
-  }
-
   currentCollision.push_back(&associated);
 
   std::sort(currentCollision.begin(), currentCollision.end(), GameObjectComp());
