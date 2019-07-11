@@ -33,13 +33,6 @@ Antagonist::Antagonist(GameObject& associated, std::vector<Vec2> path)
   Collider* collider =
       new Collider(associated, {0.6, 0.15}, {0, sprite->GetHeight() * 0.45f});
 
-  GameObject* pc_go = new GameObject();
-  pc_go->box = associated.box;
-  PriorityChanger* priority_changer =
-      new PriorityChanger(*pc_go, associated, true);
-  pc_go->AddComponent(priority_changer);
-  state.AddObject(pc_go);
-
   int tileDim = 8;
   // a position está no meio horizontal e no fim vertical do sprite
   // para renderizar, colocamos o xy da box de acordo
@@ -73,6 +66,12 @@ void Antagonist::Start() {
   state_stack.emplace(stored_state);
   stored_state->OnStateEnter();
   stored_state = nullptr;
+
+  GameObject* pc_go = new GameObject(associated.priority);
+  pc_go->box = associated.box;
+  PriorityChanger* priority_changer = new PriorityChanger(*pc_go, associated);
+  pc_go->AddComponent(priority_changer);
+  priorityChanger_go = Game::GetInstance().GetCurrentState().AddObject(pc_go);
 }
 
 void Antagonist::Update(float dt) {
@@ -117,6 +116,13 @@ void Antagonist::Update(float dt) {
   associated.box.x = position.x * tileDim - sprite->GetWidth() / 2;
   // posição * dimensão do tile - altura da sprite, pois o y fica la embaixo
   associated.box.y = position.y * tileDim - sprite->GetHeight();
+
+  auto pcCpt = priorityChanger_go->GetComponent(PriorityChangerType);
+  if (!pcCpt) {
+    throw std::runtime_error("Sem PC CPT");
+  }
+  auto pc = std::dynamic_pointer_cast<PriorityChanger>(pcCpt);
+  pc->SetRect(dt, associated.box);
 }
 
 void Antagonist::Render() {}

@@ -43,7 +43,7 @@ void Lore::Sleep() {
 
 void Lore::FirstMonsterSpawn() {
   auto& state = Game::GetInstance().GetCurrentState();
-  auto ant = new GameObject(11);
+  auto ant = new GameObject(100);
   Antagonist* antagonist = new Antagonist(*ant, {{347, 579}});
   ant->AddComponent(antagonist);
   GameData::MonsterGameObject = state.AddObject(ant);

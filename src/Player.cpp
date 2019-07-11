@@ -384,7 +384,7 @@ void Player::Update(float dt) {
   auto pc = std::dynamic_pointer_cast<PriorityChanger>(pcCpt);
   pc->SetRect(dt, associated.box);
 
-  std::cout << position.x << " " << position.y << std::endl;
+  // std::cout << position.x << " " << position.y << std::endl;
 }
 
 void Player::Render() {}

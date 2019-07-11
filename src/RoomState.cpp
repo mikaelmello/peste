@@ -154,7 +154,7 @@ void RoomState::LoadAssets() {
   objects.push_back(dialogGo);
   GameData::DialogGameObject = dialogGo;
 
-  auto playerGo = std::make_shared<GameObject>(10);
+  auto playerGo = std::make_shared<GameObject>(100);
   Player* player = new Player(*playerGo, currentTileMap->GetInitialPosition());
   playerGo->AddComponent(player);
   objects.push_back(playerGo);
@@ -305,7 +305,7 @@ void RoomState::LoadFurnitureSecondFloor() {
 
   furnitureGo = new GameObject(7);
   furniture = new Furniture(*furnitureGo, "assets/img/furniture/clock.png",
-                            {302, 532}, Helpers::Interaction::LOOK, true,
+                            {302, 532}, Helpers::Interaction::LOOK, false,
                             {"Parece que não funciona..."});
   furnitureGo->AddComponent(furniture);
   objects.emplace_back(furnitureGo);

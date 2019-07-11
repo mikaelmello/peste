@@ -125,6 +125,8 @@ class Antagonist : public Component {
   Helpers::Direction last_direction;
 
   Helpers::Action last_action;
+
+  std::shared_ptr<GameObject> priorityChanger_go;
 };
 
 #endif

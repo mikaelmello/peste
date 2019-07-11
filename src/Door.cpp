@@ -77,7 +77,7 @@ Door::Door(GameObject& associated, Helpers::DoorStyle style, Vec2 position,
 
   GameObject* pcGo = new GameObject(associated.priority);
   pcGo->box = associated.box;
-  PriorityChanger* priChanger = new PriorityChanger(*pcGo, associated, false);
+  PriorityChanger* priChanger = new PriorityChanger(*pcGo, associated);
   pcGo->AddComponent(priChanger);
   state.AddObject(pcGo);
 
