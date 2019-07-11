@@ -329,6 +329,7 @@ void Player::Update(float dt) {
 
   if (direction == Direction::NONE) {
     running = false;
+    OpenIdleSprite(sprite, lastDirection);
   } else {
     walkSoundTimer.Update(dt);
     float timeout = running ? 0.218 : 0.459;

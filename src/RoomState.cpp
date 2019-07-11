@@ -582,7 +582,7 @@ void RoomState::LoadDoors() {
   objects.emplace_back(doorGo);
 
   doorGo = new GameObject(8);
-  door = new Door(*doorGo, Helpers::Direction::UP, {48, 640}, false, false,
+  door = new Door(*doorGo, Helpers::Direction::UP, {48.15, 640}, false, false,
                   Helpers::KeyType::CROWBAR);
   doorGo->AddComponent(door);
   objects.emplace_back(doorGo);
