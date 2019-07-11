@@ -102,16 +102,17 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
       if (door->GetKey() != Helpers::KeyType::NOKEY) {
         if (std::find(keys.begin(), keys.end(), door->GetKey()) == keys.end()) {
           if (door->GetKey() == Helpers::KeyType::CROWBAR) {
-            SCRIPT_TYPE s = {
-                {"HOPE", "Está emperrada, não consigo abrir..."},
-                {"HOPE",
-                 "A fechadura parece estar quebrada, como será que vou "
-                 "entrar?"},
-                {"HOPE",
-                 "Acho que nenhuma chave vai me ajudar a abrir esta porta..."},
+            SCRIPT_TYPE s[] = {
+                {{"HOPE", "Está emperrada, não consigo abrir..."}},
+                {{"HOPE",
+                  "A fechadura parece estar quebrada, como será que vou "
+                  "entrar?"}},
+                {{"HOPE",
+                  "Acho que nenhuma chave vai me ajudar a abrir esta "
+                  "porta..."}},
             };
             // inserir som de porta emperrada
-            GameData::InitDialog(s);
+            GameData::InitDialog(s[rand() % 3]);
           } else {
             SCRIPT_TYPE s[] = {
                 {{"HOPE", "Está trancado, onde será que está a chave?"}},

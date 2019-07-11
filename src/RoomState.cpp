@@ -335,7 +335,7 @@ void RoomState::LoadFurnitureSecondFloor() {
   furnitureGo = new GameObject(7);
   furniture = new Furniture(*furnitureGo, "assets/img/furniture/bookshelf2.png",
                             {334, 777}, Helpers::Interaction::LOOK, false,
-                            {"Nada interessante.."});
+                            {"Nada interessante..."});
   furnitureGo->AddComponent(furniture);
   objects.emplace_back(furnitureGo);
 
@@ -356,7 +356,7 @@ void RoomState::LoadFurnitureSecondFloor() {
   furniture =
       new Furniture(*furnitureGo, "assets/img/furniture/bookshelf3.png",
                     {206, 777}, Helpers::Interaction::LOOK, false,
-                    {"Esses livros de hitória falam sobre a Idade Média..."});
+                    {"Esses livros de história falam sobre a Idade Média..."});
   furnitureGo->AddComponent(furniture);
   objects.emplace_back(furnitureGo);
 
