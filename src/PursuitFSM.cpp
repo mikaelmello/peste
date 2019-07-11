@@ -5,7 +5,7 @@
 #include "Player.hpp"
 #include "Types.hpp"
 
-PursuitFSM::PursuitFSM(GameObject& object) : IFSM(object) {
+PursuitFSM::PursuitFSM(GameObject& object) : IFSM(object, PURSUIT_SPEED) {
   Game& game = Game::GetInstance();
   State& state = game.GetCurrentState();
   auto tilemap = state.GetCurrentTileMap();

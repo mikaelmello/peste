@@ -12,7 +12,7 @@
 #include "Types.hpp"
 
 PatrolFSM::PatrolFSM(GameObject& object, std::vector<Vec2>& points)
-    : IFSM(object) {
+    : IFSM(object, PATROL_SPEED) {
   auto ant_cpt = object.GetComponent(Types::AntagonistType);
   if (!ant_cpt) {
     throw std::runtime_error("sem antagonist in PatrolFSM::PatrolFSM");

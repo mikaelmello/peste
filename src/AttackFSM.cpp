@@ -7,7 +7,7 @@
 #include "Player.hpp"
 #include "Sprite.hpp"
 
-AttackFSM::AttackFSM(GameObject& object) : IFSM(object) {
+AttackFSM::AttackFSM(GameObject& object) : IFSM(object, ZERO_SPEED) {
   auto ant_cpt = object.GetComponent(Types::AntagonistType);
   if (!ant_cpt) {
     throw std::runtime_error("sem ant em AttackFSM::AttackFSM");

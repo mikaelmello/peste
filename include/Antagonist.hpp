@@ -38,6 +38,12 @@
 #define DOWNLEFT_ATTACK_SPRITE_ANTAGONIST \
   "assets/img/terry/attack/down_attack.png"
 
+#define CALC_CONST 6
+#define PATROL_SPEED 30.0f
+#define SUSPECT_SPEED 40.0f
+#define PURSUIT_SPEED 70.0f
+#define ZERO_SPEED 0
+
 #define WALKING_WALK_SET                                                    \
   {                                                                         \
     LEFT_WALK_SPRITE, RIGHT_WALK_SPRITE, DOWN_WALK_SPRITE, UP_WALK_SPRITE,  \
@@ -101,11 +107,12 @@ class Antagonist : public Component {
   static std::stack<std::pair<unsigned, std::vector<Vec2>>> paths;
 
  private:
-  void MoveAssetsManager(std::vector<std::string> set, bool ac);
+  void MoveAssetsManager(std::vector<std::string> set, float frame_time,
+                         bool ac);
 
-  void IdleAssetsManager(bool action_change);
+  void IdleAssetsManager(float frame_time, bool action_change);
 
-  void AttackAssetsManager();
+  void AttackAssetsManager(float frame_time);
 
   Vec2 previous_position;
 

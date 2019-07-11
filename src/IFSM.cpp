@@ -5,7 +5,8 @@
 #include "GameData.hpp"
 #include "Player.hpp"
 
-IFSM::IFSM(GameObject& object) : object(object), pop_requested(false) {}
+IFSM::IFSM(GameObject& object, float speed)
+    : object(object), pop_requested(false), speed(speed) {}
 
 IFSM::~IFSM() {}
 
@@ -41,10 +42,19 @@ bool IFSM::UpdatePosition(float dt) {
     movesLeft = 0;
   }
 
-  ant->position = path[currentMoveIndex];
-  ant->paths.top().first = currentMoveIndex;
+  if (currentMoveIndex >= 0 && currentMoveIndex < path.size()) {
+    ant->position = path[currentMoveIndex];
+    ant->paths.top().first = currentMoveIndex;
+  }
 
   return shouldPop;
+}
+
+bool IFSM::UpdateSpeed(float speed) {
+  if (speed < 0) {
+    throw std::invalid_argument("speed menor que 0 em IFSM::UpdateSpeed");
+  }
+  this->speed = speed;
 }
 
 IFSM::Walkable IFSM::GetWalkable(GameObject& object, GameObject& pivot) {

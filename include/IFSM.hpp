@@ -10,7 +10,7 @@
 
 class IFSM {
  public:
-  IFSM(GameObject& object);
+  IFSM(GameObject& object, float speed);
 
   virtual ~IFSM();
 
@@ -38,13 +38,15 @@ class IFSM {
   static Walkable GetWalkable(GameObject& object, GameObject& pivot);
 
  protected:
+  bool UpdateSpeed(float speed);
+
   bool UpdatePosition(float dt);
 
   GameObject& object;
 
   bool pop_requested;
 
-  float speed = 30;
+  float speed;
 
   float accumulated = 0;
 

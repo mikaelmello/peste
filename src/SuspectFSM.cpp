@@ -9,7 +9,7 @@
 #include "Types.hpp"
 
 SuspectFSM::SuspectFSM(GameObject& object)
-    : IFSM(object), rage_bias(0), cooldown_lock(false) {
+    : IFSM(object, SUSPECT_SPEED), rage_bias(0), cooldown_lock(false) {
   stack_original_size = Antagonist::paths.size();
 
   auto antCpt = object.GetComponent(AntagonistType);

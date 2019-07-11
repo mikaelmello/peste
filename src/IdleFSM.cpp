@@ -2,7 +2,7 @@
 #include "Antagonist.hpp"
 #include "Types.hpp"
 
-IdleFSM::IdleFSM(GameObject& object) : IFSM(object) {
+IdleFSM::IdleFSM(GameObject& object) : IFSM(object, ZERO_SPEED) {
   auto ant_cpt = object.GetComponent(Types::AntagonistType);
   if (!ant_cpt) {
     throw std::runtime_error("sem antagonista em IdleFSM::IdleFSM");

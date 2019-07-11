@@ -28,8 +28,8 @@ Antagonist::Antagonist(GameObject& associated, std::vector<Vec2> path)
   position = path[0];
 
   Sound* sound = new Sound(associated, BREATHING_ANTAGONIST_SOUND);
-  Sprite* sprite =
-      new Sprite(associated, DOWN_IDLE_SPRITE_ANTAGONIST, 4, 0.125);
+  Sprite* sprite = new Sprite(associated, DOWN_IDLE_SPRITE_ANTAGONIST, 4,
+                              CALC_CONST / PATROL_SPEED);
   Collider* collider =
       new Collider(associated, {0.6, 0.15}, {0, sprite->GetHeight() * 0.45f});
 
@@ -160,29 +160,30 @@ void Antagonist::AssetsManager(Helpers::Action action) {
 
   switch (action) {
     case Helpers::Action::IDLE:
-      IdleAssetsManager(action_change);
+      IdleAssetsManager(0.125, action_change);
       break;
     case Helpers::Action::MOVING:
-      MoveAssetsManager(WALKING_WALK_SET, action_change);
+      MoveAssetsManager(WALKING_WALK_SET, 0.18, action_change);
       break;
     case Helpers::Action::SUSPECTING:
-      MoveAssetsManager(SUSPECTING_WALK_SET, action_change);
+      MoveAssetsManager(SUSPECTING_WALK_SET, 0.12, action_change);
       break;
     case Helpers::Action::CHASING:
-      MoveAssetsManager(CHASING_WALK_SET, action_change);
+      MoveAssetsManager(CHASING_WALK_SET, 0.06, action_change);
       break;
     case Helpers::Action::ATTACKING:
-      AttackAssetsManager();
+      AttackAssetsManager(0.125);
       break;
     default:
       action = Helpers::Action::IDLE;
-      IdleAssetsManager(true);
+      IdleAssetsManager(0.125, true);
       break;
   }
   last_action = action;
 }
 
-void Antagonist::MoveAssetsManager(std::vector<std::string> set, bool ac) {
+void Antagonist::MoveAssetsManager(std::vector<std::string> set,
+                                   float frame_time, bool ac) {
   if (set.size() != 8) {
     throw std::runtime_error("O set de MoveAssetsManager deve ter 8 imagens");
   }
@@ -258,10 +259,11 @@ void Antagonist::MoveAssetsManager(std::vector<std::string> set, bool ac) {
       break;
   }
 
+  sprite->SetFrameTime(frame_time);
   last_direction = direction;
 }
 
-void Antagonist::IdleAssetsManager(bool action_change) {
+void Antagonist::IdleAssetsManager(float frame_time, bool action_change) {
   if (!action_change) return;
 
   auto spriteCpt = associated.GetComponent(SpriteType);
@@ -321,7 +323,7 @@ void Antagonist::IdleAssetsManager(bool action_change) {
   }
 }
 
-void Antagonist::AttackAssetsManager() {
+void Antagonist::AttackAssetsManager(float frame_time) {
   auto spriteCpt = associated.GetComponent(SpriteType);
   if (!spriteCpt) {
     throw std::runtime_error("O gameobject do antagonista nao tem sprite");
@@ -379,6 +381,8 @@ void Antagonist::AttackAssetsManager() {
       sprite->SetFrameCount(3);
       break;
   }
+
+  sprite->SetFrameTime(frame_time);
 }
 
 bool Antagonist::Is(Types type) const { return type == this->Type; }
