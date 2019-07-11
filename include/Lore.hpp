@@ -14,6 +14,7 @@ class Lore {
   static int Slept;
   static void Sleep();
   static void FirstMonsterSpawn();
+  static void UnlockLibrary();
 };
 
 #endif

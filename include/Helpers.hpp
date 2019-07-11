@@ -74,13 +74,14 @@ enum Floor {
   BASEMENT,
   GROUND_FLOOR,
   FIRST_FLOOR,
+  NO_FLOOR,
 };
 
 enum KeyType {
   CROWBAR,
-  KEY1,
-  KEY2,
-  KEY3,
+  KITCHEN,
+  LIBRARY,
+  EXIT,
   KEY4,
   NOKEY,
 };

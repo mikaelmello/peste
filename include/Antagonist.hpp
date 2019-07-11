@@ -27,8 +27,9 @@
 #define DOWNRIGHT_IDLE_SPRITE_ANTAGONIST "assets/img/terry/idle/idle_down.png"
 #define DOWNLEFT_IDLE_SPRITE_ANTAGONIST "assets/img/terry/idle/idle_down.png"
 
-#define RIGHT_ATTACK_SPRITE_ANTAGONIST "assets/img/terry/attack/down_attack.png"
-#define LEFT_ATTACK_SPRITE_ANTAGONIST "assets/img/terry/attack/down_attack.png"
+#define RIGHT_ATTACK_SPRITE_ANTAGONIST \
+  "assets/img/terry/attack/right_attack.png"
+#define LEFT_ATTACK_SPRITE_ANTAGONIST "assets/img/terry/attack/left_attack.png"
 #define UP_ATTACK_SPRITE_ANTAGONIST "assets/img/terry/attack/up_attack.png"
 #define DOWN_ATTACK_SPRITE_ANTAGONIST "assets/img/terry/attack/down_attack.png"
 #define UPRIGHT_ATTACK_SPRITE_ANTAGONIST "assets/img/terry/attack/up_attack.png"

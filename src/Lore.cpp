@@ -7,10 +7,12 @@
 #include "Game.hpp"
 #include "GameData.hpp"
 #include "InputManager.hpp"
+#include "Item.hpp"
 #include "Resources.hpp"
 #include "SDL_include.h"
 #include "SleepState.hpp"
 #include "Sprite.hpp"
+#include "Stairs.hpp"
 
 bool Lore::NicePerson = false;
 bool Lore::HasEnteredMasterBedroom = false;
@@ -39,6 +41,15 @@ void Lore::Sleep() {
 
   auto& game = Game::GetInstance();
   game.Push(new SleepState());
+
+  auto itemGo = new GameObject(7);
+  auto item =
+      new Item(*itemGo, "Pé de Cabra",
+               "Bom para abrir coisas que normalmente não podem ser abertas.",
+               "assets/img/item/crowbar.png", {291, 58},
+               Helpers::KeyType::CROWBAR, 96, 96);
+  itemGo->AddComponent(item);
+  game.GetCurrentState().AddObject(itemGo);
 }
 
 void Lore::FirstMonsterSpawn() {
@@ -52,4 +63,23 @@ void Lore::FirstMonsterSpawn() {
   auto playerPos = GameData::PlayerGameObject->box.Center();
   auto monsterPos = GameData::MonsterGameObject->box.Center();
   CameraAction::Start(playerPos, monsterPos);
+
+  auto itemGo = new GameObject(7);
+  auto item = new Item(*itemGo, "Chave", "O que será que ela abre?",
+                       "assets/img/item/key2.png", {150, 906},
+                       Helpers::KeyType::LIBRARY, 32, 32);
+  itemGo->AddComponent(item);
+  state.AddObject(itemGo);
+}
+
+void Lore::UnlockLibrary() {
+  auto& state = Game::GetInstance().GetCurrentState();
+
+  //  Quando ele entrar na biblioteca, deve tocar um som alto e aparecer o
+  //  basement.
+  auto stairsGo = new GameObject(8);
+  auto stairs = new Stairs(*stairsGo, Helpers::Direction::UP, {380, 210},
+                           Helpers::Floor::BASEMENT);
+  stairsGo->AddComponent(stairs);
+  state.AddObject(stairsGo);
 }

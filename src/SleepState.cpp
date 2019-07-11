@@ -2,7 +2,7 @@
 #include "GameData.hpp"
 #include "Lore.hpp"
 
-SleepState::SleepState() : im(InputManager::GetInstance()) { Lore::Slept++; }
+SleepState::SleepState() : im(InputManager::GetInstance()) {}
 
 SleepState::~SleepState() {}
 
@@ -24,6 +24,7 @@ void SleepState::Update(float dt) {
 }
 
 void SleepState::Start() {
+  Lore::Slept++;
   LoadAssets();
   StartArray();
   started = true;

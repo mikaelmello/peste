@@ -160,7 +160,7 @@ bool Antagonist::NearTarget() {
   try {
     if (w.can_walk) {
       auto path = pf.Run(position, w.walkable);
-      return path.size() <= 150;
+      return path.size() != 0 && !GameData::player_is_hidden;
     }
     return false;
 

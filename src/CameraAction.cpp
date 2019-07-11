@@ -34,7 +34,6 @@ void CameraAction::Update(float dt) {
     return;
   }
   auto distanceToMove = speed * dt;
-
   if (distanceLeft <= distanceToMove) {
     auto movement = Vec2(distanceLeft, 0).GetRotated(angle);
     Camera::pos += movement;

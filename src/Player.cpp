@@ -4,6 +4,7 @@
 #include <string>
 #include "Blocker.hpp"
 #include "Camera.hpp"
+#include "CameraAction.hpp"
 #include "Collider.hpp"
 #include "Door.hpp"
 #include "Furniture.hpp"
@@ -80,7 +81,7 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
       auto item = std::dynamic_pointer_cast<Item>(item_cpt);
       if (item->GetKeyType() != Helpers::KeyType::NOKEY) {
         keys.push_back(item->GetKeyType());
-        if (item->GetKeyType() == Helpers::KeyType::KEY1) {
+        if (item->GetKeyType() == Helpers::KeyType::KITCHEN) {
           GameData::got_key1 = true;
         }
       }
@@ -101,16 +102,17 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
       if (door->GetKey() != Helpers::KeyType::NOKEY) {
         if (std::find(keys.begin(), keys.end(), door->GetKey()) == keys.end()) {
           if (door->GetKey() == Helpers::KeyType::CROWBAR) {
-            SCRIPT_TYPE s = {
-                {"HOPE", "Está emperrada, não consigo abrir..."},
-                {"HOPE",
-                 "A fechadura parece estar quebrada, como será que vou "
-                 "entrar?"},
-                {"HOPE",
-                 "Acho que nenhuma chave vai me ajudar a abrir esta porta..."},
+            SCRIPT_TYPE s[] = {
+                {{"HOPE", "Está emperrada, não consigo abrir..."}},
+                {{"HOPE",
+                  "A fechadura parece estar quebrada, como será que vou "
+                  "entrar?"}},
+                {{"HOPE",
+                  "Acho que nenhuma chave vai me ajudar a abrir esta "
+                  "porta..."}},
             };
             // inserir som de porta emperrada
-            GameData::InitDialog(s);
+            GameData::InitDialog(s[rand() % 3]);
           } else {
             SCRIPT_TYPE s[] = {
                 {{"HOPE", "Está trancado, onde será que está a chave?"}},
@@ -125,23 +127,28 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
           return;
         } else {
           if (door->GetKey() == Helpers::KeyType::CROWBAR) {
-            SCRIPT_TYPE s = {
-                {"HOPE", "Usar o pé de cabra foi uma ótima ideia!"},
-                {"HOPE",
-                 "Só com um pé de cabra pra conseguir abrir esta porta "
-                 "mesmo."}};
+            SCRIPT_TYPE s[] = {
+                {{"HOPE", "Usar o pé de cabra foi uma ótima ideia!"}},
+                {{"HOPE",
+                  "Só com um pé de cabra pra conseguir abrir esta porta "
+                  "mesmo."}}};
             // inserir som de porta sendo arrombada
-            GameData::InitDialog(s);
+            GameData::InitDialog(s[rand() % 2]);
             Lore::FirstMonsterSpawn();
           } else {
-            SCRIPT_TYPE s = {{"HOPE", "Consegui destrancar!"},
-                             {"HOPE", "A chave era a certa!"}};
+            SCRIPT_TYPE s[] = {{{"HOPE", "Consegui destrancar!"}},
+                               {{"HOPE", "A chave era a certa!"}}};
             // inserir som de porta abrindo
-            GameData::InitDialog(s);
+            GameData::InitDialog(s[rand() % 2]);
+          }
+          if (door->GetKey() == Helpers::KeyType::LIBRARY) {
+            Lore::UnlockLibrary();
+            sound->Open("assets/audio/sound_effects/metal_clacking.wav");
+            sound->Play();
           }
           soundPlayed = true;
           sound->Open("assets/audio/doors/open_door.wav");
-          sound->Play();
+          sound->Play(1, 64);
           door->SetKey(Helpers::KeyType::NOKEY);
         }
       }
@@ -253,6 +260,10 @@ void Player::Update(float dt) {
         {"Hope", "MEU DEUS! QUE BARULHO É ESSE?!?!"},
     };
     GameData::InitDialog(script);
+
+    auto playerPos = GameData::PlayerGameObject->box.Center();
+    CameraAction::Start(playerPos, {77 * 8, 795 * 8});
+
     Lore::Slept++;
   }
 
@@ -425,6 +436,8 @@ void Player::OpenIdleSprite(const std::shared_ptr<Sprite>& sprite,
     case Direction::DOWNRIGHT:
       sprite->Open(PLAYER_FRONT);
       frameCount = 8;
+      break;
+    default:
       break;
   }
 

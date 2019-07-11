@@ -17,22 +17,28 @@ Dialog::Dialog(GameObject& associated) : Component(associated) {
   associated.box = Rect(43, 500, 1024, 183);
 
   GameObject* interlocutor_go = new GameObject(associated.priority + 1);
-  Text* interlocutor =
-      new Text(*interlocutor_go, "assets/font/tox-typewriter.ttf", 35,
-               Text::BLENDED_WRAPPED, " ", {0, 0, 0, 0}, associated.box.w - 80);
+  Text* interlocutor = new Text(
+      *interlocutor_go, "assets/font/tox-typewriter.ttf", 35,
+      Text::BLENDED_WRAPPED, " ", {0, 0, 0, 0}, associated.box.w - 110);
   interlocutor_go->AddComponent(interlocutor);
   interlocutorGo = state.AddObject(interlocutor_go);
 
   GameObject* text_go = new GameObject(associated.priority + 1);
-  Text* txt =
-      new Text(*text_go, "assets/font/tox-typewriter.ttf", 25,
-               Text::BLENDED_WRAPPED, " ", {0, 0, 0, 0}, associated.box.w - 80);
+  Text* txt = new Text(*text_go, "assets/font/tox-typewriter.ttf", 25,
+                       Text::BLENDED_WRAPPED, " ", {0, 0, 0, 0},
+                       associated.box.w - 110);
   text_go->AddComponent(txt);
   textGo = state.AddObject(text_go);
+
+  GameObject* space_go = new GameObject(associated.priority + 1);
+  sprite = new Sprite(*space_go, "assets/img/menu/space.png");
+  space_go->AddComponent(sprite);
+  spaceGo = state.AddObject(space_go);
 
   interlocutorGo->DisableRender();
   textGo->DisableRender();
   associated.DisableRender();
+  spaceGo->DisableRender();
 }
 
 Dialog::~Dialog() {
@@ -65,6 +71,7 @@ void Dialog::Clear() {
 
   interlocutorGo->DisableRender();
   textGo->DisableRender();
+  spaceGo->DisableRender();
   associated.DisableRender();
 }
 
@@ -81,6 +88,8 @@ void Dialog::UpdateTexts() {
   interlocutorGo->box.y = associated.box.y + 20;
   textGo->box.x = associated.box.x + 36;
   textGo->box.y = associated.box.y + 70;
+  spaceGo->box.x = associated.box.x + 828;
+  spaceGo->box.y = associated.box.y + 140;
 
   auto interlocutorCpt = interlocutorGo->GetComponent(TextType);
   auto textCpt = textGo->GetComponent(TextType);
@@ -115,5 +124,6 @@ void Dialog::SetScript(SCRIPT_TYPE script) {
 
   interlocutorGo->EnableRender();
   textGo->EnableRender();
+  spaceGo->EnableRender();
   associated.EnableRender();
 }

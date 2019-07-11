@@ -43,6 +43,9 @@ bool GameData::AddToInventory(std::shared_ptr<GameObject> item) {
 }
 
 void GameData::InitDialog(SCRIPT_TYPE script) {
+  if (!GameData::DialogGameObject) {
+    throw std::runtime_error("Nao tem dialog game object pra ter dialog");
+  }
   auto dialogCpt = GameData::DialogGameObject->GetComponent(DialogType);
   if (!dialogCpt) {
     throw std::invalid_argument("Trying to init script without dialog????");
@@ -130,6 +133,7 @@ Helpers::Floor GameData::PlayerFloor() {
   if (Floor2.Contains(playerPos)) {
     return Helpers::Floor::FIRST_FLOOR;
   }
+  return Helpers::Floor::NO_FLOOR;
 }
 
 Helpers::Floor GameData::MonsterFloor() {
@@ -143,4 +147,5 @@ Helpers::Floor GameData::MonsterFloor() {
   if (Floor2.Contains(monsterPos)) {
     return Helpers::Floor::FIRST_FLOOR;
   }
+  return Helpers::Floor::NO_FLOOR;
 }
