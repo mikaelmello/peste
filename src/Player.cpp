@@ -31,6 +31,12 @@ using namespace Helpers;
 #define PLAYER_LEFT "assets/img/hope/left.png"
 #define PLAYER_RIGHT "assets/img/hope/right.png"
 
+std::vector<std::string> YawnSounds = {
+    PLAYER_YAWN_SOUND_1,
+    PLAYER_YAWN_SOUND_2,
+    PLAYER_YAWN_SOUND_3,
+};
+
 Player::Player(GameObject& associated, Vec2 position)
     : Component(associated),
       position(position),
@@ -237,6 +243,8 @@ void Player::Update(float dt) {
               {"Hope", "Estou caindo de sono, preciso dormir..."},
           },
       };
+      sound->Open(YawnSounds[rand() % 3]);
+      sound->Play();
       sleepTimer.Restart();
       GameData::InitDialog(scripts[rand() % 3]);
     }

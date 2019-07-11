@@ -16,6 +16,9 @@
 
 #define PLAYER_WALKING_SOUND "assets/audio/hope/walking.wav"
 #define PLAYER_RUNNING_SOUND "assets/audio/hope/running.wav"
+#define PLAYER_YAWN_SOUND_1 "assets/audio/hope/yawn1.wav"
+#define PLAYER_YAWN_SOUND_2 "assets/audio/hope/yawn2.wav"
+#define PLAYER_YAWN_SOUND_3 "assets/audio/hope/yawn3.wav"
 
 class Player : public Component {
  public:
