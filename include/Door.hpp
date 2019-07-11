@@ -16,9 +16,8 @@
 
 class Door : public Component {
  public:
-  Door(GameObject& associated, Helpers::Direction direction, Vec2 position,
-       bool open, bool doubledoor = false,
-       Helpers::KeyType key = Helpers::KeyType::NOKEY);
+  Door(GameObject& associated, Helpers::DoorStyle style, Vec2 position,
+       bool open, Helpers::KeyType key = Helpers::KeyType::NOKEY);
 
   ~Door();
 

@@ -52,11 +52,14 @@ Furniture::Furniture(GameObject& associated, const std::string& file,
 
     if (interaction == Helpers::Interaction::HIDE) {
       interactMsg = new ActionMessage(*interactmsg_go, position, HIDE_MSG);
+      collider->SetScale({1.5, 1.5});
     } else if (interaction == Helpers::Interaction::LOOK ||
                interaction == Helpers::Interaction::PLAY) {
       interactMsg = new ActionMessage(*interactmsg_go, position, LOOK_MSG);
+      // collider->SetScale({1, 1})
     } else if (interaction == Helpers::Interaction::SLEEP) {
       interactMsg = new ActionMessage(*interactmsg_go, position, SLEEP_MSG);
+      collider->SetScale({1.5, 1.5});
     }
     interactmsg_go->AddComponent(interactMsg);
     interactMsgGo = state.AddObject(interactmsg_go);
