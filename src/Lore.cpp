@@ -46,7 +46,7 @@ void Lore::Sleep() {
   auto item =
       new Item(*itemGo, "Pé de Cabra",
                "Bom para abrir coisas que normalmente não podem ser abertas.",
-               "assets/img/item/crowbar.png", {176, 368},
+               "assets/img/item/crowbar.png", {291, 58},
                Helpers::KeyType::CROWBAR, 96, 96);
   itemGo->AddComponent(item);
   game.GetCurrentState().AddObject(itemGo);
