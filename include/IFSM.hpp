@@ -38,7 +38,7 @@ class IFSM {
   static Walkable GetWalkable(GameObject& object, GameObject& pivot);
 
  protected:
-  bool UpdateSpeed(float speed);
+  void UpdateSpeed(float speed);
 
   bool UpdatePosition(float dt);
 

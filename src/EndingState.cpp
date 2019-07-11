@@ -13,6 +13,7 @@ void EndingState::Update(float dt) {
     return;
   }
   quitRequested |= im.QuitRequested();
+  popRequested |= im.KeyPress(ESCAPE_KEY);
 
   UpdateArray(dt);
 }
@@ -21,6 +22,8 @@ void EndingState::Start() {
   LoadAssets();
   StartArray();
   started = true;
+  SortObjects();
+  GameData::InitDialog(dialog);
 }
 
 void EndingState::Pause() {}
@@ -28,28 +31,30 @@ void EndingState::Pause() {}
 void EndingState::Resume() {}
 
 void EndingState::LoadAssets() {
-  std::vector<std::pair<std::string, std::string>> good_script = {
-      {"Hope ", "Terry!"},
-      {"Hope: ", "Meu deus, é você mesmo?!"},
-      {"Hope ", "Você está bem?!"},
-      {"Terry ", "Você é... o médico?"},
-      {"Hope ", "Sim! Meu nome é Hope, lembra?"},
-      {"Terry ", "Você não foi... embora?"},
-      {"Hope ", "Eu vim aqui para cuidar de você."},
-      {"Terry ", "Você... é diferente de todos."},
-      {"Terry ", "É diferente do... meu pai."},
-      {"Hope ", "..."},
-      {"Hope ", "Vem... vamos sair daqui."},
-      {"Terry ", "Para onde vamos?"},
-      {"Hope ", "Para um lugar seguro."}};
+  SCRIPT_TYPE good_script = {{"Hope ", "Terry!"},
+                             {"Hope ", "Meu deus, é você mesmo?!"},
+                             {"Hope ", "Você está bem?!"},
+                             {"Terry ", "Você é... o médico?"},
+                             {"Hope ", "Sim! Meu nome é Hope, lembra?"},
+                             {"Terry ", "Você não foi... embora?"},
+                             {"Hope ", "Eu vim aqui para cuidar de você."},
+                             {"Terry ", "Você... é diferente de todos."},
+                             {"Terry ", "É diferente do... meu pai."},
+                             {"Hope ", "..."},
+                             {"Hope ", "Vem... vamos sair daqui."},
+                             {"Terry ", "Para onde vamos?"},
+                             {"Hope ", "Para um lugar seguro."},
+                             {"Fim ", " "}};
 
-  std::vector<std::pair<std::string, std::string>> bad_script = {
+  SCRIPT_TYPE bad_script = {
       {"Sr. e Sra. Hyde, ",
        "Escolhi a profissão de enfermeiro porque gosto de cuidar das pessoas. "
        "Quando cheguei na casa, coisa ruins aconteceram e infelizmente não sei "
        "onde o Terry está. Me desculpe."},
 
-      {" ", "Por favor, não me procurem mais."}};
+      {" ", "Por favor, não me procurem mais."},
+      {"Fim ", " "}};
+
   std::string sprite_path =
       ending == 1 ? BAD_ENDING_SPRITE : GOOD_ENDING_SPRITE;
   dialog = ending == 1 ? bad_script : good_script;
@@ -59,10 +64,11 @@ void EndingState::LoadAssets() {
   background_go->AddComponent(background_sprite);
   objects.push_back(background_go);
 
-  objects.push_back(GameData::DialogGameObject);
-
-  SortObjects();
-  GameData::InitDialog(dialog);
+  auto dialogGo = std::make_shared<GameObject>(1500);
+  auto dialog = new Dialog(*dialogGo);
+  dialogGo->AddComponent(dialog);
+  objects.push_back(dialogGo);
+  GameData::DialogGameObject = dialogGo;
 }
 
 void EndingState::Render() { RenderArray(); }
