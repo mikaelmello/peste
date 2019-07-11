@@ -36,11 +36,14 @@ RoomState::RoomState() {
   currentTileMap->SetParallax(1, 0, 0);
   mapGo->AddComponent(currentTileMap);
   objects.emplace_back(mapGo);
+
+  backgroundSound = std::make_shared<Music>("assets/audio/rainwind.wav");
 }
 
 RoomState::~RoomState() {
   Camera::Unfollow();
   Camera::pos = {0, 0};
+  backgroundSound->Stop();
 }
 
 void RoomState::Update(float dt) {
@@ -117,14 +120,19 @@ void RoomState::Start() {
   LoadAssets();
   StartArray();
   started = true;
+  backgroundSound->Play();
 }
 
 void RoomState::Pause() {
   Camera::Unfollow();
   Camera::pos = {0, 0};
+  backgroundSound->Stop();
 }
 
-void RoomState::Resume() { Camera::Follow(GameData::PlayerGameObject.get()); }
+void RoomState::Resume() {
+  Camera::Follow(GameData::PlayerGameObject.get());
+  backgroundSound->Play();
+}
 
 void RoomState::LoadAssets() {
   Game& game = Game::GetInstance();
