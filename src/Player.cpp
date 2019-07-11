@@ -247,7 +247,7 @@ void Player::Update(float dt) {
     return;
   }
   if (input.IsKeyDown(LSHIFT_KEY) && input.IsKeyDown(SDLK_d)) {
-    position = {50, 900};
+    position = {70, 900};
     return;
   }
   if (input.IsKeyDown(LSHIFT_KEY) && input.IsKeyDown(SDLK_c)) {

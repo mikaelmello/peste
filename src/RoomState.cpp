@@ -389,24 +389,24 @@ void RoomState::LoadFurnitureSecondFloor() {
   // begin last bedroom
   furnitureGo = new GameObject(7);
   furniture =
-      new Furniture(*furnitureGo, "assets/img/furniture/cabinet.png", {35, 870},
-                    Helpers::Interaction::LOOK, true,
-                    {"Nossa... Tem monte de toalha e roupa aqui.",
-                     "Oh! Parece que tem alguma coisa brilhando ali no canto!"},
+      new Furniture(*furnitureGo, "assets/img/furniture/cabinet.png",
+                    {120, 870}, Helpers::Interaction::LOOK, true,
+                    {"Só tem um monte de toalha e roupa aqui.",
+                     "Espero que o resto do quarto seja mais interessante"},
                     true);
   furnitureGo->AddComponent(furniture);
   objects.emplace_back(furnitureGo);
 
   furnitureGo = new GameObject(7);
   furniture = new Furniture(*furnitureGo, "assets/img/furniture/bedgreen.png",
-                            {69, 867}, Helpers::Interaction::SLEEP);
+                            {40, 867}, Helpers::Interaction::SLEEP);
   furnitureGo->AddComponent(furniture);
   objects.emplace_back(furnitureGo);
 
   furnitureGo = new GameObject(7);
   furniture =
       new Furniture(*furnitureGo, "assets/img/furniture/bedside_table.png",
-                    {90, 873}, Helpers::Interaction::NOTHING);
+                    {20, 873}, Helpers::Interaction::NOTHING);
   furnitureGo->AddComponent(furniture);
   objects.emplace_back(furnitureGo);
   // end last bedroom
@@ -638,7 +638,7 @@ void RoomState::LoadStairs() {
 void RoomState::LoadItems() {
   auto itemGo = new GameObject(7);
   auto item = new Item(*itemGo, "Chave 1", "Uma chave com aparência de velha.",
-                       "assets/img/item/key1.png", {20, 887},
+                       "assets/img/item/key1.png", {17, 892},
                        Helpers::KeyType::KEY1, 32, 32);
   itemGo->AddComponent(item);
   objects.emplace_back(itemGo);
