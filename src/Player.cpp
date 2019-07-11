@@ -34,10 +34,10 @@ using namespace Helpers;
 Player::Player(GameObject& associated, Vec2 position)
     : Component(associated),
       position(position),
-      frameCount(1),
-      frameTime(1),
+      frameCount(8),
+      frameTime(0.1),
       lastDirection(Helpers::Direction::NONE) {
-  Sprite* sprite = new Sprite(associated, PLAYER_FRONT);
+  Sprite* sprite = new Sprite(associated, PLAYER_FRONT, 8, 0.1);
   Collider* collider =
       new Collider(associated, {0.5, 0.3}, {0, sprite->GetHeight() * 0.35f});
   associated.AddComponent(sprite);
@@ -369,45 +369,50 @@ bool Player::Is(Types type) const { return type == this->Type; }
 
 void Player::OpenIdleSprite(const std::shared_ptr<Sprite>& sprite,
                             Direction lastDirection) {
-  frameCount = 1;
-  frameTime = 1;
-  sprite->SetFrameCount(frameCount);
-  sprite->SetFrameTime(frameTime);
-
   switch (lastDirection) {
     case Direction::UP:
       sprite->Open(PLAYER_BACK);
+      frameCount = 4;
       break;
     case Direction::DOWN:
       sprite->Open(PLAYER_FRONT);
+      frameCount = 8;
       break;
     case Direction::LEFT:
       sprite->Open(PLAYER_LEFT);
+      frameCount = 4;
       break;
     case Direction::RIGHT:
       sprite->Open(PLAYER_RIGHT);
+      frameCount = 4;
       break;
     case Direction::UPLEFT:
       sprite->Open(PLAYER_BACK);
+      frameCount = 4;
       break;
     case Direction::UPRIGHT:
       sprite->Open(PLAYER_BACK);
+      frameCount = 4;
       break;
     case Direction::DOWNLEFT:
       sprite->Open(PLAYER_FRONT);
+      frameCount = 8;
       break;
     case Direction::DOWNRIGHT:
       sprite->Open(PLAYER_FRONT);
+      frameCount = 8;
       break;
-    case Direction::NONE:
-      sprite->Open(PLAYER_FRONT);
-      break;
+  }
+
+  if (lastDirection != Direction::NONE) {
+    sprite->SetFrameCount(frameCount);
+    frameTime = 0.1;
+    sprite->SetFrameTime(frameTime);
   }
 }
 
 void Player::OpenWalkingSprite(const std::shared_ptr<Sprite>& sprite,
                                Direction direction) {
-  frameCount = 1;
   switch (direction) {
     case Direction::UP:
       sprite->Open(PLAYER_BACK_ANIM);
