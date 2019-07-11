@@ -85,6 +85,12 @@ enum KeyType {
   NOKEY,
 };
 
+enum DoorStyle {
+  DOUBLE,
+  SINGLE,
+  LAB,
+};
+
 }  // end namespace Helpers
 
 #endif

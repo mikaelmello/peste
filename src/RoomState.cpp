@@ -146,6 +146,12 @@ void RoomState::LoadAssets() {
   objects.push_back(playerGo);
   GameData::PlayerGameObject = playerGo;
 
+  auto terryGo = std::make_shared<GameObject>(8);
+  Terry* terry = new Terry(*terryGo, {70, 795});
+  terryGo->AddComponent(terry);
+  GameData::TerryGameObject = terryGo;
+  objects.push_back(terryGo);
+
   // std::cout << objects.size() << std::endl;
 
   // ant = std::make_shared<GameObject>(11);
@@ -216,8 +222,9 @@ void RoomState::LoadFurnitureFirstFloor() {
 
   // begin kitchen
   furnitureGo = new GameObject(6);
-  furniture = new Furniture(*furnitureGo, "assets/img/furniture/table_big.png",
-                            {305, 64}, Helpers::Interaction::NOTHING);
+  furniture =
+      new Furniture(*furnitureGo, "assets/img/furniture/complete_table.png",
+                    {305, 64}, Helpers::Interaction::NOTHING);
   furnitureGo->AddComponent(furniture);
   objects.emplace_back(furnitureGo);
 
@@ -292,7 +299,7 @@ void RoomState::LoadFurnitureSecondFloor() {
 
   furnitureGo = new GameObject(7);
   furniture = new Furniture(*furnitureGo, "assets/img/furniture/clock.png",
-                            {210, 532}, Helpers::Interaction::LOOK, true,
+                            {302, 532}, Helpers::Interaction::LOOK, true,
                             {"Parece que não funciona..."});
   furnitureGo->AddComponent(furniture);
   objects.emplace_back(furnitureGo);
@@ -354,36 +361,29 @@ void RoomState::LoadFurnitureSecondFloor() {
   // end library
 
   // begin bedroom terry
-
-  auto terryGo = std::make_shared<GameObject>(8);
-  Terry* terry = new Terry(*terryGo, {33, 750});
-  terryGo->AddComponent(terry);
-  GameData::TerryGameObject = terryGo;
-  objects.push_back(terryGo);
-
   furnitureGo = new GameObject(7);
   furniture = new Furniture(*furnitureGo, "assets/img/furniture/wardrobe.png",
-                            {118, 719}, Helpers::Interaction::HIDE);
+                            {125, 734}, Helpers::Interaction::HIDE);
   furnitureGo->AddComponent(furniture);
   objects.emplace_back(furnitureGo);
 
   auto terryBedGo = std::make_shared<GameObject>(7);
   furniture = new Furniture(*terryBedGo, "assets/img/furniture/bedTerry.png",
-                            {55, 736}, Helpers::Interaction::HIDE);
+                            {27, 754}, Helpers::Interaction::HIDE);
   terryBedGo->AddComponent(furniture);
   GameData::TerryBedGameObject = terryBedGo;
   objects.push_back(terryBedGo);
 
   furnitureGo = new GameObject(7);
   furniture = new Furniture(*furnitureGo, "assets/img/furniture/toy2.png",
-                            {37, 817}, Helpers::Interaction::LOOK, false,
+                            {48, 821}, Helpers::Interaction::LOOK, false,
                             {"Que brinquedo antigo..."});
   furnitureGo->AddComponent(furniture);
   objects.emplace_back(furnitureGo);
 
   furnitureGo = new GameObject(7);
   furniture = new Furniture(*furnitureGo, "assets/img/furniture/toy3.png",
-                            {52, 807}, Helpers::Interaction::NOTHING, false);
+                            {30, 817}, Helpers::Interaction::NOTHING, false);
   furnitureGo->AddComponent(furniture);
   objects.emplace_back(furnitureGo);
   // end bedroom terry
@@ -401,14 +401,14 @@ void RoomState::LoadFurnitureSecondFloor() {
 
   furnitureGo = new GameObject(7);
   furniture = new Furniture(*furnitureGo, "assets/img/furniture/bedgreen.png",
-                            {69, 867}, Helpers::Interaction::SLEEP);
+                            {90, 867}, Helpers::Interaction::SLEEP);
   furnitureGo->AddComponent(furniture);
   objects.emplace_back(furnitureGo);
 
   furnitureGo = new GameObject(7);
   furniture =
       new Furniture(*furnitureGo, "assets/img/furniture/bedside_table.png",
-                    {90, 873}, Helpers::Interaction::NOTHING);
+                    {110, 873}, Helpers::Interaction::NOTHING);
   furnitureGo->AddComponent(furniture);
   objects.emplace_back(furnitureGo);
   // end last bedroom
@@ -497,7 +497,8 @@ void RoomState::LoadFurnitureBasement() {
       new Furniture(*furnitureGo, "assets/img/furniture/oldpc.png", {123, 1141},
                     Helpers::Interaction::LOOK, true,
                     {"Parece que estavam avancando nos teste da cura da "
-                     "Peste. Mas eu não conheco esses métodos..."});
+                     "Peste...",
+                     "Mas eu não conheco esses métodos..."});
   furnitureGo->AddComponent(furniture);
   objects.emplace_back(furnitureGo);
 
@@ -564,13 +565,12 @@ void RoomState::LoadFurnitureBasement() {
 void RoomState::LoadDoors() {
   // begin ground floor
   auto doorGo = new GameObject(8);
-  auto door =
-      new Door(*doorGo, Helpers::Direction::UP, {256, 224}, false, true);
+  auto door = new Door(*doorGo, Helpers::DoorStyle::DOUBLE, {256, 224}, false);
   doorGo->AddComponent(door);
   objects.emplace_back(doorGo);
 
   doorGo = new GameObject(8);
-  door = new Door(*doorGo, Helpers::Direction::UP, {256, 113}, false, true,
+  door = new Door(*doorGo, Helpers::DoorStyle::DOUBLE, {256, 113}, false,
                   Helpers::KeyType::KEY1);
   doorGo->AddComponent(door);
   objects.emplace_back(doorGo);
@@ -578,23 +578,37 @@ void RoomState::LoadDoors() {
 
   // begin first floor
   doorGo = new GameObject(8);
-  door = new Door(*doorGo, Helpers::Direction::UP, {288, 624}, false, true,
+  door = new Door(*doorGo, Helpers::DoorStyle::DOUBLE, {288, 624}, false,
                   Helpers::KeyType::KEY2);
   doorGo->AddComponent(door);
   objects.emplace_back(doorGo);
 
   doorGo = new GameObject(8);
-  door = new Door(*doorGo, Helpers::Direction::UP, {48, 640}, false, false,
+  door = new Door(*doorGo, Helpers::DoorStyle::SINGLE, {48, 624}, false,
                   Helpers::KeyType::CROWBAR);
   doorGo->AddComponent(door);
   objects.emplace_back(doorGo);
 
   doorGo = new GameObject(8);
-  door = new Door(*doorGo, Helpers::Direction::UP, {96, 704}, false, false,
+  door = new Door(*doorGo, Helpers::DoorStyle::SINGLE, {80, 720}, false,
                   Helpers::KeyType::NOKEY);
   doorGo->AddComponent(door);
   objects.emplace_back(doorGo);
   // begin first floor
+
+  // begin basement
+  doorGo = new GameObject(8);
+  door = new Door(*doorGo, Helpers::DoorStyle::LAB, {192, 1104}, false,
+                  Helpers::KeyType::NOKEY);
+  doorGo->AddComponent(door);
+  objects.emplace_back(doorGo);
+
+  doorGo = new GameObject(8);
+  door = new Door(*doorGo, Helpers::DoorStyle::LAB, {336, 1104}, false,
+                  Helpers::KeyType::NOKEY);
+  doorGo->AddComponent(door);
+  objects.emplace_back(doorGo);
+  // end basement
 }
 
 void RoomState::LoadStairs() {

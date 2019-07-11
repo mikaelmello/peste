@@ -77,7 +77,7 @@ Stairs::Stairs(GameObject& associated, Helpers::Direction direction,
     if (floor != Helpers::Floor::BASEMENT) {
       blocker = new Blocker(*blocker_go, {1, 0.5}, {0, 0.25f});
     } else {
-      blocker = new Blocker(*blocker);
+      blocker = new Blocker(*blocker_go);
     }
   }
 

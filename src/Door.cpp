@@ -11,17 +11,15 @@
 #include "Sprite.hpp"
 #include "State.hpp"
 
-#define LEFT_DOOR_CLOSED "assets/img/doors/door_left_closed.png"
-#define LEFT_DOOR_OPEN "assets/img/doors/door_left_open.png"
-#define RIGHT_DOOR_CLOSED "assets/img/doors/door_right_closed.png"
-#define RIGHT_DOOR_OPEN "assets/img/doors/door_right_open.png"
 #define FRONT_DOOR_CLOSED "assets/img/doors/door_front_closed.png"
 #define FRONT_DOOR_OPEN "assets/img/doors/door_front_open.png"
 #define DOUBLE_DOOR_CLOSED "assets/img/doors/doubleDoor_front_closed.png"
 #define DOUBLE_DOOR_OPEN "assets/img/doors/doubleDoor_front_open.png"
+#define LAB_DOOR_OPEN "assets/img/doors/labdoorOpen.png"
+#define LAB_DOOR_CLOSED "assets/img/doors/labdoor.png"
 
-Door::Door(GameObject& associated, Helpers::Direction direction, Vec2 position,
-           bool open, bool doubledoor, Helpers::KeyType key)
+Door::Door(GameObject& associated, Helpers::DoorStyle style, Vec2 position,
+           bool open, Helpers::KeyType key)
     : Component(associated),
       position(position),
       colliding(false),
@@ -30,31 +28,21 @@ Door::Door(GameObject& associated, Helpers::Direction direction, Vec2 position,
   Collider* collider = new Collider(associated);
   Sprite* sprite = new Sprite(associated);
 
-  if (direction == Helpers::Direction::LEFT) {
-    closePath = LEFT_DOOR_CLOSED;
-    openPath = LEFT_DOOR_OPEN;
-    sprite->Open(LEFT_DOOR_CLOSED);
-    collider->SetScale({2, 1});
-    collider->SetOffset({1, 0});
-  } else if (direction == Helpers::Direction::RIGHT) {
-    closePath = RIGHT_DOOR_CLOSED;
-    openPath = RIGHT_DOOR_OPEN;
-    sprite->Open(RIGHT_DOOR_CLOSED);
-    collider->SetScale({2, 1});
-    collider->SetOffset({1, 0});
-  } else if (direction == Helpers::Direction::UP) {
-    if (doubledoor) {
-      closePath = DOUBLE_DOOR_CLOSED;
-      openPath = DOUBLE_DOOR_OPEN;
-      sprite->Open(DOUBLE_DOOR_CLOSED);
-    } else {
-      closePath = FRONT_DOOR_CLOSED;
-      openPath = FRONT_DOOR_OPEN;
-      sprite->Open(FRONT_DOOR_CLOSED);
-    }
-    collider->SetScale({1, 1.5});
-    collider->SetOffset({0, 0.75});
+  if (style == Helpers::DoorStyle::DOUBLE) {
+    closePath = DOUBLE_DOOR_CLOSED;
+    openPath = DOUBLE_DOOR_OPEN;
+    sprite->Open(DOUBLE_DOOR_CLOSED);
+  } else if (style == Helpers::DoorStyle::SINGLE) {
+    closePath = FRONT_DOOR_CLOSED;
+    openPath = FRONT_DOOR_OPEN;
+    sprite->Open(FRONT_DOOR_CLOSED);
+  } else if (style == Helpers::DoorStyle::LAB) {
+    closePath = LAB_DOOR_CLOSED;
+    openPath = LAB_DOOR_OPEN;
+    sprite->Open(LAB_DOOR_CLOSED);
   }
+  collider->SetScale({1, 1.5});
+  collider->SetOffset({0, 0.75});
 
   associated.box.x = position.x * 8;
   associated.box.y = position.y * 8;
@@ -63,14 +51,8 @@ Door::Door(GameObject& associated, Helpers::Direction direction, Vec2 position,
 
   GameObject* blocker_go = new GameObject(associated.priority);
   blocker_go->box = associated.box;
-  Blocker* blocker;
-
-  if (direction == Helpers::Direction::UP) {
-    blocker =
-        new Blocker(*blocker_go, {1, 0.4}, {0, sprite->GetHeight() * 0.30f});
-  } else {
-    blocker = new Blocker(*blocker_go);
-  }
+  Blocker* blocker =
+      new Blocker(*blocker_go, {1, 0.4}, {0, sprite->GetHeight() * 0.30f});
 
   GameObject* openGo = new GameObject();
   ActionMessage* openMsg =
