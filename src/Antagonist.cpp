@@ -1,5 +1,6 @@
 #include "Antagonist.hpp"
 #include <iostream>
+#include <memory>
 #include <string>
 #include "AttackFSM.hpp"
 #include "Collider.hpp"
@@ -32,6 +33,13 @@ Antagonist::Antagonist(GameObject& associated, std::vector<Vec2> path)
                               CALC_CONST / PATROL_SPEED);
   Collider* collider =
       new Collider(associated, {0.6, 0.15}, {0, sprite->GetHeight() * 0.45f});
+
+  GameObject* pc_go = new GameObject();
+  pc_go->box = associated.box;
+  PriorityChanger* priority_changer =
+      new PriorityChanger(*pc_go, associated, PCType::PCMonster);
+  pc_go->AddComponent(priority_changer);
+  state.AddObject(pc_go);
 
   int tileDim = 8;
   // a position está no meio horizontal e no fim vertical do sprite

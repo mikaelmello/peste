@@ -12,10 +12,16 @@
 #include "Rect.hpp"
 #include "Types.hpp"
 
+enum PCType {
+  PCNormal,
+  PCPlayer,
+  PCMonster,
+};
+
 class PriorityChanger : public Component {
  public:
   PriorityChanger(GameObject& associated, GameObject& object,
-                  bool player = false);
+                  PCType type = PCType::PCNormal);
 
   ~PriorityChanger();
 
@@ -34,9 +40,17 @@ class PriorityChanger : public Component {
   const Types Type = PriorityChangerType;
 
  private:
+  struct GameObjectComp {
+    bool operator()(const GameObject* lhs, const GameObject* rhs) const {
+      return (lhs->box.y + lhs->box.h) < (rhs->box.y + rhs->box.h);
+    }
+  };
+
   GameObject& object;
 
-  bool player;
+  std::vector<GameObject*> currentCollision;
+
+  PCType type;
 };
 
 #endif

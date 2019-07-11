@@ -78,6 +78,4 @@ std::shared_ptr<Component> GameObject::GetComponent(Types type) {
 
 void GameObject::SetPriority(double newPriority) {
   this->priority = newPriority;
-  State& state = Game::GetInstance().GetCurrentState();
-  state.SortObjects();
 }

@@ -57,7 +57,8 @@ Player::Player(GameObject& associated, Vec2 position)
 
   GameObject* pcGo = new GameObject(associated.priority);
   pcGo->box = associated.box;
-  PriorityChanger* priChanger = new PriorityChanger(*pcGo, associated, true);
+  PriorityChanger* priChanger =
+      new PriorityChanger(*pcGo, associated, PCType::PCPlayer);
   pcGo->AddComponent(priChanger);
   priorityChanger_go = state.AddObject(pcGo);
 
@@ -194,7 +195,6 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
   auto stairs_cpt = other->GetComponent(StairsType);
   if (stairs_cpt) {
     if (input.KeyPress(X_KEY)) {
-      std::cout << GameData::PlayerFloor() << std::endl;
       if (GameData::PlayerFloor() == Helpers::Floor::GROUND_FLOOR) {
         if (position.x < 275) {
           position.x = 220;
@@ -225,7 +225,6 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
 void Player::Start() { sleepTimer.Restart(); }
 
 void Player::Update(float dt) {
-  // std::cout << position.ToString() << std::endl;
   Vec2 oldPos(position.x, position.y);
   InputManager& input = InputManager::GetInstance();
   bool canwalk = true;
@@ -394,8 +393,6 @@ void Player::Update(float dt) {
   }
   auto pc = std::dynamic_pointer_cast<PriorityChanger>(pcCpt);
   pc->SetRect(dt, associated.box);
-
-  // std::cout << position.x << " " << position.y << std::endl;
 }
 
 void Player::Render() {}

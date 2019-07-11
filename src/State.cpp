@@ -64,12 +64,10 @@ void State::UpdateArray(float dt) {
     enqueuedObjects.pop();
   }
 
-  if (hasObject) {
-    SortObjects();
-  }
-
   std::for_each(objects.begin(), objects.end(),
                 [&](auto& go) { go->Update(dt); });
+
+  SortObjects();
 }
 
 void State::RenderArray() {
