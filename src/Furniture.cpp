@@ -14,16 +14,19 @@
 
 #define HIDE_MSG "assets/img/hide.png"
 #define LOOK_MSG "assets/img/look.png"
-#define OUT_MSG "assets/img/x.png"
-#define SLEEP_MSG "assets/img/x.png"
+#define OUT_MSG "assets/img/goOut.png"
+#define SLEEP_MSG "assets/img/sleep.png"
 
 Furniture::Furniture(GameObject& associated, const std::string& file,
                      Vec2 position, Helpers::Interaction interaction,
-                     bool fullblock)
+                     bool fullblock, std::vector<std::string> script,
+                     bool special)
     : Component(associated),
       interact(false),
       colliding(false),
-      interaction(interaction) {
+      interaction(interaction),
+      script(script),
+      special(special) {
   Sprite* sprite = new Sprite(associated, file);
   associated.AddComponent(sprite);
 
@@ -38,7 +41,8 @@ Furniture::Furniture(GameObject& associated, const std::string& file,
   associated.box.h = sprite->GetHeight();
 
   if (interaction != Helpers::Interaction::NOTHING) {
-    Collider* collider = new Collider(associated, {1.5, 1.5}, {0.75, 1.5});
+    Collider* collider = new Collider(associated, {1, 1.5},
+                                      {0, (float)(sprite->GetHeight() * 0.25)});
     associated.AddComponent(collider);
 
     interact = true;
@@ -48,11 +52,14 @@ Furniture::Furniture(GameObject& associated, const std::string& file,
 
     if (interaction == Helpers::Interaction::HIDE) {
       interactMsg = new ActionMessage(*interactmsg_go, position, HIDE_MSG);
+      collider->SetScale({1.5, 1.5});
     } else if (interaction == Helpers::Interaction::LOOK ||
                interaction == Helpers::Interaction::PLAY) {
       interactMsg = new ActionMessage(*interactmsg_go, position, LOOK_MSG);
+      // collider->SetScale({1, 1})
     } else if (interaction == Helpers::Interaction::SLEEP) {
       interactMsg = new ActionMessage(*interactmsg_go, position, SLEEP_MSG);
+      collider->SetScale({1.5, 1.5});
     }
     interactmsg_go->AddComponent(interactMsg);
     interactMsgGo = state.AddObject(interactmsg_go);
@@ -122,5 +129,23 @@ void Furniture::ShowInteractionDialog() { interactMsgGo->EnableRender(); }
 void Furniture::HideInteractionDialog() { interactMsgGo->DisableRender(); }
 
 Helpers::Interaction Furniture::GetInteraction() { return interaction; }
+
+void Furniture::RemoveInteraction() {
+  interaction = Helpers::Interaction::NOTHING;
+  interactMsgGo->RequestDelete();
+  interact = false;
+}
+
+void Furniture::Look() {
+  SCRIPT_TYPE s;
+  for (auto aux : script) {
+    s.push_back({"HOPE", aux});
+  }
+  if (special && GameData::got_key1) {
+    s.pop_back();
+  }
+
+  GameData::InitDialog(s);
+}
 
 bool Furniture::Is(Types type) const { return type == this->Type; }

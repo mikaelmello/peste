@@ -29,6 +29,10 @@ class RoomState : public State {
 
   void Render();
 
+  void LoadLibraryKey();
+
+  void LoadTrapdoor();
+
  private:
   void LoadFurnitureFirstFloor();
 
@@ -40,11 +44,11 @@ class RoomState : public State {
 
   void LoadStairs();
 
-  void LoadAntagonist();
-
   void LoadItems();
 
   std::shared_ptr<GameObject> ant;
+
+  std::shared_ptr<Music> backgroundSound;
 
   Helpers::Floor last_known = Helpers::Floor::GROUND_FLOOR;
 };

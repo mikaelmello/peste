@@ -10,6 +10,7 @@
 #include "GameData.hpp"
 #include "GameObject.hpp"
 #include "InputManager.hpp"
+#include "Lore.hpp"
 #include "PriorityChanger.hpp"
 #include "Sprite.hpp"
 #include "TileMap.hpp"
@@ -28,11 +29,10 @@ Terry::Terry(GameObject& associated, Vec2 position)
 
   State& state = Game::GetInstance().GetCurrentState();
 
-  auto tilemap = state.GetCurrentTileMap();
-  int tileDim = tilemap->GetLogicalTileDimension();
-
-  associated.box.x = position.x * tileDim;
-  associated.box.y = position.y * tileDim;
+  associated.box.x = position.x * 8;
+  associated.box.y = position.y * 8;
+  associated.box.w = sprite->GetWidth();
+  associated.box.h = sprite->GetHeight();
 
   GameObject* bgo = new GameObject(associated.priority);
   bgo->box = associated.box;
@@ -49,7 +49,7 @@ Terry::Terry(GameObject& associated, Vec2 position)
 
   GameObject* talkGo = new GameObject();
   ActionMessage* talkMsg =
-      new ActionMessage(*talkGo, position, "assets/img/open_msg.png");
+      new ActionMessage(*talkGo, position, "assets/img/talk.png");
   talkGo->AddComponent(talkMsg);
   talkMessageGo = state.AddObject(talkGo);
 }
@@ -90,24 +90,25 @@ void Terry::ShowTalkDialog() { talkMessageGo->EnableRender(); }
 void Terry::HideTalkDialog() { talkMessageGo->DisableRender(); }
 
 void Terry::Talk() {
-  std::vector<std::pair<std::string, std::string>> scripts;
-  std::pair<std::string, std::string> aux;
-  aux.first = "HOPE";
-  aux.second =
-      "Hope esta falando besteira para o Terry e Lorem Ipsum is simply dummy "
-      "text of the printing and typesetting industry. Lorem Ipsum has been "
-      "the "
-      "industry's standard dummy text ever since the 1500s, when an unknown "
-      "printer took a galley of type and scrambled it to make a type "
-      "specimen "
-      "book.";
-  scripts.push_back(aux);
-
-  aux.first = "TERRY";
-  aux.second = "Terry esta pistolito com o Hope.";
-  scripts.push_back(aux);
-
-  GameData::InitDialog(scripts);
+  SCRIPT_TYPE scripts[] = {
+      {
+          {"Hope", "Você vive aqui há muito tempo?"},
+          {"Terry", "..."},
+          {"Hope", "Sua casa é bonita. Bem grande..."},
+          {"Terry", "... é, muito."},
+          {"Hope", "Tem um monte de brinquedo aqui, vamos lá!"},
+      },
+      {
+          {"Hope", "Você tem alguma brincadeira favorita?"},
+          {"Terry", "... sim."},
+          {"Hope", "Qual?"},
+      },
+      {
+          {"Hope", "Tá tudo bem?"},
+      },
+  };
+  Lore::NicePerson = true;
+  GameData::InitDialog(scripts[rand() % 3]);
 }
 
 bool Terry::Is(Types type) const { return type == this->Type; }

@@ -20,6 +20,7 @@ std::vector<Vec2> Pathfinder::Astar::Run(Vec2& s, Vec2& d) {
   std::pair<int, int> dest = {d.x, d.y};
 
   if (!Helpers::CanWalk(object, start)) {
+    printf("%s\n", s.ToString().c_str());
     throw std::invalid_argument("Pathfinder: current position is invalid");
   }
 

@@ -18,15 +18,15 @@ Dialog::Dialog(GameObject& associated) : Component(associated) {
 
   GameObject* interlocutor_go = new GameObject(associated.priority + 1);
   Text* interlocutor =
-      new Text(*interlocutor_go, "assets/font/tox-typewriter.ttf", 25,
-               Text::BLENDED_WRAPPED, " ", {0, 0, 0, 0}, associated.box.w - 26);
+      new Text(*interlocutor_go, "assets/font/tox-typewriter.ttf", 35,
+               Text::BLENDED_WRAPPED, " ", {0, 0, 0, 0}, associated.box.w - 80);
   interlocutor_go->AddComponent(interlocutor);
   interlocutorGo = state.AddObject(interlocutor_go);
 
   GameObject* text_go = new GameObject(associated.priority + 1);
   Text* txt =
       new Text(*text_go, "assets/font/tox-typewriter.ttf", 25,
-               Text::BLENDED_WRAPPED, " ", {0, 0, 0, 0}, associated.box.w - 26);
+               Text::BLENDED_WRAPPED, " ", {0, 0, 0, 0}, associated.box.w - 80);
   text_go->AddComponent(txt);
   textGo = state.AddObject(text_go);
 
@@ -79,8 +79,8 @@ void Dialog::UpdateTexts() {
   associated.box = Rect(43, 500, 1024, 183) + cameraPos;
   interlocutorGo->box.x = associated.box.x + 35;
   interlocutorGo->box.y = associated.box.y + 20;
-  textGo->box.x = associated.box.x + 25;
-  textGo->box.y = associated.box.y + 45;
+  textGo->box.x = associated.box.x + 36;
+  textGo->box.y = associated.box.y + 70;
 
   auto interlocutorCpt = interlocutorGo->GetComponent(TextType);
   auto textCpt = textGo->GetComponent(TextType);

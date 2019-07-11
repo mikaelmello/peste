@@ -12,14 +12,14 @@
 #include "GameObject.hpp"
 #include "InputManager.hpp"
 #include "Item.hpp"
+#include "Lore.hpp"
 #include "PriorityChanger.hpp"
+#include "SleepState.hpp"
 #include "Sprite.hpp"
 #include "TileMap.hpp"
 #include "Types.hpp"
 
 using namespace Helpers;
-
-#define SCRIPT_TYPE std::vector<std::pair<std::string, std::string>>
 
 #define PLAYER_FRONT_ANIM "assets/img/hope/front_anim.png"
 #define PLAYER_BACK_ANIM "assets/img/hope/back_anim.png"
@@ -31,13 +31,19 @@ using namespace Helpers;
 #define PLAYER_LEFT "assets/img/hope/left.png"
 #define PLAYER_RIGHT "assets/img/hope/right.png"
 
+std::vector<std::string> YawnSounds = {
+    PLAYER_YAWN_SOUND_1,
+    PLAYER_YAWN_SOUND_2,
+    PLAYER_YAWN_SOUND_3,
+};
+
 Player::Player(GameObject& associated, Vec2 position)
     : Component(associated),
       position(position),
-      frameCount(1),
-      frameTime(1),
+      frameCount(8),
+      frameTime(0.1),
       lastDirection(Helpers::Direction::NONE) {
-  Sprite* sprite = new Sprite(associated, PLAYER_FRONT);
+  Sprite* sprite = new Sprite(associated, PLAYER_FRONT, 8, 0.1);
   Collider* collider =
       new Collider(associated, {0.5, 0.3}, {0, sprite->GetHeight() * 0.35f});
   associated.AddComponent(sprite);
@@ -54,10 +60,9 @@ Player::Player(GameObject& associated, Vec2 position)
   pcGo->AddComponent(priChanger);
   priorityChanger_go = state.AddObject(pcGo);
 
-  Sound* sound = new Sound(associated);
-  associated.AddComponent(sound);
-  auto sound_cpt = associated.GetComponent(SoundType);
-  sound_ptr = std::dynamic_pointer_cast<Sound>(sound_cpt);
+  sound = std::make_shared<Sound>(associated);
+  walkingSound = std::make_shared<Sound>(associated);
+  walkingSound->Open(PLAYER_WALKING_SOUND);
 }
 
 Player::~Player() { priorityChanger_go->RequestDelete(); }
@@ -75,6 +80,9 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
       auto item = std::dynamic_pointer_cast<Item>(item_cpt);
       if (item->GetKeyType() != Helpers::KeyType::NOKEY) {
         keys.push_back(item->GetKeyType());
+        if (item->GetKeyType() == Helpers::KeyType::KEY1) {
+          GameData::got_key1 = true;
+        }
       }
       auto ok = GameData::AddToInventory(other);
       if (!ok) {
@@ -88,45 +96,64 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
   auto door_cpt = other->GetComponent(DoorType);
   if (door_cpt) {
     if (input.KeyPress(X_KEY)) {
+      auto soundPlayed = false;
       auto door = std::dynamic_pointer_cast<Door>(door_cpt);
       if (door->GetKey() != Helpers::KeyType::NOKEY) {
         if (std::find(keys.begin(), keys.end(), door->GetKey()) == keys.end()) {
-          if (door->GetKey() == door->GetKey() == Helpers::KeyType::CROWBAR) {
-            SCRIPT_TYPE s = {std::make_pair<std::string, std::string>(
-                "HOPE", "Está emperrada, não consigo abrir...")};
+          if (door->GetKey() == Helpers::KeyType::CROWBAR) {
+            SCRIPT_TYPE s = {
+                {"HOPE", "Está emperrada, não consigo abrir..."},
+                {"HOPE",
+                 "A fechadura parece estar quebrada, como será que vou "
+                 "entrar?"},
+                {"HOPE",
+                 "Acho que nenhuma chave vai me ajudar a abrir esta porta..."},
+            };
             // inserir som de porta emperrada
             GameData::InitDialog(s);
           } else {
-            sound_ptr->Open("assets/audio/doors/locked_door.wav");
-            sound_ptr->Play();
-            SCRIPT_TYPE s = {std::make_pair<std::string, std::string>(
-                "HOPE", "Está trancado, onde será que está a chave?")};
+            SCRIPT_TYPE s[] = {
+                {{"HOPE", "Está trancado, onde será que está a chave?"}},
+                {{"HOPE", "Não tenho a chave daqui..."}},
+                {{"HOPE", "Preciso da chave..."}},
+            };
             // inserir som de porta trancada
-            GameData::InitDialog(s);
+            GameData::InitDialog(s[rand() % 3]);
           }
+          sound->Open("assets/audio/doors/locked_door.wav");
+          sound->Play();
           return;
         } else {
           if (door->GetKey() == Helpers::KeyType::CROWBAR) {
-            SCRIPT_TYPE s = {std::make_pair<std::string, std::string>(
-                "HOPE",
-                "Vou tentar forçar a porta com isso aqui... Consegui!")};
+            SCRIPT_TYPE s = {
+                {"HOPE", "Usar o pé de cabra foi uma ótima ideia!"},
+                {"HOPE",
+                 "Só com um pé de cabra pra conseguir abrir esta porta "
+                 "mesmo."}};
             // inserir som de porta sendo arrombada
             GameData::InitDialog(s);
+            Lore::FirstMonsterSpawn();
           } else {
-            sound_ptr->Open("assets/audio/doors/open_door.wav");
-            sound_ptr->Play();
-            SCRIPT_TYPE s = {std::make_pair<std::string, std::string>(
-                "HOPE", "Consegui destrancar!")};
+            SCRIPT_TYPE s = {{"HOPE", "Consegui destrancar!"},
+                             {"HOPE", "A chave era a certa!"}};
             // inserir som de porta abrindo
             GameData::InitDialog(s);
           }
+          soundPlayed = true;
+          sound->Open("assets/audio/doors/open_door.wav");
+          sound->Play();
           door->SetKey(Helpers::KeyType::NOKEY);
         }
       }
-      if (door->IsOpen())
+      if (!soundPlayed) {
+        sound->Open("assets/audio/doors/open_door_short.wav");
+        sound->Play();
+      }
+      if (door->IsOpen()) {
         door->Close();
-      else
+      } else {
         door->Open();
+      }
     }
   }
 
@@ -143,11 +170,16 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
           GameData::player_is_hidden = false;
         }
       } else if (furniture->GetInteraction() == Helpers::Interaction::PLAY) {
-        sound_ptr->Open("assets/audio/furniture/piano.wav");
-        sound_ptr->Play();
+        sound->Open("assets/audio/furniture/piano.wav");
+        sound->Play();
         SCRIPT_TYPE s = {std::make_pair<std::string, std::string>(
             "HOPE", "Um piano de cauda? Nossa, que luxo!")};
         GameData::InitDialog(s);
+      } else if (furniture->GetInteraction() == Helpers::Interaction::LOOK) {
+        furniture->Look();
+      } else if (furniture->GetInteraction() == Helpers::Interaction::SLEEP) {
+        furniture->RemoveInteraction();
+        Lore::Sleep();
       }
     }
   }
@@ -155,18 +187,19 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
   auto stairs_cpt = other->GetComponent(StairsType);
   if (stairs_cpt) {
     if (input.KeyPress(X_KEY)) {
-      std::cout << GameData::hope_is_in << std::endl;
-      if (GameData::hope_is_in == Helpers::Floor::GROUND_FLOOR) {
-        GameData::hope_is_in = Helpers::Floor::FIRST_FLOOR;
+      std::cout << GameData::PlayerFloor() << std::endl;
+      if (GameData::PlayerFloor() == Helpers::Floor::GROUND_FLOOR) {
         if (position.x < 275) {
           position.x = 220;
           position.y = 580;
-        } else {
+        } else if (position.x < 373) {
           position.x = 350;
           position.y = 580;
+        } else {
+          position.x = 366;
+          position.y = 1297;
         }
-      } else if (GameData::hope_is_in == Helpers::Floor::FIRST_FLOOR) {
-        GameData::hope_is_in = Helpers::Floor::GROUND_FLOOR;
+      } else if (GameData::PlayerFloor() == Helpers::Floor::FIRST_FLOOR) {
         if (position.x < 275) {
           position.x = 220;
           position.y = 211;
@@ -174,21 +207,54 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
           position.x = 350;
           position.y = 211;
         }
+      } else {
+        position.x = 388;
+        position.y = 206;
       }
     }
   }
 }
 
-void Player::Start() {}
+void Player::Start() { sleepTimer.Restart(); }
 
 void Player::Update(float dt) {
+  // std::cout << position.ToString() << std::endl;
   Vec2 oldPos(position.x, position.y);
   InputManager& input = InputManager::GetInstance();
   bool canwalk = true;
   auto tilemap = Game::GetInstance().GetCurrentState().GetCurrentTileMap();
-  int tileDim = tilemap->GetLogicalTileDimension();
+  int tileDim = 8;
 
   if (GameData::player_is_hidden) return;
+
+  if (Lore::Slept == 0) {
+    sleepTimer.Update(dt);
+    int limit = 30;
+    if (sleepTimer.Get() > limit &&
+        !GameData::DialogGameObject->IsRendering()) {
+      SCRIPT_TYPE scripts[] = {
+          {
+              {"Hope", "Que sono..."},
+          },
+          {
+              {"Hope", "Não aguento mais ficar em pé... onde fica uma cama?"},
+          },
+          {
+              {"Hope", "Estou caindo de sono, preciso dormir..."},
+          },
+      };
+      sound->Open(YawnSounds[rand() % 3]);
+      sound->Play();
+      sleepTimer.Restart();
+      GameData::InitDialog(scripts[rand() % 3]);
+    }
+  } else if (Lore::Slept == 1) {
+    SCRIPT_TYPE script = {
+        {"Hope", "MEU DEUS! QUE BARULHO É ESSE?!?!"},
+    };
+    GameData::InitDialog(script);
+    Lore::Slept++;
+  }
 
   auto spriteCpt = associated.GetComponent(SpriteType);
   auto colliderCpt = associated.GetComponent(ColliderType);
@@ -197,13 +263,29 @@ void Player::Update(float dt) {
     throw std::runtime_error("Nao tem sprite nem collider no player");
   }
 
+  // hack remove
+  if (input.IsKeyDown(LSHIFT_KEY) && input.IsKeyDown(SDLK_t)) {
+    position = {50, 800};
+    return;
+  }
+  if (input.IsKeyDown(LSHIFT_KEY) && input.IsKeyDown(SDLK_d)) {
+    position = {70, 900};
+    return;
+  }
+  if (input.IsKeyDown(LSHIFT_KEY) && input.IsKeyDown(SDLK_c)) {
+    position = {291, 58};
+    return;
+  }
+
   auto sprite = std::dynamic_pointer_cast<Sprite>(spriteCpt);
   auto collider = std::dynamic_pointer_cast<Collider>(colliderCpt);
 
   auto move = speed * dt;
+  auto nowRunning = false;
   if (input.IsKeyDown(LSHIFT_KEY)) {
-    move *= 1.5;
-    sprite->SetFrameTime(frameTime / 1.5f);
+    nowRunning = true;
+    move *= 2;
+    sprite->SetFrameTime(frameTime / 2);
   } else {
     sprite->SetFrameTime(frameTime);
   }
@@ -268,9 +350,27 @@ void Player::Update(float dt) {
   auto direction = combine_moves(up, down, left, right);
 
   if (direction == Direction::NONE) {
+    running = false;
     OpenIdleSprite(sprite, lastDirection);
-  } else if (lastDirection != direction) {
-    OpenWalkingSprite(sprite, direction);
+  } else {
+    walkSoundTimer.Update(dt);
+    float timeout = running ? 0.218 : 0.459;
+    if (nowRunning != running) {
+      running = nowRunning;
+      walkingSound->Open(running ? PLAYER_RUNNING_SOUND : PLAYER_WALKING_SOUND);
+    }
+
+    if (walkSoundTimer.Get() >= timeout) {
+      walkSoundTimer.Restart();
+      if (nowRunning) {
+        walkingSound->Play(1, 32);
+      } else {
+        walkingSound->Play(1, 32);
+      }
+    }
+    if (lastDirection != direction) {
+      OpenWalkingSprite(sprite, direction);
+    }
   }
   lastDirection = direction;
 
@@ -283,69 +383,60 @@ void Player::Update(float dt) {
   }
   auto pc = std::dynamic_pointer_cast<PriorityChanger>(pcCpt);
   pc->SetRect(dt, associated.box);
+
+  std::cout << position.x << " " << position.y << std::endl;
 }
 
-void Player::Render() {
-#if DEBUG
-  Vec2 point = Vec2(0, 0) - Camera::pos;
-  SDL_Point points[5];
-  points[0] = {(int)point.x, (int)point.y};
-  points[4] = {(int)point.x, (int)point.y};
-
-  point = (Vec2(1024, 0)) - Camera::pos;
-  points[1] = {(int)point.x, (int)point.y};
-
-  point = (Vec2(1024, 768)) - Camera::pos;
-  points[2] = {(int)point.x, (int)point.y};
-
-  point = (Vec2(0, 768)) - Camera::pos;
-  points[3] = {(int)point.x, (int)point.y};
-#endif
-}
+void Player::Render() {}
 
 bool Player::Is(Types type) const { return type == this->Type; }
 
 void Player::OpenIdleSprite(const std::shared_ptr<Sprite>& sprite,
                             Direction lastDirection) {
-  frameCount = 1;
-  frameTime = 1;
-  sprite->SetFrameCount(frameCount);
-  sprite->SetFrameTime(frameTime);
-
   switch (lastDirection) {
     case Direction::UP:
       sprite->Open(PLAYER_BACK);
+      frameCount = 4;
       break;
     case Direction::DOWN:
       sprite->Open(PLAYER_FRONT);
+      frameCount = 8;
       break;
     case Direction::LEFT:
       sprite->Open(PLAYER_LEFT);
+      frameCount = 4;
       break;
     case Direction::RIGHT:
       sprite->Open(PLAYER_RIGHT);
+      frameCount = 4;
       break;
     case Direction::UPLEFT:
       sprite->Open(PLAYER_BACK);
+      frameCount = 4;
       break;
     case Direction::UPRIGHT:
       sprite->Open(PLAYER_BACK);
+      frameCount = 4;
       break;
     case Direction::DOWNLEFT:
       sprite->Open(PLAYER_FRONT);
+      frameCount = 8;
       break;
     case Direction::DOWNRIGHT:
       sprite->Open(PLAYER_FRONT);
+      frameCount = 8;
       break;
-    case Direction::NONE:
-      sprite->Open(PLAYER_FRONT);
-      break;
+  }
+
+  if (lastDirection != Direction::NONE) {
+    sprite->SetFrameCount(frameCount);
+    frameTime = 0.1;
+    sprite->SetFrameTime(frameTime);
   }
 }
 
 void Player::OpenWalkingSprite(const std::shared_ptr<Sprite>& sprite,
                                Direction direction) {
-  frameCount = 1;
   switch (direction) {
     case Direction::UP:
       sprite->Open(PLAYER_BACK_ANIM);
@@ -384,6 +475,6 @@ void Player::OpenWalkingSprite(const std::shared_ptr<Sprite>& sprite,
   }
 
   sprite->SetFrameCount(frameCount);
-  frameTime = 0.4 / frameCount;
+  frameTime = 0.8 / frameCount;
   sprite->SetFrameTime(frameTime);
 }

@@ -17,7 +17,7 @@ class Item : public Component {
  public:
   Item(GameObject& associated, const std::string& name,
        const std::string& description, const std::string& spritePath, Vec2 pos,
-       Helpers::KeyType keyType = Helpers::KeyType::NOKEY);
+       Helpers::KeyType keyType = Helpers::KeyType::NOKEY, int maxW = 0, int maxH = 0);
 
   ~Item();
 

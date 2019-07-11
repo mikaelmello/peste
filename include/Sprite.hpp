@@ -54,7 +54,7 @@ class Sprite : public Component {
   Vec2 GetScale();
 
   std::string GetFile();
-  
+
   int GetFrameCount() const;
 
   float GetFrameTime() const;

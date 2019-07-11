@@ -22,13 +22,15 @@ class Sound : public Component {
 
   void Open(const std::string& file);
 
-  void Play(int times = 1);
+  void Play(int times = 1, int volume = MIX_MAX_VOLUME);
 
   void Stop();
 
   void Update(float dt) override;
 
   bool Is(Types type) const override;
+
+  bool IsPlaying();
 
   void Render() override;
 

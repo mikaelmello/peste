@@ -41,6 +41,9 @@ void MenuState::Update(float dt) {
     throw std::runtime_error("sem som em MenuState::Update");
   }
   auto sound = std::dynamic_pointer_cast<Sound>(sound_cpt);
+  played = true;
+  sound->Stop();
+  Game::GetInstance().Push(new RoomState());
 
   if (im.KeyPress(SPACE_BAR_KEY)) {
     switch (options->GetOperation()) {

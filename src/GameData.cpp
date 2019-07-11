@@ -1,19 +1,28 @@
 #include "GameData.hpp"
 #include <memory>
+#include "Antagonist.hpp"
 #include "Helpers.hpp"
 #include "Item.hpp"
 #include "Types.hpp"
 
+std::shared_ptr<GameObject> GameData::MonsterGameObject;
 std::shared_ptr<GameObject> GameData::PlayerGameObject;
 std::shared_ptr<GameObject> GameData::DialogGameObject;
+std::shared_ptr<GameObject> GameData::TerryBedGameObject;
+std::shared_ptr<GameObject> GameData::TerryGameObject;
 
 std::vector<std::shared_ptr<GameObject>> GameData::PlayerInventory;
 
 bool GameData::player_was_hit = false;
 bool GameData::player_is_hidden = false;
-int GameData::InventoryPage = 0;
+bool GameData::can_visit_basement = false;
 
-Helpers::Floor GameData::hope_is_in = Helpers::Floor::GROUND_FLOOR;
+Rect GameData::Basement = Rect(0, 8000, 5000, 4000);
+Rect GameData::Floor1 = Rect(0, 38, 5000, 3500);
+Rect GameData::Floor2 = Rect(0, 4100, 5000, 4000);
+
+int GameData::InventoryPage = 0;
+bool GameData::got_key1 = false;
 
 bool GameData::AddToInventory(std::shared_ptr<GameObject> item) {
   auto item_type_cpt = item->GetComponent(ItemType);
@@ -43,4 +52,97 @@ void GameData::InitDialog(SCRIPT_TYPE script) {
   auto dialog = std::dynamic_pointer_cast<Dialog>(dialogCpt);
 
   dialog->SetScript(script);
+}
+
+bool GameData::CanUseLamp() {
+  unsigned c = 0;
+  for (auto i : PlayerInventory) {
+    auto item_cpt = i->GetComponent(ItemType);
+    if (!item_cpt) {
+      throw std::runtime_error("sem item em GameData::CanVisitBasement");
+    }
+    auto item = std::dynamic_pointer_cast<Item>(item_cpt);
+
+    if (item->GetName() == "Isqueiro")
+      c++;
+    else if (item->GetName() == "Lamparina")
+      c++;
+    else if (item->GetName() == "Óleo")
+      c++;
+  }
+
+  return c >= 3;
+}
+
+bool GameData::HasCrowbar() {
+  for (auto i : PlayerInventory) {
+    auto item_cpt = i->GetComponent(ItemType);
+    if (!item_cpt) {
+      throw std::runtime_error("sem item em GameData::CanDefendYourself");
+    }
+    auto item = std::dynamic_pointer_cast<Item>(item_cpt);
+
+    if (item->GetName() == "Pé de cabra") return true;
+  }
+  return false;
+}
+
+
+void GameData::LoadAntagonistPaths() {
+  if (!MonsterGameObject) {
+    return;
+  }
+
+  std::vector<Vec2> path;
+
+  switch (GameData::PlayerFloor()) {
+    case Helpers::Floor::BASEMENT:
+      path = {{215, 1092}};
+      break;
+    case Helpers::Floor::GROUND_FLOOR:
+      path = {{263, 297}, {361, 297}, {351, 394}, {89, 383},
+              {203, 296}, {268, 202}, {253, 93},  {82, 118},
+              {82, 243},  {40, 76},   {197, 80},  {276, 202}};
+      break;
+    case Helpers::Floor::FIRST_FLOOR:
+      path = {{347, 579}, {175, 582}, {169, 698}, {54, 696},  {66, 613},
+              {106, 698}, {93, 784},  {180, 713}, {187, 605}, {286, 609}};
+      break;
+    default:
+      path = {{263, 297}};
+      break;
+  }
+
+  auto ant_cpt = MonsterGameObject->GetComponent(AntagonistType);
+  if (!ant_cpt) {
+    throw std::runtime_error("sem antagonista em RoomState::LoadAntagonist");
+  }
+  auto antagonista = std::dynamic_pointer_cast<Antagonist>(ant_cpt);
+  antagonista->NewPatrolPath(path);
+}
+
+Helpers::Floor GameData::PlayerFloor() {
+  auto playerPos = PlayerGameObject->box.Center();
+  if (Basement.Contains(playerPos)) {
+    return Helpers::Floor::BASEMENT;
+  }
+  if (Floor1.Contains(playerPos)) {
+    return Helpers::Floor::GROUND_FLOOR;
+  }
+  if (Floor2.Contains(playerPos)) {
+    return Helpers::Floor::FIRST_FLOOR;
+  }
+}
+
+Helpers::Floor GameData::MonsterFloor() {
+  auto monsterPos = MonsterGameObject->box.Center();
+  if (Basement.Contains(monsterPos)) {
+    return Helpers::Floor::BASEMENT;
+  }
+  if (Floor1.Contains(monsterPos)) {
+    return Helpers::Floor::GROUND_FLOOR;
+  }
+  if (Floor2.Contains(monsterPos)) {
+    return Helpers::Floor::FIRST_FLOOR;
+  }
 }

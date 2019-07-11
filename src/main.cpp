@@ -1,12 +1,12 @@
 #define INCLUDE_SDL
 #include <iostream>
-#include "EnemyState.hpp"
 #include "Game.hpp"
 #include "MenuState.hpp"
 #include "SDL_include.h"
 
 int main() {
   try {
+    srand(time(NULL));
     auto roomState = new MenuState();
     Game& game = Game::GetInstance();
     game.Push(roomState);
