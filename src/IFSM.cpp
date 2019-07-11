@@ -42,7 +42,7 @@ bool IFSM::UpdatePosition(float dt) {
     movesLeft = 0;
   }
 
-  if (currentMoveIndex >= 0 && currentMoveIndex < path.size()) {
+  if (currentMoveIndex < path.size()) {
     ant->position = path[currentMoveIndex];
     ant->paths.top().first = currentMoveIndex;
   }
@@ -50,7 +50,7 @@ bool IFSM::UpdatePosition(float dt) {
   return shouldPop;
 }
 
-bool IFSM::UpdateSpeed(float speed) {
+void IFSM::UpdateSpeed(float speed) {
   if (speed < 0) {
     throw std::invalid_argument("speed menor que 0 em IFSM::UpdateSpeed");
   }

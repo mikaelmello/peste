@@ -437,6 +437,9 @@ void Player::OpenIdleSprite(const std::shared_ptr<Sprite>& sprite,
       sprite->Open(PLAYER_FRONT);
       frameCount = 8;
       break;
+    default:
+      sprite->Open(PLAYER_FRONT);
+      frameCount = 8;
   }
 
   if (lastDirection != Direction::NONE) {

@@ -74,6 +74,7 @@ enum Floor {
   BASEMENT,
   GROUND_FLOOR,
   FIRST_FLOOR,
+  NO_FLOOR,
 };
 
 enum KeyType {
