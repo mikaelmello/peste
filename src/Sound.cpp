@@ -23,19 +23,22 @@ Sound::~Sound() {}
 
 void Sound::Open(const std::string& file) { chunk = Resources::GetSound(file); }
 
-void Sound::Play(int times) {
+void Sound::Play(int times, int volume) {
   int availableChannel = Mix_PlayChannel(-1, chunk.get(), times - 1);
   if (availableChannel == -1) {
     throw std::runtime_error("Could not play sound: " +
                              std::string(Mix_GetError()));
   }
-  Mix_Volume(availableChannel, MIX_MAX_VOLUME);
+  Mix_Volume(availableChannel, volume);
   channel = availableChannel;
 }
+
+bool Sound::IsPlaying() { return channel != -1; }
 
 void Sound::Stop() {
   if (chunk && channel != -1) {
     Mix_HaltChannel(channel);
+    channel = -1;
   }
 }
 

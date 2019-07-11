@@ -14,6 +14,9 @@
 #include "Sprite.hpp"
 #include "Types.hpp"
 
+#define PLAYER_WALKING_SOUND "assets/audio/hope/walking.wav"
+#define PLAYER_RUNNING_SOUND "assets/audio/hope/running.wav"
+
 class Player : public Component {
  public:
   Player(GameObject& associated, Vec2 position);
@@ -35,13 +38,17 @@ class Player : public Component {
   Vec2 position;
 
  private:
-  const double speed = 40;
+  const double speed = 30;
 
   int frameCount;
 
   float frameTime;
 
+  bool running = false;
+
   Timer sleepTimer;
+
+  Timer walkSoundTimer;
 
   void OpenIdleSprite(const std::shared_ptr<Sprite>& sprite,
                       Helpers::Direction lastDirection);
@@ -55,7 +62,9 @@ class Player : public Component {
 
   std::vector<Helpers::KeyType> keys;
 
-  std::shared_ptr<Sound> sound_ptr;
+  std::shared_ptr<Sound> sound;
+
+  std::shared_ptr<Sound> walkingSound;
 };
 
 #endif

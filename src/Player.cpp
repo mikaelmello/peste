@@ -54,10 +54,9 @@ Player::Player(GameObject& associated, Vec2 position)
   pcGo->AddComponent(priChanger);
   priorityChanger_go = state.AddObject(pcGo);
 
-  Sound* sound = new Sound(associated);
-  associated.AddComponent(sound);
-  auto sound_cpt = associated.GetComponent(SoundType);
-  sound_ptr = std::dynamic_pointer_cast<Sound>(sound_cpt);
+  sound = std::make_shared<Sound>(associated);
+  walkingSound = std::make_shared<Sound>(associated);
+  walkingSound->Open(PLAYER_WALKING_SOUND);
 }
 
 Player::~Player() { priorityChanger_go->RequestDelete(); }
@@ -100,9 +99,9 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
             // inserir som de porta emperrada
             GameData::InitDialog(s);
           } else {
-            sound_ptr->Stop();
-            sound_ptr->Open("assets/audio/doors/locked_door.wav");
-            sound_ptr->Play();
+            sound->Stop();
+            sound->Open("assets/audio/doors/locked_door.wav");
+            sound->Play();
             SCRIPT_TYPE s[] = {
                 {{"HOPE", "Está trancado, onde será que está a chave?"}},
                 {{"HOPE", "Não tenho a chave daqui..."}},
@@ -121,9 +120,8 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
             GameData::InitDialog(s);
             Lore::FirstMonsterSpawn();
           } else {
-            sound_ptr->Stop();
-            sound_ptr->Open("assets/audio/doors/open_door.wav");
-            sound_ptr->Play();
+            sound->Open("assets/audio/doors/open_door.wav");
+            sound->Play();
             SCRIPT_TYPE s = {std::make_pair<std::string, std::string>(
                 "HOPE", "Consegui destrancar!")};
             // inserir som de porta abrindo
@@ -152,9 +150,8 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
           GameData::player_is_hidden = false;
         }
       } else if (furniture->GetInteraction() == Helpers::Interaction::PLAY) {
-        sound_ptr->Stop();
-        sound_ptr->Open("assets/audio/furniture/piano.wav");
-        sound_ptr->Play();
+        sound->Open("assets/audio/furniture/piano.wav");
+        sound->Play();
         SCRIPT_TYPE s = {std::make_pair<std::string, std::string>(
             "HOPE", "Um piano de cauda? Nossa, que luxo!")};
         GameData::InitDialog(s);
@@ -262,9 +259,11 @@ void Player::Update(float dt) {
   auto collider = std::dynamic_pointer_cast<Collider>(colliderCpt);
 
   auto move = speed * dt;
+  auto nowRunning = false;
   if (input.IsKeyDown(LSHIFT_KEY)) {
-    move *= 1.5;
-    sprite->SetFrameTime(frameTime / 1.5f);
+    nowRunning = true;
+    move *= 2;
+    sprite->SetFrameTime(frameTime / 2);
   } else {
     sprite->SetFrameTime(frameTime);
   }
@@ -329,9 +328,26 @@ void Player::Update(float dt) {
   auto direction = combine_moves(up, down, left, right);
 
   if (direction == Direction::NONE) {
-    OpenIdleSprite(sprite, lastDirection);
-  } else if (lastDirection != direction) {
-    OpenWalkingSprite(sprite, direction);
+    running = false;
+  } else {
+    walkSoundTimer.Update(dt);
+    float timeout = running ? 0.218 : 0.459;
+    if (nowRunning != running) {
+      running = nowRunning;
+      walkingSound->Open(running ? PLAYER_RUNNING_SOUND : PLAYER_WALKING_SOUND);
+    }
+
+    if (walkSoundTimer.Get() >= timeout) {
+      walkSoundTimer.Restart();
+      if (nowRunning) {
+        walkingSound->Play(1, 32);
+      } else {
+        walkingSound->Play(1, 32);
+      }
+    }
+    if (lastDirection != direction) {
+      OpenWalkingSprite(sprite, direction);
+    }
   }
   lastDirection = direction;
 
@@ -429,6 +445,6 @@ void Player::OpenWalkingSprite(const std::shared_ptr<Sprite>& sprite,
   }
 
   sprite->SetFrameCount(frameCount);
-  frameTime = 0.4 / frameCount;
+  frameTime = 0.8 / frameCount;
   sprite->SetFrameTime(frameTime);
 }
