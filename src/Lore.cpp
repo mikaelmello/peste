@@ -65,7 +65,7 @@ void Lore::FirstMonsterSpawn() {
   CameraAction::Start(playerPos, monsterPos);
 
   auto itemGo = new GameObject(7);
-  auto item = new Item(*itemGo, "Chave 2", "O que será que ela abre?",
+  auto item = new Item(*itemGo, "Chave", "O que será que ela abre?",
                        "assets/img/item/key2.png", {150, 906},
                        Helpers::KeyType::LIBRARY, 32, 32);
   itemGo->AddComponent(item);

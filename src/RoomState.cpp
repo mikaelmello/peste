@@ -457,7 +457,7 @@ void RoomState::LoadFurnitureBasement() {
   furnitureGo->AddComponent(furniture);
   objects.emplace_back(furnitureGo);
 
-  furnitureGo = new GameObject(7);
+  furnitureGo = new GameObject(15);
   furniture =
       new Furniture(*furnitureGo, "assets/img/furniture/microscope2.png",
                     {386, 1063}, Helpers::Interaction::LOOK);
@@ -485,7 +485,7 @@ void RoomState::LoadFurnitureBasement() {
   furnitureGo->AddComponent(furniture);
   objects.emplace_back(furnitureGo);
 
-  furnitureGo = new GameObject(7);
+  furnitureGo = new GameObject(15);
   furniture =
       new Furniture(*furnitureGo, "assets/img/furniture/microscope2.png",
                     {74, 1144}, Helpers::Interaction::LOOK);
@@ -522,7 +522,7 @@ void RoomState::LoadFurnitureBasement() {
   furnitureGo->AddComponent(furniture);
   objects.emplace_back(furnitureGo);
 
-  furnitureGo = new GameObject(7);
+  furnitureGo = new GameObject(15);
   furniture =
       new Furniture(*furnitureGo, "assets/img/furniture/microscope1.png",
                     {19, 1174}, Helpers::Interaction::NOTHING);
@@ -657,7 +657,7 @@ void RoomState::LoadStairs() {
 
 void RoomState::LoadItems() {
   auto itemGo = new GameObject(7);
-  auto item = new Item(*itemGo, "Chave 1", "Uma chave com aparência de velha.",
+  auto item = new Item(*itemGo, "Chave", "Uma chave com aparência de velha.",
                        "assets/img/item/key1.png", {17, 892},
                        Helpers::KeyType::KITCHEN, 32, 32);
   itemGo->AddComponent(item);
@@ -685,7 +685,7 @@ void RoomState::LoadItems() {
   objects.emplace_back(itemGo);
 
   itemGo = new GameObject(7);
-  item = new Item(*itemGo, "Chave 3", "Uma chave como outra qualquer.",
+  item = new Item(*itemGo, "Chave", "Uma chave como outra qualquer.",
                   "assets/img/item/key3.png", {304, 893},
                   Helpers::KeyType::EXIT, 32, 32);
   itemGo->AddComponent(item);
