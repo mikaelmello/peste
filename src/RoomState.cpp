@@ -666,15 +666,6 @@ void RoomState::LoadItems() {
   objects.emplace_back(itemGo);
 
   itemGo = new GameObject(7);
-  item =
-      new Item(*itemGo, "Pé de Cabra",
-               "Bom para abrir coisas que normalmente não podem ser abertas.",
-               "assets/img/item/crowbar.png", {176, 368},
-               Helpers::KeyType::CROWBAR, 96, 96);
-  itemGo->AddComponent(item);
-  objects.emplace_back(itemGo);
-
-  itemGo = new GameObject(7);
   item = new Item(*itemGo, "Lamparina", "Uma lamparina à óleo antiga.",
                   "assets/img/item/lamp.png", {60, 556},
                   Helpers::KeyType::NOKEY, 64, 64);

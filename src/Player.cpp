@@ -126,19 +126,19 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
           return;
         } else {
           if (door->GetKey() == Helpers::KeyType::CROWBAR) {
-            SCRIPT_TYPE s = {
-                {"HOPE", "Usar o pé de cabra foi uma ótima ideia!"},
-                {"HOPE",
-                 "Só com um pé de cabra pra conseguir abrir esta porta "
-                 "mesmo."}};
+            SCRIPT_TYPE s[] = {
+                {{"HOPE", "Usar o pé de cabra foi uma ótima ideia!"}},
+                {{"HOPE",
+                  "Só com um pé de cabra pra conseguir abrir esta porta "
+                  "mesmo."}}};
             // inserir som de porta sendo arrombada
-            GameData::InitDialog(s);
+            GameData::InitDialog(s[rand() % 2]);
             Lore::FirstMonsterSpawn();
           } else {
-            SCRIPT_TYPE s = {{"HOPE", "Consegui destrancar!"},
-                             {"HOPE", "A chave era a certa!"}};
+            SCRIPT_TYPE s[] = {{{"HOPE", "Consegui destrancar!"}},
+                               {{"HOPE", "A chave era a certa!"}}};
             // inserir som de porta abrindo
-            GameData::InitDialog(s);
+            GameData::InitDialog(s[rand() % 2]);
           }
           soundPlayed = true;
           sound->Open("assets/audio/doors/open_door.wav");
@@ -250,6 +250,15 @@ void Player::Update(float dt) {
       GameData::InitDialog(scripts[rand() % 3]);
     }
   } else if (Lore::Slept == 1) {
+    auto itemGo = new GameObject(7);
+    auto item =
+        new Item(*itemGo, "Pé de Cabra",
+                 "Bom para abrir coisas que normalmente não podem ser abertas.",
+                 "assets/img/item/crowbar.png", {176, 368},
+                 Helpers::KeyType::CROWBAR, 96, 96);
+    itemGo->AddComponent(item);
+    Game::GetInstance().GetCurrentState().AddObject(itemGo);
+
     SCRIPT_TYPE script = {
         {"Hope", "MEU DEUS! QUE BARULHO É ESSE?!?!"},
     };
