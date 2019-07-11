@@ -90,18 +90,22 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
   auto door_cpt = other->GetComponent(DoorType);
   if (door_cpt) {
     if (input.KeyPress(X_KEY)) {
+      auto soundPlayed = false;
       auto door = std::dynamic_pointer_cast<Door>(door_cpt);
       if (door->GetKey() != Helpers::KeyType::NOKEY) {
         if (std::find(keys.begin(), keys.end(), door->GetKey()) == keys.end()) {
           if (door->GetKey() == Helpers::KeyType::CROWBAR) {
-            SCRIPT_TYPE s = {std::make_pair<std::string, std::string>(
-                "HOPE", "Está emperrada, não consigo abrir...")};
+            SCRIPT_TYPE s = {
+                {"HOPE", "Está emperrada, não consigo abrir..."},
+                {"HOPE",
+                 "A fechadura parece estar quebrada, como será que vou "
+                 "entrar?"},
+                {"HOPE",
+                 "Acho que nenhuma chave vai me ajudar a abrir esta porta..."},
+            };
             // inserir som de porta emperrada
             GameData::InitDialog(s);
           } else {
-            sound->Stop();
-            sound->Open("assets/audio/doors/locked_door.wav");
-            sound->Play();
             SCRIPT_TYPE s[] = {
                 {{"HOPE", "Está trancado, onde será que está a chave?"}},
                 {{"HOPE", "Não tenho a chave daqui..."}},
@@ -110,30 +114,40 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
             // inserir som de porta trancada
             GameData::InitDialog(s[rand() % 3]);
           }
+          sound->Open("assets/audio/doors/locked_door.wav");
+          sound->Play();
           return;
         } else {
           if (door->GetKey() == Helpers::KeyType::CROWBAR) {
-            SCRIPT_TYPE s = {std::make_pair<std::string, std::string>(
-                "HOPE",
-                "Vou tentar forçar a porta com isso aqui... Consegui!")};
+            SCRIPT_TYPE s = {
+                {"HOPE", "Usar o pé de cabra foi uma ótima ideia!"},
+                {"HOPE",
+                 "Só com um pé de cabra pra conseguir abrir esta porta "
+                 "mesmo."}};
             // inserir som de porta sendo arrombada
             GameData::InitDialog(s);
             Lore::FirstMonsterSpawn();
           } else {
-            sound->Open("assets/audio/doors/open_door.wav");
-            sound->Play();
-            SCRIPT_TYPE s = {std::make_pair<std::string, std::string>(
-                "HOPE", "Consegui destrancar!")};
+            SCRIPT_TYPE s = {{"HOPE", "Consegui destrancar!"},
+                             {"HOPE", "A chave era a certa!"}};
             // inserir som de porta abrindo
             GameData::InitDialog(s);
           }
+          soundPlayed = true;
+          sound->Open("assets/audio/doors/open_door.wav");
+          sound->Play();
           door->SetKey(Helpers::KeyType::NOKEY);
         }
       }
-      if (door->IsOpen())
+      if (!soundPlayed) {
+        sound->Open("assets/audio/doors/open_door_short.wav");
+        sound->Play();
+      }
+      if (door->IsOpen()) {
         door->Close();
-      else
+      } else {
         door->Open();
+      }
     }
   }
 
