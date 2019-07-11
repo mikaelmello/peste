@@ -19,7 +19,7 @@ bool GameData::can_visit_basement = false;
 
 Rect GameData::Basement = Rect(0, 8000, 5000, 4000);
 Rect GameData::Floor1 = Rect(0, 38, 5000, 3500);
-Rect GameData::Floor2 = Rect(0, 4100, 5000, 4000);
+Rect GameData::Floor2 = Rect(0, 4100, 5000, 3900);
 
 int GameData::InventoryPage = 0;
 bool GameData::got_key1 = false;
@@ -36,11 +36,11 @@ bool GameData::AddToInventory(std::shared_ptr<GameObject> item) {
   if (GameData::PlayerInventory.size() >= 18) {
     return false;
   }
-
+r1.Contains(monsterPos))
   item_cpt->Pickup();
-  item->RequestDelete();
-  GameData::PlayerInventory.push_back(item);
-  return true;
+item->RequestDelete();
+GameData::PlayerInventory.push_back(item);
+return true;
 }
 
 void GameData::InitDialog(SCRIPT_TYPE script) {
@@ -86,7 +86,6 @@ bool GameData::HasCrowbar() {
   }
   return false;
 }
-
 
 void GameData::LoadAntagonistPaths() {
   if (!MonsterGameObject) {
