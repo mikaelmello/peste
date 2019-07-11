@@ -63,16 +63,30 @@ bool GameData::CanUseLamp() {
     }
     auto item = std::dynamic_pointer_cast<Item>(item_cpt);
 
-    if (item->GetName() == "lighter")
+    if (item->GetName() == "Isqueiro")
       c++;
-    else if (item->GetName() == "lamp")
+    else if (item->GetName() == "Lamparina")
       c++;
-    else if (item->GetName() == "oil")
+    else if (item->GetName() == "Óleo")
       c++;
   }
 
   return c >= 3;
 }
+
+bool GameData::HasCrowbar() {
+  for (auto i : PlayerInventory) {
+    auto item_cpt = i->GetComponent(ItemType);
+    if (!item_cpt) {
+      throw std::runtime_error("sem item em GameData::CanDefendYourself");
+    }
+    auto item = std::dynamic_pointer_cast<Item>(item_cpt);
+
+    if (item->GetName() == "Pé de cabra") return true;
+  }
+  return false;
+}
+
 
 void GameData::LoadAntagonistPaths() {
   if (!MonsterGameObject) {

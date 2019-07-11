@@ -201,6 +201,7 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
 void Player::Start() { sleepTimer.Restart(); }
 
 void Player::Update(float dt) {
+  // std::cout << position.ToString() << std::endl;
   Vec2 oldPos(position.x, position.y);
   InputManager& input = InputManager::GetInstance();
   bool canwalk = true;

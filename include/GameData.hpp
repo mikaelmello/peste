@@ -40,6 +40,8 @@ class GameData {
   static Rect Floor1;
   static Rect Floor2;
 
+  static bool HasCrowbar();
+
  private:
   static bool can_visit_basement;
 };
