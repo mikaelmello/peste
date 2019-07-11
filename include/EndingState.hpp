@@ -1,18 +1,23 @@
-#ifndef ENDINGTWOSTATE_H
-#define ENDINGTWOSTATE_H
+#ifndef ENDINGSTATE_H
+#define ENDINGSTATE_H
 
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *                  INCLUDES E DEFINES
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+#define BAD_ENDING_SPRITE "assets/img/endings/bad_ending.png"
+#define GOOD_ENDING_SPRITE "assets/img/endings/good_ending.png"
+
+#include "Dialog.hpp"
+#include "InputManager.hpp"
 #include "Music.hpp"
 #include "State.hpp"
 
-class EndingtwoState : public State {
+class EndingState : public State {
  public:
-  EndingtwoState();
+  EndingState(int ending);
 
-  ~EndingtwoState();
+  ~EndingState();
 
   void Start();
 
@@ -27,6 +32,13 @@ class EndingtwoState : public State {
   void Update(float dt);
 
   void Render();
+
+ private:
+  int ending;
+
+  SCRIPT_TYPE dialog;
+
+  InputManager& im;
 };
 
 #endif
