@@ -4,6 +4,7 @@
 #include <string>
 #include "Blocker.hpp"
 #include "Camera.hpp"
+#include "CameraAction.hpp"
 #include "Collider.hpp"
 #include "Door.hpp"
 #include "Furniture.hpp"
@@ -253,6 +254,10 @@ void Player::Update(float dt) {
         {"Hope", "MEU DEUS! QUE BARULHO É ESSE?!?!"},
     };
     GameData::InitDialog(script);
+
+    auto playerPos = GameData::PlayerGameObject->box.Center();
+    CameraAction::Start(playerPos, {77 * 8, 795 * 8});
+
     Lore::Slept++;
   }
 
