@@ -30,9 +30,15 @@ Dialog::Dialog(GameObject& associated) : Component(associated) {
   text_go->AddComponent(txt);
   textGo = state.AddObject(text_go);
 
+  GameObject* space_go = new GameObject(associated.priority + 1);
+  sprite = new Sprite(*space_go, "assets/img/menu/space.png");
+  space_go->AddComponent(sprite);
+  spaceGo = state.AddObject(space_go);
+
   interlocutorGo->DisableRender();
   textGo->DisableRender();
   associated.DisableRender();
+  spaceGo->DisableRender();
 }
 
 Dialog::~Dialog() {
@@ -65,6 +71,7 @@ void Dialog::Clear() {
 
   interlocutorGo->DisableRender();
   textGo->DisableRender();
+  spaceGo->DisableRender();
   associated.DisableRender();
 }
 
@@ -81,6 +88,8 @@ void Dialog::UpdateTexts() {
   interlocutorGo->box.y = associated.box.y + 20;
   textGo->box.x = associated.box.x + 36;
   textGo->box.y = associated.box.y + 70;
+  spaceGo->box.x = associated.box.x + 828;
+  spaceGo->box.y = associated.box.y + 140;
 
   auto interlocutorCpt = interlocutorGo->GetComponent(TextType);
   auto textCpt = textGo->GetComponent(TextType);
@@ -115,5 +124,6 @@ void Dialog::SetScript(SCRIPT_TYPE script) {
 
   interlocutorGo->EnableRender();
   textGo->EnableRender();
+  spaceGo->EnableRender();
   associated.EnableRender();
 }

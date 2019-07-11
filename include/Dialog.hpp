@@ -41,6 +41,7 @@ class Dialog : public Component {
   SCRIPT_TYPE script;
 
   std::shared_ptr<GameObject> interlocutorGo;
+  std::shared_ptr<GameObject> spaceGo;
   std::shared_ptr<GameObject> textGo;
 };
 
