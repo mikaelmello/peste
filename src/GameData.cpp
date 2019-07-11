@@ -36,11 +36,10 @@ bool GameData::AddToInventory(std::shared_ptr<GameObject> item) {
   if (GameData::PlayerInventory.size() >= 18) {
     return false;
   }
-r1.Contains(monsterPos))
   item_cpt->Pickup();
-item->RequestDelete();
-GameData::PlayerInventory.push_back(item);
-return true;
+  item->RequestDelete();
+  GameData::PlayerInventory.push_back(item);
+  return true;
 }
 
 void GameData::InitDialog(SCRIPT_TYPE script) {
