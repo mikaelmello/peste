@@ -100,7 +100,7 @@ void RoomState::Update(float dt) {
   }
 
   if (GameData::hope_is_in != last_known) {
-    // LoadAntagonist();
+    LoadAntagonist();
     last_known = GameData::hope_is_in;
   }
 
@@ -148,11 +148,11 @@ void RoomState::LoadAssets() {
 
   // std::cout << objects.size() << std::endl;
 
-  // ant = std::make_shared<GameObject>(11);
-  // Antagonist* antagonist = new Antagonist(*ant.get(), {{263, 297}});
-  // ant->AddComponent(antagonist);
-  // objects.push_back(ant);
-  // LoadAntagonist();
+  ant = std::make_shared<GameObject>(11);
+  Antagonist* antagonist = new Antagonist(*ant.get(), {{263, 297}});
+  ant->AddComponent(antagonist);
+  objects.push_back(ant);
+  LoadAntagonist();
 
   Camera::Follow(playerGo.get());
 
@@ -645,9 +645,8 @@ void RoomState::LoadAntagonist() {
               {82, 243},  {40, 76},   {197, 80},  {276, 202}};
       break;
     case Helpers::Floor::FIRST_FLOOR:
-      path = {{306, 882}, {235, 818}, {344, 724}, {245, 698}, {301, 589},
-              {170, 598}, {64, 611},  {166, 801}, {74, 826},  {168, 904},
-              {176, 704}, {201, 574}, {304, 688}, {244, 740}, {360, 841}};
+      path = {{347, 579}, {175, 582}, {169, 698}, {54, 696},  {66, 613},
+              {106, 698}, {93, 784},  {180, 713}, {187, 605}, {286, 609}};
       break;
     default:
       path = {{263, 297}};
@@ -674,7 +673,7 @@ void RoomState::LoadItems() {
   item =
       new Item(*itemGo, "Pé de Cabra",
                "Bom para abrir coisas que normalmente não podem ser abertas.",
-               "assets/img/item/crowbar.png", {291, 58},
+               "assets/img/item/crowbar.png", {176, 368},
                Helpers::KeyType::CROWBAR, 96, 96);
   itemGo->AddComponent(item);
   objects.emplace_back(itemGo);
