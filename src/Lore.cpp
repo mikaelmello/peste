@@ -2,6 +2,8 @@
 #include <iostream>
 #include <stdexcept>
 #include <string>
+#include "Antagonist.hpp"
+#include "CameraAction.hpp"
 #include "Game.hpp"
 #include "GameData.hpp"
 #include "InputManager.hpp"
@@ -11,6 +13,7 @@
 #include "Sprite.hpp"
 
 bool Lore::NicePerson = false;
+bool Lore::HasEnteredMasterBedroom = false;
 int Lore::Slept = 0;
 
 void Lore::Sleep() {
@@ -36,4 +39,17 @@ void Lore::Sleep() {
 
   auto& game = Game::GetInstance();
   game.Push(new SleepState());
+}
+
+void Lore::FirstMonsterSpawn() {
+  auto& state = Game::GetInstance().GetCurrentState();
+  auto ant = new GameObject(11);
+  Antagonist* antagonist = new Antagonist(*ant, {{347, 579}});
+  ant->AddComponent(antagonist);
+  GameData::MonsterGameObject = state.AddObject(ant);
+  GameData::LoadAntagonistPaths();
+
+  auto playerPos = GameData::PlayerGameObject->box.Center();
+  auto monsterPos = GameData::MonsterGameObject->box.Center();
+  CameraAction::Start(playerPos, monsterPos);
 }

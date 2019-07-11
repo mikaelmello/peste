@@ -9,9 +9,11 @@
 
 class Lore {
  public:
+  static bool HasEnteredMasterBedroom;
   static bool NicePerson;
   static int Slept;
   static void Sleep();
+  static void FirstMonsterSpawn();
 };
 
 #endif

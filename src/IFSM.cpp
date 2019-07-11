@@ -41,8 +41,10 @@ bool IFSM::UpdatePosition(float dt) {
     movesLeft = 0;
   }
 
-  ant->position = path[currentMoveIndex];
-  ant->paths.top().first = currentMoveIndex;
+  if (currentMoveIndex >= 0 && currentMoveIndex < path.size()) {
+    ant->position = path[currentMoveIndex];
+    ant->paths.top().first = currentMoveIndex;
+  }
 
   return shouldPop;
 }

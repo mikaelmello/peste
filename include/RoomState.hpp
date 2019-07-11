@@ -44,8 +44,6 @@ class RoomState : public State {
 
   void LoadStairs();
 
-  void LoadAntagonist();
-
   void LoadItems();
 
   std::shared_ptr<GameObject> ant;

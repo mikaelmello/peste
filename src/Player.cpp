@@ -116,6 +116,7 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
                 "Vou tentar forçar a porta com isso aqui... Consegui!")};
             // inserir som de porta sendo arrombada
             GameData::InitDialog(s);
+            Lore::FirstMonsterSpawn();
           } else {
             sound_ptr->Stop();
             sound_ptr->Open("assets/audio/doors/open_door.wav");
@@ -166,9 +167,8 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
   auto stairs_cpt = other->GetComponent(StairsType);
   if (stairs_cpt) {
     if (input.KeyPress(X_KEY)) {
-      std::cout << GameData::hope_is_in << std::endl;
-      if (GameData::hope_is_in == Helpers::Floor::GROUND_FLOOR) {
-        GameData::hope_is_in = Helpers::Floor::FIRST_FLOOR;
+      std::cout << GameData::PlayerFloor() << std::endl;
+      if (GameData::PlayerFloor() == Helpers::Floor::GROUND_FLOOR) {
         if (position.x < 275) {
           position.x = 220;
           position.y = 580;
@@ -176,12 +176,10 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
           position.x = 350;
           position.y = 580;
         } else {
-          GameData::hope_is_in = Helpers::Floor::BASEMENT;
           position.x = 366;
           position.y = 1297;
         }
-      } else if (GameData::hope_is_in == Helpers::Floor::FIRST_FLOOR) {
-        GameData::hope_is_in = Helpers::Floor::GROUND_FLOOR;
+      } else if (GameData::PlayerFloor() == Helpers::Floor::FIRST_FLOOR) {
         if (position.x < 275) {
           position.x = 220;
           position.y = 211;
@@ -190,7 +188,6 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
           position.y = 211;
         }
       } else {
-        GameData::hope_is_in = Helpers::Floor::GROUND_FLOOR;
         position.x = 388;
         position.y = 206;
       }
@@ -250,6 +247,10 @@ void Player::Update(float dt) {
   }
   if (input.IsKeyDown(LSHIFT_KEY) && input.IsKeyDown(SDLK_d)) {
     position = {50, 900};
+    return;
+  }
+  if (input.IsKeyDown(LSHIFT_KEY) && input.IsKeyDown(SDLK_c)) {
+    position = {291, 58};
     return;
   }
 

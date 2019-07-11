@@ -2,6 +2,7 @@
 #include <iostream>
 #include "Antagonist.hpp"
 #include "Camera.hpp"
+#include "CameraAction.hpp"
 #include "CameraFollower.hpp"
 #include "Collider.hpp"
 #include "Collision.hpp"
@@ -60,6 +61,11 @@ void RoomState::Update(float dt) {
     return;
   }
 
+  if (CameraAction::IsRunning()) {
+    CameraAction::Update(dt);
+    return;
+  }
+
   if (im.KeyPress(ESCAPE_KEY)) {
     Game::GetInstance().Push(new InventoryState());
   }
@@ -99,9 +105,9 @@ void RoomState::Update(float dt) {
     }
   }
 
-  if (GameData::hope_is_in != last_known) {
-    // LoadAntagonist();
-    last_known = GameData::hope_is_in;
+  if (GameData::PlayerFloor() != last_known) {
+    GameData::LoadAntagonistPaths();
+    last_known = GameData::PlayerFloor();
   }
 
   UpdateArray(dt);
@@ -145,14 +151,6 @@ void RoomState::LoadAssets() {
   playerGo->AddComponent(player);
   objects.push_back(playerGo);
   GameData::PlayerGameObject = playerGo;
-
-  // std::cout << objects.size() << std::endl;
-
-  // ant = std::make_shared<GameObject>(11);
-  // Antagonist* antagonist = new Antagonist(*ant.get(), {{263, 297}});
-  // ant->AddComponent(antagonist);
-  // objects.push_back(ant);
-  // LoadAntagonist();
 
   Camera::Follow(playerGo.get());
 
@@ -630,36 +628,6 @@ void RoomState::LoadStairs() {
 
   LoadTrapdoor();  // ta aqui só pra teste
   // end basement
-}
-
-void RoomState::LoadAntagonist() {
-  std::vector<Vec2> path;
-
-  switch (GameData::hope_is_in) {
-    case Helpers::Floor::BASEMENT:
-      path = {{215, 1092}};
-      break;
-    case Helpers::Floor::GROUND_FLOOR:
-      path = {{263, 297}, {361, 297}, {351, 394}, {89, 383},
-              {203, 296}, {268, 202}, {253, 93},  {82, 118},
-              {82, 243},  {40, 76},   {197, 80},  {276, 202}};
-      break;
-    case Helpers::Floor::FIRST_FLOOR:
-      path = {{306, 882}, {235, 818}, {344, 724}, {245, 698}, {301, 589},
-              {170, 598}, {64, 611},  {166, 801}, {74, 826},  {168, 904},
-              {176, 704}, {201, 574}, {304, 688}, {244, 740}, {360, 841}};
-      break;
-    default:
-      path = {{263, 297}};
-      break;
-  }
-
-  auto ant_cpt = ant->GetComponent(AntagonistType);
-  if (!ant_cpt) {
-    throw std::runtime_error("sem antagonista em RoomState::LoadAntagonist");
-  }
-  auto antagonista = std::dynamic_pointer_cast<Antagonist>(ant_cpt);
-  antagonista->NewPatrolPath(path);
 }
 
 void RoomState::LoadItems() {

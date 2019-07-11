@@ -40,6 +40,17 @@ Antagonist::Antagonist(GameObject& associated, std::vector<Vec2> path)
   pc_go->AddComponent(priority_changer);
   state.AddObject(pc_go);
 
+  int tileDim = 8;
+  // a position está no meio horizontal e no fim vertical do sprite
+  // para renderizar, colocamos o xy da box de acordo
+  // posição * dimensão do tile - (comprimento da sprite / 2), pois o x fica no
+  // meio da sprite
+  associated.box.w = sprite->GetWidth();
+  associated.box.h = sprite->GetHeight();
+  associated.box.x = position.x * tileDim - sprite->GetWidth() / 2;
+  // posição * dimensão do tile - altura da sprite, pois o y fica la embaixo
+  associated.box.y = position.y * tileDim - sprite->GetHeight();
+
   associated.AddComponent(sound);
   associated.AddComponent(collider);
   associated.AddComponent(sprite);
@@ -57,7 +68,11 @@ void Antagonist::NotifyCollision(std::shared_ptr<GameObject> other) {
 void Antagonist::Start() {
   last_action = Helpers::Action::IDLE;
   last_direction = Helpers::Direction::NONE;
+
   stored_state = new PatrolFSM(associated, path);
+  state_stack.emplace(stored_state);
+  stored_state->OnStateEnter();
+  stored_state = nullptr;
 }
 
 void Antagonist::Update(float dt) {
@@ -119,6 +134,10 @@ bool Antagonist::NearTarget() {
   auto tilemap = state.GetCurrentTileMap();
 
   Pathfinder::Astar pf(associated, tilemap);
+
+  if (GameData::MonsterFloor() != GameData::PlayerFloor()) {
+    return false;
+  }
 
   auto player = GameData::PlayerGameObject->GetComponent(PlayerType);
   if (!player) {
