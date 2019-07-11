@@ -27,6 +27,7 @@ class GameData {
 
   static bool player_is_hidden;
 
+  static bool got_key1;
   static std::shared_ptr<GameObject> TerryBedGameObject;
   static std::shared_ptr<GameObject> TerryGameObject;
 

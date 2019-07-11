@@ -22,6 +22,7 @@ Rect GameData::Floor1 = Rect(0, 38, 5000, 3500);
 Rect GameData::Floor2 = Rect(0, 4100, 5000, 4000);
 
 int GameData::InventoryPage = 0;
+bool GameData::got_key1 = false;
 
 bool GameData::AddToInventory(std::shared_ptr<GameObject> item) {
   auto item_type_cpt = item->GetComponent(ItemType);

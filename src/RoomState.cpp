@@ -291,7 +291,7 @@ void RoomState::LoadFurnitureSecondFloor() {
   furnitureGo = new GameObject(7);
   furniture = new Furniture(*furnitureGo, "assets/img/furniture/clock.png",
                             {210, 532}, Helpers::Interaction::LOOK, true,
-                            "Parece que não funciona...");
+                            {"Parece que não funciona..."});
   furnitureGo->AddComponent(furniture);
   objects.emplace_back(furnitureGo);
 
@@ -306,7 +306,7 @@ void RoomState::LoadFurnitureSecondFloor() {
   furnitureGo = new GameObject(7);
   furniture = new Furniture(*furnitureGo, "assets/img/furniture/desk.png",
                             {346, 652}, Helpers::Interaction::LOOK, true,
-                            "Acho melhor não mexer no que não é meu...");
+                            {"Acho melhor não mexer no que não é meu..."});
   furnitureGo->AddComponent(furniture);
   objects.emplace_back(furnitureGo);
 
@@ -319,14 +319,14 @@ void RoomState::LoadFurnitureSecondFloor() {
   furnitureGo = new GameObject(7);
   furniture = new Furniture(*furnitureGo, "assets/img/furniture/bookshelf2.png",
                             {334, 777}, Helpers::Interaction::LOOK, false,
-                            "Nada interessante..");
+                            {"Nada interessante.."});
   furnitureGo->AddComponent(furniture);
   objects.emplace_back(furnitureGo);
 
   furnitureGo = new GameObject(7);
   furniture = new Furniture(*furnitureGo, "assets/img/furniture/bookshelf1.png",
                             {206, 717}, Helpers::Interaction::LOOK, false,
-                            "Alguns livros de medicina...");
+                            {"Alguns livros de medicina..."});
   furnitureGo->AddComponent(furniture);
   objects.emplace_back(furnitureGo);
 
@@ -340,7 +340,7 @@ void RoomState::LoadFurnitureSecondFloor() {
   furniture =
       new Furniture(*furnitureGo, "assets/img/furniture/bookshelf3.png",
                     {206, 777}, Helpers::Interaction::LOOK, false,
-                    "Esses livros de hitória falam sobre a Idade Média...");
+                    {"Esses livros de hitória falam sobre a Idade Média..."});
   furnitureGo->AddComponent(furniture);
   objects.emplace_back(furnitureGo);
 
@@ -375,7 +375,7 @@ void RoomState::LoadFurnitureSecondFloor() {
   furnitureGo = new GameObject(7);
   furniture = new Furniture(*furnitureGo, "assets/img/furniture/toy2.png",
                             {37, 817}, Helpers::Interaction::LOOK, false,
-                            "Que brinquedo antigo...");
+                            {"Que brinquedo antigo..."});
   furnitureGo->AddComponent(furniture);
   objects.emplace_back(furnitureGo);
 
@@ -388,8 +388,12 @@ void RoomState::LoadFurnitureSecondFloor() {
 
   // begin last bedroom
   furnitureGo = new GameObject(7);
-  furniture = new Furniture(*furnitureGo, "assets/img/furniture/cabinet.png",
-                            {35, 870}, Helpers::Interaction::NOTHING);
+  furniture =
+      new Furniture(*furnitureGo, "assets/img/furniture/cabinet.png", {35, 870},
+                    Helpers::Interaction::LOOK, true,
+                    {"Nossa... Tem monte de toalha e roupa aqui.",
+                     "Oh! Parece que tem alguma coisa brilhando ali no canto!"},
+                    true);
   furnitureGo->AddComponent(furniture);
   objects.emplace_back(furnitureGo);
 
@@ -487,10 +491,11 @@ void RoomState::LoadFurnitureBasement() {
   objects.emplace_back(furnitureGo);
 
   furnitureGo = new GameObject(7);
-  furniture = new Furniture(*furnitureGo, "assets/img/furniture/oldpc.png",
-                            {123, 1141}, Helpers::Interaction::LOOK, true,
-                            "Parece que estavam avancando nos teste da cura da "
-                            "Peste. Mas eu não conheco esses métodos...");
+  furniture =
+      new Furniture(*furnitureGo, "assets/img/furniture/oldpc.png", {123, 1141},
+                    Helpers::Interaction::LOOK, true,
+                    {"Parece que estavam avancando nos teste da cura da "
+                     "Peste. Mas eu não conheco esses métodos..."});
   furnitureGo->AddComponent(furniture);
   objects.emplace_back(furnitureGo);
 
@@ -633,7 +638,7 @@ void RoomState::LoadStairs() {
 void RoomState::LoadItems() {
   auto itemGo = new GameObject(7);
   auto item = new Item(*itemGo, "Chave 1", "Uma chave com aparência de velha.",
-                       "assets/img/item/key1.png", {30, 886},
+                       "assets/img/item/key1.png", {20, 887},
                        Helpers::KeyType::KEY1, 32, 32);
   itemGo->AddComponent(item);
   objects.emplace_back(itemGo);
