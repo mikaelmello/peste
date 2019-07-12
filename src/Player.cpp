@@ -311,7 +311,13 @@ void Player::Update(float dt) {
   }
 
   if (GameData::player_was_hit) {
-    Lore::PlayerCaught();
+    if (GameData::HasItem("Vacina")) {
+      if (!Lore::Defended) {
+        Lore::DefendAgainstMonster();
+      }
+    } else {
+      Lore::PlayerCaught();
+    }
   }
 
   auto spriteCpt = associated.GetComponent(SpriteType);
