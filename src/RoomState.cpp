@@ -27,7 +27,7 @@ RoomState::RoomState() {
   last_known = Helpers::Floor::GROUND_FLOOR;
   GameObject* bckgGo = new GameObject(3);
   Sprite* bckgSprite = new Sprite(*bckgGo, "assets/img/black.jpg");
-  bckgGo->AddComponent(new CameraFollower(*bckgGo, {512, 334}));
+  bckgGo->AddComponent(new CameraFollower(*bckgGo));
   bckgGo->AddComponent(bckgSprite);
   objects.emplace_back(bckgGo);
 
@@ -128,12 +128,12 @@ void RoomState::Update(float dt) {
 
         GameData::InitDialog(s[rand() % 2]);
 
-        player->leaveBasement = true;
+        player->LeaveBasement();
       } else {
-        player->lamp = true;
+        player->UseLamp();
       }
     } else {
-      player->lamp = false;
+      player->PutLampAway();
     }
 
     GameData::LoadAntagonistPaths();

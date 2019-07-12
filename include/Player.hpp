@@ -40,6 +40,11 @@
 #define PLAYER_LEFT_LAMP "assets/img/hope/left_lamp.png"
 #define PLAYER_RIGHT_LAMP "assets/img/hope/right_lamp.png"
 
+#define SHADOW_CENTER "assets/img/shadow_center.png"
+#define SHADOW_LEFT "assets/img/shadow_left.png"
+#define SHADOW_RIGHT "assets/img/shadow_right.png"
+#define SHADOW "assets/img/shadow.png"
+
 class Player : public Component {
  public:
   Player(GameObject& associated, Vec2 position);
@@ -62,7 +67,11 @@ class Player : public Component {
 
   bool leaveBasement = false;
 
-  bool lamp = false;
+  void UseLamp();
+
+  void LeaveBasement();
+
+  void PutLampAway();
 
  private:
   const double speed = 30;
@@ -86,6 +95,10 @@ class Player : public Component {
   Helpers::Direction lastDirection;
 
   std::shared_ptr<GameObject> priorityChanger_go;
+
+  std::shared_ptr<GameObject> darknessGo;
+
+  bool lamp = false;
 
   std::vector<Helpers::KeyType> keys;
 

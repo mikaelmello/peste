@@ -5,6 +5,7 @@
 #include "Blocker.hpp"
 #include "Camera.hpp"
 #include "CameraAction.hpp"
+#include "CameraFollower.hpp"
 #include "Collider.hpp"
 #include "Door.hpp"
 #include "Furniture.hpp"
@@ -52,12 +53,38 @@ Player::Player(GameObject& associated, Vec2 position)
   pcGo->AddComponent(priChanger);
   priorityChanger_go = state.AddObject(pcGo);
 
+  auto dkGo = new GameObject(1050);
+  CameraFollower* cf = new CameraFollower(*dkGo);
+  sprite = new Sprite(*dkGo, SHADOW_CENTER);
+  dkGo->AddComponent(cf);
+  dkGo->AddComponent(sprite);
+  darknessGo = state.AddObject(dkGo);
+
   sound = std::make_shared<Sound>(associated);
   walkingSound = std::make_shared<Sound>(associated);
   walkingSound->Open(PLAYER_WALKING_SOUND);
 }
 
 Player::~Player() { priorityChanger_go->RequestDelete(); }
+
+void Player::LeaveBasement() {
+  leaveBasement = true;
+  darknessGo->EnableRender();
+  auto darkSprite =
+      std::dynamic_pointer_cast<Sprite>(darknessGo->GetComponent(SpriteType));
+
+  darkSprite->Open(SHADOW);
+}
+
+void Player::UseLamp() {
+  lamp = true;
+  darknessGo->EnableRender();
+}
+
+void Player::PutLampAway() {
+  lamp = false;
+  darknessGo->DisableRender();
+}
 
 void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
   if (other->IsDead()) {
@@ -249,7 +276,7 @@ void Player::Update(float dt) {
           },
       };
       sound->Open(YawnSounds[rand() % 3]);
-      sound->Play();
+      // sound->Play();
       sleepTimer.Restart();
       GameData::InitDialog(scripts[rand() % 3]);
     }
@@ -425,6 +452,19 @@ bool Player::Is(Types type) const { return type == this->Type; }
 
 void Player::OpenIdleSprite(const std::shared_ptr<Sprite>& sprite,
                             Direction lastDirection) {
+  if (lamp) {
+    auto darkSprite =
+        std::dynamic_pointer_cast<Sprite>(darknessGo->GetComponent(SpriteType));
+
+    if (lastDirection == LEFT) {
+      darkSprite->Open(SHADOW_LEFT);
+    } else if (lastDirection == RIGHT) {
+      darkSprite->Open(SHADOW_RIGHT);
+    } else if (lastDirection != NONE) {
+      darkSprite->Open(SHADOW_CENTER);
+    }
+  }
+
   switch (lastDirection) {
     case Direction::UP:
       sprite->Open(lamp ? PLAYER_BACK_LAMP : PLAYER_BACK);
@@ -471,6 +511,19 @@ void Player::OpenIdleSprite(const std::shared_ptr<Sprite>& sprite,
 
 void Player::OpenWalkingSprite(const std::shared_ptr<Sprite>& sprite,
                                Direction direction) {
+  if (lamp) {
+    auto darkSprite =
+        std::dynamic_pointer_cast<Sprite>(darknessGo->GetComponent(SpriteType));
+
+    if (direction == LEFT) {
+      darkSprite->Open(SHADOW_LEFT);
+    } else if (direction == RIGHT) {
+      darkSprite->Open(SHADOW_RIGHT);
+    } else {
+      darkSprite->Open(SHADOW_CENTER);
+    }
+  }
+
   switch (direction) {
     case Direction::UP:
       sprite->Open(lamp ? PLAYER_BACK_ANIM_LAMP : PLAYER_BACK_ANIM);
