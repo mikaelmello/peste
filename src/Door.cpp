@@ -96,7 +96,7 @@ void Door::NotifyCollision(std::shared_ptr<GameObject> other) {
   }
 
   auto antComponent = other->GetComponent(AntagonistType);
-  if (antComponent) {
+  if (antComponent && this->key == Helpers::KeyType::NOKEY) {
     Open();
   }
 }

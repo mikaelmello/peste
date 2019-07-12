@@ -92,6 +92,7 @@ enum DoorStyle {
   LAB,
 };
 
+void TeleportPlayerSafeHouse();
 }  // end namespace Helpers
 
 #endif

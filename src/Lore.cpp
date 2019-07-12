@@ -4,6 +4,7 @@
 #include <string>
 #include "Antagonist.hpp"
 #include "CameraAction.hpp"
+#include "CaughtState.hpp"
 #include "Game.hpp"
 #include "GameData.hpp"
 #include "InputManager.hpp"
@@ -16,7 +17,9 @@
 
 bool Lore::NicePerson = false;
 bool Lore::HasEnteredMasterBedroom = false;
+bool Lore::Caught = false;
 int Lore::Slept = 0;
+int Lore::CaughtCount = 0;
 
 void Lore::Sleep() {
   if (!GameData::TerryBedGameObject) {
@@ -82,4 +85,12 @@ void Lore::UnlockLibrary() {
                            Helpers::Floor::BASEMENT);
   stairsGo->AddComponent(stairs);
   state.AddObject(stairsGo);
+}
+
+void Lore::PlayerCaught() {
+  auto& game = Game::GetInstance();
+  game.Push(new CaughtState());
+
+  Helpers::TeleportPlayerSafeHouse();
+  GameData::player_was_hit = false;
 }

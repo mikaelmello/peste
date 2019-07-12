@@ -225,13 +225,13 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
 void Player::Start() { sleepTimer.Restart(); }
 
 void Player::Update(float dt) {
-  // std::cout << position.ToString() << std::endl;
   Vec2 oldPos(position.x, position.y);
   InputManager& input = InputManager::GetInstance();
   bool canwalk = true;
   auto tilemap = Game::GetInstance().GetCurrentState().GetCurrentTileMap();
   int tileDim = 8;
 
+  GameData::player_in_safehouse = GameData::SafeHouse.Contains(position * 8);
   if (GameData::player_is_hidden) return;
 
   if (Lore::Slept == 0) {
@@ -267,6 +267,24 @@ void Player::Update(float dt) {
     Lore::Slept++;
   }
 
+  if (Lore::Caught) {
+    SCRIPT_TYPE s[] = {
+        {{"HOPE",
+          "O QUE ACONTECEU?! AQUELE MONSTRO QUASE ME MATOU! Pera... por que "
+          "ele não me matou?"}},
+        {{"HOPE", "EU PRECISO CORRER AGORA DAQUI! Mas onde está o Terry?"}},
+        {{"HOPE", "EU PRECISO SALVAR O TERRY DAQUELE MOSTRO!"}},
+    };
+    // inserir som de porta trancada
+    GameData::InitDialog(s[Lore::CaughtCount % 3]);
+    Lore::Caught = false;
+    Lore::CaughtCount++;
+  }
+
+  if (GameData::player_was_hit) {
+    Lore::PlayerCaught();
+  }
+
   auto spriteCpt = associated.GetComponent(SpriteType);
   auto colliderCpt = associated.GetComponent(ColliderType);
 
@@ -280,7 +298,8 @@ void Player::Update(float dt) {
     return;
   }
   if (input.IsKeyDown(LSHIFT_KEY) && input.IsKeyDown(SDLK_d)) {
-    position = {70, 900};
+    // position = {70, 900};
+    Helpers::TeleportPlayerSafeHouse();
     return;
   }
   if (input.IsKeyDown(LSHIFT_KEY) && input.IsKeyDown(SDLK_c)) {
@@ -394,8 +413,6 @@ void Player::Update(float dt) {
   }
   auto pc = std::dynamic_pointer_cast<PriorityChanger>(pcCpt);
   pc->SetRect(dt, associated.box);
-
-  std::cout << position.x << " " << position.y << std::endl;
 }
 
 void Player::Render() {}

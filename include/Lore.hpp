@@ -11,10 +11,13 @@ class Lore {
  public:
   static bool HasEnteredMasterBedroom;
   static bool NicePerson;
+  static bool Caught;
   static int Slept;
+  static int CaughtCount;
   static void Sleep();
   static void FirstMonsterSpawn();
   static void UnlockLibrary();
+  static void PlayerCaught();
 };
 
 #endif

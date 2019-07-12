@@ -26,6 +26,7 @@ class GameData {
   static bool player_was_hit;
 
   static bool player_is_hidden;
+  static bool player_in_safehouse;
 
   static bool got_key1;
   static std::shared_ptr<GameObject> TerryBedGameObject;
@@ -39,6 +40,7 @@ class GameData {
   static Rect Basement;
   static Rect Floor1;
   static Rect Floor2;
+  static Rect SafeHouse;
 
   static bool HasCrowbar();
 
