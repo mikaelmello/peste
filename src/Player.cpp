@@ -127,10 +127,14 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
             GameData::InitDialog(s[rand() % 2]);
             Lore::FirstMonsterSpawn();
           } else {
-            SCRIPT_TYPE s[] = {{{"HOPE", "Consegui destrancar!"}},
-                               {{"HOPE", "A chave era a certa!"}}};
-            // inserir som de porta abrindo
-            GameData::InitDialog(s[rand() % 2]);
+            if (door->GetKey() != Helpers::KeyType::EXIT) {
+              SCRIPT_TYPE s[] = {{{"HOPE", "Consegui destrancar!"}},
+                                 {{"HOPE", "A chave era a certa!"}}};
+              // inserir som de porta abrindo
+              GameData::InitDialog(s[rand() % 2]);
+            } else {
+              // inserir um ending state de acordo com o final correto.
+            }
           }
           if (door->GetKey() == Helpers::KeyType::LIBRARY) {
             Lore::UnlockLibrary();
