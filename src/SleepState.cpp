@@ -20,7 +20,7 @@ void SleepState::Update(float dt) {
       throw std::runtime_error("sem sound SleepState::Update");
     }
     auto sound = std::dynamic_pointer_cast<Sound>(sound_cpt);
-    sound->Play();
+    sound->Play(2);
     return;
   }
 }
