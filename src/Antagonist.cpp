@@ -61,7 +61,8 @@ Antagonist::~Antagonist() { delete stored_state; }
 
 void Antagonist::NotifyCollision(std::shared_ptr<GameObject> other) {
   auto player_cpt = other->GetComponent(Types::PlayerType);
-  if (player_cpt && (last_action != Helpers::Action::ATTACKING)) {
+  if (player_cpt && (last_action != Helpers::Action::ATTACKING) &&
+      !GameData::player_is_hidden) {
     Push(new AttackFSM(associated));
   }
 }

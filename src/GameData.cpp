@@ -20,6 +20,7 @@ bool GameData::player_is_hidden = false;
 bool GameData::can_visit_basement = false;
 bool GameData::player_in_safehouse = false;
 bool GameData::already_begin_animation = false;
+bool GameData::transformed_monster_in_terry = false;
 
 Rect GameData::Basement = Rect(0, 8000, 5000, 4000);
 Rect GameData::Floor1 = Rect(0, 38, 5000, 3500);

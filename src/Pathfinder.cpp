@@ -53,7 +53,7 @@ void Pathfinder::Astar::Search(std::vector<Vec2>& path,
     Close(current.second);
 
     auto point = current.second;
-    if (details[index(point.first, point.second)].g > 100) {
+    if (details[index(point.first, point.second)].g > 150) {
       continue;
     }
 
