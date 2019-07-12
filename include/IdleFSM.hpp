@@ -4,7 +4,7 @@
 /* * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * *
  *                  INCLUDES E DEFINES
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-#define IDLE_TIME 2
+#define IDLE_TIME (0.1)
 #define IDLE_SPRITE_ANTAGONIST "assets/img/terry/idle_terry.png"
 
 #include <stack>
