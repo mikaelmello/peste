@@ -19,6 +19,7 @@
 bool Lore::NicePerson = false;
 bool Lore::HasEnteredMasterBedroom = false;
 bool Lore::Caught = false;
+bool Lore::Defended = false;
 int Lore::Slept = 0;
 int Lore::CaughtCount = 0;
 
@@ -146,4 +147,46 @@ void Lore::PlayerCaught() {
 
   Helpers::TeleportPlayerSafeHouse();
   GameData::player_was_hit = false;
+}
+
+void Lore::DefendAgainstMonster() {
+  printf("Oi 1\n");
+  Lore::Defended = true;
+
+  auto& state = Game::GetInstance().GetCurrentState();
+
+  auto ant_cpt = GameData::MonsterGameObject->GetComponent(AntagonistType);
+  if (!ant_cpt) {
+    throw std::runtime_error("sem ant em Lore::DefendAgainstMonster");
+  }
+  auto ant = std::dynamic_pointer_cast<Antagonist>(ant_cpt);
+
+  GameData::transformed_monster_in_terry = true;
+
+  if (!GameData::TerryGameObject) {
+    GameData::TerryGameObject = std::make_shared<GameObject>(8);
+    state.AddObject(GameData::TerryGameObject.get());
+  }
+  GameData::TerryGameObject->box.x = ant->position.x * 8;
+  GameData::TerryGameObject->box.y = ant->position.y * 8;
+
+  auto sprite_cpt = GameData::TerryGameObject->GetComponent(SpriteType);
+  if (!sprite_cpt) {
+    auto sprite_c = new Sprite(*GameData::TerryGameObject,
+                               "assets/img/terry/monster_to_terry.png");
+    GameData::TerryGameObject->AddComponent(sprite_c);
+  }
+
+  sprite_cpt = GameData::TerryGameObject->GetComponent(SpriteType);
+  if (!sprite_cpt) {
+    throw std::runtime_error("sem sprite em Lore::DefendAgainstMonster");
+  }
+  auto sprite = std::dynamic_pointer_cast<Sprite>(sprite_cpt);
+
+  sprite->Open("assets/img/terry/monster_to_terry.png");
+  sprite->SetFrameCount(10);
+  sprite->SetFrameTime(0.125);
+  GameData::MonsterGameObject->RequestDelete();
+
+  printf("Oi! 2\n");
 }
