@@ -14,7 +14,7 @@
 
 class Terry : public Component {
  public:
-  Terry(GameObject& associated, Vec2 position);
+  Terry(GameObject& associated, const std::string& file, Vec2 position);
 
   ~Terry();
 
@@ -32,6 +32,10 @@ class Terry : public Component {
   void HideTalkDialog();
 
   void Talk();
+
+  void SetAnimation(int frameCount, float frameTime);
+
+  void SetSprite(const std::string& file);
 
   const Types Type = TerryType;
 

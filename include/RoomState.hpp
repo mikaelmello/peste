@@ -47,6 +47,8 @@ class RoomState : public State {
   std::shared_ptr<Music> backgroundSound;
 
   Helpers::Floor last_known = Helpers::Floor::GROUND_FLOOR;
+
+  Timer timer;
 };
 
 #endif

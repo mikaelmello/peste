@@ -77,6 +77,16 @@ void RoomState::Update(float dt) {
     return;
   }
 
+  if (GameData::already_begin_animation) {
+    timer.Update(dt);
+    if (timer.Get() > (10 * 0.125)) {
+      auto terry_cpt = GameData::MonsterGameObject->GetComponent(TerryType);
+      auto terry = std::dynamic_pointer_cast<Terry>(terry_cpt);
+      terry->SetSprite("assets/img/npc/npc.png");
+      terry->SetAnimation(4, 0.5);
+    }
+  }
+
   Camera::Update(dt);
 
   if (im.KeyPress(ESCAPE_KEY)) {
@@ -197,7 +207,9 @@ void RoomState::LoadAssets() {
   GameData::PlayerGameObject = playerGo;
 
   auto terryGo = std::make_shared<GameObject>(8);
-  Terry* terry = new Terry(*terryGo, {75, 795});
+  Terry* terry = new Terry(*terryGo, "assets/img/npc/idlenpc.png", {75, 795});
+  terry->SetSprite("assets/img/npc/npc.png");
+  terry->SetAnimation(4, 0.5);
   terryGo->AddComponent(terry);
   GameData::TerryGameObject = terryGo;
   objects.push_back(terryGo);
@@ -475,7 +487,9 @@ void RoomState::LoadFurnitureBasement() {
   auto furnitureGo = new GameObject(7);
   auto furniture =
       new Furniture(*furnitureGo, "assets/img/furniture/wheelchair.png",
-                    {178, 1059}, Helpers::Interaction::NOTHING);
+                    {178, 1059}, Helpers::Interaction::LOOK, true,
+                    {"Hum, estranho ver uma dessas aqui...",
+                     "Isso me lembra uma certa cidade... Deixa pra lá."});
   furnitureGo->AddComponent(furniture);
   objects.emplace_back(furnitureGo);
 
@@ -529,8 +543,10 @@ void RoomState::LoadFurnitureBasement() {
   objects.emplace_back(furnitureGo);
 
   furnitureGo = new GameObject(7);
-  furniture = new Furniture(*furnitureGo, "assets/img/furniture/equipament.png",
-                            {60, 1144}, Helpers::Interaction::LOOK);
+  furniture =
+      new Furniture(*furnitureGo, "assets/img/furniture/equipament.png",
+                    {60, 1144}, Helpers::Interaction::LOOK, true,
+                    {"Que estranho esse equipamento. Nunca vi um igual..."});
   furnitureGo->AddComponent(furniture);
   objects.emplace_back(furnitureGo);
 
@@ -554,7 +570,9 @@ void RoomState::LoadFurnitureBasement() {
                     Helpers::Interaction::LOOK, true,
                     {"Parece que estavam avancando nos teste da cura da "
                      "Peste...",
-                     "Mas eu não conheco esses métodos..."});
+                     "Mas eu não conheco esses métodos...",
+                     "Será que isso é o que eu estou pensando? No que será que "
+                     "eles estavam pensando ao mexer com esse tipo de coisa?"});
   furnitureGo->AddComponent(furniture);
   objects.emplace_back(furnitureGo);
 

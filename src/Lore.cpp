@@ -15,6 +15,7 @@
 #include "SleepState.hpp"
 #include "Sprite.hpp"
 #include "Stairs.hpp"
+#include "Terry.hpp"
 
 bool Lore::NicePerson = false;
 bool Lore::HasEnteredMasterBedroom = false;
@@ -150,7 +151,6 @@ void Lore::PlayerCaught() {
 }
 
 void Lore::DefendAgainstMonster() {
-  printf("Oi 1\n");
   Lore::Defended = true;
 
   auto& state = Game::GetInstance().GetCurrentState();
@@ -163,30 +163,16 @@ void Lore::DefendAgainstMonster() {
 
   GameData::transformed_monster_in_terry = true;
 
-  if (!GameData::TerryGameObject) {
-    GameData::TerryGameObject = std::make_shared<GameObject>(8);
-    state.AddObject(GameData::TerryGameObject.get());
-  }
-  GameData::TerryGameObject->box.x = ant->position.x * 8;
-  GameData::TerryGameObject->box.y = ant->position.y * 8;
+  GameData::TerryGameObject = std::make_shared<GameObject>(8);
+  auto terry_cpt =
+      new Terry(*GameData::TerryGameObject, "assets/img/npc/idlenpc.png",
+                {ant->position.x, ant->position.y});
+  terry_cpt->SetSprite("assets/img/terry/monster_to_terry.png");
+  terry_cpt->SetAnimation(10, 0.125);
+  GameData::TerryGameObject->AddComponent(terry_cpt);
+  state.AddObject(GameData::TerryGameObject.get());
 
-  auto sprite_cpt = GameData::TerryGameObject->GetComponent(SpriteType);
-  if (!sprite_cpt) {
-    auto sprite_c = new Sprite(*GameData::TerryGameObject,
-                               "assets/img/terry/monster_to_terry.png");
-    GameData::TerryGameObject->AddComponent(sprite_c);
-  }
-
-  sprite_cpt = GameData::TerryGameObject->GetComponent(SpriteType);
-  if (!sprite_cpt) {
-    throw std::runtime_error("sem sprite em Lore::DefendAgainstMonster");
-  }
-  auto sprite = std::dynamic_pointer_cast<Sprite>(sprite_cpt);
-
-  sprite->Open("assets/img/terry/monster_to_terry.png");
-  sprite->SetFrameCount(10);
-  sprite->SetFrameTime(0.125);
   GameData::MonsterGameObject->RequestDelete();
 
-  printf("Oi! 2\n");
+  GameData::already_begin_animation = true;
 }
