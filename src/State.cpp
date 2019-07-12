@@ -58,7 +58,6 @@ void State::StartArray() {
 }
 
 void State::UpdateArray(float dt) {
-  bool hasObject = !enqueuedObjects.empty();
   while (!enqueuedObjects.empty()) {
     objects.push_back(enqueuedObjects.front());
     enqueuedObjects.pop();

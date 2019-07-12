@@ -20,7 +20,7 @@
 Furniture::Furniture(GameObject& associated, const std::string& file,
                      Vec2 position, Helpers::Interaction interaction,
                      bool fullblock, std::vector<std::string> script,
-                     bool special)
+                     bool special, bool blocks)
     : Component(associated),
       interact(false),
       colliding(false),
@@ -64,32 +64,28 @@ Furniture::Furniture(GameObject& associated, const std::string& file,
     interactMsgGo = state.AddObject(interactmsg_go);
   }
 
-  GameObject* blocker_go = new GameObject(associated.priority);
-  blocker_go->box = associated.box;
-  Blocker* blocker;
-  if (fullblock) {
-    blocker = new Blocker(*blocker_go);
-  } else {
-    blocker =
-        new Blocker(*blocker_go, {1, 0.4}, {0, sprite->GetHeight() * 0.30f});
+  if (blocks) {
+    GameObject* blocker_go = new GameObject(associated.priority);
+    blocker_go->box = associated.box;
+    if (fullblock) {
+      Blocker* blocker = new Blocker(*blocker_go);
+      blocker_go->AddComponent(blocker);
+    } else {
+      Blocker* blocker =
+          new Blocker(*blocker_go, {1, 0.4}, {0, sprite->GetHeight() * 0.30f});
+      blocker_go->AddComponent(blocker);
 
-    GameObject* pcGo = new GameObject(associated.priority);
-    pcGo->box = associated.box;
-    PriorityChanger* priChanger = new PriorityChanger(*pcGo, associated);
-    pcGo->AddComponent(priChanger);
-    state.AddObject(pcGo);
-  }
-
-  blocker_go->AddComponent(blocker);
-  blockerGo = state.AddObject(blocker_go);
-}
-
-Furniture::~Furniture() {
-  blockerGo->RequestDelete();
-  if (interact) {
-    interactMsgGo->RequestDelete();
+      GameObject* pcGo = new GameObject(associated.priority);
+      pcGo->box = associated.box;
+      PriorityChanger* priChanger = new PriorityChanger(*pcGo, associated);
+      pcGo->AddComponent(priChanger);
+      state.AddObject(pcGo);
+    }
+    blockerGo = state.AddObject(blocker_go);
   }
 }
+
+Furniture::~Furniture() {}
 
 void Furniture::NotifyCollision(std::shared_ptr<GameObject> other) {
   auto playerComponent = other->GetComponent(PlayerType);
@@ -152,6 +148,14 @@ void Furniture::SetAnimation(int frameCount, int frameTime) {
   auto sprite = std::dynamic_pointer_cast<Sprite>(sprite_cpt);
   sprite->SetFrameCount(frameCount);
   sprite->SetFrameTime(frameTime);
+}
+
+void Furniture::SetScale(float x, float y) {
+  auto sprite_cpt = associated.GetComponent(SpriteType);
+  auto sprite = std::dynamic_pointer_cast<Sprite>(sprite_cpt);
+  sprite->SetScaleX(x, y);
+  associated.box.w = sprite->GetWidth();
+  associated.box.h = sprite->GetHeight();
 }
 
 bool Furniture::Is(Types type) const { return type == this->Type; }

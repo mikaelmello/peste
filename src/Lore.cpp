@@ -63,8 +63,10 @@ void Lore::Sleep() {
       "bem. "
       "Então eu acho que vai mesmo!\""};
   auto daily_go = new GameObject(7);
-  auto daily = new Furniture(*daily_go, "assets/img/item/daily.png", {75, 795},
-                             Helpers::Interaction::LOOK, false, script);
+  auto daily =
+      new Furniture(*daily_go, "assets/img/item/daily.png", {75, 795},
+                    Helpers::Interaction::LOOK, false, script, false, false);
+  daily->SetScale(0.4, 0.4);
   daily_go->AddComponent(daily);
   game.GetCurrentState().AddObject(daily_go);
 
@@ -78,8 +80,9 @@ void Lore::Sleep() {
       "“Mostrar para o doutor.\""};
 
   daily_go = new GameObject(7);
-  daily = new Furniture(*daily_go, "assets/img/item/daily.png", {29, 610},
-                        Helpers::Interaction::LOOK, false, script);
+  daily =
+      new Furniture(*daily_go, "assets/img/item/daily.png", {29, 610},
+                    Helpers::Interaction::LOOK, false, script, false, false);
   daily_go->AddComponent(daily);
   game.GetCurrentState().AddObject(daily_go);
 
@@ -93,8 +96,9 @@ void Lore::Sleep() {
       "minha idade.\""};
 
   daily_go = new GameObject(7);
-  daily = new Furniture(*daily_go, "assets/img/item/daily.png", {303, 312},
-                        Helpers::Interaction::LOOK, false, script);
+  daily =
+      new Furniture(*daily_go, "assets/img/item/daily.png", {303, 312},
+                    Helpers::Interaction::LOOK, false, script, false, false);
   daily_go->AddComponent(daily);
   game.GetCurrentState().AddObject(daily_go);
 }
