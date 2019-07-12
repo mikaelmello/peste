@@ -617,6 +617,12 @@ void RoomState::LoadDoors() {
   objects.emplace_back(doorGo);
 
   doorGo = new GameObject(8);
+  door = new Door(*doorGo, Helpers::DoorStyle::MAIN, {48, 416}, false,
+                  Helpers::KeyType::EXIT);
+  doorGo->AddComponent(door);
+  objects.emplace_back(doorGo);
+
+  doorGo = new GameObject(8);
   door = new Door(*doorGo, Helpers::DoorStyle::DOUBLE, {256, 112}, false,
                   Helpers::KeyType::KITCHEN);
   doorGo->AddComponent(door);

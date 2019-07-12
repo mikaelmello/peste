@@ -17,6 +17,7 @@
 #define DOUBLE_DOOR_OPEN "assets/img/doors/doubleDoor_front_open.png"
 #define LAB_DOOR_OPEN "assets/img/doors/labdoorOpen.png"
 #define LAB_DOOR_CLOSED "assets/img/doors/labdoor.png"
+#define MAIN_DOOR "assets/img/doors/maindoor.png"
 
 Door::Door(GameObject& associated, Helpers::DoorStyle style, Vec2 position,
            bool open, Helpers::KeyType key)
@@ -40,6 +41,8 @@ Door::Door(GameObject& associated, Helpers::DoorStyle style, Vec2 position,
     closePath = LAB_DOOR_CLOSED;
     openPath = LAB_DOOR_OPEN;
     sprite->Open(LAB_DOOR_CLOSED);
+  } else if (style == Helpers::DoorStyle::MAIN) {
+    sprite->Open(MAIN_DOOR);
   }
   collider->SetScale({1, 1.5});
   collider->SetOffset({0, 0.75});
