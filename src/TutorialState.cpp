@@ -1,7 +1,8 @@
 #include "TutorialState.hpp"
 #include "InputManager.hpp"
 
-TutorialState::TutorialState() : im(InputManager::GetInstance()) {}
+TutorialState::TutorialState()
+    : im(InputManager::GetInstance()), k(0), tutorials(TUTORIALS) {}
 
 TutorialState::~TutorialState() {}
 
@@ -13,6 +14,21 @@ void TutorialState::Update(float dt) {
   popRequested |= im.KeyPress(ESCAPE_KEY) || im.JoyKeyPress(JOY_B_KEY);
   quitRequested |= im.QuitRequested();
 
+  UpdateArray(dt);
+
+  auto sprite_cpt = box->GetComponent(SpriteType);
+  if (!sprite_cpt) {
+    std::runtime_error("sem sprite em CreditsState::Update");
+  }
+  auto sprite = std::dynamic_pointer_cast<Sprite>(sprite_cpt);
+
+  popRequested |= im.KeyPress(ESCAPE_KEY) || im.JoyKeyPress(JOY_B_KEY);
+  quitRequested |= im.QuitRequested();
+
+  if (im.KeyPress(SPACE_BAR_KEY) || im.JoyKeyPress(JOY_A_KEY)) {
+    k = (k + 1) % tutorials.size();
+    sprite->Open(tutorials[k]);
+  }
   UpdateArray(dt);
 }
 
@@ -39,6 +55,14 @@ void TutorialState::LoadAssets() {
   box_go->box.x = 15;
   box_go->box.y = 250;
   objects.push_back(box_go);
+  box = box_go;
+
+  auto cursor_go = std::make_shared<GameObject>(10003);
+  Sprite* cursor_sprite = new Sprite(*cursor_go, MENU_CURSOR_SPRITE);
+  cursor_go->AddComponent(cursor_sprite);
+  objects.push_back(cursor_go);
+  cursor_go->box.x = 100;
+  cursor_go->box.y = 630;
 }
 
 void TutorialState::Render() { RenderArray(); }
