@@ -90,6 +90,7 @@ enum DoorStyle {
   DOUBLE,
   SINGLE,
   LAB,
+  MAIN,
 };
 
 void TeleportPlayerSafeHouse();
