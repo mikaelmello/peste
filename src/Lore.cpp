@@ -83,6 +83,7 @@ void Lore::Sleep() {
   daily =
       new Furniture(*daily_go, "assets/img/item/daily.png", {29, 610},
                     Helpers::Interaction::LOOK, false, script, false, false);
+  daily->SetScale(0.4, 0.4);
   daily_go->AddComponent(daily);
   game.GetCurrentState().AddObject(daily_go);
 
@@ -99,6 +100,7 @@ void Lore::Sleep() {
   daily =
       new Furniture(*daily_go, "assets/img/item/daily.png", {303, 312},
                     Helpers::Interaction::LOOK, false, script, false, false);
+  daily->SetScale(0.4, 0.4);
   daily_go->AddComponent(daily);
   game.GetCurrentState().AddObject(daily_go);
 }

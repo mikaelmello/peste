@@ -314,7 +314,7 @@ void RoomState::LoadFurnitureSecondFloor() {
   furnitureGo = new GameObject(7);
   furniture = new Furniture(*furnitureGo, "assets/img/furniture/clock.png",
                             {295, 532}, Helpers::Interaction::LOOK, false,
-                            {"Parece que não funciona..."});
+                            {"Parece que não funciona..."}, false, false);
   furnitureGo->AddComponent(furniture);
   objects.emplace_back(furnitureGo);
 

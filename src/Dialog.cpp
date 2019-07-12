@@ -19,14 +19,14 @@ Dialog::Dialog(GameObject& associated) : Component(associated) {
   GameObject* interlocutor_go = new GameObject(associated.priority + 1);
   Text* interlocutor = new Text(
       *interlocutor_go, "assets/font/tox-typewriter.ttf", 35,
-      Text::BLENDED_WRAPPED, " ", {0, 0, 0, 0}, associated.box.w - 110);
+      Text::BLENDED_WRAPPED, " ", {0, 0, 0, 0}, associated.box.w - 150);
   interlocutor_go->AddComponent(interlocutor);
   interlocutorGo = state.AddObject(interlocutor_go);
 
   GameObject* text_go = new GameObject(associated.priority + 1);
   Text* txt = new Text(*text_go, "assets/font/tox-typewriter.ttf", 25,
                        Text::BLENDED_WRAPPED, " ", {0, 0, 0, 0},
-                       associated.box.w - 110);
+                       associated.box.w - 150);
   text_go->AddComponent(txt);
   textGo = state.AddObject(text_go);
 
