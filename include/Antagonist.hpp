@@ -42,7 +42,7 @@
 #define CALC_CONST 6
 #define PATROL_SPEED 50.0f
 #define SUSPECT_SPEED 40.0f
-#define PURSUIT_SPEED 70.0f
+#define PURSUIT_SPEED 40.0f
 #define ZERO_SPEED 0
 
 #define WALKING_WALK_SET                                                    \
