@@ -182,6 +182,13 @@ void RoomState::LoadFurnitureFirstFloor() {
   furnitureGo->AddComponent(furniture);
   objects.emplace_back(furnitureGo);
 
+  furnitureGo = new GameObject(6);
+  furniture = new Furniture(*furnitureGo, "assets/img/furniture/picture1.png",
+                            {43, 325}, Helpers::Interaction::NOTHING);
+  furniture->SetAnimation(5, 1);
+  furnitureGo->AddComponent(furniture);
+  objects.emplace_back(furnitureGo);
+
   // begin piano room
   furnitureGo = new GameObject(6);
   furniture = new Furniture(*furnitureGo, "assets/img/furniture/piano.png",
@@ -306,8 +313,15 @@ void RoomState::LoadFurnitureSecondFloor() {
 
   furnitureGo = new GameObject(7);
   furniture = new Furniture(*furnitureGo, "assets/img/furniture/clock.png",
-                            {302, 532}, Helpers::Interaction::LOOK, false,
+                            {295, 532}, Helpers::Interaction::LOOK, false,
                             {"Parece que não funciona..."});
+  furnitureGo->AddComponent(furniture);
+  objects.emplace_back(furnitureGo);
+
+  furnitureGo = new GameObject(6);
+  furniture = new Furniture(*furnitureGo, "assets/img/furniture/picture2.png",
+                            {204, 532}, Helpers::Interaction::NOTHING);
+  furniture->SetAnimation(5, 1);
   furnitureGo->AddComponent(furniture);
   objects.emplace_back(furnitureGo);
 

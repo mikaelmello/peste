@@ -40,6 +40,8 @@ class Furniture : public Component {
 
   void Look();
 
+  void SetAnimation(int frameCount, int frameTime);
+
   const Types Type = FurnitureType;
 
  private:

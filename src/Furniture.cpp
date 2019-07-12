@@ -56,7 +56,6 @@ Furniture::Furniture(GameObject& associated, const std::string& file,
     } else if (interaction == Helpers::Interaction::LOOK ||
                interaction == Helpers::Interaction::PLAY) {
       interactMsg = new ActionMessage(*interactmsg_go, position, LOOK_MSG);
-      // collider->SetScale({1, 1})
     } else if (interaction == Helpers::Interaction::SLEEP) {
       interactMsg = new ActionMessage(*interactmsg_go, position, SLEEP_MSG);
       collider->SetScale({1.5, 1.5});
@@ -146,6 +145,13 @@ void Furniture::Look() {
   }
 
   GameData::InitDialog(s);
+}
+
+void Furniture::SetAnimation(int frameCount, int frameTime) {
+  auto sprite_cpt = associated.GetComponent(SpriteType);
+  auto sprite = std::dynamic_pointer_cast<Sprite>(sprite_cpt);
+  sprite->SetFrameCount(frameCount);
+  sprite->SetFrameTime(frameTime);
 }
 
 bool Furniture::Is(Types type) const { return type == this->Type; }

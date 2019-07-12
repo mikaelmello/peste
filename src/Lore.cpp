@@ -4,6 +4,7 @@
 #include <string>
 #include "Antagonist.hpp"
 #include "CameraAction.hpp"
+#include "Furniture.hpp"
 #include "Game.hpp"
 #include "GameData.hpp"
 #include "InputManager.hpp"
@@ -50,6 +51,52 @@ void Lore::Sleep() {
                Helpers::KeyType::CROWBAR, 96, 96);
   itemGo->AddComponent(item);
   game.GetCurrentState().AddObject(itemGo);
+
+  std::vector<std::string> script = {
+      "É um caderno todo destruído...",
+      "Ah! Parece que tem algo escrito na parte de dentro da capa.",
+      "\"Hoje a mamãe me deu um caderno novo. Ela falou que era pra desenhos. "
+      "Mas eu vou usar como um amigo!\". . .",
+      "\"Eu sinto falta dos meus amigos… Nunca mais consegui ir na escola "
+      "depois que descobri que tô doente…\" . . .",
+      "\"Mas o papai e a mamãe são médicos! Eles falaram que vai ficar tudo "
+      "bem. "
+      "Então eu acho que vai mesmo!\""};
+  auto daily_go = new GameObject(7);
+  auto daily = new Furniture(*daily_go, "assets/img/item/daily.png", {75, 795},
+                             Helpers::Interaction::LOOK, false, script);
+  daily_go->AddComponent(daily);
+  game.GetCurrentState().AddObject(daily_go);
+
+  script = {
+      "É uma folha de caderno rasgada...,",
+      "\"Às vezes, eu chego a ter medo do papai... Eu sei que ele quer meu "
+      "bem e tá fazendo essas coisas pra eu melhorar... Mas dói tanto.\" ...",
+      "\"Antes eu ficava feliz que o papai e a mamãe estavam fazendo meus "
+      "remédios. Agora eu nem consigo olhar pro papai sem chorar.\" ..."
+      "\"Um post-it colado sobre a página diz, numa caligrafia diferente, "
+      "“Mostrar para o doutor.\""};
+
+  daily_go = new GameObject(7);
+  daily = new Furniture(*daily_go, "assets/img/item/daily.png", {29, 610},
+                        Helpers::Interaction::LOOK, false, script);
+  daily_go->AddComponent(daily);
+  game.GetCurrentState().AddObject(daily_go);
+
+  script = {
+      "\"Eu ouvi uns barulhos lá embaixo.\"",
+      "\"Voz de criança? Não sei, mesmo... Eu tava feliz de ter gente da "
+      "minha idade aqui. Talvez era algum primo que eu não conhecia.\"...",
+      "\"Mas quando eu pedi pra saber quem tava lá, meu pai disse que era só "
+      "ele e a mamãe.\"...",
+      "\"Engraçado... Eu jurava que tinha ouvido a voz de uma criança da "
+      "minha idade.\""};
+
+  daily_go = new GameObject(7);
+  daily = new Furniture(*daily_go, "assets/img/item/daily.png", {303, 312},
+                        Helpers::Interaction::LOOK, false, script);
+  daily_go->AddComponent(daily);
+  game.GetCurrentState().AddObject(daily_go);
 }
 
 void Lore::FirstMonsterSpawn() {
