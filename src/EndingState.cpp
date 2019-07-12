@@ -32,9 +32,15 @@ void EndingState::Pause() {}
 void EndingState::Resume() {}
 
 void EndingState::LoadAssets() {
-  SCRIPT_TYPE good_script = {{"Terry ", "Para onde vamos?"},
-                             {"Hope ", "Para um lugar seguro."},
-                             {"Fim ", " "}};
+  SCRIPT_TYPE good_script = {
+      {"Sr. e Sra. Hyde, ",
+       "Escolhi a profissão de enfermeiro porque gosto de cuidar das pessoas. "
+       "E é isto que estou fazendo. Vou levar o Terry para um lugar mais "
+       "seguro. "
+       "Ele não está a salvo com vocês."},
+      {" ", "Por favor, não nos procurem mais."},
+      {"Fim ", " "}};
+  ;
 
   SCRIPT_TYPE bad_script = {
       {"Sr. e Sra. Hyde, ",
