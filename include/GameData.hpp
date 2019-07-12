@@ -43,6 +43,7 @@ class GameData {
   static bool HasCrowbar();
 
  private:
+  static bool canUseLamp;
   static bool can_visit_basement;
 };
 

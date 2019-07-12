@@ -13,6 +13,7 @@ std::shared_ptr<GameObject> GameData::TerryGameObject;
 
 std::vector<std::shared_ptr<GameObject>> GameData::PlayerInventory;
 
+bool GameData::canUseLamp = false;
 bool GameData::player_was_hit = false;
 bool GameData::player_is_hidden = false;
 bool GameData::can_visit_basement = false;
@@ -57,6 +58,10 @@ void GameData::InitDialog(SCRIPT_TYPE script) {
 }
 
 bool GameData::CanUseLamp() {
+  if (canUseLamp) {
+    return true;
+  }
+
   unsigned c = 0;
   for (auto i : PlayerInventory) {
     auto item_cpt = i->GetComponent(ItemType);
@@ -65,15 +70,14 @@ bool GameData::CanUseLamp() {
     }
     auto item = std::dynamic_pointer_cast<Item>(item_cpt);
 
-    if (item->GetName() == "Isqueiro")
+    if (item->GetName() == "Isqueiro" || item->GetName() == "Lamparina" ||
+        item->GetName() == "Óleo") {
       c++;
-    else if (item->GetName() == "Lamparina")
-      c++;
-    else if (item->GetName() == "Óleo")
-      c++;
+    }
   }
 
-  return c >= 3;
+  canUseLamp = c >= 3;
+  return canUseLamp;
 }
 
 bool GameData::HasCrowbar() {

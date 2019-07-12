@@ -225,7 +225,11 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
 void Player::Start() { sleepTimer.Restart(); }
 
 void Player::Update(float dt) {
-  Vec2 oldPos(position.x, position.y);
+  if (leaveBasement) {
+    position = {388, 206};
+    leaveBasement = false;
+    return;
+  }
   InputManager& input = InputManager::GetInstance();
   bool canwalk = true;
   auto tilemap = Game::GetInstance().GetCurrentState().GetCurrentTileMap();

@@ -55,8 +55,6 @@ void RoomState::Update(float dt) {
     return;
   }
 
-  Camera::Update(dt);
-
   InputManager& im = InputManager::GetInstance();
   quitRequested |= im.QuitRequested();
 
@@ -69,6 +67,8 @@ void RoomState::Update(float dt) {
     CameraAction::Update(dt);
     return;
   }
+
+  Camera::Update(dt);
 
   if (im.KeyPress(ESCAPE_KEY)) {
     Game::GetInstance().Push(new InventoryState());
@@ -109,9 +109,28 @@ void RoomState::Update(float dt) {
     }
   }
 
-  if (GameData::PlayerFloor() != last_known) {
+  auto floor = GameData::PlayerFloor();
+  if (floor != last_known) {
+    if (floor == Helpers::Floor::BASEMENT && !GameData::CanUseLamp()) {
+      SCRIPT_TYPE s[] = {
+          {{"Hope", "Está muito escuro, preciso achar algo para iluminar"}},
+          {{"Hope",
+            "Não vou conseguir ver nada enquanto não tiver algo para "
+            "iluminar"}},
+      };
+
+      GameData::InitDialog(s[rand() % 2]);
+
+      auto player_cpt = GameData::PlayerGameObject->GetComponent(PlayerType);
+      if (!player_cpt) {
+        throw std::runtime_error("player sem player em roomstate");
+      }
+      auto player = std::dynamic_pointer_cast<Player>(player_cpt);
+      player->leaveBasement = true;
+    }
+
     GameData::LoadAntagonistPaths();
-    last_known = GameData::PlayerFloor();
+    last_known = floor;
   }
 
   UpdateArray(dt);

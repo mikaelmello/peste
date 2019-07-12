@@ -40,6 +40,8 @@ class Player : public Component {
 
   Vec2 position;
 
+  bool leaveBasement = false;
+
  private:
   const double speed = 30;
 
