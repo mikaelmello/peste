@@ -16,7 +16,8 @@ class Furniture : public Component {
  public:
   Furniture(GameObject& associated, const std::string& file, Vec2 position,
             Helpers::Interaction interaction, bool fullblock = true,
-            std::vector<std::string> script = {}, bool special = false);
+            std::vector<std::string> script = {}, bool special = false,
+            bool blocks = true);
 
   ~Furniture();
 
@@ -39,6 +40,10 @@ class Furniture : public Component {
   void RemoveInteraction();
 
   void Look();
+
+  void SetAnimation(int frameCount, int frameTime);
+
+  void SetScale(float x, float y);
 
   const Types Type = FurnitureType;
 
