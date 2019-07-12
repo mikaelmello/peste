@@ -254,6 +254,7 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
 void Player::Start() { sleepTimer.Restart(); }
 
 void Player::Update(float dt) {
+  printf("%s\n", position.ToString().c_str());
   if (leaveBasement) {
     position = {388, 206};
     leaveBasement = false;
