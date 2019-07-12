@@ -44,6 +44,7 @@ void SleepState::LoadAssets() {
 
   sprite_go = std::make_shared<GameObject>();
   auto sprite_cpt = new Sprite(*sprite_go, SLEEPING_BG);
+  sprite_cpt->SetScaleX(1.1, 1.1);
   sprite_go->AddComponent(sprite_cpt);
   sprite_go->box.x = 0;
   sprite_go->box.y = 0;
