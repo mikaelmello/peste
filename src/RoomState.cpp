@@ -111,22 +111,29 @@ void RoomState::Update(float dt) {
 
   auto floor = GameData::PlayerFloor();
   if (floor != last_known) {
-    if (floor == Helpers::Floor::BASEMENT && !GameData::CanUseLamp()) {
-      SCRIPT_TYPE s[] = {
-          {{"Hope", "Está muito escuro, preciso achar algo para iluminar"}},
-          {{"Hope",
-            "Não vou conseguir ver nada enquanto não tiver algo para "
-            "iluminar"}},
-      };
+    auto player_cpt = GameData::PlayerGameObject->GetComponent(PlayerType);
+    if (!player_cpt) {
+      throw std::runtime_error("player sem player/sprite em roomstate");
+    }
 
-      GameData::InitDialog(s[rand() % 2]);
+    auto player = std::dynamic_pointer_cast<Player>(player_cpt);
+    if (floor == Helpers::Floor::BASEMENT) {
+      if (!GameData::CanUseLamp()) {
+        SCRIPT_TYPE s[] = {
+            {{"Hope", "Está muito escuro, preciso achar algo para iluminar"}},
+            {{"Hope",
+              "Não vou conseguir ver nada enquanto não tiver algo para "
+              "iluminar"}},
+        };
 
-      auto player_cpt = GameData::PlayerGameObject->GetComponent(PlayerType);
-      if (!player_cpt) {
-        throw std::runtime_error("player sem player em roomstate");
+        GameData::InitDialog(s[rand() % 2]);
+
+        player->leaveBasement = true;
+      } else {
+        player->lamp = true;
       }
-      auto player = std::dynamic_pointer_cast<Player>(player_cpt);
-      player->leaveBasement = true;
+    } else {
+      player->lamp = false;
     }
 
     GameData::LoadAntagonistPaths();

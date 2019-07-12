@@ -22,16 +22,6 @@
 
 using namespace Helpers;
 
-#define PLAYER_FRONT_ANIM "assets/img/hope/front_anim.png"
-#define PLAYER_BACK_ANIM "assets/img/hope/back_anim.png"
-#define PLAYER_LEFT_ANIM "assets/img/hope/left_anim.png"
-#define PLAYER_RIGHT_ANIM "assets/img/hope/right_anim.png"
-
-#define PLAYER_FRONT "assets/img/hope/front.png"
-#define PLAYER_BACK "assets/img/hope/back.png"
-#define PLAYER_LEFT "assets/img/hope/left.png"
-#define PLAYER_RIGHT "assets/img/hope/right.png"
-
 std::vector<std::string> YawnSounds = {
     PLAYER_YAWN_SOUND_1,
     PLAYER_YAWN_SOUND_2,
@@ -411,36 +401,36 @@ void Player::OpenIdleSprite(const std::shared_ptr<Sprite>& sprite,
                             Direction lastDirection) {
   switch (lastDirection) {
     case Direction::UP:
-      sprite->Open(PLAYER_BACK);
+      sprite->Open(lamp ? PLAYER_BACK_LAMP : PLAYER_BACK);
       frameCount = 4;
       break;
     case Direction::DOWN:
-      sprite->Open(PLAYER_FRONT);
-      frameCount = 8;
+      sprite->Open(lamp ? PLAYER_FRONT_LAMP : PLAYER_FRONT);
+      frameCount = lamp ? 4 : 8;
       break;
     case Direction::LEFT:
-      sprite->Open(PLAYER_LEFT);
+      sprite->Open(lamp ? PLAYER_LEFT_LAMP : PLAYER_LEFT);
       frameCount = 4;
       break;
     case Direction::RIGHT:
-      sprite->Open(PLAYER_RIGHT);
+      sprite->Open(lamp ? PLAYER_RIGHT_LAMP : PLAYER_RIGHT);
       frameCount = 4;
       break;
     case Direction::UPLEFT:
-      sprite->Open(PLAYER_BACK);
+      sprite->Open(lamp ? PLAYER_BACK_LAMP : PLAYER_BACK);
       frameCount = 4;
       break;
     case Direction::UPRIGHT:
-      sprite->Open(PLAYER_BACK);
+      sprite->Open(lamp ? PLAYER_BACK_LAMP : PLAYER_BACK);
       frameCount = 4;
       break;
     case Direction::DOWNLEFT:
-      sprite->Open(PLAYER_FRONT);
-      frameCount = 8;
+      sprite->Open(lamp ? PLAYER_FRONT_LAMP : PLAYER_FRONT);
+      frameCount = lamp ? 4 : 8;
       break;
     case Direction::DOWNRIGHT:
-      sprite->Open(PLAYER_FRONT);
-      frameCount = 8;
+      sprite->Open(lamp ? PLAYER_FRONT_LAMP : PLAYER_FRONT);
+      frameCount = lamp ? 4 : 8;
       break;
     default:
       break;
@@ -457,35 +447,35 @@ void Player::OpenWalkingSprite(const std::shared_ptr<Sprite>& sprite,
                                Direction direction) {
   switch (direction) {
     case Direction::UP:
-      sprite->Open(PLAYER_BACK_ANIM);
+      sprite->Open(lamp ? PLAYER_BACK_ANIM_LAMP : PLAYER_BACK_ANIM);
       frameCount = 5;
       break;
     case Direction::DOWN:
-      sprite->Open(PLAYER_FRONT_ANIM);
+      sprite->Open(lamp ? PLAYER_FRONT_ANIM_LAMP : PLAYER_FRONT_ANIM);
       frameCount = 5;
       break;
     case Direction::LEFT:
-      sprite->Open(PLAYER_LEFT_ANIM);
+      sprite->Open(lamp ? PLAYER_LEFT_ANIM_LAMP : PLAYER_LEFT_ANIM);
       frameCount = 8;
       break;
     case Direction::RIGHT:
-      sprite->Open(PLAYER_RIGHT_ANIM);
+      sprite->Open(lamp ? PLAYER_RIGHT_ANIM_LAMP : PLAYER_RIGHT_ANIM);
       frameCount = 8;
       break;
     case Direction::UPLEFT:
-      sprite->Open(PLAYER_BACK_ANIM);
+      sprite->Open(lamp ? PLAYER_BACK_ANIM_LAMP : PLAYER_BACK_ANIM);
       frameCount = 5;
       break;
     case Direction::UPRIGHT:
-      sprite->Open(PLAYER_BACK_ANIM);
+      sprite->Open(lamp ? PLAYER_BACK_ANIM_LAMP : PLAYER_BACK_ANIM);
       frameCount = 5;
       break;
     case Direction::DOWNLEFT:
-      sprite->Open(PLAYER_FRONT_ANIM);
+      sprite->Open(lamp ? PLAYER_FRONT_ANIM_LAMP : PLAYER_FRONT_ANIM);
       frameCount = 5;
       break;
     case Direction::DOWNRIGHT:
-      sprite->Open(PLAYER_FRONT_ANIM);
+      sprite->Open(lamp ? PLAYER_FRONT_ANIM_LAMP : PLAYER_FRONT_ANIM);
       frameCount = 5;
       break;
     default:
