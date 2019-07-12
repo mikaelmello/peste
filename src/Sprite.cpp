@@ -49,6 +49,9 @@ void Sprite::Open(const std::string& file) {
 void Sprite::SetClip(int x, int y, int w, int h) { clipRect = {x, y, w, h}; }
 
 void Sprite::Render(int x, int y) {
+  if (!IsOpen()) {
+    return;
+  }
   SDL_Rect temp_rect = {x, y, (int)round(scale.x * clipRect.w),
                         (int)round(scale.y * clipRect.h)};
   int return_code = SDL_RenderCopyEx(
