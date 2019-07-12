@@ -59,6 +59,7 @@ Player::Player(GameObject& associated, Vec2 position)
   dkGo->AddComponent(cf);
   dkGo->AddComponent(sprite);
   darknessGo = state.AddObject(dkGo);
+  darknessGo->DisableRender();
 
   sound = std::make_shared<Sound>(associated);
   walkingSound = std::make_shared<Sound>(associated);
