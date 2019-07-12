@@ -88,25 +88,42 @@ void Terry::ShowTalkDialog() { talkMessageGo->EnableRender(); }
 void Terry::HideTalkDialog() { talkMessageGo->DisableRender(); }
 
 void Terry::Talk() {
-  SCRIPT_TYPE scripts[] = {
-      {
-          {"Hope", "Você vive aqui há muito tempo?"},
-          {"Terry", "..."},
-          {"Hope", "Sua casa é bonita. Bem grande..."},
-          {"Terry", "... é, muito."},
-          {"Hope", "Tem um monte de brinquedo aqui, vamos lá!"},
-      },
-      {
-          {"Hope", "Você tem alguma brincadeira favorita?"},
-          {"Terry", "... sim."},
-          {"Hope", "Qual?"},
-      },
-      {
-          {"Hope", "Tá tudo bem?"},
-      },
-  };
-  Lore::NicePerson = true;
-  GameData::InitDialog(scripts[rand() % 3]);
+  if (!GameData::transformed_monster_in_terry) {
+    SCRIPT_TYPE scripts[] = {
+        {
+            {"Hope", "Você vive aqui há muito tempo?"},
+            {"Terry", "..."},
+            {"Hope", "Sua casa é bonita. Bem grande..."},
+            {"Terry", "... é, muito."},
+            {"Hope", "Tem um monte de brinquedo aqui, vamos lá!"},
+        },
+        {
+            {"Hope", "Você tem alguma brincadeira favorita?"},
+            {"Terry", "... sim."},
+            {"Hope", "Qual?"},
+        },
+        {
+            {"Hope", "Tá tudo bem?"},
+        },
+    };
+    Lore::NicePerson = true;
+    GameData::InitDialog(scripts[rand() % 3]);
+  } else {
+    SCRIPT_TYPE script = {
+        {"Hope ", "Terry!"},
+        {"Hope ", "Meu deus, é você mesmo?!"},
+        {"Hope ", "Você está bem?!"},
+        {"Terry ", "Você é... o médico?"},
+        {"Hope ", "Sim! Meu nome é Hope, lembra?"},
+        {"Terry ", "Você não foi... embora?"},
+        {"Hope ", "Eu vim aqui para cuidar de você."},
+        {"Terry ", "Você... é diferente de todos."},
+        {"Terry ", "É diferente do... meu pai."},
+        {"Hope ", "..."},
+        {"Hope ", "Vem... vamos sair daqui."},
+    };
+    GameData::InitDialog(script);
+  }
 }
 
 void Terry::SetSprite(const std::string& file) {

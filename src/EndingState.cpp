@@ -32,18 +32,7 @@ void EndingState::Pause() {}
 void EndingState::Resume() {}
 
 void EndingState::LoadAssets() {
-  SCRIPT_TYPE good_script = {{"Hope ", "Terry!"},
-                             {"Hope ", "Meu deus, é você mesmo?!"},
-                             {"Hope ", "Você está bem?!"},
-                             {"Terry ", "Você é... o médico?"},
-                             {"Hope ", "Sim! Meu nome é Hope, lembra?"},
-                             {"Terry ", "Você não foi... embora?"},
-                             {"Hope ", "Eu vim aqui para cuidar de você."},
-                             {"Terry ", "Você... é diferente de todos."},
-                             {"Terry ", "É diferente do... meu pai."},
-                             {"Hope ", "..."},
-                             {"Hope ", "Vem... vamos sair daqui."},
-                             {"Terry ", "Para onde vamos?"},
+  SCRIPT_TYPE good_script = {{"Terry ", "Para onde vamos?"},
                              {"Hope ", "Para um lugar seguro."},
                              {"Fim ", " "}};
 

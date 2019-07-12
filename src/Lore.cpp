@@ -163,14 +163,13 @@ void Lore::DefendAgainstMonster() {
 
   GameData::transformed_monster_in_terry = true;
 
-  GameData::TerryGameObject = std::make_shared<GameObject>(8);
-  auto terry_cpt =
-      new Terry(*GameData::TerryGameObject, "assets/img/npc/idlenpc.png",
-                {ant->position.x, ant->position.y});
+  GameObject* terry_go = new GameObject(8);
+  Terry* terry_cpt = new Terry(*terry_go, "assets/img/npc/idlenpc.png",
+                               {ant->position.x - 10, ant->position.y - 10});
   terry_cpt->SetSprite("assets/img/terry/monster_to_terry.png");
-  terry_cpt->SetAnimation(10, 0.125);
-  GameData::TerryGameObject->AddComponent(terry_cpt);
-  state.AddObject(GameData::TerryGameObject.get());
+  terry_cpt->SetAnimation(10, 0.3);
+  terry_go->AddComponent(terry_cpt);
+  GameData::TerryGameObject = state.AddObject(terry_go);
 
   GameData::MonsterGameObject->RequestDelete();
 

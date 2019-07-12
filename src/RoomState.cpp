@@ -79,11 +79,15 @@ void RoomState::Update(float dt) {
 
   if (GameData::already_begin_animation) {
     timer.Update(dt);
-    if (timer.Get() > (10 * 0.125)) {
-      auto terry_cpt = GameData::MonsterGameObject->GetComponent(TerryType);
-      auto terry = std::dynamic_pointer_cast<Terry>(terry_cpt);
-      terry->SetSprite("assets/img/npc/npc.png");
-      terry->SetAnimation(4, 0.5);
+    if (timer.Get() > (10 * 0.3)) {
+      auto terry_cpt = GameData::TerryGameObject->GetComponent(TerryType);
+      if (terry_cpt) {
+        auto terry = std::dynamic_pointer_cast<Terry>(terry_cpt);
+        terry->SetSprite("assets/img/npc/npc.png");
+        terry->SetAnimation(4, 0.1);
+      } else {
+        throw std::runtime_error("Sem Terry irmao");
+      }
     }
   }
 
