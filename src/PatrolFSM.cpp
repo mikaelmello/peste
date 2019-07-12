@@ -62,6 +62,6 @@ void PatrolFSM::Update(float dt) {
   OnStateExecution(dt);
 
   if (ant.lock()->NearTarget()) {
-    ant.lock()->Push(new SuspectFSM(object));
+    // ant.lock()->Push(new SuspectFSM(object));
   }
 }
