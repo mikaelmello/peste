@@ -16,7 +16,7 @@ class Lore {
   static int CaughtCount;
   static void Sleep();
   static void FirstMonsterSpawn();
-  static void UnlockLibrary();
+  static void UnlockBasement();
   static void PlayerCaught();
 };
 

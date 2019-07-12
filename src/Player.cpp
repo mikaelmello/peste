@@ -103,6 +103,15 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
         keys.push_back(item->GetKeyType());
         if (item->GetKeyType() == Helpers::KeyType::KITCHEN) {
           GameData::got_key1 = true;
+        } else if (item->GetKeyType() == Helpers::KeyType::EXIT) {
+          SCRIPT_TYPE s = {
+              {"HOPE", "Que barulho é esse lá embaixo?"},
+          };
+          // inserir som de porta trancada
+          GameData::InitDialog(s);
+          Lore::UnlockBasement();
+          sound->Open("assets/audio/sound_effects/metal_clacking.wav");
+          sound->Play();
         }
       }
       auto ok = GameData::AddToInventory(other);
@@ -166,11 +175,6 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
               return;
               // inserir um ending state de acordo com o final correto.
             }
-          }
-          if (door->GetKey() == Helpers::KeyType::LIBRARY) {
-            Lore::UnlockLibrary();
-            sound->Open("assets/audio/sound_effects/metal_clacking.wav");
-            sound->Play();
           }
           soundPlayed = true;
           sound->Open("assets/audio/doors/open_door.wav");
@@ -337,6 +341,10 @@ void Player::Update(float dt) {
   }
   if (input.IsKeyDown(LSHIFT_KEY) && input.IsKeyDown(SDLK_a)) {
     position = {389, 1104};
+    return;
+  }
+  if (input.IsKeyDown(LSHIFT_KEY) && input.IsKeyDown(SDLK_s)) {
+    position = {304, 893};
     return;
   }
 

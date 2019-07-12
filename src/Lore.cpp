@@ -4,8 +4,8 @@
 #include <string>
 #include "Antagonist.hpp"
 #include "CameraAction.hpp"
-#include "Furniture.hpp"
 #include "CaughtState.hpp"
+#include "Furniture.hpp"
 #include "Game.hpp"
 #include "GameData.hpp"
 #include "InputManager.hpp"
@@ -128,7 +128,7 @@ void Lore::FirstMonsterSpawn() {
   state.AddObject(itemGo);
 }
 
-void Lore::UnlockLibrary() {
+void Lore::UnlockBasement() {
   auto& state = Game::GetInstance().GetCurrentState();
 
   //  Quando ele entrar na biblioteca, deve tocar um som alto e aparecer o
