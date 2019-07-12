@@ -45,6 +45,9 @@ class GameData {
   static bool HasCrowbar();
 
   static bool transformed_monster_in_terry;
+  static bool opened_main_door;
+
+  static void Init();
 
  private:
   static bool canUseLamp;

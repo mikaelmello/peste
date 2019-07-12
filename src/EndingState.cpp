@@ -1,5 +1,6 @@
 #include "EndingState.hpp"
 
+#include <iostream>
 #include "GameData.hpp"
 #include "Sprite.hpp"
 
@@ -56,8 +57,8 @@ void EndingState::LoadAssets() {
       {"Fim ", " "}};
 
   std::string sprite_path =
-      ending == 1 ? BAD_ENDING_SPRITE : GOOD_ENDING_SPRITE;
-  dialog = ending == 1 ? bad_script : good_script;
+      ending == 1 ? GOOD_ENDING_SPRITE : BAD_ENDING_SPRITE;
+  dialog = ending == 1 ? good_script : bad_script;
 
   auto background_go = std::make_shared<GameObject>();
   auto background_sprite = new Sprite(*background_go, sprite_path);

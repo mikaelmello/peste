@@ -13,6 +13,7 @@ std::shared_ptr<GameObject> GameData::TerryGameObject;
 
 std::vector<std::shared_ptr<GameObject>> GameData::PlayerInventory;
 
+bool GameData::opened_main_door = false;
 bool GameData::transformed_monster_in_terry = false;
 bool GameData::canUseLamp = false;
 bool GameData::player_was_hit = false;
@@ -27,6 +28,18 @@ Rect GameData::SafeHouse = Rect(98, 6721, 1080, 1110);
 
 int GameData::InventoryPage = 0;
 bool GameData::got_key1 = false;
+
+void GameData::Init() {
+  opened_main_door = false;
+  transformed_monster_in_terry = false;
+  canUseLamp = false;
+  player_was_hit = false;
+  player_is_hidden = false;
+  can_visit_basement = false;
+  player_in_safehouse = false;
+  InventoryPage = 0;
+  got_key1 = 0;
+}
 
 bool GameData::AddToInventory(std::shared_ptr<GameObject> item) {
   auto item_type_cpt = item->GetComponent(ItemType);

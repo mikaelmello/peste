@@ -7,6 +7,7 @@
 #include "CameraAction.hpp"
 #include "Collider.hpp"
 #include "Door.hpp"
+#include "EndingState.hpp"
 #include "Furniture.hpp"
 #include "Game.hpp"
 #include "GameData.hpp"
@@ -133,6 +134,8 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
               // inserir som de porta abrindo
               GameData::InitDialog(s[rand() % 2]);
             } else {
+              GameData::opened_main_door = true;
+              return;
               // inserir um ending state de acordo com o final correto.
             }
           }
@@ -415,8 +418,6 @@ void Player::Update(float dt) {
   }
   auto pc = std::dynamic_pointer_cast<PriorityChanger>(pcCpt);
   pc->SetRect(dt, associated.box);
-
-  std::cout << position.x << " " << position.y << std::endl;
 }
 
 void Player::Render() {}
