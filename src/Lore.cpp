@@ -60,8 +60,8 @@ void Lore::Sleep() {
   std::vector<std::string> script = {
       "É um caderno todo destruído...",
       "Ah! Parece que tem algo escrito na parte de dentro da capa.",
-      "\"Hoje a mamãe me deu um caderno novo. Ela falou que era pra desenhos. "
-      "Mas eu vou usar como um amigo!\". . .",
+      "\"Hoje a mamãe me deu um caderno novo. Ela falou que era pra desenhos, "
+      "mas eu vou usar como um amigo!\". . .",
       "\"Eu sinto falta dos meus amigos… Nunca mais consegui ir na escola "
       "depois que descobri que tô doente…\" . . .",
       "\"Mas o papai e a mamãe são médicos! Eles falaram que vai ficar tudo "
@@ -80,9 +80,9 @@ void Lore::Sleep() {
       "\"Às vezes, eu chego a ter medo do papai... Eu sei que ele quer meu "
       "bem e tá fazendo essas coisas pra eu melhorar... Mas dói tanto.\" ...",
       "\"Antes eu ficava feliz que o papai e a mamãe estavam fazendo meus "
-      "remédios. Agora eu nem consigo olhar pro papai sem chorar.\" ..."
-      "\"Um post-it colado sobre a página diz, numa caligrafia diferente, "
-      "“Mostrar para o doutor.\""};
+      "remédios. Agora eu nem consigo olhar pro papai sem chorar.\" ...",
+      "Um post-it colado sobre a página diz, numa caligrafia diferente: "
+      "\"Mostrar para o doutor.\""};
 
   daily_go = new GameObject(7);
   daily =
