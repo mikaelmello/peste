@@ -167,7 +167,7 @@ void Game::Run() {
     SDL_RenderClear(renderer);
     state->Render();
     SDL_RenderPresent(renderer);
-    fpsthink();
+    // fpsthink();
     // printf("%f\n", framespersecond);
   }
 
