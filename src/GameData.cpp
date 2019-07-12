@@ -14,7 +14,6 @@ std::shared_ptr<GameObject> GameData::TerryGameObject;
 std::vector<std::shared_ptr<GameObject>> GameData::PlayerInventory;
 
 bool GameData::opened_main_door = false;
-bool GameData::transformed_monster_in_terry = false;
 bool GameData::canUseLamp = false;
 bool GameData::player_was_hit = false;
 bool GameData::player_is_hidden = false;
