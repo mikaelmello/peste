@@ -271,12 +271,12 @@
               {
               "name":"initialPositionX",
               "type":"int",
-              "value":11
+              "value":4
               }, 
               {
               "name":"initialPositionY",
               "type":"int",
-              "value":23
+              "value":26
        }],
        "orientation":"orthogonal",
        "renderorder":"left-up",

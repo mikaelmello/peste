@@ -8,6 +8,7 @@
 #include "Collision.hpp"
 #include "Dialog.hpp"
 #include "Door.hpp"
+#include "EndingState.hpp"
 #include "Furniture.hpp"
 #include "Game.hpp"
 #include "GameData.hpp"
@@ -65,6 +66,14 @@ void RoomState::Update(float dt) {
 
   if (CameraAction::IsRunning()) {
     CameraAction::Update(dt);
+    return;
+  }
+
+  if (GameData::opened_main_door) {
+    popRequested = true;
+    Game::GetInstance().Push(
+        new EndingState(GameData::transformed_monster_in_terry));
+    GameData::opened_main_door = false;
     return;
   }
 

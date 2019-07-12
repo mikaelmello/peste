@@ -3,6 +3,7 @@
 #include "Camera.hpp"
 #include "CreditsState.hpp"
 #include "Game.hpp"
+#include "GameData.hpp"
 #include "Helpers.hpp"
 #include "Resources.hpp"
 #include "RoomState.hpp"
@@ -50,6 +51,7 @@ void MenuState::Update(float dt) {
       case Cursor::play:
         played = true;
         sound->Stop();
+        GameData::Init();
         Game::GetInstance().Push(new RoomState());
         break;
       case Cursor::tutorial:
