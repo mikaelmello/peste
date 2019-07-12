@@ -16,11 +16,9 @@
 #include "TileMap.hpp"
 #include "Types.hpp"
 
-#define TERRY_IDLE_SPRITE "assets/img/npc/npc.png"
-
-Terry::Terry(GameObject& associated, Vec2 position)
+Terry::Terry(GameObject& associated, const std::string& file, Vec2 position)
     : Component(associated), position(position), colliding(false) {
-  Sprite* sprite = new Sprite(associated, TERRY_IDLE_SPRITE);
+  Sprite* sprite = new Sprite(associated, file);
   Collider* collider = new Collider(associated, {1.6, 1.6}, {0.8, 0.8});
   associated.AddComponent(sprite);
   associated.box.w = sprite->GetWidth();
@@ -90,25 +88,55 @@ void Terry::ShowTalkDialog() { talkMessageGo->EnableRender(); }
 void Terry::HideTalkDialog() { talkMessageGo->DisableRender(); }
 
 void Terry::Talk() {
-  SCRIPT_TYPE scripts[] = {
-      {
-          {"Hope", "Você vive aqui há muito tempo?"},
-          {"Terry", "..."},
-          {"Hope", "Sua casa é bonita. Bem grande..."},
-          {"Terry", "... é, muito."},
-          {"Hope", "Tem um monte de brinquedo aqui, vamos lá!"},
-      },
-      {
-          {"Hope", "Você tem alguma brincadeira favorita?"},
-          {"Terry", "... sim."},
-          {"Hope", "Qual?"},
-      },
-      {
-          {"Hope", "Tá tudo bem?"},
-      },
-  };
-  Lore::NicePerson = true;
-  GameData::InitDialog(scripts[rand() % 3]);
+  if (!GameData::transformed_monster_in_terry) {
+    SCRIPT_TYPE scripts[] = {
+        {
+            {"Hope", "Você vive aqui há muito tempo?"},
+            {"Terry", "..."},
+            {"Hope", "Sua casa é bonita. Bem grande..."},
+            {"Terry", "... é, muito."},
+            {"Hope", "Tem um monte de brinquedo aqui, vamos lá!"},
+        },
+        {
+            {"Hope", "Você tem alguma brincadeira favorita?"},
+            {"Terry", "... sim."},
+            {"Hope", "Qual?"},
+        },
+        {
+            {"Hope", "Tá tudo bem?"},
+        },
+    };
+    Lore::NicePerson = true;
+    GameData::InitDialog(scripts[rand() % 3]);
+  } else {
+    SCRIPT_TYPE script = {
+        {"Hope ", "Terry!"},
+        {"Hope ", "Meu deus, é você mesmo?!"},
+        {"Hope ", "Você está bem?!"},
+        {"Terry ", "Você é... o médico?"},
+        {"Hope ", "Sim! Meu nome é Hope, lembra?"},
+        {"Terry ", "Você não foi... embora?"},
+        {"Hope ", "Eu vim aqui para cuidar de você."},
+        {"Terry ", "Você... é diferente de todos."},
+        {"Terry ", "É diferente do... meu pai."},
+        {"Hope ", "..."},
+        {"Hope ", "Vem... vamos sair daqui."},
+    };
+    GameData::InitDialog(script);
+  }
+}
+
+void Terry::SetSprite(const std::string& file) {
+  auto sprite_cpt = associated.GetComponent(SpriteType);
+  auto sprite = std::dynamic_pointer_cast<Sprite>(sprite_cpt);
+  sprite->Open(file);
+}
+
+void Terry::SetAnimation(int frameCount, float frameTime) {
+  auto sprite_cpt = associated.GetComponent(SpriteType);
+  auto sprite = std::dynamic_pointer_cast<Sprite>(sprite_cpt);
+  sprite->SetFrameCount(frameCount);
+  sprite->SetFrameTime(frameTime);
 }
 
 bool Terry::Is(Types type) const { return type == this->Type; }
