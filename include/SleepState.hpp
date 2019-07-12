@@ -6,6 +6,7 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 #define WRECKING_SOUND "assets/audio/sound_effects/wrecking_wood.wav"
+#define SLEEPING_BG "assets/img/sleeping_background.png"
 
 #include "InputManager.hpp"
 #include "Music.hpp"
@@ -36,6 +37,7 @@ class SleepState : public State {
   Timer pop_timer;
 
   std::shared_ptr<GameObject> sound_go;
+  std::shared_ptr<GameObject> sprite_go;
 
   InputManager& im;
 };
