@@ -9,7 +9,7 @@
 #include "InputManager.hpp"
 #include "Resources.hpp"
 #include "SDL_include.h"
-
+#include "XboxController.hpp"
 Game* Game::instance = nullptr;
 
 Game::Game(const std::string& title, int width, int height)
@@ -22,9 +22,22 @@ Game::Game(const std::string& title, int width, int height)
   }
   int return_code;
 
-  return_code = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER);
+  return_code = SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO | SDL_INIT_TIMER |
+                         SDL_INIT_JOYSTICK);
   if (return_code != 0) {
     throw std::runtime_error("Failed to init the SDL library");
+  }
+
+  // Check for joysticks
+  if (SDL_NumJoysticks() < 1) {
+    printf("Warning: No joysticks connected!\n");
+  } else {
+    // Load joystick
+    XboxController::Joystick = SDL_JoystickOpen(0);
+    if (XboxController::Joystick == NULL) {
+      printf("Warning: Unable to open game controller! SDL Error: %s\n",
+             SDL_GetError());
+    }
   }
 
   int img_flags = IMG_INIT_JPG | IMG_INIT_PNG | IMG_INIT_TIF;
@@ -82,6 +95,8 @@ Game::~Game() {
   Resources::ClearMusics();
   Resources::ClearSounds();
 
+  // Close game controller
+  SDL_JoystickClose(XboxController::Joystick);
   SDL_DestroyRenderer(renderer);
   SDL_DestroyWindow(window);
   Mix_CloseAudio();
@@ -152,6 +167,8 @@ void Game::Run() {
     SDL_RenderClear(renderer);
     state->Render();
     SDL_RenderPresent(renderer);
+    fpsthink();
+    // printf("%f\n", framespersecond);
   }
 
   while (!stateStack.empty()) {

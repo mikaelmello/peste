@@ -27,6 +27,21 @@
 #define I_KEY SDLK_i
 #define X_KEY SDLK_x
 
+enum JoyKeys {
+  JOY_DOWN_KEY = 55,
+  JOY_UP_KEY = 56,
+  JOY_LEFT_KEY = 57,
+  JOY_RIGHT_KEY = 58,
+  JOY_A_KEY = 0,
+  JOY_B_KEY = 1,
+  JOY_X_KEY = 2,
+  JOY_Y_KEY = 3,
+  JOY_LB_KEY = 4,
+  JOY_RB_KEY = 5,
+  JOY_SELECT_KEY = 6,
+  JOY_START_KEY = 7,
+};
+
 class InputManager {
  public:
   void Update();
@@ -34,6 +49,9 @@ class InputManager {
   bool KeyPress(int key);
   bool KeyRelease(int key);
   bool IsKeyDown(int key);
+
+  bool JoyKeyPress(int key);
+  bool IsJoyKeyDown(int key);
 
   bool MousePress(int button) const;
   bool MouseRelease(int button) const;
@@ -58,6 +76,9 @@ class InputManager {
 
   std::unordered_map<int, bool> keyState;
   std::unordered_map<int, int> keyUpdate;
+
+  std::unordered_map<int, bool> joyKeyState;
+  std::unordered_map<int, int> joyKeyUpdate;
 
   bool quitRequested;
   int updateCounter;

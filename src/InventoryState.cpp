@@ -95,9 +95,9 @@ void InventoryState::Update(float dt) {
 
     int cursorRow = inventoryCursorIndex / gridWidth;
     int cursorColumn = (inventoryCursorIndex % gridWidth);
-    if (im.KeyPress(UP_ARROW_KEY)) {
+    if (im.KeyPress(UP_ARROW_KEY) || im.JoyKeyPress(JOY_UP_KEY)) {
       cursorRow = std::max(0, cursorRow - 1);
-    } else if (im.KeyPress(DOWN_ARROW_KEY)) {
+    } else if (im.KeyPress(DOWN_ARROW_KEY) || im.JoyKeyPress(JOY_DOWN_KEY)) {
       if (cursorRow == gridHeight - 1) {
         cursorIndex = Menu;
         menuCursorIndex = menuLength - 1;
@@ -106,7 +106,7 @@ void InventoryState::Update(float dt) {
         }
       }
       cursorRow = std::min(gridHeight - 1, cursorRow + 1);
-    } else if (im.KeyPress(LEFT_ARROW_KEY)) {
+    } else if (im.KeyPress(LEFT_ARROW_KEY) || im.JoyKeyPress(JOY_LEFT_KEY)) {
       if (cursorColumn == 0) {
         if (cursorRow == gridHeight - 1) {
           cursorIndex = Page;
@@ -114,7 +114,7 @@ void InventoryState::Update(float dt) {
       } else {
         cursorColumn -= 1;
       }
-    } else if (im.KeyPress(RIGHT_ARROW_KEY)) {
+    } else if (im.KeyPress(RIGHT_ARROW_KEY) || im.JoyKeyPress(JOY_RIGHT_KEY)) {
       cursorColumn = std::min(gridWidth - 1, cursorColumn + 1);
     }
     auto newIndex = cursorRow * gridWidth + cursorColumn;
@@ -127,7 +127,7 @@ void InventoryState::Update(float dt) {
     cursorGo->box.x = newPos.x;
     cursorGo->box.y = newPos.y;
 
-    if (im.KeyPress(UP_ARROW_KEY)) {
+    if (im.KeyPress(UP_ARROW_KEY) || im.JoyKeyPress(JOY_UP_KEY)) {
       if (menuCursorIndex == 0) {
         cursorIndex = Page;
       } else if (menuCursorIndex == 1) {
@@ -136,11 +136,11 @@ void InventoryState::Update(float dt) {
         inventoryCursorIndex += gridWidth - 1;
       }
       updateShowcase();
-    } else if (im.KeyPress(LEFT_ARROW_KEY)) {
+    } else if (im.KeyPress(LEFT_ARROW_KEY) || im.JoyKeyPress(JOY_LEFT_KEY)) {
       menuCursorIndex = std::max(0, menuCursorIndex - 1);
-    } else if (im.KeyPress(RIGHT_ARROW_KEY)) {
+    } else if (im.KeyPress(RIGHT_ARROW_KEY) || im.JoyKeyPress(JOY_RIGHT_KEY)) {
       menuCursorIndex = std::min(menuLength - 1, menuCursorIndex + 1);
-    } else if (im.KeyPress(SPACE_BAR_KEY)) {
+    } else if (im.KeyPress(SPACE_BAR_KEY) || im.JoyKeyPress(JOY_A_KEY)) {
       switch (menuCursorIndex) {
         case 0:
           popRequested = true;
@@ -155,15 +155,15 @@ void InventoryState::Update(float dt) {
   } else if (cursorIndex == Page) {
     cursorGo->box.x = 100;
     cursorGo->box.y = 550;
-    if (im.KeyPress(SPACE_BAR_KEY)) {
+    if (im.KeyPress(SPACE_BAR_KEY) || im.JoyKeyPress(JOY_A_KEY)) {
       GameData::InventoryPage = (GameData::InventoryPage + 1) % 2;
       refreshPage();
       updateShowcase();
-    } else if (im.KeyPress(RIGHT_ARROW_KEY)) {
+    } else if (im.KeyPress(RIGHT_ARROW_KEY) || im.JoyKeyPress(JOY_RIGHT_KEY)) {
       cursorIndex = Inventory;
       inventoryCursorIndex = (gridHeight - 1) * gridWidth;
       updateShowcase();
-    } else if (im.KeyPress(DOWN_ARROW_KEY)) {
+    } else if (im.KeyPress(DOWN_ARROW_KEY) || im.JoyKeyPress(JOY_DOWN_KEY)) {
       cursorIndex = Menu;
       menuCursorIndex = 0;
     }

@@ -10,7 +10,7 @@ void TutorialState::Update(float dt) {
     return;
   }
 
-  popRequested |= im.KeyPress(ESCAPE_KEY);
+  popRequested |= im.KeyPress(ESCAPE_KEY) || im.JoyKeyPress(JOY_B_KEY);
   quitRequested |= im.QuitRequested();
 
   UpdateArray(dt);

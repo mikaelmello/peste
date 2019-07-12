@@ -55,7 +55,7 @@ void Dialog::Update(float dt) {
 
   InputManager& im = InputManager::GetInstance();
 
-  if (im.KeyPress(SPACE_BAR_KEY)) {
+  if (im.KeyPress(SPACE_BAR_KEY) || im.JoyKeyPress(JOY_B_KEY)) {
     dialogIndex++;
     UpdateTexts();
   }

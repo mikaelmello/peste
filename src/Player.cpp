@@ -97,7 +97,7 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
 
   auto item_cpt = other->GetComponent(ItemType);
   if (item_cpt) {
-    if (input.KeyPress(X_KEY)) {
+    if (input.KeyPress(X_KEY) || input.JoyKeyPress(JOY_A_KEY)) {
       auto item = std::dynamic_pointer_cast<Item>(item_cpt);
       if (item->GetKeyType() != Helpers::KeyType::NOKEY) {
         keys.push_back(item->GetKeyType());
@@ -125,7 +125,7 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
 
   auto door_cpt = other->GetComponent(DoorType);
   if (door_cpt) {
-    if (input.KeyPress(X_KEY)) {
+    if (input.KeyPress(X_KEY) || input.JoyKeyPress(JOY_A_KEY)) {
       auto soundPlayed = false;
       auto door = std::dynamic_pointer_cast<Door>(door_cpt);
       if (door->GetKey() != Helpers::KeyType::NOKEY) {
@@ -196,7 +196,7 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
 
   auto furniture_cpt = other->GetComponent(FurnitureType);
   if (furniture_cpt) {
-    if (input.KeyPress(X_KEY)) {
+    if (input.KeyPress(X_KEY) || input.JoyKeyPress(JOY_A_KEY)) {
       auto furniture = std::dynamic_pointer_cast<Furniture>(furniture_cpt);
       if (furniture->GetInteraction() == Helpers::Interaction::HIDE) {
         if (!GameData::player_is_hidden) {
@@ -223,7 +223,7 @@ void Player::NotifyCollision(std::shared_ptr<GameObject> other) {
 
   auto stairs_cpt = other->GetComponent(StairsType);
   if (stairs_cpt) {
-    if (input.KeyPress(X_KEY)) {
+    if (input.KeyPress(X_KEY) || input.JoyKeyPress(JOY_A_KEY)) {
       if (GameData::PlayerFloor() == Helpers::Floor::GROUND_FLOOR) {
         if (position.x < 275) {
           position.x = 220;
@@ -359,7 +359,7 @@ void Player::Update(float dt) {
 
   auto move = speed * dt;
   auto nowRunning = false;
-  if (input.IsKeyDown(LSHIFT_KEY)) {
+  if (input.IsKeyDown(LSHIFT_KEY) || input.IsJoyKeyDown(JOY_RB_KEY)) {
     nowRunning = true;
     move *= 2;
     sprite->SetFrameTime(frameTime / 2);
@@ -383,7 +383,7 @@ void Player::Update(float dt) {
   int x = position.x - w / 2;
   int y = position.y - h;
 
-  if (input.IsKeyDown(UP_ARROW_KEY)) {
+  if (input.IsKeyDown(UP_ARROW_KEY) || input.IsJoyKeyDown(JOY_UP_KEY)) {
     canwalk = true;
     up = true;
     for (int i = 0; i < w && canwalk; i++) {
@@ -393,7 +393,7 @@ void Player::Update(float dt) {
       position.y -= move;
     }
   }
-  if (input.IsKeyDown(DOWN_ARROW_KEY)) {
+  if (input.IsKeyDown(DOWN_ARROW_KEY) || input.IsJoyKeyDown(JOY_DOWN_KEY)) {
     canwalk = true;
     down = true;
     for (int i = 0; i < w && canwalk; i++) {
@@ -403,7 +403,7 @@ void Player::Update(float dt) {
       position.y += move;
     }
   }
-  if (input.IsKeyDown(LEFT_ARROW_KEY)) {
+  if (input.IsKeyDown(LEFT_ARROW_KEY) || input.IsJoyKeyDown(JOY_LEFT_KEY)) {
     canwalk = true;
     left = true;
     for (int i = 0; i < h && canwalk; i++) {
@@ -413,7 +413,7 @@ void Player::Update(float dt) {
       position.x -= move;
     }
   }
-  if (input.IsKeyDown(RIGHT_ARROW_KEY)) {
+  if (input.IsKeyDown(RIGHT_ARROW_KEY) || input.IsJoyKeyDown(JOY_RIGHT_KEY)) {
     canwalk = true;
     right = true;
     for (int i = 0; i < h && canwalk; i++) {
