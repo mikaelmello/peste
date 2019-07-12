@@ -29,11 +29,11 @@ void MenuState::Update(float dt) {
     options->Last();
   }
 
-  if (im.KeyPress(DOWN_ARROW_KEY)) {
+  if (im.KeyPress(DOWN_ARROW_KEY) || im.KeyPress(JOY_DOWN_KEY)) {
     (*options)++;
   }
 
-  if (im.KeyPress(UP_ARROW_KEY)) {
+  if (im.KeyPress(UP_ARROW_KEY) || im.KeyPress(JOY_UP_KEY)) {
     (*options)--;
   }
 
@@ -46,7 +46,7 @@ void MenuState::Update(float dt) {
   sound->Stop();
   Game::GetInstance().Push(new RoomState());
 
-  if (im.KeyPress(SPACE_BAR_KEY)) {
+  if (im.KeyPress(SPACE_BAR_KEY) || im.JoyKeyPress(JOY_A_KEY)) {
     switch (options->GetOperation()) {
       case Cursor::play:
         played = true;

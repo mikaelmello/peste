@@ -66,7 +66,7 @@ void Terry::NotifyCollision(std::shared_ptr<GameObject> other) {
     colliding = true;
 
     InputManager& input = InputManager::GetInstance();
-    if (input.KeyPress(X_KEY)) {
+    if (input.KeyPress(X_KEY) || input.JoyKeyPress(JOY_A_KEY)) {
       Talk();
     }
   }

@@ -16,10 +16,10 @@ void CreditsState::Update(float dt) {
   }
   auto sprite = std::dynamic_pointer_cast<Sprite>(sprite_cpt);
 
-  popRequested |= im.KeyPress(ESCAPE_KEY);
+  popRequested |= im.KeyPress(ESCAPE_KEY) || im.JoyKeyPress(JOY_B_KEY);
   quitRequested |= im.QuitRequested();
 
-  if (im.KeyPress(SPACE_BAR_KEY)) {
+  if (im.KeyPress(SPACE_BAR_KEY) || im.JoyKeyPress(JOY_A_KEY)) {
     k = (k + 1) % credits.size();
     sprite->Open(credits[k]);
   }

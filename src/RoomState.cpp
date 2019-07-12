@@ -21,6 +21,7 @@
 #include "Terry.hpp"
 #include "TileMap.hpp"
 #include "Types.hpp"
+#include "XboxController.hpp"
 
 #define IMG_PATH "assets/img/furniture/"
 
@@ -79,7 +80,7 @@ void RoomState::Update(float dt) {
 
   Camera::Update(dt);
 
-  if (im.KeyPress(ESCAPE_KEY)) {
+  if (im.KeyPress(ESCAPE_KEY) || im.JoyKeyPress(JOY_START_KEY)) {
     Game::GetInstance().Push(new InventoryState());
   }
 

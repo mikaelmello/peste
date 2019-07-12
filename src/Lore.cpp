@@ -150,7 +150,6 @@ void Lore::PlayerCaught() {
 }
 
 void Lore::DefendAgainstMonster() {
-  printf("Oi 1\n");
   Lore::Defended = true;
 
   auto& state = Game::GetInstance().GetCurrentState();
@@ -187,6 +186,4 @@ void Lore::DefendAgainstMonster() {
   sprite->SetFrameCount(10);
   sprite->SetFrameTime(0.125);
   GameData::MonsterGameObject->RequestDelete();
-
-  printf("Oi! 2\n");
 }
