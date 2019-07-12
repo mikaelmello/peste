@@ -763,7 +763,7 @@ void RoomState::LoadItems() {
   objects.emplace_back(itemGo);
 
   itemGo = new GameObject(7);
-  item = new Item(*itemGo, "Chave", "Uma chave como outra qualquer.",
+  item = new Item(*itemGo, "Chave", "A chave principal.",
                   "assets/img/item/key3.png", {304, 893},
                   Helpers::KeyType::EXIT, 32, 32);
   itemGo->AddComponent(item);
