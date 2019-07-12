@@ -120,7 +120,7 @@ void GameData::LoadAntagonistPaths() {
 
   switch (GameData::PlayerFloor()) {
     case Helpers::Floor::BASEMENT:
-      path = {{215, 1092}};
+      path = {{109, 1172}, {132, 1211}, {177, 1227}, {243, 1194}, {199, 1168}};
       break;
     case Helpers::Floor::GROUND_FLOOR:
       path = {{240, 300}, {305, 300}, {305, 380}, {240, 380}};
