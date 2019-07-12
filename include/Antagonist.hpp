@@ -18,6 +18,16 @@
 #define RIGHT_UP_WALK_SPRITE "assets/img/terry/walk/up_walk.png"
 #define fdskaljfds "assets/img/terry/idle_terry.png"
 
+#define SUSPECT_LEFT_SPRITE "assets/img/terry/suspect/suspect_left.png"
+#define SUSPECT_RIGHT_SPRITE "assets/img/terry/suspect/suspect_right.png"
+#define SUSPECT_DOWN_SPRITE "assets/img/terry/suspect/suspect_down.png"
+#define SUSPECT_UP_SPRITE "assets/img/terry/suspect/suspect_up.png"
+
+#define PURSUIT_LEFT_SPRITE "assets/img/terry/chase/pursuit_left.png"
+#define PURSUIT_RIGHT_SPRITE "assets/img/terry/chase/pursuit_right.png"
+#define PURSUIT_DOWN_SPRITE "assets/img/terry/chase/pursuit_down.png"
+#define PURSUIT_UP_SPRITE "assets/img/terry/chase/pursuit_up.png"
+
 #define RIGHT_IDLE_SPRITE_ANTAGONIST "assets/img/terry/idle/idle_right.png"
 #define LEFT_IDLE_SPRITE_ANTAGONIST "assets/img/terry/idle/idle_left.png"
 #define UP_IDLE_SPRITE_ANTAGONIST "assets/img/terry/idle/idle_down.png"
@@ -54,16 +64,16 @@
 
 #define SUSPECTING_WALK_SET                                                 \
   {                                                                         \
-    LEFT_WALK_SPRITE, RIGHT_WALK_SPRITE, DOWN_WALK_SPRITE, UP_WALK_SPRITE,  \
-        LEFT_DOWN_WALK_SPRITE, LEFT_UP_WALK_SPRITE, RIGHT_DOWN_WALK_SPRITE, \
-        RIGHT_UP_WALK_SPRITE                                                \
+    SUSPECT_LEFT_SPRITE, SUSPECT_RIGHT_SPRITE, SUSPECT_DOWN_SPRITE, SUSPECT_UP_SPRITE,  \
+        SUSPECT_DOWN_SPRITE, SUSPECT_UP_SPRITE, SUSPECT_DOWN_SPRITE, \
+        SUSPECT_UP_SPRITE                                                 \
   }
 
 #define CHASING_WALK_SET                                                    \
   {                                                                         \
-    LEFT_WALK_SPRITE, RIGHT_WALK_SPRITE, DOWN_WALK_SPRITE, UP_WALK_SPRITE,  \
-        LEFT_DOWN_WALK_SPRITE, LEFT_UP_WALK_SPRITE, RIGHT_DOWN_WALK_SPRITE, \
-        RIGHT_UP_WALK_SPRITE                                                \
+    PURSUIT_LEFT_SPRITE, PURSUIT_RIGHT_SPRITE, PURSUIT_DOWN_SPRITE, PURSUIT_UP_SPRITE,  \
+        PURSUIT_DOWN_SPRITE, PURSUIT_UP_SPRITE, PURSUIT_DOWN_SPRITE, \
+        PURSUIT_UP_SPRITE                                                \
   }
 
 #include <memory>
