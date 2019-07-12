@@ -82,6 +82,9 @@ void MenuState::Resume() {
   auto sound_cpt = background->GetComponent(SoundType);
   auto sound = std::dynamic_pointer_cast<Sound>(sound_cpt);
 
+  GameData::InventoryPage = 0;
+  GameData::PlayerInventory.clear();
+
   try {
     if (played) {
       sound->Play(10000);
