@@ -44,7 +44,6 @@ void MenuState::Update(float dt) {
   auto sound = std::dynamic_pointer_cast<Sound>(sound_cpt);
   played = true;
   sound->Stop();
-  Game::GetInstance().Push(new RoomState());
 
   if (im.KeyPress(SPACE_BAR_KEY) || im.JoyKeyPress(JOY_A_KEY)) {
     switch (options->GetOperation()) {
