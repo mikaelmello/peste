@@ -17,10 +17,12 @@ bool GameData::canUseLamp = false;
 bool GameData::player_was_hit = false;
 bool GameData::player_is_hidden = false;
 bool GameData::can_visit_basement = false;
+bool GameData::player_in_safehouse = false;
 
 Rect GameData::Basement = Rect(0, 8000, 5000, 4000);
 Rect GameData::Floor1 = Rect(0, 38, 5000, 3500);
 Rect GameData::Floor2 = Rect(0, 4100, 5000, 3900);
+Rect GameData::SafeHouse = Rect(98, 6721, 1080, 1110);
 
 int GameData::InventoryPage = 0;
 bool GameData::got_key1 = false;

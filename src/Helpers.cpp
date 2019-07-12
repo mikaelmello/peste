@@ -12,6 +12,8 @@
 #include <vector>
 #include "Collider.hpp"
 #include "Game.hpp"
+#include "GameData.hpp"
+#include "Player.hpp"
 #include "SDL_include.h"
 #include "Sprite.hpp"
 
@@ -139,4 +141,15 @@ bool Helpers::CanWalk(GameObject& object, Vec2& p) {
 bool Helpers::CanWalk(GameObject& object, std::pair<int, int>& p) {
   Vec2 point(p.first, p.second);
   return CanWalk(object, point);
+}
+
+void Helpers::TeleportPlayerSafeHouse() {
+  auto player_cpt = GameData::PlayerGameObject->GetComponent(PlayerType);
+  if (!player_cpt) {
+    throw std::runtime_error(
+        "sem player_cpt em Helpers::TeleportPlayerSafeHouse");
+  }
+
+  auto player = std::dynamic_pointer_cast<Player>(player_cpt);
+  player->position = {70, 900};
 }
