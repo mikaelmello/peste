@@ -690,4 +690,11 @@ void RoomState::LoadItems() {
                   Helpers::KeyType::EXIT, 32, 32);
   itemGo->AddComponent(item);
   objects.emplace_back(itemGo);
+
+  itemGo = new GameObject(7);
+  item = new Item(*itemGo, "Vacina", "Pode ser muito útil...",
+                  "assets/img/item/needle.png", {389, 1100},
+                  Helpers::KeyType::NOKEY, 36, 36);
+  itemGo->AddComponent(item);
+  objects.emplace_back(itemGo);
 }

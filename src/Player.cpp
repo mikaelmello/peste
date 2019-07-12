@@ -286,6 +286,10 @@ void Player::Update(float dt) {
     position = {291, 58};
     return;
   }
+  if (input.IsKeyDown(LSHIFT_KEY) && input.IsKeyDown(SDLK_a)) {
+    position = {389, 1104};
+    return;
+  }
 
   auto sprite = std::dynamic_pointer_cast<Sprite>(spriteCpt);
   auto collider = std::dynamic_pointer_cast<Collider>(colliderCpt);
