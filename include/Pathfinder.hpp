@@ -66,6 +66,8 @@ class Astar {
 
   ~Astar();
 
+  void ToggleMaxSearch();
+
   std::vector<Vec2> Run(Vec2& start, Vec2& dest);
 
  private:
@@ -76,6 +78,8 @@ class Astar {
   TileMap* tm;
 
   std::vector<Cell> details;
+
+  bool max_search;
 
   int rows;
 

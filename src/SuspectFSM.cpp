@@ -73,6 +73,8 @@ void SuspectFSM::OnStateExit() {
   Vec2 current = ant.lock()->position;
 
   auto pf = Pathfinder::Astar(object, tilemap);
+  pf.ToggleMaxSearch();
+
   auto return_path = pf.Run(current, initial);
 
   Antagonist::paths.emplace(0, return_path);

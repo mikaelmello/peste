@@ -5,7 +5,7 @@
 
 Pathfinder::Astar::Astar(GameObject& o, std::shared_ptr<Heuristic> h,
                          TileMap* tm)
-    : object(o), heuristic(h), tm(tm) {
+    : object(o), heuristic(h), tm(tm), max_search(true) {
   rows = tm->GetLogicalHeight();
   cols = tm->GetLogicalWidth();
 }
@@ -14,6 +14,8 @@ Pathfinder::Astar::Astar(GameObject& o, TileMap* tm)
     : Astar(o, std::shared_ptr<Heuristic>(new Euclidian()), tm) {}
 
 Pathfinder::Astar::~Astar() {}
+
+void Pathfinder::Astar::ToggleMaxSearch() { max_search = !max_search; }
 
 std::vector<Vec2> Pathfinder::Astar::Run(Vec2& s, Vec2& d) {
   std::pair<int, int> start = {s.x, s.y};
@@ -52,7 +54,7 @@ void Pathfinder::Astar::Search(std::vector<Vec2>& path,
     Close(current.second);
 
     auto point = current.second;
-    if (details[index(point.first, point.second)].g > 150) {
+    if (max_search && details[index(point.first, point.second)].g > 150) {
       continue;
     }
 

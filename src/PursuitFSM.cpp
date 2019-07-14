@@ -57,6 +57,8 @@ void PursuitFSM::OnStateExit() {
   }
 
   auto return_path = pf->Run(ant.lock()->position, initial);
+  pf->ToggleMaxSearch();
+
   Antagonist::paths.emplace(0, return_path);
 }
 
