@@ -169,7 +169,10 @@ bool Antagonist::NearTarget() {
   try {
     if (w.can_walk) {
       auto path = pf.Run(position, w.walkable);
-      return path.size() != 0 && !GameData::player_is_hidden;
+      bool has_path = path.size() != 0;
+      bool player_safe =
+          GameData::player_is_hidden || GameData::player_in_safehouse;
+      return has_path && !player_safe;
     }
     return false;
 
@@ -177,9 +180,6 @@ bool Antagonist::NearTarget() {
     printf("%s\n", ex.what());
     return false;
   }
-
-  /*double dist = position.Distance(playerCp->position);
-return dist <= distance_check && !GameData::player_is_hidden;*/
 }
 
 void Antagonist::AssetsManager(Helpers::Action action) {
