@@ -1,5 +1,7 @@
 # Peste
 
+[Github](https://github.com/mikaelmello/peste/)
+
 Peste, "Plague" in Portuguese, is an interactive thriller game where the main character, Hope, is a nurse hired to take care of Terry, a sick child abandoned by his parents, after they've lost all hope of finding a cure for him.
 
 Terry's parents, Mary and Jekyll Hyde, are doctors with a great life until their only child, Terry, contracts the Plague, an incurable disease neglected by the medical academy because it only affected rats, a minority that was even rarer in the city's elite.
