@@ -5,6 +5,7 @@
 #include "Game.hpp"
 #include "GameData.hpp"
 #include "Helpers.hpp"
+#include "Lore.hpp"
 #include "Resources.hpp"
 #include "RoomState.hpp"
 #include "Sound.hpp"
@@ -49,6 +50,7 @@ void MenuState::Update(float dt) {
         played = true;
         sound->Stop();
         GameData::Init();
+        Lore::Init();
         Game::GetInstance().Push(new RoomState());
         break;
       case Cursor::tutorial:

@@ -9,6 +9,7 @@
 
 class Lore {
  public:
+  static void Init();
   static bool HasEnteredMasterBedroom;
   static bool NicePerson;
   static bool Caught;

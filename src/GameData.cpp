@@ -3,6 +3,7 @@
 #include "Antagonist.hpp"
 #include "Helpers.hpp"
 #include "Item.hpp"
+#include "Lore.hpp"
 #include "Types.hpp"
 
 std::shared_ptr<GameObject> GameData::MonsterGameObject;

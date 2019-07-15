@@ -24,6 +24,15 @@ bool Lore::Defended = false;
 int Lore::Slept = 0;
 int Lore::CaughtCount = 0;
 
+void Lore::Init() {
+  Lore::NicePerson = false;
+  Lore::HasEnteredMasterBedroom = false;
+  Lore::Caught = false;
+  Lore::Defended = false;
+  Lore::Slept = 0;
+  Lore::CaughtCount = 0;
+}
+
 void Lore::Sleep() {
   if (!GameData::TerryBedGameObject) {
     throw std::runtime_error("Cama do terry nao setada no gamedata");
