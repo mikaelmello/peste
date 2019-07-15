@@ -3,7 +3,7 @@ CXXINCS  = -I"include/" -lSDL2 -lSDL2_image -lSDL2_ttf -lSDL2_mixer
 CXXFLAGS = $(CXXINCS) -std=c++14 -O2
 SRCS  	 = $(shell find src -name '*.cpp')
 OBJ      = $(addprefix obj/,$(notdir $(SRCS:%.cpp=%.o))) 
-BIN      = engine
+BIN      = peste
 RM       = rm -f
 
 .PHONY: all all-before all-after clean clean-custom
