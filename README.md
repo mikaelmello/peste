@@ -56,7 +56,7 @@ Built the dynamic grid-based collision system, adding (and sometimes creating) s
 
 ## How to Play
 
-You are **strongly** recommend to play using Linux.
+You are **strongly** recommended to play using Linux.
 
 - Install SDL: `sudo apt‐get install libsdl2‐dev libsdl2‐image‐dev libsdl2‐mixer‐dev libsd`
 - Compile: `make -j`
