@@ -42,15 +42,15 @@ Your goal is to leave the house via the entrance door, with or without Terry.
 
 All team members contributed to all areas, always reviewing code and refactoring whenever we discussed a better alternative, however some features can be attributed more to one member than another:
 
-### Gabriel Levi
+### Gabriel Levi - 16/0006490
 
 Responsible for building the map and adding interactions with items or furniture, rendering relative to positions, door and stairs mechanics.
 
-### Gabriel Nunes
+### Gabriel Nunes - 16/0006597
 
 Main developer of the Antagonist and its finite state machine along with a path-finding algorithm, the main menu, the ending states.
 
-### Mikael Mello
+### Mikael Mello - 16/0015537
 
 Built the dynamic grid-based collision system, adding (and sometimes creating) sound effects, dialogues, inventory system, joystick implementation, also important improvements over other key sections of the code.
 
