@@ -58,6 +58,6 @@ Built the dynamic grid-based collision system, adding (and sometimes creating) s
 
 You are **strongly** recommended to play using Linux.
 
-- Install SDL: `sudo apt‐get install libsdl2‐dev libsdl2‐image‐dev libsdl2‐mixer‐dev libsd`
+- Install SDL: `sudo apt‐get install build-essentials libsdl2‐dev libsdl2‐image‐dev libsdl2‐mixer‐dev libsdl2-ttf-dev libsd`
 - Compile: `make -j`
 - Run: `./peste`
